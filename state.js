@@ -1,6 +1,6 @@
 state = {
 	players: [],
-	pressedKeys: {},
+	// pressedKeys: {},
 	projectiles: [],
 	cells: []
 }

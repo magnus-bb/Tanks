@@ -19,32 +19,20 @@ function setup() {
 		'Magnus',
 		Math.floor(Math.random() * width),
 		Math.floor(Math.random() * height)
-	)
-	)
-
+	))
 	state.players.push(new Tank(
 		'Helena',
 		Math.floor(Math.random() * width),
 		Math.floor(Math.random() * height),
-		'KeyW', 'KeyD', 'KeyS', 'KeyA', 'KeyC'
+		87, 68, 83, 65, 67
 	))
-
-	// Set keybindings for firing (must be done AFTER all tanks have been created)
-	for (const player of state.players) {
-		document.addEventListener('keydown', e => {
-			if (e.code === player.keybindings.fire) {
-				player.fire()
-			}
-		})
-	}
 }
 
-
-//! Keyboard Moves
-// Whether a key is down can be accessed in the state-object
-document.addEventListener('keydown', e => {
-	state.pressedKeys[e.code] = true
-})
-document.addEventListener('keyup', e => {
-	state.pressedKeys[e.code] = false
-})
+// Keyboard handler for firing
+function keyPressed() {
+	for (const player of state.players) {
+		if (keyCode == player.keybindings.fire) {
+			player.fire()
+		}
+	}
+}

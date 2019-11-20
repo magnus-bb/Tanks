@@ -1,6 +1,6 @@
 //! Player
 class Tank {
-	constructor(name, x, y, forward = 'ArrowUp', right = 'ArrowRight', backward = 'ArrowDown', left = 'ArrowLeft', fire = 'Space') {
+	constructor(name, x, y, forward = UP_ARROW, right = RIGHT_ARROW, backward = DOWN_ARROW, left = LEFT_ARROW, fire = 32) {
 		this.name = name
 		this.x = x
 		this.y = y
@@ -8,36 +8,43 @@ class Tank {
 		this.moveSpeed = config.player.moveSpeed
 		this.turnSpeed = config.player.turnSpeed
 		this.color = randomColor()
-		this.orientation = 0
+		this.direction = 0
+		this.ammo = config.player.ammo
+		this.weapon = null
+		this.trail = [{ x: this.x, y: this.y }]
 		this.keybindings = {
 			forward: forward,
 			backward: backward,
 			left: left,
 			right: right,
 			fire: fire
-		},
-			this.ammo = config.player.ammo
-		this.weapon = null
+		}
 	}
 
 	move() {
 		// Angle and amount to move
-		const move = moveInDir(this.moveSpeed, this.orientation)
+		const move = getMoveCoords(this.moveSpeed, this.direction)
 
 		// Controls-handling
-		if (state.pressedKeys[this.keybindings.forward]) {
+		if (keyIsDown(this.keybindings.forward)) {
 			this.x += move.x
 			this.y += move.y
 		}
-		if (state.pressedKeys[this.keybindings.backward]) {
+		if (keyIsDown(this.keybindings.backward)) {
 			this.x -= move.x
 			this.y -= move.y
 		}
-		if (state.pressedKeys[this.keybindings.left]) {
-			this.orientation -= this.turnSpeed
+		if (keyIsDown(this.keybindings.left)) {
+			this.direction = (this.direction % 360) - this.turnSpeed
+			//console.log(this.direction) //! DELETE
 		}
-		if (state.pressedKeys[this.keybindings.right]) {
-			this.orientation += this.turnSpeed
+		if (keyIsDown(this.keybindings.right)) {
+			this.direction = (this.direction % 360) + this.turnSpeed
+			//console.log(this.direction) //! DELETE
+		}
+
+		if (this.trail[this.trail.length - 1].x !== this.x || this.trail[this.trail.length - 1].y !== this.y) {
+			this.trail.push({ x: this.x, y: this.y })
 		}
 	}
 
@@ -57,11 +64,11 @@ class Tank {
 		// Body of tank
 		strokeWeight(1)
 		circle(this.x, this.y, this.d)
-		// Orientation of cannon
-		const cannonXStart = (this.d / 5) * Math.cos(this.orientation) + this.x
-		const cannonYStart = (this.d / 5) * Math.sin(this.orientation) + this.y
-		const cannonXEnd = config.player.cannonLength * Math.cos(this.orientation) + this.x
-		const cannonYEnd = config.player.cannonLength * Math.sin(this.orientation) + this.y
+		// direction of cannon
+		const cannonXStart = (this.d / 5) * Math.cos(degsToRads(this.direction)) + this.x
+		const cannonYStart = (this.d / 5) * Math.sin(degsToRads(this.direction)) + this.y
+		const cannonXEnd = config.player.cannonLength * Math.cos(degsToRads(this.direction)) + this.x
+		const cannonYEnd = config.player.cannonLength * Math.sin(degsToRads(this.direction)) + this.y
 		// Outline of cannon
 		strokeWeight(3)
 		// Cannon
@@ -72,18 +79,44 @@ class Tank {
 class Bullet {
 	constructor(owner) {
 		this.d = config.bullet.diameter
-		this.direction = owner.orientation
+		this.direction = owner.direction
 		this.speed = config.bullet.speed
 		this.owner = owner
-
-		this.x = (owner.d / 2 + this.d / 2 + 1) * Math.cos(this.direction) + owner.x
-		this.y = (owner.d / 2 + this.d / 2 + 1) * Math.sin(this.direction) + owner.y
+		this.x = (owner.d / 2 + this.d / 2 + 1) * Math.cos(degsToRads(this.direction)) + owner.x
+		this.y = (owner.d / 2 + this.d / 2 + 1) * Math.sin(degsToRads(this.direction)) + owner.y
 	}
 
 	move() {
-		const move = moveInDir(this.speed, this.direction)
+		const move = getMoveCoords(this.speed, this.direction)
 		this.x += move.x
 		this.y += move.y
+	}
+
+	bounce() {
+		for (const cell of state.cells) {
+			// only looks at walls in the given cell
+			if (between(this.x, cell.x, cell.x + cell.w, true) && between(this.y, cell.y, cell.y + cell.w, true)) {
+				for (const wall in cell.walls) {
+					// If the wall exists, check for a collision (with the placement of the wall)
+					if (cell.walls[wall]) {
+						const collision = this.checkCollision(wall, cell.walls[wall])
+						if (collision) console.log(collision)
+					}
+				}
+				break
+			}
+		}
+	}
+
+	//! Does not check if ends of walls are hit
+	checkCollision(placement, wall) {
+		const wallWidth = wall.w / 2
+
+		if (placement === 'right' && (between(this.direction, -90, 90) || this.direction > 270 || this.direction < -270) && this.x >= wall.x1 - wallWidth) return placement
+		if (placement === 'left' && (between(this.direction, -270, -90) || between(this.direction, 90, 270)) && this.x <= wall.x1 + wallWidth) return placement
+		if (placement === 'top' && (between(this.direction, 0, -180) || this.direction > 180) && this.y <= wall.y1 + wallWidth) return placement
+		if (placement === 'bottom' && (between(this.direction, 0, 180) || this.direction < -180) && this.y >= wall.y1 - wallWidth) return placement
+		else return null
 	}
 
 	show() {
@@ -171,11 +204,15 @@ class Wall {
 
 
 //! Helper functions
-function moveInDir(speed, direction) {
+function getMoveCoords(speed, direction) {
 	return {
-		x: speed * Math.cos(direction),
-		y: speed * Math.sin(direction)
+		x: speed * Math.cos(degsToRads(direction)),
+		y: speed * Math.sin(degsToRads(direction))
 	}
+}
+
+function degsToRads(deg) {
+	return deg * (PI / 180)
 }
 
 function randomColor() {
@@ -186,4 +223,13 @@ function randomWallSide() {
 	const sides = ['top', 'right', 'bottom', 'left']
 	const index = Math.floor(Math.random() * 4)
 	return sides[index]
+}
+
+function between(number, min, max, forCell = false) { // Does not include max, since collisions will ping for several cells
+	if (forCell) {
+		return number < max && number >= min
+	} else {
+		return number < max && number > min
+	}
+
 }
