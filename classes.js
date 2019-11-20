@@ -56,3 +56,19 @@ class Tank {
 		}
 	}
 }
+
+class Cell {
+	constructor(x, y) {
+
+	}
+}
+
+class Wall {
+	constructor(cellX, cellY, direction) {
+
+	}
+
+	show() {
+		line()
+	}
+}

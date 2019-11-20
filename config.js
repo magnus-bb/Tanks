@@ -7,8 +7,11 @@ config = {
 		cannonLength: 18,
 	},
 	canvas: {
-		width: 800,
-		height: 600,
+		width: 800, //20 * cellWidth
+		height: 600, //15 * cellWidth
+	},
+	environment: {
+		cellWidth: 40,
 	}
 }
 
