@@ -5,13 +5,18 @@ config = {
 		turnSpeed: 0.07,
 		color: [30, 170, 30],
 		cannonLength: 18,
-	},
-	canvas: {
-		width: 800, //20 * cellWidth
-		height: 600, //15 * cellWidth
+		ammo: 3
 	},
 	environment: {
-		cellWidth: 40,
+		cellWidth: 50,
+		cellAmtX: 20,
+		cellAmtY: 15,
+		wallWidth: 5,
+		wallChance: 0.2
+	},
+	bullet: {
+		speed: 5,
+		diameter: 8
 	}
 }
 
