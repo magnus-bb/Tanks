@@ -88,35 +88,56 @@ class Bullet {
 
 	move() {
 		const move = getMoveCoords(this.speed, this.direction)
+
 		this.x += move.x
 		this.y += move.y
 	}
 
 	bounce() {
 		for (const cell of state.cells) {
-			// only looks at walls in the given cell
-			if (between(this.x, cell.x, cell.x + cell.w, true) && between(this.y, cell.y, cell.y + cell.w, true)) {
-				for (const wall in cell.walls) {
-					// If the wall exists, check for a collision (with the placement of the wall)
-					if (cell.walls[wall]) {
-						const collision = this.checkCollision(wall, cell.walls[wall])
-						if (collision) console.log(collision)
+			for (const wall in cell.walls) {
+				// If the wall exists, check for a collision (with the placement of the wall)
+				if (cell.walls[wall]) {
+					const collision = this.checkCollision(cell.walls[wall])
+					if (collision) {
+						if (this.direction < 0) this.direction += 360
+						const axis = collision[0]
+						const direction = collision[1]
+
+						if (axis === 'vertical') {
+							if (direction === 'upwards') {
+								this.direction += (270 - this.direction) * 2
+							} else /*downwards*/ {
+								this.direction += (90 - this.direction) * 2
+							}
+						} else /*horizontal*/ {
+							if (direction === 'right') {
+								this.direction = (this.direction - 360) * -1
+							} else /*left*/ {
+								this.direction += (180 - this.direction) * 2
+							}
+						}
 					}
 				}
-				break
 			}
 		}
 	}
 
 	//! Does not check if ends of walls are hit
-	checkCollision(placement, wall) {
+	checkCollision(wall) {
 		const wallWidth = wall.w / 2
 
-		if (placement === 'right' && (between(this.direction, -90, 90) || this.direction > 270 || this.direction < -270) && this.x >= wall.x1 - wallWidth) return placement
-		if (placement === 'left' && (between(this.direction, -270, -90) || between(this.direction, 90, 270)) && this.x <= wall.x1 + wallWidth) return placement
-		if (placement === 'top' && (between(this.direction, 0, -180) || this.direction > 180) && this.y <= wall.y1 + wallWidth) return placement
-		if (placement === 'bottom' && (between(this.direction, 0, 180) || this.direction < -180) && this.y >= wall.y1 - wallWidth) return placement
-		else return null
+		if (between(this.y, wall.y1, wall.y2) && between(this.x, wall.x1 - wallWidth, wall.x1 + wallWidth)) {
+			if (between(this.direction, -180, 0) || this.direction > 180) return ['vertical', 'upwards']
+			if (between(this.direction, 0, 180) || this.direction < -180) return ['vertical', 'downwards']
+		}
+
+		if (between(this.x, wall.x1, wall.x2) && between(this.y, wall.y1 - wallWidth, wall.y1 + wallWidth)) {
+			if (between(this.direction, -90, 90) || this.direction > 270 || this.direction < -270) return ['horizontal', 'right']
+			if (between(this.direction, -270, -90) || between(this.direction, 90, 270)) return ['horizontal', 'left']
+		}
+
+		return null
 	}
 
 	show() {
@@ -225,9 +246,9 @@ function randomWallSide() {
 	return sides[index]
 }
 
-function between(number, min, max, forCell = false) { // Does not include max, since collisions will ping for several cells
-	if (forCell) {
-		return number < max && number >= min
+function between(number, min, max, include = true) { // Does not include max, since collisions will ping for several cells
+	if (include) {
+		return number <= max && number >= min
 	} else {
 		return number < max && number > min
 	}
