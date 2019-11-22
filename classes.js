@@ -8,10 +8,10 @@ class Tank {
 		this.moveSpeed = config.player.moveSpeed
 		this.turnSpeed = config.player.turnSpeed
 		this.color = randomColor()
-		this.direction = 0
+		this.direction = 0 // in degrees - converted to radians for moving
 		this.ammo = config.player.ammo
 		this.weapon = null
-		this.trail = [{ x: this.x, y: this.y }]
+		this.trail = [{ x: this.x, y: this.y }] // For death recap - maybe
 		this.keybindings = {
 			forward: forward,
 			backward: backward,
@@ -35,6 +35,7 @@ class Tank {
 			this.y -= move.y
 		}
 		if (keyIsDown(this.keybindings.left)) {
+			// % 360 makes it so we don't have to deal with angles over 360 deg
 			this.direction = (this.direction % 360) - this.turnSpeed
 			//console.log(this.direction) //! DELETE
 		}
@@ -43,6 +44,7 @@ class Tank {
 			//console.log(this.direction) //! DELETE
 		}
 
+		// Trail only updates if tank is not standing still
 		if (this.trail[this.trail.length - 1].x !== this.x || this.trail[this.trail.length - 1].y !== this.y) {
 			this.trail.push({ x: this.x, y: this.y })
 		}
@@ -50,9 +52,11 @@ class Tank {
 
 	fire() {
 		if (this.weapon) {
+			// Make class for each weapon?
 			// Use weapon
 		} else if (this.ammo > 0) {
 			this.ammo--
+			// Keeps track of all bullets
 			state.projectiles.push(new Bullet(this))
 		}
 	}
@@ -64,24 +68,26 @@ class Tank {
 		// Body of tank
 		strokeWeight(1)
 		circle(this.x, this.y, this.d)
-		// direction of cannon
+		// direction of cannon + offset from center
 		const cannonXStart = (this.d / 5) * Math.cos(degsToRads(this.direction)) + this.x
 		const cannonYStart = (this.d / 5) * Math.sin(degsToRads(this.direction)) + this.y
 		const cannonXEnd = config.player.cannonLength * Math.cos(degsToRads(this.direction)) + this.x
 		const cannonYEnd = config.player.cannonLength * Math.sin(degsToRads(this.direction)) + this.y
-		// Outline of cannon
-		strokeWeight(3)
 		// Cannon
+		strokeWeight(3)
 		line(cannonXStart, cannonYStart, cannonXEnd, cannonYEnd)
 	}
 }
 
+//! Should be extension of a Projectile class, so other weapons can extend as well
 class Bullet {
 	constructor(owner) {
 		this.d = config.bullet.diameter
+		// Moves in direction that owner was pointing:
 		this.direction = owner.direction
 		this.speed = config.bullet.speed
-		this.owner = owner
+		this.owner = owner // Who to give points to when colliding with tanks etc.
+		// Starts offset from tank center:
 		this.x = (owner.d / 2 + this.d / 2 + 1) * Math.cos(degsToRads(this.direction)) + owner.x
 		this.y = (owner.d / 2 + this.d / 2 + 1) * Math.sin(degsToRads(this.direction)) + owner.y
 	}
@@ -95,15 +101,16 @@ class Bullet {
 
 	bounce() {
 		for (const cell of state.cells) {
-			for (const wall in cell.walls) {
-				// If the wall exists, check for a collision (with the placement of the wall)
+			for (const wall in cell.walls) { // All walls in all cells
+				// If the wall exists, check for a collision (with the placement of the wall):
 				if (cell.walls[wall]) {
-					const collision = this.checkCollision(cell.walls[wall])
+					const collision = this.checkCollision(cell.walls[wall]) // Returns axis of wall and direction of bullet
 					if (collision) {
-						if (this.direction < 0) this.direction += 360
+						if (this.direction < 0) this.direction += 360 // Normalizes angle to positive equivalent - 90deg === -270deg etc.
 						const axis = collision[0]
 						const direction = collision[1]
 
+						// The directions need to be positive for these hacks to work:
 						if (axis === 'vertical') {
 							if (direction === 'upwards') {
 								this.direction += (270 - this.direction) * 2
@@ -125,7 +132,7 @@ class Bullet {
 
 	//! Does not check if ends of walls are hit
 	checkCollision(wall) {
-		const wallWidth = wall.w / 2
+		const wallWidth = wall.w / 2 // Line thickness makes the walls a pseudo-rectangle that I can check for coordinates 'inside'
 
 		if (between(this.y, wall.y1, wall.y2) && between(this.x, wall.x1 - wallWidth, wall.x1 + wallWidth)) {
 			if (between(this.direction, -180, 0) || this.direction > 180) return ['vertical', 'upwards']
@@ -180,6 +187,7 @@ class Cell {
 	}
 }
 
+//? Try with rectangles instead of lines and maybe bind 'sides' to their coordinates?
 class Wall {
 	constructor(owner, side) {
 		this.x1 = owner.x
