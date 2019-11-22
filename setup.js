@@ -1,4 +1,5 @@
 function setup() {
+	frameRate(config.fps)
 	// Makes world
 	const canvasWidth = config.environment.cellWidth * config.environment.cellAmtX
 	const canvasHeight = config.environment.cellWidth * config.environment.cellAmtY

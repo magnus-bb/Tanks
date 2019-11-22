@@ -90,6 +90,8 @@ class Bullet {
 		// Starts offset from tank center:
 		this.x = (owner.d / 2 + this.d / 2 + 1) * Math.cos(degsToRads(this.direction)) + owner.x
 		this.y = (owner.d / 2 + this.d / 2 + 1) * Math.sin(degsToRads(this.direction)) + owner.y
+		// First frame alive is used to fade projectile
+		this.startFrame = frameCount
 	}
 
 	move() {
@@ -134,31 +136,41 @@ class Bullet {
 	checkCollision(wall) {
 		const wallWidth = wall.w / 2 // Line thickness makes the walls a pseudo-rectangle that I can check for coordinates 'inside'
 
+		// If projectile is directly next to a wall and inside its 'pseudo'-rectangle:
 		if (between(this.y, wall.y1, wall.y2) && between(this.x, wall.x1 - wallWidth, wall.x1 + wallWidth)) {
+			// Checks for the relevant moving direction of projectile:
 			if (between(this.direction, -180, 0) || this.direction > 180) return ['vertical', 'upwards']
 			if (between(this.direction, 0, 180) || this.direction < -180) return ['vertical', 'downwards']
 		}
-
+		// If projectile is directly above/below to a wall and inside its 'pseudo'-rectangle:
 		if (between(this.x, wall.x1, wall.x2) && between(this.y, wall.y1 - wallWidth, wall.y1 + wallWidth)) {
+			// Checks for the relevant moving direction of projectile:
 			if (between(this.direction, -90, 90) || this.direction > 270 || this.direction < -270) return ['horizontal', 'right']
 			if (between(this.direction, -270, -90) || between(this.direction, 90, 270)) return ['horizontal', 'left']
 		}
 
+		// If no collissions
 		return null
 	}
 
 	show() {
+		// Just a black circle
 		noStroke()
 		fill(0)
 		circle(this.x, this.y, this.d)
+
+		// Removes projectile after framesAlive has passed
+		if (frameCount >= this.startFrame + config.bullet.framesAlive) {
+			const projectileIndex = state.projectiles.findIndex(proj => proj === this)
+			this.destroy(projectileIndex)
+		}
 	}
 
-	// Uses index number to splice from state array of projectiles
+	// Uses index number to remove projectile from the game:
 	destroy(index) {
-		if (this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
-			state.projectiles.splice(index, 1)
-			this.owner.ammo++
-		}
+		//! Out of bounds: if (this.x < 0 || this.x > width || this.y < 0 || this.y > height) 
+		state.projectiles.splice(index, 1)
+		this.owner.ammo++
 	}
 }
 

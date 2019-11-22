@@ -1,4 +1,5 @@
 config = {
+	fps: 60,
 	player: {
 		diameter: 20,
 		moveSpeed: 2,
@@ -16,7 +17,8 @@ config = {
 	},
 	bullet: {
 		speed: 3,
-		diameter: 8
+		diameter: 8,
+		framesAlive: 60 * 6 // 60fps * 5seconds
 	}
 }
 

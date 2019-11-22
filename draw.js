@@ -24,7 +24,6 @@ function draw() {
 		const projectile = state.projectiles[i]
 		projectile.move()
 		projectile.bounce()
-		projectile.show()
-		projectile.destroy(i)
+		projectile.show() // Also removes projectile
 	}
 }
