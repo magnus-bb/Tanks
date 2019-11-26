@@ -84,12 +84,12 @@ class Bullet {
 	constructor(owner) {
 		this.d = config.bullet.diameter
 		// Moves in direction that owner was pointing:
-		this.direction = owner.direction
+		this.direction = owner.direction 
 		this.speed = config.bullet.speed
 		this.owner = owner // Who to give points to when colliding with tanks etc.
 		// Starts offset from tank center:
-		this.x = (owner.d / 2 + this.d / 2 + 1) * Math.cos(degsToRads(this.direction)) + owner.x
-		this.y = (owner.d / 2 + this.d / 2 + 1) * Math.sin(degsToRads(this.direction)) + owner.y
+		this.x = (owner.d / 2 + this.d / 2 + 1) * Math.cos(degsToRads(this.direction)) + owner.x //! ONLY NEEDS POINT AT THE TIP OF THE CANNON
+		this.y = (owner.d / 2 + this.d / 2 + 1) * Math.sin(degsToRads(this.direction)) + owner.y //! ONLY NEEDS POINT AT THE TIP OF THE CANNON
 		// First frame alive is used to fade projectile
 		this.startFrame = frameCount
 	}
@@ -111,8 +111,9 @@ class Bullet {
 						if (this.direction < 0) this.direction += 360 // Normalizes angle to positive equivalent - 90deg === -270deg etc.
 						const axis = collision[0]
 						const direction = collision[1]
-						
+
 						// The directions need to be positive for these hacks to work:
+						//! ONLY NEEDS TO CHECK IF DIRECTION X/Y ARE POSITIVE OR NEGATIVE
 						if (axis === 'vertical') {
 							if (direction === 'upwards') {
 								this.direction += (270 - this.direction) * 2
