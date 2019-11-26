@@ -3,7 +3,8 @@ function setup() {
 	// Makes world
 	const canvasWidth = config.environment.cellWidth * config.environment.cellAmtX
 	const canvasHeight = config.environment.cellWidth * config.environment.cellAmtY
-	createCanvas(canvasWidth, canvasHeight)
+	const canvas = createCanvas(canvasWidth, canvasHeight)
+	canvas.parent('canvas-container');
 
 	// Sets cells, generates walls and draws them
 	for (let x = 0; x < width; x += config.environment.cellWidth) {

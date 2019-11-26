@@ -58,6 +58,7 @@ class Tank {
 			this.ammo--
 			// Keeps track of all bullets
 			state.projectiles.push(new Bullet(this))
+			shake(canvas)
 		}
 	}
 
@@ -82,7 +83,7 @@ class Tank {
 //! Should be extension of a Projectile class, so other weapons can extend as well
 class Bullet {
 	constructor(owner) {
-		this.d = config.bullet.diameter
+		this.d = config.bullet.diameter * 3;
 		// Moves in direction that owner was pointing:
 		this.direction = owner.direction //! RECALCULATE DIRECTION AFTER EACH BOUNCE, SINCE BOUNCE JUST INVERTS COORDS
 		this.speed = config.bullet.speed
@@ -92,13 +93,17 @@ class Bullet {
 		this.y = (owner.d / 2 + this.d / 2 + 1) * sin(degsToRads(this.direction)) + owner.y //! ONLY NEEDS POINT AT THE TIP OF THE CANNON
 		// First frame alive is used to fade projectile
 		this.startFrame = frameCount
+
+		this.tail = [];
 	}
+
 
 	move() {
 		const move = getMoveCoords(this.speed, this.direction)
 
 		this.x += move.x
 		this.y += move.y
+
 	}
 
 	bounce() {
@@ -156,10 +161,31 @@ class Bullet {
 	}
 
 	show() {
+		let ownerColor = color(this.owner.color);
+
+		this.tail.push({x: this.x, y: this.y});
+		if(this.tail.length > 40){
+			this.tail.shift();
+		}
+
 		// Just a black circle
 		noStroke()
-		fill(0)
+		fill(ownerColor)
 		circle(this.x, this.y, this.d)
+
+		ownerColor.setAlpha(50);
+		fill(ownerColor);
+		for(let i = 0; i < this.tail.length; i++){
+			let d = this.d - ( (this.tail.length - i)/10 ) > 1 ? this.d-((this.tail.length - i)/10) : 1;
+			circle(this.tail[i].x, this.tail[i].y, d);
+		}
+		fill(0)
+
+		if(this.d > config.bullet.diameter){
+			this.d -= 3;
+		}else{
+			this.d = config.bullet.diameter;
+		}
 
 		// Removes projectile after framesAlive has passed
 		if (frameCount >= this.startFrame + config.bullet.framesAlive) {
@@ -170,7 +196,7 @@ class Bullet {
 
 	// Uses index number to remove projectile from the game:
 	destroy(index) {
-		//! Out of bounds: if (this.x < 0 || this.x > width || this.y < 0 || this.y > height) 
+		//! Out of bounds: if (this.x < 0 || this.x > width || this.y < 0 || this.y > height)
 		state.projectiles.splice(index, 1)
 		this.owner.ammo++
 	}
@@ -276,3 +302,43 @@ function between(number, min, max, include = true) { // Does not include max, si
 	}
 
 }
+
+function shake (element, magnitude = 5) {
+
+  let counter = 1;
+  let numberOfShakes = 15;
+
+  let startX = 0,
+      startY = 0,
+      startAngle = 0;
+
+  let magnitudeUnit = magnitude / numberOfShakes;
+
+  //The `randomInt` helper function
+  let randomInt = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
+
+	doshake();
+
+  function doshake() {
+    if (counter < numberOfShakes) {
+      element.style.transform = 'translate(' + startX + 'px, ' + startY + 'px)';
+      magnitude -= magnitudeUnit;
+
+      let randomX = randomInt(-magnitude, magnitude);
+      let randomY = randomInt(-magnitude, magnitude);
+
+      element.style.transform = 'translate(' + randomX + 'px, ' + randomY + 'px)';
+
+      counter += 1;
+
+      requestAnimationFrame(doshake);
+    }
+
+    if (counter >= numberOfShakes) {
+      element.style.transform = 'translate(' + startX + ', ' + startY + ')';
+    }
+  }
+
+};
