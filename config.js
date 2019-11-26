@@ -13,12 +13,12 @@ config = {
 		cellAmtX: 20,
 		cellAmtY: 15,
 		wallWidth: 6,
-		wallChance: 0.2
+		wallChance: 0.5//*0.2
 	},
 	bullet: {
 		speed: 3,
 		diameter: 8,
-		framesAlive: 60 * 6 // 60fps * 5seconds
+		framesAlive: 999 //*60 * 6 // 60fps * 5seconds
 	}
 }
 

@@ -111,7 +111,7 @@ class Bullet {
 						if (this.direction < 0) this.direction += 360 // Normalizes angle to positive equivalent - 90deg === -270deg etc.
 						const axis = collision[0]
 						const direction = collision[1]
-
+						
 						// The directions need to be positive for these hacks to work:
 						if (axis === 'vertical') {
 							if (direction === 'upwards') {
@@ -182,10 +182,10 @@ class Cell {
 		this.y = y
 		this.w = config.environment.cellWidth
 		this.walls = {
-			top: null,
+			//*top: null,
 			right: null,
 			bottom: null,
-			left: null
+			//*left: null
 		}
 	}
 
