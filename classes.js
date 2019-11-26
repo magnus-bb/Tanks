@@ -84,7 +84,7 @@ class Bullet {
 	constructor(owner) {
 		this.d = config.bullet.diameter
 		// Moves in direction that owner was pointing:
-		this.direction = owner.direction 
+		this.direction = owner.direction
 		this.speed = config.bullet.speed
 		this.owner = owner // Who to give points to when colliding with tanks etc.
 		// Starts offset from tank center:
@@ -134,6 +134,7 @@ class Bullet {
 	}
 
 	//! Does not check if ends of walls are hit
+	//! https://happycoding.io/tutorials/processing/collision-detection - SEE RECT + RECT
 	checkCollision(wall) {
 		const wallWidth = wall.w / 2 // Line thickness makes the walls a pseudo-rectangle that I can check for coordinates 'inside'
 
