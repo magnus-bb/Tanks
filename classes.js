@@ -69,10 +69,10 @@ class Tank {
 		strokeWeight(1)
 		circle(this.x, this.y, this.d)
 		// direction of cannon + offset from center
-		const cannonXStart = (this.d / 5) * Math.cos(degsToRads(this.direction)) + this.x
-		const cannonYStart = (this.d / 5) * Math.sin(degsToRads(this.direction)) + this.y
-		const cannonXEnd = config.player.cannonLength * Math.cos(degsToRads(this.direction)) + this.x
-		const cannonYEnd = config.player.cannonLength * Math.sin(degsToRads(this.direction)) + this.y
+		const cannonXStart = (this.d / 5) * cos(degsToRads(this.direction)) + this.x //! P5 ANGLE MODE?
+		const cannonYStart = (this.d / 5) * sin(degsToRads(this.direction)) + this.y
+		const cannonXEnd = config.player.cannonLength * cos(degsToRads(this.direction)) + this.x
+		const cannonYEnd = config.player.cannonLength * sin(degsToRads(this.direction)) + this.y
 		// Cannon
 		strokeWeight(3)
 		line(cannonXStart, cannonYStart, cannonXEnd, cannonYEnd)
@@ -88,8 +88,8 @@ class Bullet {
 		this.speed = config.bullet.speed
 		this.owner = owner // Who to give points to when colliding with tanks etc.
 		// Starts offset from tank center:
-		this.x = (owner.d / 2 + this.d / 2 + 1) * Math.cos(degsToRads(this.direction)) + owner.x //! ONLY NEEDS POINT AT THE TIP OF THE CANNON
-		this.y = (owner.d / 2 + this.d / 2 + 1) * Math.sin(degsToRads(this.direction)) + owner.y //! ONLY NEEDS POINT AT THE TIP OF THE CANNON
+		this.x = (owner.d / 2 + this.d / 2 + 1) * cos(degsToRads(this.direction)) + owner.x //! ONLY NEEDS POINT AT THE TIP OF THE CANNON
+		this.y = (owner.d / 2 + this.d / 2 + 1) * sin(degsToRads(this.direction)) + owner.y //! ONLY NEEDS POINT AT THE TIP OF THE CANNON
 		// First frame alive is used to fade projectile
 		this.startFrame = frameCount
 	}
@@ -248,8 +248,8 @@ class Wall {
 //! Helper functions
 function getMoveCoords(speed, direction) {
 	return {
-		x: speed * Math.cos(degsToRads(direction)),
-		y: speed * Math.sin(degsToRads(direction))
+		x: speed * cos(degsToRads(direction)),
+		y: speed * sin(degsToRads(direction))
 	}
 }
 
