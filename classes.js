@@ -36,11 +36,11 @@ class Tank {
 		}
 		if (keyIsDown(this.keybindings.left)) {
 			// % 360 makes it so we don't have to deal with angles over 360 deg
-			this.direction = (this.direction % 360) - this.turnSpeed
+			this.direction = (this.direction % 360) - this.turnSpeed //! SEE IF ROTATE() CAN DO THIS
 			//console.log(this.direction) //! DELETE
 		}
 		if (keyIsDown(this.keybindings.right)) {
-			this.direction = (this.direction % 360) + this.turnSpeed
+			this.direction = (this.direction % 360) + this.turnSpeed //! SEE IF ROTATE() CAN DO THIS
 			//console.log(this.direction) //! DELETE
 		}
 
@@ -69,10 +69,10 @@ class Tank {
 		strokeWeight(1)
 		circle(this.x, this.y, this.d)
 		// direction of cannon + offset from center
-		const cannonXStart = (this.d / 5) * cos(degsToRads(this.direction)) + this.x //! P5 ANGLE MODE?
-		const cannonYStart = (this.d / 5) * sin(degsToRads(this.direction)) + this.y
-		const cannonXEnd = config.player.cannonLength * cos(degsToRads(this.direction)) + this.x
-		const cannonYEnd = config.player.cannonLength * sin(degsToRads(this.direction)) + this.y
+		const cannonXStart = (this.d / 5) * cos(radians(this.direction)) + this.x //! SEE IF ROTATE() CAN DO THIS
+		const cannonYStart = (this.d / 5) * sin(radians(this.direction)) + this.y
+		const cannonXEnd = config.player.cannonLength * cos(radians(this.direction)) + this.x 
+		const cannonYEnd = config.player.cannonLength * sin(radians(this.direction)) + this.y 
 		// Cannon
 		strokeWeight(3)
 		line(cannonXStart, cannonYStart, cannonXEnd, cannonYEnd)
@@ -88,8 +88,8 @@ class Bullet {
 		this.speed = config.bullet.speed
 		this.owner = owner // Who to give points to when colliding with tanks etc.
 		// Starts offset from tank center:
-		this.x = (owner.d / 2 + this.d / 2 + 1) * cos(degsToRads(this.direction)) + owner.x //! ONLY NEEDS POINT AT THE TIP OF THE CANNON
-		this.y = (owner.d / 2 + this.d / 2 + 1) * sin(degsToRads(this.direction)) + owner.y //! ONLY NEEDS POINT AT THE TIP OF THE CANNON
+		this.x = (owner.d / 2 + this.d / 2 + 1) * cos(radians(this.direction)) + owner.x //! ONLY NEEDS POINT AT THE TIP OF THE CANNON
+		this.y = (owner.d / 2 + this.d / 2 + 1) * sin(radians(this.direction)) + owner.y //! ONLY NEEDS POINT AT THE TIP OF THE CANNON
 		// First frame alive is used to fade projectile
 		this.startFrame = frameCount
 	}
@@ -237,42 +237,4 @@ class Wall {
 		stroke(41)
 		line(this.x1, this.y1, this.x2, this.y2)
 	}
-}
-
-
-
-
-
-
-
-
-//! Helper functions
-function getMoveCoords(speed, direction) {
-	return {
-		x: speed * cos(degsToRads(direction)),
-		y: speed * sin(degsToRads(direction))
-	}
-}
-
-function degsToRads(deg) {
-	return deg * (PI / 180)
-}
-
-function randomColor() {
-	return [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)]
-}
-
-function randomWallSide() {
-	const sides = ['top', 'right', 'bottom', 'left']
-	const index = Math.floor(Math.random() * 4)
-	return sides[index]
-}
-
-function between(number, min, max, include = true) { // Does not include max, since collisions will ping for several cells
-	if (include) {
-		return number <= max && number >= min
-	} else {
-		return number < max && number > min
-	}
-
 }
