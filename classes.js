@@ -8,7 +8,7 @@ class Tank {
 		this.moveSpeed = config.player.moveSpeed
 		this.turnSpeed = config.player.turnSpeed
 		this.color = randomColor()
-		this.direction = 0 // in degrees - converted to radians for moving
+		this.direction = 0 //! in degrees - converted to radians for moving
 		this.ammo = config.player.ammo
 		this.weapon = null
 		this.trail = [{ x: this.x, y: this.y }] // For death recap - maybe
@@ -193,7 +193,7 @@ class Cell {
 
 	populateWalls() {
 		for (const wall in this.walls) {
-			const setWall = Math.random() < config.environment.wallChance
+			const setWall = Math.random() < config.environment.wallOccurrency
 			if (setWall) {
 				this.walls[wall] = new Wall(this, wall)
 			}
