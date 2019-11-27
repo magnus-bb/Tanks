@@ -8,7 +8,7 @@ class Tank {
 		this.moveSpeed = config.player.moveSpeed
 		this.turnSpeed = config.player.turnSpeed
 		this.color = randomColor()
-		this.direction = 0 //! in degrees - converted to radians for moving
+		this.direction = random(0, 360)
 		this.ammo = config.player.ammo
 		this.weapon = null
 		this.trail = [{ x: this.x, y: this.y }] // For death recap - maybe
