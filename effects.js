@@ -1,4 +1,4 @@
-function shake(magnitude = 2) {
+function shake(magnitude = config.effects.defaultShakeMagnitude) {
 	let shakeCount = 1;
 	const numShakes = 10
 	const startX = 0

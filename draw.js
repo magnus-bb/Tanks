@@ -23,7 +23,7 @@ function draw() {
 	for (let i = state.projectiles.length - 1; i >= 0; i--) {
 		const projectile = state.projectiles[i]
 		projectile.move()
-		projectile.bounce()
+		//projectile.bounce()
 		projectile.show() // Also removes projectile
 	}
 }

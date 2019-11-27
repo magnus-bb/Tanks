@@ -58,8 +58,8 @@ class Tank {
 			this.ammo--
 			// Keeps track of all bullets
 			state.projectiles.push(new Bullet(this))
-			shake()
 		}
+		shake()
 	}
 
 	show() {
@@ -83,29 +83,39 @@ class Tank {
 //! Should be extension of a Projectile class, so other weapons can extend as well
 class Bullet {
 	constructor(owner) {
-		this.d = config.bullet.diameter * 3 //! Maybe
+		// Initial size is bigger for a muzzle flash effect
+		this.d = config.bullet.diameter * config.effects.muzzleSize
 		// Moves in direction that owner was pointing:
 		this.direction = owner.direction //! RECALCULATE DIRECTION AFTER EACH BOUNCE, SINCE BOUNCE JUST INVERTS COORDS
 		this.speed = config.bullet.speed
-		this.owner = owner // Who to give points to when colliding with tanks etc.
+		this.owner = owner
 		// Starts offset from tank center:
 		this.x = (owner.d / 2 + this.d / 2 + 1) * cos(radians(this.direction)) + owner.x //! ONLY NEEDS POINT AT THE TIP OF THE CANNON
 		this.y = (owner.d / 2 + this.d / 2 + 1) * sin(radians(this.direction)) + owner.y //! ONLY NEEDS POINT AT THE TIP OF THE CANNON
 		// First frame alive is used to fade projectile
 		this.startFrame = frameCount
 
+		// Direction only needs to be recalculated every bounce on projectiles and on spawn
+		const move = getMoveCoords(this.speed, this.direction)
+		this.moveCoords = {
+			dX: move.x,
+			dY: move.y
+		}
+
+		// For effects
 		this.tail = []
 	}
 
 	move() {
-		const move = getMoveCoords(this.speed, this.direction)
-
-		this.x += move.x
-		this.y += move.y
-
+		this.x += this.moveCoords.dX
+		this.y += this.moveCoords.dY
 	}
 
 	bounce() {
+		if (this.collision().x) {
+
+		}
+
 		for (const cell of state.cells) {
 			for (const wall in cell.walls) { // All walls in all cells
 				// If the wall exists, check for a collision (with the placement of the wall):
@@ -159,32 +169,43 @@ class Bullet {
 		return null
 	}
 
-	show() {
-		let ownerColor = color(this.owner.color); //! WILL CHANGE TO A SPRITE
+	effects() {
 
+	}
+
+	// Makes a tail point for each frame
+	effect(color) {
+		// Makes tail data
 		this.tail.push({ x: this.x, y: this.y });
 		if (this.tail.length > 40) {
 			this.tail.shift();
 		}
 
-		// Just a black circle
-		noStroke()
-		fill(ownerColor)
-		circle(this.x, this.y, this.d)
-
-		ownerColor.setAlpha(50);
-		fill(ownerColor);
+		// Renders tail
+		color.setAlpha(50);
+		fill(color);
 		for (let i = 0; i < this.tail.length; i++) {
 			let d = this.d - ((this.tail.length - i) / 10) > 1 ? this.d - ((this.tail.length - i) / 10) : 1;
 			circle(this.tail[i].x, this.tail[i].y, d);
 		}
-		fill(0)
 
+		// Resizes bullet after muzzle flash
 		if (this.d > config.bullet.diameter) {
 			this.d -= 3;
 		} else {
 			this.d = config.bullet.diameter;
 		}
+	}
+
+	show() {
+		let ownerColor = color(this.owner.color); //! WILL CHANGE TO A SPRITE
+
+		// Main bullet
+		fill(ownerColor)
+		noStroke()
+		circle(this.x, this.y, this.d)
+		
+		this.effect(ownerColor)
 
 		// Removes projectile after framesAlive has passed
 		if (frameCount >= this.startFrame + config.bullet.framesAlive) {
@@ -195,7 +216,6 @@ class Bullet {
 
 	// Uses index number to remove projectile from the game:
 	destroy(index) {
-		//! Out of bounds: if (this.x < 0 || this.x > width || this.y < 0 || this.y > height)
 		state.projectiles.splice(index, 1)
 		this.owner.ammo++
 	}

@@ -1,8 +1,15 @@
+// Converts a direction and speed to new coords
 function getMoveCoords(speed, direction) {
 	return {
 		x: speed * cos(radians(direction)),
 		y: speed * sin(radians(direction))
 	}
+}
+
+// Converts difference in x and y coords to a direction in degrees
+function getDirection(dX, dY) {
+	let direction = atan2(dY, dX) // x & y are reversed because of the function, don't change
+	return degrees(direction)
 }
 
 function randomColor() {
