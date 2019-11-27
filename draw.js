@@ -1,7 +1,7 @@
 function draw() {
 	//! Canvas
 	background(195)
-	stroke(41)
+	stroke(40)
 	strokeWeight(config.environment.wallWidth)
 	noFill()
 	rect(0, 0, width, height)
