@@ -36,12 +36,10 @@ class Tank {
 		}
 		if (keyIsDown(this.keybindings.left)) {
 			// % 360 makes it so we don't have to deal with angles over 360 deg
-			this.direction = (this.direction % 360) - this.turnSpeed //! SEE IF ROTATE() CAN DO THIS
-			//console.log(this.direction) //! DELETE
+			this.direction = (this.direction % 360) - this.turnSpeed //TODO: Maybe use rotate() when we switch to sprites
 		}
 		if (keyIsDown(this.keybindings.right)) {
-			this.direction = (this.direction % 360) + this.turnSpeed //! SEE IF ROTATE() CAN DO THIS
-			//console.log(this.direction) //! DELETE
+			this.direction = (this.direction % 360) + this.turnSpeed //TODO: Maybe use rotate() when we switch to sprites
 		}
 
 		// Trail only updates if tank is not standing still
@@ -52,14 +50,12 @@ class Tank {
 
 	fire() {
 		if (this.weapon) {
-			// Make class for each weapon?
-			// Use weapon
+			//TODO: Use weapon
 		} else if (this.ammo > 0) {
 			this.ammo--
-			// Keeps track of all bullets
 			state.projectiles.push(new Bullet(this))
 
-			shake()
+			shake() // Global effect
 		}
 	}
 
@@ -81,7 +77,7 @@ class Tank {
 	}
 }
 
-//! Should be extension of a Projectile class, so other weapons can extend as well
+//TODO: Should be extension of a Projectile class, so other weapons can extend as well
 class Bullet {
 	constructor(owner) {
 		// Initial size is bigger for a muzzle flash effect
