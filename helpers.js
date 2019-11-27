@@ -22,3 +22,7 @@ function between(number, min, max, include = true) { // Does not include max, si
 		return number < max && number > min
 	}
 }
+
+let randInt = (min, max) => {
+	return Math.floor(Math.random() * (max - min + 1)) + min
+}

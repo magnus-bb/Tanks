@@ -1,4 +1,4 @@
-//! Player
+//* Player
 class Tank {
 	constructor(name, x, y, forward = UP_ARROW, right = RIGHT_ARROW, backward = DOWN_ARROW, left = LEFT_ARROW, fire = 32) {
 		this.name = name
@@ -58,7 +58,7 @@ class Tank {
 			this.ammo--
 			// Keeps track of all bullets
 			state.projectiles.push(new Bullet(this))
-			shake(canvas)
+			shake()
 		}
 	}
 
@@ -72,8 +72,8 @@ class Tank {
 		// direction of cannon + offset from center
 		const cannonXStart = (this.d / 5) * cos(radians(this.direction)) + this.x //! SEE IF ROTATE() CAN DO THIS
 		const cannonYStart = (this.d / 5) * sin(radians(this.direction)) + this.y
-		const cannonXEnd = config.player.cannonLength * cos(radians(this.direction)) + this.x 
-		const cannonYEnd = config.player.cannonLength * sin(radians(this.direction)) + this.y 
+		const cannonXEnd = config.player.cannonLength * cos(radians(this.direction)) + this.x
+		const cannonYEnd = config.player.cannonLength * sin(radians(this.direction)) + this.y
 		// Cannon
 		strokeWeight(3)
 		line(cannonXStart, cannonYStart, cannonXEnd, cannonYEnd)
@@ -83,7 +83,7 @@ class Tank {
 //! Should be extension of a Projectile class, so other weapons can extend as well
 class Bullet {
 	constructor(owner) {
-		this.d = config.bullet.diameter * 3;
+		this.d = config.bullet.diameter * 3 //! Maybe
 		// Moves in direction that owner was pointing:
 		this.direction = owner.direction //! RECALCULATE DIRECTION AFTER EACH BOUNCE, SINCE BOUNCE JUST INVERTS COORDS
 		this.speed = config.bullet.speed
@@ -94,9 +94,8 @@ class Bullet {
 		// First frame alive is used to fade projectile
 		this.startFrame = frameCount
 
-		this.tail = [];
+		this.tail = []
 	}
-
 
 	move() {
 		const move = getMoveCoords(this.speed, this.direction)
@@ -161,10 +160,10 @@ class Bullet {
 	}
 
 	show() {
-		let ownerColor = color(this.owner.color);
+		let ownerColor = color(this.owner.color); //! WILL CHANGE TO A SPRITE
 
-		this.tail.push({x: this.x, y: this.y});
-		if(this.tail.length > 40){
+		this.tail.push({ x: this.x, y: this.y });
+		if (this.tail.length > 40) {
 			this.tail.shift();
 		}
 
@@ -175,15 +174,15 @@ class Bullet {
 
 		ownerColor.setAlpha(50);
 		fill(ownerColor);
-		for(let i = 0; i < this.tail.length; i++){
-			let d = this.d - ( (this.tail.length - i)/10 ) > 1 ? this.d-((this.tail.length - i)/10) : 1;
+		for (let i = 0; i < this.tail.length; i++) {
+			let d = this.d - ((this.tail.length - i) / 10) > 1 ? this.d - ((this.tail.length - i) / 10) : 1;
 			circle(this.tail[i].x, this.tail[i].y, d);
 		}
 		fill(0)
 
-		if(this.d > config.bullet.diameter){
+		if (this.d > config.bullet.diameter) {
 			this.d -= 3;
-		}else{
+		} else {
 			this.d = config.bullet.diameter;
 		}
 
@@ -202,8 +201,7 @@ class Bullet {
 	}
 }
 
-
-//! Environment
+//* Environment
 class Cell {
 	constructor(x, y) {
 		this.x = x
@@ -227,7 +225,6 @@ class Cell {
 	}
 }
 
-//? Try with rectangles instead of lines and maybe bind 'sides' to their coordinates?
 class Wall {
 	constructor(owner, side) {
 		this.x1 = owner.x
@@ -263,43 +260,4 @@ class Wall {
 		stroke(41)
 		line(this.x1, this.y1, this.x2, this.y2)
 	}
-
-function shake (element, magnitude = 5) {
-
-  let counter = 1;
-  let numberOfShakes = 15
-
-  let startX = 0,
-      startY = 0,
-      startAngle = 0
-
-  let magnitudeUnit = magnitude / numberOfShakes
-
-  //The `randomInt` helper function
-  let randomInt = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1)) + min
-  }
-
-	doshake()
-
-  function doshake() {
-    if (counter < numberOfShakes) {
-      element.style.transform = 'translate(' + startX + 'px, ' + startY + 'px)'
-      magnitude -= magnitudeUnit
-
-      let randomX = randomInt(-magnitude, magnitude)
-      let randomY = randomInt(-magnitude, magnitude)
-
-      element.style.transform = 'translate(' + randomX + 'px, ' + randomY + 'px)'
-
-      counter += 1
-
-      requestAnimationFrame(doshake)
-    }
-
-    if (counter >= numberOfShakes) {
-      element.style.transform = 'translate(' + startX + ', ' + startY + ')'
-    }
-  }
 }
-
