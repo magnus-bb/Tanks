@@ -1,29 +1,29 @@
 function draw() {
-	//! Canvas
+	//* Canvas
 	background(195)
 	stroke(40)
 	strokeWeight(config.environment.wallWidth)
 	noFill()
 	rect(0, 0, width, height)
 
-	//! Cells & Walls
+	//* Cells & Walls
 	for (const cell of state.cells) {
 		for (const wall in cell.walls) {
 			if (cell.walls[wall]) cell.walls[wall].show()
 		}
 	}
 
-	//! Players
+	//* Players
 	for (const player of state.players) {
 		player.move()
 		player.show()
 	}
 
-	//! Projectiles
+	//* Projectiles
 	for (let i = state.projectiles.length - 1; i >= 0; i--) {
 		const projectile = state.projectiles[i]
-		projectile.move()
 		projectile.checkCollision()
+		projectile.move()
 		projectile.show() // Also removes projectile
 	}
 }

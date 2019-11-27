@@ -34,3 +34,8 @@ Todos
 - Omskrive `state.cells` til et to-dimensionelt array, så celler let kan finde sine naboer
 - En lækker effekt når et projektil kalder `destroy()`, så det ikke bare forsvinder
 - Finde og loade open source lydeffekter til skud (*gud forbyde, at jeg bliver nødt til at optage mundlyde*)
+
+Links
+-----
+- **Collisions**: https://happycoding.io/tutorials/processing/collision-detection
+- **P5 reference**: https://p5js.org/reference/

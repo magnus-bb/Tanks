@@ -2,7 +2,7 @@
 class Tank {
 	constructor(name, x, y, forward = UP_ARROW, right = RIGHT_ARROW, backward = DOWN_ARROW, left = LEFT_ARROW, fire = 32) {
 		this.name = name
-		this.x = x
+		this.x = x // TODO: Spawn in middle of cell
 		this.y = y
 		this.d = config.player.diameter
 		this.moveSpeed = config.player.moveSpeed
@@ -114,24 +114,22 @@ class Bullet {
 
 	bounce(axis) {
 		// Reverses move direction of the axis
-		if (axis === 'x') {
+		if (axis.x) {
 			this.moveCoords.dX *= -1
 		}
-		if (axis === 'y') {
-			this.moveCoords.dy *= -1
+		if (axis.y) {
+			this.moveCoords.dY *= -1
 		}
 
 		// Updates direction to match the new moveCoords
 		this.direction = getDirection(this.moveCoords.dX, this.moveCoords.dY)
 	}
 
-	//! Does not check if ends of walls are hit
-	//! https://happycoding.io/tutorials/processing/collision-detection - SEE RECT + RECT BUT WITH "RAYTRACING" per pixel of bullet movespeed between current pos and next pos
 	checkCollision() {
 		const numSteps = config.environment.collisionLookaheadSteps // How many positions to check between bullet location and next frames' location
 		const wallWidth = config.environment.wallWidth / 2 // +/- from center of wall
 
-		//! Change cells to be in a 2D array, so neighbouring cell walls can be checked
+		//TODO: Change cells to be in a 2D array, so neighbouring cell walls can be checked
 		for (const cell of state.cells) {
 			for (let wall in cell.walls) {
 				if (cell.walls[wall]) { // checks for existing walls
@@ -146,19 +144,14 @@ class Bullet {
 							y: this.y + this.moveCoords.dY / numSteps * step
 						}
 
-						//! NOT WORKING, bounce is overwritten, make array or object to pass to this.bounce
-						let bounce
-						if (between(lookAhead['longAxis'], wall[longAxis + '1'], wall[longAxis + '2']) && between(this[shortAxis], wall[shortAxis + '1'] - wallWidth, wall[shortAxis + '1'] + wallWidth)) {
-							//? Invert longAxis
-							console.log(longAxis)
-							bounce = longAxis
+						const bounce = {x: false, y: false}
+						if (between(lookAhead[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(this[shortAxis], wall[shortAxis + '1'] - wallWidth, wall[shortAxis + '1'] + wallWidth)) {
+							bounce[longAxis] = true
 						}
 						if (between(this[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(lookAhead[shortAxis], wall[shortAxis + '1'] - wallWidth, wall[shortAxis + '1'] + wallWidth)) {
-							//? Invert shortAxis
-							console.log(shortAxis)
-							bounce = shortAxis
+							bounce[shortAxis] = true
 						}
-						if (bounce) {
+						if (bounce.x || bounce.y) {
 							this.bounce(bounce)
 							break
 						}
@@ -256,6 +249,7 @@ class Bullet {
 		}
 	}
 
+	// TODO: Add fade / effect
 	// Uses index number to remove projectile from the game:
 	destroy(index) {
 		state.projectiles.splice(index, 1)
