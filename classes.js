@@ -112,12 +112,12 @@ class Bullet {
 		this.y += this.moveCoords.dY
 	}
 
-	bounce() {
+	bounce(axis) {
 		// Reverses move direction of the axis
-		if (this.collision().x) {
+		if (axis === 'x') {
 			this.moveCoords.dX *= -1
 		}
-		if (this.collision().y) {
+		if (axis === 'y') {
 			this.moveCoords.dy *= -1
 		}
 
@@ -127,83 +127,89 @@ class Bullet {
 
 	//! Does not check if ends of walls are hit
 	//! https://happycoding.io/tutorials/processing/collision-detection - SEE RECT + RECT BUT WITH "RAYTRACING" per pixel of bullet movespeed between current pos and next pos
-	checkCollision(wall) {
-		for (const cell of state.cells) {
-			for (const wall in cell.walls) { // All walls in all cells
-				// If the wall exists, check for a collision (with the placement of the wall):
-				if (cell.walls[wall]) {
-					const collision = this.checkCollision(cell.walls[wall]) // Returns axis of wall and direction of bullet
-					if (collision) {
-						if (this.direction < 0) this.direction += 360 // Normalizes angle to positive equivalent - 90deg === -270deg etc.
-						const axis = collision[0]
-						const direction = collision[1]
+	checkCollision() {
 
-						// The directions need to be positive for these hacks to work:
-						//! ONLY NEEDS TO CHECK IF DIRECTION X/Y ARE POSITIVE OR NEGATIVE
-						if (axis === 'vertical') {
-							if (direction === 'upwards') {
-								this.direction += (270 - this.direction) * 2
-							} else /*downwards*/ {
-								this.direction += (90 - this.direction) * 2
-							}
-						} else /*horizontal*/ {
-							if (direction === 'right') {
-								this.direction = (this.direction - 360) * -1
-							} else /*left*/ {
-								this.direction += (180 - this.direction) * 2
-							}
-						}
-					}
-				}
+		//! Change cells to be in a 2D array, so neighbouring cell walls can be checked
+		for (const cell of state.cells) {
+			for (const wall in cell.walls) {
+				//* Lookahead on x and y if a wall (rect) is there, bounce next frame
 			}
 		}
 
-		
-		const wallWidth = wall.w / 2 // Line thickness makes the walls a pseudo-rectangle that I can check for coordinates 'inside'
+		// 		// If the wall exists, check for a collision (with the placement of the wall):
+		// 		if (cell.walls[wall]) {
+		// 			const collision = this.checkCollision(cell.walls[wall]) // Returns axis of wall and direction of bullet
+		// 			if (collision) {
+		// 				if (this.direction < 0) this.direction += 360 // Normalizes angle to positive equivalent - 90deg === -270deg etc.
+		// 				const axis = collision[0]
+		// 				const direction = collision[1]
 
-		// If projectile is directly next to a wall and inside its 'pseudo'-rectangle:
-		if (between(this.y, wall.y1, wall.y2) && between(this.x, wall.x1 - wallWidth, wall.x1 + wallWidth)) {
-			// Checks for the relevant moving direction of projectile:
-			if (between(this.direction, -180, 0) || this.direction > 180) return ['vertical', 'upwards']
-			if (between(this.direction, 0, 180) || this.direction < -180) return ['vertical', 'downwards']
-		}
-		// If projectile is directly above/below to a wall and inside its 'pseudo'-rectangle:
-		if (between(this.x, wall.x1, wall.x2) && between(this.y, wall.y1 - wallWidth, wall.y1 + wallWidth)) {
-			// Checks for the relevant moving direction of projectile:
-			if (between(this.direction, -90, 90) || this.direction > 270 || this.direction < -270) return ['horizontal', 'right']
-			if (between(this.direction, -270, -90) || between(this.direction, 90, 270)) return ['horizontal', 'left']
-		}
+		// 				// The directions need to be positive for these hacks to work:
+		// 				//! ONLY NEEDS TO CHECK IF DIRECTION X/Y ARE POSITIVE OR NEGATIVE
+		// 				if (axis === 'vertical') {
+		// 					if (direction === 'upwards') {
+		// 						this.direction += (270 - this.direction) * 2
+		// 					} else /*downwards*/ {
+		// 						this.direction += (90 - this.direction) * 2
+		// 					}
+		// 				} else /*horizontal*/ {
+		// 					if (direction === 'right') {
+		// 						this.direction = (this.direction - 360) * -1
+		// 					} else /*left*/ {
+		// 						this.direction += (180 - this.direction) * 2
+		// 					}
+		// 				}
+		// 			}
+		// 		}
+		// 	}
+		// }
 
-		// If no collissions
-		return null
+
+		// const wallWidth = wall.w / 2 // Line thickness makes the walls a pseudo-rectangle that I can check for coordinates 'inside'
+
+		// // If projectile is directly next to a wall and inside its 'pseudo'-rectangle:
+		// if (between(this.y, wall.y1, wall.y2) && between(this.x, wall.x1 - wallWidth, wall.x1 + wallWidth)) {
+		// 	// Checks for the relevant moving direction of projectile:
+		// 	if (between(this.direction, -180, 0) || this.direction > 180) return ['vertical', 'upwards']
+		// 	if (between(this.direction, 0, 180) || this.direction < -180) return ['vertical', 'downwards']
+		// }
+		// // If projectile is directly above/below to a wall and inside its 'pseudo'-rectangle:
+		// if (between(this.x, wall.x1, wall.x2) && between(this.y, wall.y1 - wallWidth, wall.y1 + wallWidth)) {
+		// 	// Checks for the relevant moving direction of projectile:
+		// 	if (between(this.direction, -90, 90) || this.direction > 270 || this.direction < -270) return ['horizontal', 'right']
+		// 	if (between(this.direction, -270, -90) || between(this.direction, 90, 270)) return ['horizontal', 'left']
+		// }
+
+		// // If no collissions
+		// return null
 	}
 
 	// Makes a tail point for each frame
 	effect(color) {
 		// Makes tail data
-		this.tail.push({ x: this.x, y: this.y });
+		this.tail.push({ x: this.x, y: this.y })
 		if (this.tail.length > 40) {
-			this.tail.shift();
+			this.tail.shift()
 		}
 
 		// Renders tail
-		color.setAlpha(50);
+		color.setAlpha(config.effects.bulletTrailAlpha)
 		fill(color);
 		for (let i = 0; i < this.tail.length; i++) {
-			let d = this.d - ((this.tail.length - i) / 10) > 1 ? this.d - ((this.tail.length - i) / 10) : 1;
-			circle(this.tail[i].x, this.tail[i].y, d);
+			let d = this.d - ((this.tail.length - i) / 10) > 1 ? this.d - ((this.tail.length - i) / 10) : 1
+			circle(this.tail[i].x, this.tail[i].y, d)
 		}
 
 		// Resizes bullet after muzzle flash
 		if (this.d > config.bullet.diameter) {
-			this.d -= 3;
+			this.d -= 3
 		} else {
-			this.d = config.bullet.diameter;
+			this.d = config.bullet.diameter
 		}
 	}
 
 	show() {
-		let ownerColor = color(this.owner.color); //! WILL CHANGE TO A SPRITE
+		let ownerColor = color(this.owner.color) //! WILL CHANGE TO A SPRITE
 
 		// Main bullet
 		fill(ownerColor)

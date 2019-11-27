@@ -23,6 +23,7 @@ config = {
 	effects: {
 		muzzleSize: 2,
 		defaultShakeMagnitude: 2,
+		bulletTrailAlpha: 50
 	}
 }
 
