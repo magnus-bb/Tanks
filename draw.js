@@ -1,7 +1,7 @@
 function draw() {
 	//! Canvas
 	background(195)
-	stroke(41)
+	stroke(40)
 	strokeWeight(config.environment.wallWidth)
 	noFill()
 	rect(0, 0, width, height)
@@ -23,7 +23,7 @@ function draw() {
 	for (let i = state.projectiles.length - 1; i >= 0; i--) {
 		const projectile = state.projectiles[i]
 		projectile.move()
-		projectile.bounce()
+		//projectile.bounce()
 		projectile.show() // Also removes projectile
 	}
 }

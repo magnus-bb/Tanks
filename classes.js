@@ -1,4 +1,4 @@
-//! Player
+//* Player
 class Tank {
 	constructor(name, x, y, forward = UP_ARROW, right = RIGHT_ARROW, backward = DOWN_ARROW, left = LEFT_ARROW, fire = 32) {
 		this.name = name
@@ -36,11 +36,11 @@ class Tank {
 		}
 		if (keyIsDown(this.keybindings.left)) {
 			// % 360 makes it so we don't have to deal with angles over 360 deg
-			this.direction = (this.direction % 360) - this.turnSpeed
+			this.direction = (this.direction % 360) - this.turnSpeed //! SEE IF ROTATE() CAN DO THIS
 			//console.log(this.direction) //! DELETE
 		}
 		if (keyIsDown(this.keybindings.right)) {
-			this.direction = (this.direction % 360) + this.turnSpeed
+			this.direction = (this.direction % 360) + this.turnSpeed //! SEE IF ROTATE() CAN DO THIS
 			//console.log(this.direction) //! DELETE
 		}
 
@@ -58,6 +58,8 @@ class Tank {
 			this.ammo--
 			// Keeps track of all bullets
 			state.projectiles.push(new Bullet(this))
+
+			shake()
 		}
 	}
 
@@ -69,10 +71,10 @@ class Tank {
 		strokeWeight(1)
 		circle(this.x, this.y, this.d)
 		// direction of cannon + offset from center
-		const cannonXStart = (this.d / 5) * cos(degsToRads(this.direction)) + this.x //! P5 ANGLE MODE?
-		const cannonYStart = (this.d / 5) * sin(degsToRads(this.direction)) + this.y
-		const cannonXEnd = config.player.cannonLength * cos(degsToRads(this.direction)) + this.x
-		const cannonYEnd = config.player.cannonLength * sin(degsToRads(this.direction)) + this.y
+		const cannonXStart = (this.d / 5) * cos(radians(this.direction)) + this.x //! SEE IF ROTATE() CAN DO THIS
+		const cannonYStart = (this.d / 5) * sin(radians(this.direction)) + this.y
+		const cannonXEnd = config.player.cannonLength * cos(radians(this.direction)) + this.x
+		const cannonYEnd = config.player.cannonLength * sin(radians(this.direction)) + this.y
 		// Cannon
 		strokeWeight(3)
 		line(cannonXStart, cannonYStart, cannonXEnd, cannonYEnd)
@@ -82,26 +84,39 @@ class Tank {
 //! Should be extension of a Projectile class, so other weapons can extend as well
 class Bullet {
 	constructor(owner) {
-		this.d = config.bullet.diameter
+		// Initial size is bigger for a muzzle flash effect
+		this.d = config.bullet.diameter * config.effects.muzzleSize
 		// Moves in direction that owner was pointing:
 		this.direction = owner.direction //! RECALCULATE DIRECTION AFTER EACH BOUNCE, SINCE BOUNCE JUST INVERTS COORDS
 		this.speed = config.bullet.speed
-		this.owner = owner // Who to give points to when colliding with tanks etc.
+		this.owner = owner
 		// Starts offset from tank center:
-		this.x = (owner.d / 2 + this.d / 2 + 1) * cos(degsToRads(this.direction)) + owner.x //! ONLY NEEDS POINT AT THE TIP OF THE CANNON
-		this.y = (owner.d / 2 + this.d / 2 + 1) * sin(degsToRads(this.direction)) + owner.y //! ONLY NEEDS POINT AT THE TIP OF THE CANNON
+		this.x = (owner.d / 2 + this.d / 2 + 1) * cos(radians(this.direction)) + owner.x //! ONLY NEEDS POINT AT THE TIP OF THE CANNON
+		this.y = (owner.d / 2 + this.d / 2 + 1) * sin(radians(this.direction)) + owner.y //! ONLY NEEDS POINT AT THE TIP OF THE CANNON
 		// First frame alive is used to fade projectile
 		this.startFrame = frameCount
+
+		// Direction only needs to be recalculated every bounce on projectiles and on spawn
+		const move = getMoveCoords(this.speed, this.direction)
+		this.moveCoords = {
+			dX: move.x,
+			dY: move.y
+		}
+
+		// For effects
+		this.tail = []
 	}
 
 	move() {
-		const move = getMoveCoords(this.speed, this.direction)
-
-		this.x += move.x
-		this.y += move.y
+		this.x += this.moveCoords.dX
+		this.y += this.moveCoords.dY
 	}
 
 	bounce() {
+		if (this.collision().x) {
+
+		}
+
 		for (const cell of state.cells) {
 			for (const wall in cell.walls) { // All walls in all cells
 				// If the wall exists, check for a collision (with the placement of the wall):
@@ -155,11 +170,43 @@ class Bullet {
 		return null
 	}
 
+	effects() {
+
+	}
+
+	// Makes a tail point for each frame
+	effect(color) {
+		// Makes tail data
+		this.tail.push({ x: this.x, y: this.y });
+		if (this.tail.length > 40) {
+			this.tail.shift();
+		}
+
+		// Renders tail
+		color.setAlpha(50);
+		fill(color);
+		for (let i = 0; i < this.tail.length; i++) {
+			let d = this.d - ((this.tail.length - i) / 10) > 1 ? this.d - ((this.tail.length - i) / 10) : 1;
+			circle(this.tail[i].x, this.tail[i].y, d);
+		}
+
+		// Resizes bullet after muzzle flash
+		if (this.d > config.bullet.diameter) {
+			this.d -= 3;
+		} else {
+			this.d = config.bullet.diameter;
+		}
+	}
+
 	show() {
-		// Just a black circle
+		let ownerColor = color(this.owner.color); //! WILL CHANGE TO A SPRITE
+
+		// Main bullet
+		fill(ownerColor)
 		noStroke()
-		fill(0)
 		circle(this.x, this.y, this.d)
+
+		this.effect(ownerColor)
 
 		// Removes projectile after framesAlive has passed
 		if (frameCount >= this.startFrame + config.bullet.framesAlive) {
@@ -170,14 +217,12 @@ class Bullet {
 
 	// Uses index number to remove projectile from the game:
 	destroy(index) {
-		//! Out of bounds: if (this.x < 0 || this.x > width || this.y < 0 || this.y > height) 
 		state.projectiles.splice(index, 1)
 		this.owner.ammo++
 	}
 }
 
-
-//! Environment
+//* Environment
 class Cell {
 	constructor(x, y) {
 		this.x = x
@@ -201,7 +246,6 @@ class Cell {
 	}
 }
 
-//? Try with rectangles instead of lines and maybe bind 'sides' to their coordinates?
 class Wall {
 	constructor(owner, side) {
 		this.x1 = owner.x
@@ -237,42 +281,4 @@ class Wall {
 		stroke(41)
 		line(this.x1, this.y1, this.x2, this.y2)
 	}
-}
-
-
-
-
-
-
-
-
-//! Helper functions
-function getMoveCoords(speed, direction) {
-	return {
-		x: speed * cos(degsToRads(direction)),
-		y: speed * sin(degsToRads(direction))
-	}
-}
-
-function degsToRads(deg) {
-	return deg * (PI / 180)
-}
-
-function randomColor() {
-	return [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)]
-}
-
-function randomWallSide() {
-	const sides = ['top', 'right', 'bottom', 'left']
-	const index = Math.floor(Math.random() * 4)
-	return sides[index]
-}
-
-function between(number, min, max, include = true) { // Does not include max, since collisions will ping for several cells
-	if (include) {
-		return number <= max && number >= min
-	} else {
-		return number < max && number > min
-	}
-
 }
