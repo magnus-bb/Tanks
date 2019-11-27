@@ -18,7 +18,7 @@ config = {
 	bullet: {
 		speed: 3, // Has to be less than the width of walls to not pass through
 		diameter: 8,
-		framesAlive: 999 //*60 * 6 // 60fps * 5seconds
+		framesAlive: 999 //? 60 * 6 // 60fps * 5seconds
 	}
 }
 
