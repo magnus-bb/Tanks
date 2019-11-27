@@ -58,8 +58,9 @@ class Tank {
 			this.ammo--
 			// Keeps track of all bullets
 			state.projectiles.push(new Bullet(this))
+
+			shake()
 		}
-		shake()
 	}
 
 	show() {
@@ -204,7 +205,7 @@ class Bullet {
 		fill(ownerColor)
 		noStroke()
 		circle(this.x, this.y, this.d)
-		
+
 		this.effect(ownerColor)
 
 		// Removes projectile after framesAlive has passed
