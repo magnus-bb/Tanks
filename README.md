@@ -10,6 +10,7 @@ Guidelines
 	- Skriv '`TODO: `' for at henvise til noget, der mangler at blive gjort
 	- Skriv '`@param XXX`' efterfulgt af tekst, for at beskrive et bestemt parameter til en funktion
 	- Skriv '`//`' inde i kommentaren for at overstrege
+	- Eks: `//! Not working yet. Fix before testing` - Laver kommentaren **rød**, så den lettere ses
 - Brug *ikke* semikolon i slutningen af linjer; kun ved flere single line statements (det er bare en personlig præference, men vil gerne have det uniformt)
 - Prøv så vidt muligt *kun* at holde kode, hvor det passer. Dvs:
 	- Brug filerne til at organisere
