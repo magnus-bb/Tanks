@@ -12,11 +12,11 @@ config = {
 		cellAmtX: 20,
 		cellAmtY: 15,
 		wallWidth: 6,
-		wallOccurrency: 0.5,
-		collisionLookaheadSteps: 3 // Same as bullet speed ?
+		wallOccurrence: 0.5,
+		collisionLookaheadSteps: 3 // Same as bullet speed
 	},
 	bullet: {
-		speed: 3, // Has to be less than the width of walls to not pass through
+		speed: 3,
 		diameter: 8,
 		framesAlive: 60 * 6 // 60fps * 5seconds
 	},

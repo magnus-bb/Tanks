@@ -21,6 +21,14 @@ class Tank {
 		}
 	}
 
+	checkCollision() {
+		// TODO: after rewrite of walls
+	}
+
+	handleCollision() {
+
+	}
+
 	move() {
 		// Angle and amount to move
 		const move = getMoveCoords(this.moveSpeed, this.direction)
@@ -67,7 +75,7 @@ class Tank {
 		strokeWeight(1)
 		circle(this.x, this.y, this.d)
 		// direction of cannon + offset from center
-		const cannonXStart = (this.d / 5) * cos(radians(this.direction)) + this.x //! SEE IF ROTATE() CAN DO THIS
+		const cannonXStart = (this.d / 5) * cos(radians(this.direction)) + this.x
 		const cannonYStart = (this.d / 5) * sin(radians(this.direction)) + this.y
 		const cannonXEnd = config.player.cannonLength * cos(radians(this.direction)) + this.x
 		const cannonYEnd = config.player.cannonLength * sin(radians(this.direction)) + this.y
@@ -125,31 +133,32 @@ class Bullet {
 		const numSteps = config.environment.collisionLookaheadSteps // How many positions to check between bullet location and next frames' location
 		const wallWidth = config.environment.wallWidth / 2 // +/- from center of wall
 
-		//TODO: Change cells to be in a 2D array, so neighbouring cell walls can be checked
-		for (const cell of state.cells) {
-			for (let wall in cell.walls) {
-				if (cell.walls[wall]) { // checks for existing walls
-					wall = cell.walls[wall] // binds wall to the object value, not the prop name
-					const longAxis = wall.x1 === wall.x2 ? 'y' : 'x' // Hack to help determine when to add wallWidth and when to use [].1 and [].2 props on wall
-					const shortAxis = wall.x1 === wall.x2 ? 'x' : 'y'
+		for (const column of state.grid) {
+			for (const cell of column) {
+				for (let wall in cell.walls) {
+					if (cell.walls[wall]) { // checks for existing walls
+						wall = cell.walls[wall] // binds wall to the object value, not the prop name
+						const longAxis = wall.x1 === wall.x2 ? 'y' : 'x' // Hack to help determine when to add wallWidth and when to use [].1 and [].2 props on wall
+						const shortAxis = wall.x1 === wall.x2 ? 'x' : 'y'
 
-					// Looks at "all" positions between location and next location
-					for (let step = 1; step <= numSteps; step++) {
-						const lookAhead = {
-							x: this.x + this.moveCoords.dX / numSteps * step,
-							y: this.y + this.moveCoords.dY / numSteps * step
-						}
+						// Looks at "all" positions between location and next location
+						for (let step = 1; step <= numSteps; step++) {
+							const lookAhead = {
+								x: this.x + this.moveCoords.dX / numSteps * step,
+								y: this.y + this.moveCoords.dY / numSteps * step
+							}
 
-						const bounce = {x: false, y: false}
-						if (between(lookAhead[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(this[shortAxis], wall[shortAxis + '1'] - wallWidth, wall[shortAxis + '1'] + wallWidth)) {
-							bounce[longAxis] = true
-						}
-						if (between(this[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(lookAhead[shortAxis], wall[shortAxis + '1'] - wallWidth, wall[shortAxis + '1'] + wallWidth)) {
-							bounce[shortAxis] = true
-						}
-						if (bounce.x || bounce.y) {
-							this.bounce(bounce)
-							break
+							const bounce = { x: false, y: false }
+							if (between(lookAhead[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(this[shortAxis], wall[shortAxis + '1'] - wallWidth, wall[shortAxis + '1'] + wallWidth)) {
+								bounce[longAxis] = true
+							}
+							if (between(this[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(lookAhead[shortAxis], wall[shortAxis + '1'] - wallWidth, wall[shortAxis + '1'] + wallWidth)) {
+								bounce[shortAxis] = true
+							}
+							if (bounce.x || bounce.y) {
+								this.bounce(bounce)
+								break
+							}
 						}
 					}
 				}
@@ -198,9 +207,9 @@ class Bullet {
 		}
 	}
 
-	// TODO: Add fade / effect
 	// Uses index number to remove projectile from the game:
 	destroy(index) {
+		// TODO: Add fade / effect
 		state.projectiles.splice(index, 1)
 		this.owner.ammo++
 	}
@@ -220,9 +229,12 @@ class Cell {
 
 	populateWalls() {
 		for (const wall in this.walls) {
-			const setWall = Math.random() < config.environment.wallOccurrency
-			if (setWall) {
-				this.walls[wall] = new Wall(this, wall)
+			// Don't draw walls around edge of canvas:
+			if (!(wall === 'right' && this.x === width - config.environment.cellWidth) && !(wall === 'bottom' && this.y === height - config.environment.cellWidth)) {
+				const setWall = Math.random() < config.environment.wallOccurrence
+				if (setWall) {
+					this.walls[wall] = new Wall(this, wall)
+				}
 			}
 		}
 	}

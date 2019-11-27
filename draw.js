@@ -7,20 +7,23 @@ function draw() {
 	rect(0, 0, width, height)
 
 	//* Cells & Walls
-	for (const cell of state.cells) {
-		for (const wall in cell.walls) {
-			if (cell.walls[wall]) cell.walls[wall].show()
+	for (const column of state.grid) {
+		for (const cell of column) {
+			for (const wall in cell.walls) {
+				if (cell.walls[wall]) cell.walls[wall].show()
+			}
 		}
 	}
 
 	//* Players
 	for (const player of state.players) {
+		player.checkCollision()
 		player.move()
 		player.show()
 	}
 
 	//* Projectiles
-	for (let i = state.projectiles.length - 1; i >= 0; i--) {
+	for (let i = state.projectiles.length - 1; i >= 0; i--) { // We have to go backwards when removing projectiles
 		const projectile = state.projectiles[i]
 		projectile.checkCollision()
 		projectile.move()

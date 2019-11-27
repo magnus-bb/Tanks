@@ -1,5 +1,5 @@
 state = {
 	players: [],
 	projectiles: [],
-	cells: []
+	grid: []
 }

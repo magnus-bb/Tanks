@@ -6,24 +6,26 @@ function setup() {
 	const canvas = createCanvas(canvasWidth, canvasHeight)
 	canvas.parent('canvas-container');
 
-	// Sets cells, generates walls and draws them
+	// Sets cells, generates walls
 	for (let x = 0; x < width; x += config.environment.cellWidth) {
+
+		const column = []
 		for (let y = 0; y < height; y += config.environment.cellWidth) {
-			state.cells.push(new Cell(x, y))
+			const cell = new Cell(x, y)
+			cell.populateWalls()
+			column.push(cell)
 		}
-	}
-	for (const cell of state.cells) {
-		cell.populateWalls()
+		state.grid.push(column)
 	}
 
-	// Creates a player
+	//! Creates players
 	state.players.push(new Tank(
-		'Magnus',
+		'Tanko',
 		Math.floor(Math.random() * width),
 		Math.floor(Math.random() * height)
 	))
 	state.players.push(new Tank(
-		'Helena',
+		'Tankarino',
 		Math.floor(Math.random() * width),
 		Math.floor(Math.random() * height),
 		87, 68, 83, 65, 67
