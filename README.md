@@ -26,7 +26,7 @@ Guidelines
 		- **state.js**: Alle de objekter, der skal holdes styr på og lignende
 	- Opdel lange scripts i hjælpefunktioner, der så står sit eget sted
 	- Hvis en funktion eksempelvis hedder `bounce()`, så sørg for at funktionen kun **bouncer**, og abstrahér underprocesser til en anden funktion, *eller* navngiv funktionen noget andet
-
+- Permanente kommentarer og variabel-/funktionsnavne på engelsk, hvis projektet senere skal deles
 
 Todos
 -----
