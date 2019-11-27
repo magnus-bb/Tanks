@@ -87,7 +87,7 @@ class Bullet {
 		// Initial size is bigger for a muzzle flash effect
 		this.d = config.bullet.diameter * config.effects.muzzleSize
 		// Moves in direction that owner was pointing:
-		this.direction = owner.direction //! RECALCULATE DIRECTION AFTER EACH BOUNCE, SINCE BOUNCE JUST INVERTS COORDS
+		this.direction = owner.direction
 		this.speed = config.bullet.speed
 		this.owner = owner
 		// Starts offset from tank center:
@@ -128,11 +128,42 @@ class Bullet {
 	//! Does not check if ends of walls are hit
 	//! https://happycoding.io/tutorials/processing/collision-detection - SEE RECT + RECT BUT WITH "RAYTRACING" per pixel of bullet movespeed between current pos and next pos
 	checkCollision() {
+		const numSteps = config.environment.collisionLookaheadSteps // How many positions to check between bullet location and next frames' location
+		const wallWidth = config.environment.wallWidth / 2 // +/- from center of wall
 
 		//! Change cells to be in a 2D array, so neighbouring cell walls can be checked
 		for (const cell of state.cells) {
-			for (const wall in cell.walls) {
-				//* Lookahead on x and y if a wall (rect) is there, bounce next frame
+			for (let wall in cell.walls) {
+				if (cell.walls[wall]) { // checks for existing walls
+					wall = cell.walls[wall] // binds wall to the object value, not the prop name
+					const longAxis = wall.x1 === wall.x2 ? 'y' : 'x' // Hack to help determine when to add wallWidth and when to use [].1 and [].2 props on wall
+					const shortAxis = wall.x1 === wall.x2 ? 'x' : 'y'
+
+					// Looks at "all" positions between location and next location
+					for (let step = 1; step <= numSteps; step++) {
+						const lookAhead = {
+							x: this.x + this.moveCoords.dX / numSteps * step,
+							y: this.y + this.moveCoords.dY / numSteps * step
+						}
+
+						//! NOT WORKING, bounce is overwritten, make array or object to pass to this.bounce
+						let bounce
+						if (between(lookAhead['longAxis'], wall[longAxis + '1'], wall[longAxis + '2']) && between(this[shortAxis], wall[shortAxis + '1'] - wallWidth, wall[shortAxis + '1'] + wallWidth)) {
+							//? Invert longAxis
+							console.log(longAxis)
+							bounce = longAxis
+						}
+						if (between(this[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(lookAhead[shortAxis], wall[shortAxis + '1'] - wallWidth, wall[shortAxis + '1'] + wallWidth)) {
+							//? Invert shortAxis
+							console.log(shortAxis)
+							bounce = shortAxis
+						}
+						if (bounce) {
+							this.bounce(bounce)
+							break
+						}
+					}
+				}
 			}
 		}
 
