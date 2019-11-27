@@ -113,10 +113,21 @@ class Bullet {
 	}
 
 	bounce() {
+		// Reverses move direction of the axis
 		if (this.collision().x) {
-
+			this.moveCoords.dX *= -1
+		}
+		if (this.collision().y) {
+			this.moveCoords.dy *= -1
 		}
 
+		// Updates direction to match the new moveCoords
+		this.direction = getDirection(this.moveCoords.dX, this.moveCoords.dY)
+	}
+
+	//! Does not check if ends of walls are hit
+	//! https://happycoding.io/tutorials/processing/collision-detection - SEE RECT + RECT BUT WITH "RAYTRACING" per pixel of bullet movespeed between current pos and next pos
+	checkCollision(wall) {
 		for (const cell of state.cells) {
 			for (const wall in cell.walls) { // All walls in all cells
 				// If the wall exists, check for a collision (with the placement of the wall):
@@ -146,11 +157,8 @@ class Bullet {
 				}
 			}
 		}
-	}
 
-	//! Does not check if ends of walls are hit
-	//! https://happycoding.io/tutorials/processing/collision-detection - SEE RECT + RECT BUT WITH "RAYTRACING" per pixel of bullet movespeed between current pos and next pos
-	checkCollision(wall) {
+		
 		const wallWidth = wall.w / 2 // Line thickness makes the walls a pseudo-rectangle that I can check for coordinates 'inside'
 
 		// If projectile is directly next to a wall and inside its 'pseudo'-rectangle:
@@ -168,10 +176,6 @@ class Bullet {
 
 		// If no collissions
 		return null
-	}
-
-	effects() {
-
 	}
 
 	// Makes a tail point for each frame
@@ -229,10 +233,8 @@ class Cell {
 		this.y = y
 		this.w = config.environment.cellWidth
 		this.walls = {
-			//*top: null,
 			right: null,
-			bottom: null,
-			//*left: null
+			bottom: null
 		}
 	}
 
@@ -256,9 +258,6 @@ class Wall {
 
 		const length = owner.w
 		switch (side) {
-			case 'top':
-				this.x2 += length
-				break
 			case 'right':
 				this.x1 += length
 				this.x2 += length
@@ -267,9 +266,6 @@ class Wall {
 			case 'bottom':
 				this.x2 += length
 				this.y1 += length
-				this.y2 += length
-				break
-			case 'left':
 				this.y2 += length
 				break
 		}
