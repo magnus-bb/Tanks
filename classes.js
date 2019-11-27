@@ -159,53 +159,6 @@ class Bullet {
 				}
 			}
 		}
-
-		// 		// If the wall exists, check for a collision (with the placement of the wall):
-		// 		if (cell.walls[wall]) {
-		// 			const collision = this.checkCollision(cell.walls[wall]) // Returns axis of wall and direction of bullet
-		// 			if (collision) {
-		// 				if (this.direction < 0) this.direction += 360 // Normalizes angle to positive equivalent - 90deg === -270deg etc.
-		// 				const axis = collision[0]
-		// 				const direction = collision[1]
-
-		// 				// The directions need to be positive for these hacks to work:
-		// 				//! ONLY NEEDS TO CHECK IF DIRECTION X/Y ARE POSITIVE OR NEGATIVE
-		// 				if (axis === 'vertical') {
-		// 					if (direction === 'upwards') {
-		// 						this.direction += (270 - this.direction) * 2
-		// 					} else /*downwards*/ {
-		// 						this.direction += (90 - this.direction) * 2
-		// 					}
-		// 				} else /*horizontal*/ {
-		// 					if (direction === 'right') {
-		// 						this.direction = (this.direction - 360) * -1
-		// 					} else /*left*/ {
-		// 						this.direction += (180 - this.direction) * 2
-		// 					}
-		// 				}
-		// 			}
-		// 		}
-		// 	}
-		// }
-
-
-		// const wallWidth = wall.w / 2 // Line thickness makes the walls a pseudo-rectangle that I can check for coordinates 'inside'
-
-		// // If projectile is directly next to a wall and inside its 'pseudo'-rectangle:
-		// if (between(this.y, wall.y1, wall.y2) && between(this.x, wall.x1 - wallWidth, wall.x1 + wallWidth)) {
-		// 	// Checks for the relevant moving direction of projectile:
-		// 	if (between(this.direction, -180, 0) || this.direction > 180) return ['vertical', 'upwards']
-		// 	if (between(this.direction, 0, 180) || this.direction < -180) return ['vertical', 'downwards']
-		// }
-		// // If projectile is directly above/below to a wall and inside its 'pseudo'-rectangle:
-		// if (between(this.x, wall.x1, wall.x2) && between(this.y, wall.y1 - wallWidth, wall.y1 + wallWidth)) {
-		// 	// Checks for the relevant moving direction of projectile:
-		// 	if (between(this.direction, -90, 90) || this.direction > 270 || this.direction < -270) return ['horizontal', 'right']
-		// 	if (between(this.direction, -270, -90) || between(this.direction, 90, 270)) return ['horizontal', 'left']
-		// }
-
-		// // If no collissions
-		// return null
 	}
 
 	// Makes a tail point for each frame

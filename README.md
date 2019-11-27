@@ -1,4 +1,4 @@
-# Tanks (name TBD)
+# Tanks (*TBD*)
 A recreation of the flash game Tank Trouble
 
 Guidelines
@@ -32,8 +32,9 @@ Todos
 -----
 - Tanks skal spawne i **midten** af en celle
 - Omskrive `state.cells` til et to-dimensionelt array, så celler let kan finde sine naboer
-- En lækker effekt når et projektil kalder `destroy()`, så det ikke bare forsvinder
+- En lækker effekt når et projektil kalder `destroy()`, så det ikke bare forsvinder. Evt. også fade på projektilets hale
 - Finde og loade open source lydeffekter til skud (*gud forbyde, at jeg bliver nødt til at optage mundlyde*)
+- `Bullet` class skal omskrives til at extende en `Projectile` class i stedet, og så skal fælleskarakteristika med andre våben flyttes dertil
 
 Links
 -----
