@@ -24,9 +24,13 @@ Guidelines
 		- **preload.js**: Stort set kun til at loade sprites, lydeffekter og andet, der skal være loadet inden spillet starter
 		- **setup.js**: Opsætning af spillet, som kun gøres 1 gang
 		- **state.js**: Alle de objekter, der skal holdes styr på og lignende
+	- Opdel lange scripts i hjælpefunktioner, der så står sit eget sted
+	- Hvis en funktion eksempelvis hedder `bounce()`, så sørg for at funktionen kun **bouncer**, og abstrahér underprocesser til en anden funktion, *eller* navngiv funktionen noget andet
 
 
 Todos
 -----
 - Tanks skal spawne i **midten** af en celle
 - Omskrive `state.cells` til et to-dimensionelt array, så celler let kan finde sine naboer
+- En lækker effekt når et projektil kalder `destroy()`, så det ikke bare forsvinder
+- Finde og loade open source lydeffekter til skud (*gud forbyde, at jeg bliver nødt til at optage mundlyde*)
