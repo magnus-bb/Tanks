@@ -129,50 +129,42 @@ class Bullet {
 		this.direction = getDirection(this.moveCoords.dX, this.moveCoords.dY)
 	}
 
-	checkCollision() {
+	checkCollision(wall) {
 		const numSteps = config.environment.collisionLookaheadSteps // How many positions to check between bullet location and next frames' location
 		const wallWidth = config.environment.wallWidth / 2 // +/- from center of wall
+		console.log(wall)
 
-		for (const column of state.grid) {
-			for (const cell of column) {
-				for (let wall in cell.walls) {
-					if (cell.walls[wall]) { // checks for existing walls
-						wall = cell.walls[wall] // binds wall to the object value, not the prop name
-						const longAxis = wall.x1 === wall.x2 ? 'y' : 'x' // Hack to help determine when to add wallWidth and when to use [].1 and [].2 props on wall
-						const shortAxis = wall.x1 === wall.x2 ? 'x' : 'y'
+		const longAxis = wall.x1 === wall.x2 ? 'y' : 'x' // Hack to help determine when to add wallWidth and when to use [].1 and [].2 props on wall
+		const shortAxis = wall.x1 === wall.x2 ? 'x' : 'y'
 
-						// Looks at "all" positions between location and next location
-						for (let step = 1; step <= numSteps; step++) {
-							const lookAhead = {
-								x: this.x + this.moveCoords.dX / numSteps * step,
-								y: this.y + this.moveCoords.dY / numSteps * step
-							}
+		// Looks at "all" positions between location and next location
+		for (let step = 1; step <= numSteps; step++) {
+			const lookAhead = {
+				x: this.x + this.moveCoords.dX / numSteps * step,
+				y: this.y + this.moveCoords.dY / numSteps * step
+			}
 
-							// Interaction with walls:
-							const bounce = { x: false, y: false }
-							if (between(lookAhead[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(this[shortAxis], wall[shortAxis + '1'] - wallWidth, wall[shortAxis + '1'] + wallWidth)) {
-								bounce[longAxis] = true
-							}
-							if (between(this[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(lookAhead[shortAxis], wall[shortAxis + '1'] - wallWidth, wall[shortAxis + '1'] + wallWidth)) {
-								bounce[shortAxis] = true
-							}
+			// Interaction with walls:
+			const bounce = { x: false, y: false }
+			if (between(lookAhead[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(this[shortAxis], wall[shortAxis + '1'] - wallWidth, wall[shortAxis + '1'] + wallWidth)) {
+				bounce[longAxis] = true
+			}
+			if (between(this[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(lookAhead[shortAxis], wall[shortAxis + '1'] - wallWidth, wall[shortAxis + '1'] + wallWidth)) {
+				bounce[shortAxis] = true
+			}
 
-							// Interaction with edges of convas:
-							if (lookAhead.x <= 0 + wallWidth || lookAhead.x >= width - wallWidth) {
-								bounce.x = true
-							}
-							if (lookAhead.y <= 0 + wallWidth || lookAhead.y >= height - wallWidth) {
-								bounce.y = true
-							}
+			// Interaction with edges of convas:
+			if (lookAhead.x <= 0 + wallWidth || lookAhead.x >= width - wallWidth) {
+				bounce.x = true
+			}
+			if (lookAhead.y <= 0 + wallWidth || lookAhead.y >= height - wallWidth) {
+				bounce.y = true
+			}
 
-							// A collision calls the bounce and stops further lookAheads
-							if (bounce.x || bounce.y) {
-								this.bounce(bounce)
-								break
-							}
-						}
-					}
-				}
+			// A collision calls the bounce and stops further lookAheads
+			if (bounce.x || bounce.y) {
+				this.bounce(bounce)
+				break
 			}
 		}
 	}

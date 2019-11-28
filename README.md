@@ -34,9 +34,6 @@ Todos
 - En lækker effekt når et projektil kalder `destroy()`, så det ikke bare forsvinder. Evt. også fade på projektilets hale
 - Finde og loade open source lydeffekter til skud (*gud forbyde, at jeg bliver nødt til at optage mundlyde*)
 - `Bullet` class skal omskrives til at extende en `Projectile` class i stedet, og så skal fælleskarakteristika med andre våben flyttes dertil
-- Omskriv alle walls fra linjer med en bredde til at være rektangler
-	- Omskriv kollision til at matche
-- Hjælpefunktion, der løber alle walls igennem, som tjekker collisions med relevante objekter, så walls ikke skal gennemløbes flere gange
 
 Links
 -----

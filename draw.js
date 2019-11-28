@@ -1,23 +1,36 @@
 function draw() {
-	//* Canvas
+	//* Canvas:
 	background(195)
 	stroke(40)
 	strokeWeight(config.environment.wallWidth)
 	noFill()
 	rect(0, 0, width, height) // Outer walls
 
-	//* Cells & Walls
+	//* Cells & Walls:
 	for (const column of state.grid) {
 		for (const cell of column) {
-			for (const wall in cell.walls) {
-				if (cell.walls[wall]) cell.walls[wall].show()
+			for (let wall in cell.walls) {
+				if (cell.walls[wall]) { // checks for existing walls only
+
+					wall = cell.walls[wall] // binds wall to the object value, not the prop name
+					wall.show()
+
+					//* Wall collisions:
+					for (const player of state.players) {
+						////checkCollision(wall)
+					}
+
+					for (let i = state.projectiles.length - 1; i >= 0; i--) { // We have to go backwards when removing projectiles
+						const projectile = state.projectiles[i]
+						projectile.checkCollision(wall)
+					}
+				}
 			}
 		}
 	}
 
-	//* Players
+	//* Players:
 	for (const player of state.players) {
-		player.checkCollision()
 		player.move()
 		player.show()
 	}
@@ -25,7 +38,6 @@ function draw() {
 	//* Projectiles
 	for (let i = state.projectiles.length - 1; i >= 0; i--) { // We have to go backwards when removing projectiles
 		const projectile = state.projectiles[i]
-		projectile.checkCollision()
 		projectile.move()
 		projectile.show() // Also removes projectile
 	}
