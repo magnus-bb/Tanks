@@ -12,17 +12,17 @@ function draw() {
 			for (let wall in cell.walls) {
 				if (cell.walls[wall]) { // checks for existing walls only
 
-					wall = cell.walls[wall] // binds wall to the object value, not the prop name
-					wall.show()
+					wallObj = cell.walls[wall] // binds wall to the object value, not the prop name
+					wallObj.show()
 
 					//* Wall collisions:
 					for (const player of state.players) {
-						////checkCollision(wall)
+						////checkCollision(wallObj, wall)
 					}
 
 					for (let i = state.projectiles.length - 1; i >= 0; i--) { // We have to go backwards when removing projectiles
 						const projectile = state.projectiles[i]
-						projectile.checkCollision(wall)
+						projectile.checkCollision(wallObj, wall)
 					}
 				}
 			}

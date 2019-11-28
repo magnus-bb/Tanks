@@ -21,8 +21,20 @@ class Tank {
 		}
 	}
 
-	checkCollision() {
-		// TODO: after rewrite of walls
+	checkCollision(wall, side) {
+		const wallWidth = config.environment.wallWidth / 2 // +/- from center of wall
+
+		const longAxis = side === 'right' ? 'y' : 'x' // Hack to help add wallWidth when needed and vice versa
+		const shortAxis = side === 'bottom' ? 'y' : 'x'
+
+		const shortAxisPointOne = wall[shortAxis + '1'] - wallWidth
+		const shortAxisPointTwo = wall[shortAxis + '1'] + wallWidth
+
+		/* 
+		* Use lookaheads with getMoveCoords (probably not necessary to use steps) to see whether a side (x or y)
+		* should not go past a wall. Use direction or the coords to turn slowly parallel to the wall
+		* This should all check for collisions TOGETHER with the cannon as a line (or maybe just a point at the end)
+		*/
 	}
 
 	handleCollision() {
@@ -129,13 +141,16 @@ class Bullet {
 		this.direction = getDirection(this.moveCoords.dX, this.moveCoords.dY)
 	}
 
-	checkCollision(wall) {
+	//! WHEN FIRING INSIDE WALL, BULLET GETS STUCK
+	checkCollision(wall, side) {
 		const numSteps = config.environment.collisionLookaheadSteps // How many positions to check between bullet location and next frames' location
 		const wallWidth = config.environment.wallWidth / 2 // +/- from center of wall
-		console.log(wall)
 
-		const longAxis = wall.x1 === wall.x2 ? 'y' : 'x' // Hack to help determine when to add wallWidth and when to use [].1 and [].2 props on wall
-		const shortAxis = wall.x1 === wall.x2 ? 'x' : 'y'
+		const longAxis = side === 'right' ? 'y' : 'x' // Hack to help add wallWidth when needed and vice versa
+		const shortAxis = side === 'bottom' ? 'y' : 'x'
+
+		const shortAxisPointOne = wall[shortAxis + '1'] - wallWidth
+		const shortAxisPointTwo = wall[shortAxis + '1'] + wallWidth
 
 		// Looks at "all" positions between location and next location
 		for (let step = 1; step <= numSteps; step++) {
@@ -146,10 +161,10 @@ class Bullet {
 
 			// Interaction with walls:
 			const bounce = { x: false, y: false }
-			if (between(lookAhead[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(this[shortAxis], wall[shortAxis + '1'] - wallWidth, wall[shortAxis + '1'] + wallWidth)) {
+			if (between(lookAhead[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(this[shortAxis], shortAxisPointOne, shortAxisPointTwo)) {
 				bounce[longAxis] = true
 			}
-			if (between(this[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(lookAhead[shortAxis], wall[shortAxis + '1'] - wallWidth, wall[shortAxis + '1'] + wallWidth)) {
+			if (between(this[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(lookAhead[shortAxis], shortAxisPointOne, shortAxisPointTwo)) {
 				bounce[shortAxis] = true
 			}
 

@@ -2,8 +2,8 @@ config = {
 	fps: 60,
 	player: {
 		diameter: 20,
-		moveSpeed: 2, // Has to be less than the width of walls to not pass through
-		turnSpeed: 4.5,
+		moveSpeed: 1.5, // Has to be less than the width of walls to not pass through
+		turnSpeed: 4,
 		cannonLength: 18,
 		ammo: 3
 	},
