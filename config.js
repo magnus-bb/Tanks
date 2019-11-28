@@ -9,8 +9,8 @@ config = {
 	},
 	environment: {
 		cellWidth: 55,
-		cellAmtX: 20,
-		cellAmtY: 15,
+		cellAmtX: 15,
+		cellAmtY: 10,
 		wallWidth: 6,
 		wallOccurrence: 0.5,
 		collisionLookaheadSteps: 3 // Same as bullet speed

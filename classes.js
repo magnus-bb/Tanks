@@ -148,6 +148,7 @@ class Bullet {
 								y: this.y + this.moveCoords.dY / numSteps * step
 							}
 
+							// Interaction with walls:
 							const bounce = { x: false, y: false }
 							if (between(lookAhead[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(this[shortAxis], wall[shortAxis + '1'] - wallWidth, wall[shortAxis + '1'] + wallWidth)) {
 								bounce[longAxis] = true
@@ -155,6 +156,16 @@ class Bullet {
 							if (between(this[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(lookAhead[shortAxis], wall[shortAxis + '1'] - wallWidth, wall[shortAxis + '1'] + wallWidth)) {
 								bounce[shortAxis] = true
 							}
+
+							// Interaction with edges of convas:
+							if (lookAhead.x <= 0 + wallWidth || lookAhead.x >= width - wallWidth) {
+								bounce.x = true
+							}
+							if (lookAhead.y <= 0 + wallWidth || lookAhead.y >= height - wallWidth) {
+								bounce.y = true
+							}
+
+							// A collision calls the bounce and stops further lookAheads
 							if (bounce.x || bounce.y) {
 								this.bounce(bounce)
 								break

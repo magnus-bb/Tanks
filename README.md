@@ -36,7 +36,7 @@ Todos
 - `Bullet` class skal omskrives til at extende en `Projectile` class i stedet, og så skal fælleskarakteristika med andre våben flyttes dertil
 - Omskriv alle walls fra linjer med en bredde til at være rektangler
 	- Omskriv kollision til at matche
-- Bounce på yderkanter (husk en halv vægs buffer, så de yderste celler ikke er en lille smule større end resten)
+- Hjælpefunktion, der løber alle walls igennem, som tjekker collisions med relevante objekter, så walls ikke skal gennemløbes flere gange
 
 Links
 -----

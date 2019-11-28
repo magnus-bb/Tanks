@@ -4,7 +4,7 @@ function draw() {
 	stroke(40)
 	strokeWeight(config.environment.wallWidth)
 	noFill()
-	rect(0, 0, width, height)
+	rect(0, 0, width, height) // Outer walls
 
 	//* Cells & Walls
 	for (const column of state.grid) {
