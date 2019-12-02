@@ -16,9 +16,9 @@ function draw() {
 					wallObj.show()
 
 					//* Wall collisions:
-					for (const player of state.players) {
-						////checkCollision(wallObj, wall)
-					}
+					// for (const player of state.players) {
+					// 	checkCollision(wallObj, wall)
+					// }
 
 					for (let i = state.projectiles.length - 1; i >= 0; i--) { // We have to go backwards when removing projectiles
 						const projectile = state.projectiles[i]

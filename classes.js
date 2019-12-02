@@ -7,8 +7,12 @@ class Tank {
 		this.d = config.player.diameter
 		this.moveSpeed = config.player.moveSpeed
 		this.turnSpeed = config.player.turnSpeed
-		this.color = randomColor()
+		this.drive = { // To look ahead before actually moving
+			forward: false,
+			backward: false
+		}
 		this.direction = random(0, 360)
+		this.color = randomColor()
 		this.ammo = config.player.ammo
 		this.weapon = null
 		this.trail = [{ x: this.x, y: this.y }] // For death recap - maybe
@@ -42,24 +46,38 @@ class Tank {
 	}
 
 	move() {
-		// Angle and amount to move
-		const move = getMoveCoords(this.moveSpeed, this.direction)
-
-		// Controls-handling
+		// Forwards / backwards mobility
 		if (keyIsDown(this.keybindings.forward)) {
-			this.x += move.x
-			this.y += move.y
+			this.drive.forward = true
+		} else {
+			this.drive.forward = false
 		}
 		if (keyIsDown(this.keybindings.backward)) {
-			this.x -= move.x
-			this.y -= move.y
+			this.drive.backward = true
+		} else {
+			this.drive.backward = false
 		}
+
+		// Turning
 		if (keyIsDown(this.keybindings.left)) {
 			// % 360 makes it so we don't have to deal with angles over 360 deg
 			this.direction = (this.direction % 360) - this.turnSpeed //TODO: Maybe use rotate() when we switch to sprites
 		}
 		if (keyIsDown(this.keybindings.right)) {
 			this.direction = (this.direction % 360) + this.turnSpeed //TODO: Maybe use rotate() when we switch to sprites
+		}
+
+		// Angle and amount to move
+		const move = getMoveCoords(this.moveSpeed, this.direction)
+
+		// Actually moving
+		if (this.drive.forward) {
+			this.x += move.x
+			this.y += move.y
+		}
+		if (this.drive.backward) {
+			this.x -= move.x
+			this.y -= move.y
 		}
 
 		// Trail only updates if tank is not standing still
