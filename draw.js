@@ -15,7 +15,7 @@ function draw() {
 					wallObj = cell.walls[wall] // binds wall to the object value, not the prop name
 					wallObj.show()
 
-					//* Wall collisions:
+					// Wall collisions:
 					// for (const player of state.players) {
 					// 	checkCollision(wallObj, wall)
 					// }
@@ -31,14 +31,14 @@ function draw() {
 
 	//* Players:
 	for (const player of state.players) {
-		player.move()
+		player.move() //TODO: check collisions here -> loop through walls in collision check on class
 		player.show()
 	}
 
 	//* Projectiles
 	for (let i = state.projectiles.length - 1; i >= 0; i--) { // We have to go backwards when removing projectiles
 		const projectile = state.projectiles[i]
-		projectile.move()
+		projectile.move() //TODO: check collisions here -> loop through walls in collision check on class
 		projectile.show() // Also removes projectile
 	}
 }

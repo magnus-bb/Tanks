@@ -34,6 +34,10 @@ class Tank {
 		const shortAxisPointOne = wall[shortAxis + '1'] - wallWidth
 		const shortAxisPointTwo = wall[shortAxis + '1'] + wallWidth
 
+		const move = getMoveCoords(this.moveSpeed, this.direction)
+
+		
+
 		/* 
 		* Use lookaheads with getMoveCoords (probably not necessary to use steps) to see whether a side (x or y)
 		* should not go past a wall. Use direction or the coords to turn slowly parallel to the wall
@@ -62,22 +66,22 @@ class Tank {
 		if (keyIsDown(this.keybindings.left)) {
 			// % 360 makes it so we don't have to deal with angles over 360 deg
 			this.direction = (this.direction % 360) - this.turnSpeed //TODO: Maybe use rotate() when we switch to sprites
+			console.log(this.direction)
 		}
 		if (keyIsDown(this.keybindings.right)) {
 			this.direction = (this.direction % 360) + this.turnSpeed //TODO: Maybe use rotate() when we switch to sprites
+			console.log(this.direction)
 		}
 
 		// Angle and amount to move
-		const move = getMoveCoords(this.moveSpeed, this.direction)
+		const move = getMoveCoords(this.moveSpeed, this.direction, this.drive.backward)
 
 		// Actually moving
-		if (this.drive.forward) {
+		//TODO: Check collisions here
+		//! ONLY IF THERE'S NO COLLISION
+		if (this.drive.forward || this.drive.backward) {
 			this.x += move.x
 			this.y += move.y
-		}
-		if (this.drive.backward) {
-			this.x -= move.x
-			this.y -= move.y
 		}
 
 		// Trail only updates if tank is not standing still
@@ -125,8 +129,8 @@ class Bullet {
 		this.speed = config.bullet.speed
 		this.owner = owner
 		// Starts offset from tank center:
-		this.x = (owner.d / 2 + this.d / 2 + 1) * cos(radians(this.direction)) + owner.x //! ONLY NEEDS POINT AT THE TIP OF THE CANNON
-		this.y = (owner.d / 2 + this.d / 2 + 1) * sin(radians(this.direction)) + owner.y //! ONLY NEEDS POINT AT THE TIP OF THE CANNON
+		this.x = (owner.d / 2 + this.d / 2 + 1) * cos(radians(this.direction)) + owner.x //TODO: ONLY NEEDS POINT AT THE TIP OF THE CANNON
+		this.y = (owner.d / 2 + this.d / 2 + 1) * sin(radians(this.direction)) + owner.y //TODO: ONLY NEEDS POINT AT THE TIP OF THE CANNON
 		// First frame alive is used to fade projectile
 		this.startFrame = frameCount
 
@@ -142,6 +146,7 @@ class Bullet {
 	}
 
 	move() {
+		//TODO: Check collisions here
 		this.x += this.moveCoords.dX
 		this.y += this.moveCoords.dY
 	}
