@@ -6,22 +6,28 @@ function draw() {
 	noFill()
 	rect(0, 0, width, height) // Outer walls
 
+	//* Players - inputs + out of bounds:
+	// Must happen before collisions, so a collision can overwrite player input
+	for (const player of state.players) {
+		player.input()
+		player.outOfBounds()
+	}
+
 	//* Cells & Walls:
 	for (const column of state.grid) {
 		for (const cell of column) {
 			for (let wall in cell.walls) {
 				if (cell.walls[wall]) { // checks for existing walls only
 
-					wallObj = cell.walls[wall] // binds wall to the object value, not the prop name
+					wallObj = cell.walls[wall] // binds wall to the object, not the prop name
 					wallObj.show()
 
-					// Wall collisions:
-					// for (const player of state.players) {
-					// 	checkCollision(wallObj, wall)
-					// }
+					//* Collisions:
+					for (const player of state.players) {
+						player.checkCollision(wallObj, wall)
+					}
 
-					for (let i = state.projectiles.length - 1; i >= 0; i--) { // We have to go backwards when removing projectiles
-						const projectile = state.projectiles[i]
+					for (const projectile of state.projectiles) {
 						projectile.checkCollision(wallObj, wall)
 					}
 				}
@@ -29,16 +35,16 @@ function draw() {
 		}
 	}
 
-	//* Players:
+	//* Players - updating:
 	for (const player of state.players) {
-		player.move() //TODO: check collisions here -> loop through walls in collision check on class
+		player.move()
 		player.show()
 	}
 
-	//* Projectiles
+	//* Projectiles:
 	for (let i = state.projectiles.length - 1; i >= 0; i--) { // We have to go backwards when removing projectiles
 		const projectile = state.projectiles[i]
-		projectile.move() //TODO: check collisions here -> loop through walls in collision check on class
+		projectile.move()
 		projectile.show() // Also removes projectile
 	}
 }

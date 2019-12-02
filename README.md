@@ -35,7 +35,8 @@ Todos
 - Finde og loade open source lydeffekter til skud (*gud forbyde, at jeg bliver nødt til at optage mundlyde*)
 - `Bullet` class skal omskrives til at extende en `Projectile` class i stedet, og så skal fælleskarakteristika med andre våben flyttes dertil
 - `Bullet`'s startkoordinat skal være spidsen af kanonen
-- Omskriv move() i projektiler og tanks til at checke collisions, som gennemløber alle walls, i stedet for at gøre det i draw()
+- Flyt collision ved canvas-kanter ud af wall-loopet i `Bullet`
+- Mange dele af `checkCollisions()` og `outOfBounds()` går igen. Se om de kan samles i en hjælpefunktion eller lign
 
 Links
 -----

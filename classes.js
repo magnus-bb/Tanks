@@ -2,26 +2,73 @@
 class Tank {
 	constructor(name, x, y, forward = UP_ARROW, right = RIGHT_ARROW, backward = DOWN_ARROW, left = LEFT_ARROW, fire = 32) {
 		this.name = name
-		this.x = x // TODO: Spawn in middle of cell
+		this.x = x //TODO: Spawn in middle of cell
 		this.y = y
 		this.d = config.player.diameter
 		this.moveSpeed = config.player.moveSpeed
 		this.turnSpeed = config.player.turnSpeed
-		this.drive = { // To look ahead before actually moving
-			forward: false,
-			backward: false
-		}
+		this.drive = false // To look ahead before actually moving
 		this.direction = random(0, 360)
 		this.color = randomColor()
 		this.ammo = config.player.ammo
 		this.weapon = null
-		this.trail = [{ x: this.x, y: this.y }] // For death recap - maybe
+		this.trail = [{ x: this.x, y: this.y }] //? For death recap - maybe
 		this.keybindings = {
 			forward: forward,
 			backward: backward,
 			left: left,
 			right: right,
 			fire: fire
+		}
+		this.moveCoords = {
+			dX: 0,
+			dY: 0
+		}
+	}
+
+	input() {
+		// Forwards / backwards mobility
+		if (keyIsDown(this.keybindings.forward)) {
+			this.drive = 'forward'
+		} else if (keyIsDown(this.keybindings.backward)) {
+			this.drive = 'backward'
+		} else {
+			this.drive = false
+		}
+
+		// Turning
+		if (keyIsDown(this.keybindings.left)) {
+			// % 360 makes it so we don't have to deal with angles over 360 deg
+			this.direction = (this.direction % 360) - this.turnSpeed //TODO: Maybe use rotate() when we switch to sprites
+			console.log(this.direction)
+		}
+
+		if (keyIsDown(this.keybindings.right)) {
+			this.direction = (this.direction % 360) + this.turnSpeed //TODO: Maybe use rotate() when we switch to sprites
+			console.log(this.direction)
+		}
+
+		// Angle and amount (if any) to move
+		const move = getMoveCoords(this.moveSpeed, this.direction, this.drive)
+		this.moveCoords.dX = move.x
+		this.moveCoords.dY = move.y
+	}
+
+	outOfBounds() {
+		const wallWidth = config.environment.wallWidth / 2 // +/- from center of wall
+
+		// Next tank position (if no collision is observed)
+		const lookAhead = {
+			x: this.x + this.moveCoords.dX,
+			y: this.y + this.moveCoords.dY
+		}
+
+		// Interaction with edges of convas:
+		if (lookAhead.x <= 0 + wallWidth || lookAhead.x >= width - wallWidth) {
+			this.handleCollision('x')
+		}
+		if (lookAhead.y <= 0 + wallWidth || lookAhead.y >= height - wallWidth) {
+			this.handleCollision('y')
 		}
 	}
 
@@ -34,54 +81,31 @@ class Tank {
 		const shortAxisPointOne = wall[shortAxis + '1'] - wallWidth
 		const shortAxisPointTwo = wall[shortAxis + '1'] + wallWidth
 
-		const move = getMoveCoords(this.moveSpeed, this.direction)
+		// Next tank position (if no collision is observed)
+		//! ONLY IF moveCoords dX || dY is not 0
+		const lookAhead = {
+			x: this.x + this.moveCoords.dX,
+			y: this.y + this.moveCoords.dY
+		}
 
-		
-
-		/* 
-		* Use lookaheads with getMoveCoords (probably not necessary to use steps) to see whether a side (x or y)
-		* should not go past a wall. Use direction or the coords to turn slowly parallel to the wall
-		* This should all check for collisions TOGETHER with the cannon as a line (or maybe just a point at the end)
-		*/
+		// Interaction with walls:
+		if (between(lookAhead[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(this[shortAxis], shortAxisPointOne, shortAxisPointTwo)) {
+			this.handleCollision(longAxis)
+		}
+		if (between(this[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(lookAhead[shortAxis], shortAxisPointOne, shortAxisPointTwo)) {
+			this.handleCollision(shortAxis)
+		}
 	}
 
-	handleCollision() {
-
+	handleCollision(axis) {
+		console.log(axis)
 	}
 
 	move() {
-		// Forwards / backwards mobility
-		if (keyIsDown(this.keybindings.forward)) {
-			this.drive.forward = true
-		} else {
-			this.drive.forward = false
-		}
-		if (keyIsDown(this.keybindings.backward)) {
-			this.drive.backward = true
-		} else {
-			this.drive.backward = false
-		}
-
-		// Turning
-		if (keyIsDown(this.keybindings.left)) {
-			// % 360 makes it so we don't have to deal with angles over 360 deg
-			this.direction = (this.direction % 360) - this.turnSpeed //TODO: Maybe use rotate() when we switch to sprites
-			console.log(this.direction)
-		}
-		if (keyIsDown(this.keybindings.right)) {
-			this.direction = (this.direction % 360) + this.turnSpeed //TODO: Maybe use rotate() when we switch to sprites
-			console.log(this.direction)
-		}
-
-		// Angle and amount to move
-		const move = getMoveCoords(this.moveSpeed, this.direction, this.drive.backward)
-
-		// Actually moving
-		//TODO: Check collisions here
-		//! ONLY IF THERE'S NO COLLISION
-		if (this.drive.forward || this.drive.backward) {
-			this.x += move.x
-			this.y += move.y
+		// Takes collisions into consideration, since moveCoords will be updated accordingly
+		if (this.drive) {
+			this.x += this.moveCoords.dX
+			this.y += this.moveCoords.dY
 		}
 
 		// Trail only updates if tank is not standing still
@@ -134,34 +158,15 @@ class Bullet {
 		// First frame alive is used to fade projectile
 		this.startFrame = frameCount
 
-		// Direction only needs to be recalculated every bounce on projectiles and on spawn
-		const move = getMoveCoords(this.speed, this.direction)
+		// Direction only needs to be recalculated every bounce on projectiles and on spawn:
+		const move = getMoveCoords(this.speed, this.direction, 'forward')
 		this.moveCoords = {
 			dX: move.x,
 			dY: move.y
 		}
 
-		// For effects
+		// For effects:
 		this.tail = []
-	}
-
-	move() {
-		//TODO: Check collisions here
-		this.x += this.moveCoords.dX
-		this.y += this.moveCoords.dY
-	}
-
-	bounce(axis) {
-		// Reverses move direction of the axis
-		if (axis.x) {
-			this.moveCoords.dX *= -1
-		}
-		if (axis.y) {
-			this.moveCoords.dY *= -1
-		}
-
-		// Updates direction to match the new moveCoords
-		this.direction = getDirection(this.moveCoords.dX, this.moveCoords.dY)
 	}
 
 	//! WHEN FIRING INSIDE WALL, BULLET GETS STUCK
@@ -205,6 +210,24 @@ class Bullet {
 				break
 			}
 		}
+	}
+
+	bounce(axis) {
+		// Reverses move direction of the axis
+		if (axis.x) {
+			this.moveCoords.dX *= -1
+		}
+		if (axis.y) {
+			this.moveCoords.dY *= -1
+		}
+
+		// Updates direction to match the new moveCoords
+		this.direction = getDirection(this.moveCoords.dX, this.moveCoords.dY)
+	}
+
+	move() {
+		this.x += this.moveCoords.dX
+		this.y += this.moveCoords.dY
 	}
 
 	// Makes a tail point for each frame

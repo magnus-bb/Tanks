@@ -1,14 +1,19 @@
 // Converts a direction and speed to new coords
-function getMoveCoords(speed, direction, backwards = false) {
-	if (backwards) {
+function getMoveCoords(speed, direction, drive = false) {
+	if (drive === 'backward') {
 		return {
 			x: -speed * cos(radians(direction)),
 			y: -speed * sin(radians(direction))
 		}
-	} else {
+	} else if (drive === 'forward') {
 		return {
 			x: speed * cos(radians(direction)),
 			y: speed * sin(radians(direction))
+		}
+	} else {
+		return {
+			x: 0,
+			y: 0
 		}
 	}
 }
