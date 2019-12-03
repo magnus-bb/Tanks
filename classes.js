@@ -39,12 +39,12 @@ class Tank {
 		// Turning
 		if (keyIsDown(this.keybindings.left)) {
 			// % 360 makes it so we don't have to deal with angles over 360 deg
-			this.direction = (this.direction % 360) - this.turnSpeed //TODO: Maybe use rotate() when we switch to sprites
+			this.turn(-1)
 			console.log(this.direction)
 		}
 
 		if (keyIsDown(this.keybindings.right)) {
-			this.direction = (this.direction % 360) + this.turnSpeed //TODO: Maybe use rotate() when we switch to sprites
+			this.turn(1)
 			console.log(this.direction)
 		}
 
@@ -52,6 +52,15 @@ class Tank {
 		const move = getMoveCoords(this.moveSpeed, this.direction, this.drive)
 		this.moveCoords.dX = move.x
 		this.moveCoords.dY = move.y
+	}
+
+	// Takes -1 for left and 1 for right
+	turn(direction, collision = false) {
+		if (collision) {
+			this.direction = (this.direction % 360) + this.turnSpeed / 2 * direction //TODO: Maybe use rotate() when we switch to sprites
+		} else {
+			this.direction = (this.direction % 360) + this.turnSpeed * direction //TODO: Maybe use rotate() when we switch to sprites
+		}
 	}
 
 	outOfBounds() {
@@ -81,12 +90,13 @@ class Tank {
 		const shortAxisPointOne = wall[shortAxis + '1'] - wallWidth
 		const shortAxisPointTwo = wall[shortAxis + '1'] + wallWidth
 
-		// Next tank position (if no collision is observed)
-		//! ONLY IF moveCoords dX || dY is not 0
+		// Next tank position (if no collision is observed):
 		const lookAhead = {
 			x: this.x + this.moveCoords.dX,
 			y: this.y + this.moveCoords.dY
 		}
+
+		//TODO: Include whole body of tank + cannon
 
 		// Interaction with walls:
 		if (between(lookAhead[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(this[shortAxis], shortAxisPointOne, shortAxisPointTwo)) {
@@ -98,7 +108,31 @@ class Tank {
 	}
 
 	handleCollision(axis) {
-		console.log(axis)
+		// For accessing dX or dY prop of moveCoords:
+		const deltaAxis = 'd' + axis.toUpperCase()
+		// For slowing movement of the tank
+		const otherDeltaAxis = axis === 'x' ? 'dY' : 'dX'
+
+		// No crossing walls:
+		this.moveCoords[deltaAxis] = 0
+		// Slowing movement:
+		this.moveCoords[otherDeltaAxis] /= config.player.collisionSlowFactor
+		//TODO: Add jitter effect
+
+		// const dir = this.direction
+		// // Turning when colliding:
+		// if (axis === 'x') {
+		// 	// Lower right and top left quadrant:
+		// 	if (between(dir, 0, 90, false) || dir < -270 || between(dir, 180, 270, false) || between(dir, -180, -90, false)) {
+		// 		this.turn(1, true) // true for half speed turning
+		// 	}
+		// 	// Lower left and top right quadrant:
+		// 	if (between(dir, 90, 180, false) || between(dir, -270, -180, false) || dir > 270 || between(dir, -90, 0, false)) { 
+		// 		this.turn(-1, true) // true for half speed turning
+		// 	}
+		// } else { // axis === 'y'
+
+		// }
 	}
 
 	move() {

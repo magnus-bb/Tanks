@@ -5,7 +5,8 @@ config = {
 		moveSpeed: 1.5, // Has to be less than the width of walls to not pass through
 		turnSpeed: 4,
 		cannonLength: 18,
-		ammo: 3
+		ammo: 3,
+		collisionSlowFactor: 2
 	},
 	environment: {
 		cellWidth: 55,
