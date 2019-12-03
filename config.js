@@ -6,7 +6,8 @@ config = {
 		turnSpeed: 4,
 		cannonLength: 18,
 		ammo: 3,
-		collisionSlowFactor: 2
+		collisionSlowFactor: 2,
+		jitterFactor: 4
 	},
 	environment: {
 		cellWidth: 55,

@@ -40,12 +40,10 @@ class Tank {
 		if (keyIsDown(this.keybindings.left)) {
 			// % 360 makes it so we don't have to deal with angles over 360 deg
 			this.turn(-1)
-			console.log(this.direction)
 		}
 
 		if (keyIsDown(this.keybindings.right)) {
 			this.turn(1)
-			console.log(this.direction)
 		}
 
 		// Angle and amount (if any) to move
@@ -118,7 +116,7 @@ class Tank {
 		// Slowing movement:
 		this.moveCoords[otherDeltaAxis] /= config.player.collisionSlowFactor
 		//TODO: Add jitter effect
-
+		
 		// const dir = this.direction
 		// // Turning when colliding:
 		// if (axis === 'x') {
