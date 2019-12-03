@@ -41,3 +41,15 @@ function between(number, min, max, include = true) { // Does not include max, si
 		return number < max && number > min
 	}
 }
+
+// Returns left (-1) or right (1) based on the axis of collision and pointing direction of tank
+function getTurnDirection(collisionAxis, dir) {
+	// Lower right and top left quadrant:
+	if (between(dir, 0, 90, false) || dir < -270 || between(dir, 180, 270, false) || between(dir, -180, -90, false)) {
+		return collisionAxis === 'x' ? 1 : -1
+	}
+	// Lower left and top right quadrant:
+	if (between(dir, 90, 180, false) || between(dir, -270, -180, false) || dir > 270 || between(dir, -90, 0, false)) {
+		return collisionAxis === 'x' ? -1 : 1
+	}
+}

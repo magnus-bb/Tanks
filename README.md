@@ -37,6 +37,7 @@ Todos
 - `Bullet`'s startkoordinat skal være spidsen af kanonen
 - Flyt collision ved canvas-kanter ud af wall-loopet i `Bullet`
 - Mange dele af `checkCollisions()` og `outOfBounds()` går igen. Se om de kan samles i en hjælpefunktion eller lign
+- Bedre bullet collisions på kanterne af walls
 
 Links
 -----
