@@ -308,22 +308,13 @@ class Cell {
 		this.x = x
 		this.y = y
 		this.w = config.environment.cellWidth
+		// Makes both walls initially, if cell is not at the edge of the canvas
 		this.walls = {
-			right: null,
-			bottom: null
+			right: this.x !== width - config.environment.cellWidth ? new Wall(this, 'right') : null,
+			bottom: this.y !== height - config.environment.cellWidth ? new Wall(this, 'bottom') : null
 		}
-	}
-
-	populateWalls() {
-		for (const wall in this.walls) {
-			// Don't draw walls around edge of canvas:
-			if (!(wall === 'right' && this.x === width - config.environment.cellWidth) && !(wall === 'bottom' && this.y === height - config.environment.cellWidth)) {
-				const setWall = Math.random() < config.environment.wallOccurrence
-				if (setWall) {
-					this.walls[wall] = new Wall(this, wall)
-				}
-			}
-		}
+		// For creating the maze:
+		this.visited = false
 	}
 }
 
@@ -352,10 +343,8 @@ class Wall {
 
 	show() {
 		strokeWeight(this.w)
-		strokeCap(PROJECT)
+		strokeCap(ROUND) //? PROJECT?
 		stroke(41)
 		line(this.x1, this.y1, this.x2, this.y2)
 	}
 }
-
-//* https://en.wikipedia.org/wiki/Maze_generation_algorithm

@@ -7,16 +7,7 @@ function setup() {
 	canvas.parent('canvas-container');
 
 	// Sets cells, generates walls
-	for (let x = 0; x < width; x += config.environment.cellWidth) {
-
-		const column = []
-		for (let y = 0; y < height; y += config.environment.cellWidth) {
-			const cell = new Cell(x, y)
-			cell.populateWalls()
-			column.push(cell)
-		}
-		state.grid.push(column)
-	}
+	generateMaze()
 
 	//! Creates players
 	state.players.push(new Tank(

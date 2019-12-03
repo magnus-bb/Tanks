@@ -54,6 +54,62 @@ function getTurnDirection(collisionAxis, dir) {
 	}
 }
 
-function mazeGenerator() {
-	//* Loop through cells, make walls
+function getCell(row, col) {
+	return state.grid[row][col]
+}
+
+function getNeighborCell(currentCell, direction) {
+	// Values to return are the index nums in loops:
+	state.grid.forEach((col, colNum) => {
+		col.forEach((cell, cellNum) => {
+			if (cell === currentCell) {
+				switch (direction) {
+					case 'up':
+
+						break
+					case 'right':
+
+						break
+					case 'down':
+
+						break
+					case 'left':
+
+
+				}
+			})
+	})
+}
+}
+
+
+function mazifyCell(currentCell) {
+	currentCell.visited = true
+
+
+
+}
+
+
+
+function generateMaze() {
+	// Uses width / height of canvas (based off amt of cells and cellwidth) to generate rows and columns of cells:
+	for (let x = 0; x < width; x += config.environment.cellWidth) {
+		const column = []
+		for (let y = 0; y < height; y += config.environment.cellWidth) {
+			// Makes all walls:
+			const cell = new Cell(x, y)
+			column.push(cell)
+		}
+		state.grid.push(column)
+	}
+
+	// Removes walls in maze pattern: //* https://en.wikipedia.org/wiki/Maze_generation_algorithm
+
+
+
+
+
+	// Removes some more random walls:
+
 }
