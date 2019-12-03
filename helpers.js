@@ -53,3 +53,7 @@ function getTurnDirection(collisionAxis, dir) {
 		return collisionAxis === 'x' ? -1 : 1
 	}
 }
+
+function mazeGenerator() {
+	//* Loop through cells, make walls
+}
