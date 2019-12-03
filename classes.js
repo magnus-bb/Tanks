@@ -55,7 +55,7 @@ class Tank {
 	// Takes -1 for left and 1 for right
 	turn(direction, collision = false) {
 		if (collision) {
-			this.direction = (this.direction % 360) + this.turnSpeed / 2 * direction //TODO: Maybe use rotate() when we switch to sprites
+			this.direction = (this.direction % 360) + this.turnSpeed / config.player.collisionTurnFactor * direction //TODO: Maybe use rotate() when we switch to sprites
 		} else {
 			this.direction = (this.direction % 360) + this.turnSpeed * direction //TODO: Maybe use rotate() when we switch to sprites
 		}
@@ -115,22 +115,25 @@ class Tank {
 		this.moveCoords[deltaAxis] = 0
 		// Slowing movement:
 		this.moveCoords[otherDeltaAxis] /= config.player.collisionSlowFactor
-		//TODO: Add jitter effect
-		
-		// const dir = this.direction
-		// // Turning when colliding:
-		// if (axis === 'x') {
-		// 	// Lower right and top left quadrant:
-		// 	if (between(dir, 0, 90, false) || dir < -270 || between(dir, 180, 270, false) || between(dir, -180, -90, false)) {
-		// 		this.turn(1, true) // true for half speed turning
-		// 	}
-		// 	// Lower left and top right quadrant:
-		// 	if (between(dir, 90, 180, false) || between(dir, -270, -180, false) || dir > 270 || between(dir, -90, 0, false)) { 
-		// 		this.turn(-1, true) // true for half speed turning
-		// 	}
-		// } else { // axis === 'y'
 
-		// }
+		// // //TODO: Add jitter effect
+		// // const axisDir = this.moveCoords[deltaAxis] > 0 ? 1 : -1
+		// // this[axis] -= axisDir * config.player.jitterFactor
+
+		const dir = this.direction
+		// Turning when colliding:
+		if (axis === 'x') {
+			// Lower right and top left quadrant:
+			if (between(dir, 0, 90, false) || dir < -270 || between(dir, 180, 270, false) || between(dir, -180, -90, false)) {
+				this.turn(1, true) // true for half speed turning
+			}
+			// Lower left and top right quadrant:
+			if (between(dir, 90, 180, false) || between(dir, -270, -180, false) || dir > 270 || between(dir, -90, 0, false)) { 
+				this.turn(-1, true) // true for half speed turning
+			}
+		} else { //TODO: axis === 'y'
+
+		}
 	}
 
 	move() {
