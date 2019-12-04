@@ -47,4 +47,14 @@ function draw() {
 		projectile.move()
 		projectile.show() // Also removes projectile
 	}
+
+
+	//! TEST AF CELL-HOPPING
+	// fill(255, 0, 0)
+	// noStroke()
+	// let cell = getCell(3,3)
+	// indices = getNeighborCell(cell, 'up')
+	// cell = getCell(indices[0], indices[1])
+	
+	// square(cell.x, cell.y, cell.w)
 }

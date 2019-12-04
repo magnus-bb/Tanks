@@ -63,23 +63,25 @@ function getNeighborCell(currentCell, direction) {
 	state.grid.forEach((col, colNum) => {
 		col.forEach((cell, cellNum) => {
 			if (cell === currentCell) {
+				let indices
 				switch (direction) {
 					case 'up':
-
+						indices = [colNum, cellNum - 1]
 						break
 					case 'right':
-
+						indices = [colNum + 1, cellNum]
 						break
 					case 'down':
-
+						indices = [colNum, cellNum + 1]
 						break
 					case 'left':
-
-
+						indices = [colNum - 1, cellNum]
+					
+					return getCell(...indices)
 				}
-			})
+			}
+		})
 	})
-}
 }
 
 
