@@ -39,6 +39,7 @@ Todos
 - Mange dele af `checkCollisions()` og `outOfBounds()` går igen. Se om de kan samles i en hjælpefunktion eller lign
 - Bedre bullet collisions på kanterne af walls
 - Tilføjelse af tilfældige celler, der til tider "brænder" og ikke må passeres
+- Lav en pausefunktionalitet med noLoop() og loop() på en tast
 
 Links
 -----

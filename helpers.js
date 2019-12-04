@@ -54,58 +54,108 @@ function getTurnDirection(collisionAxis, dir) {
 	}
 }
 
-function getCell(row, col) {
-	return state.grid[row][col]
+// Returns reference to cell:
+function getCell(col, row) {
+	return state.grid[col][row]
 }
 
-function getNeighborCell(currentCell, direction) {
-	// Values to return are the index nums in loops:
+// Returns col and row num of cell
+function getIndices(cell) {
 	for (let colNum = 0; colNum < state.grid.length; colNum++) {
 		const col = state.grid[colNum]
-
-		for (let cellNum = 0; cellNum < col.length; cellNum++) {
-			const cell = col[cellNum]
-			if (cell === currentCell) {
-				let indices
-
-				switch (direction) {
-					case 'up':
-						indices = [colNum, cellNum - 1]
-						break
-					case 'right':
-						indices = [colNum + 1, cellNum]
-						break
-					case 'down':
-						indices = [colNum, cellNum + 1]
-						break
-					case 'left':
-						indices = [colNum - 1, cellNum]
-				}
-
-				return getCell(...indices)
-			}
+		for (let rowNum = 0; rowNum < col.length; rowNum++) {
+			if (cell === state.grid[colNum, rowNum]) return [colNum, cellNum]
 		}
 	}
 }
 
+// Returns both reference to neighboring cell and the indices of the cell:
+// function getNeighborIndices(col, row, direction) {
+// 	for (let colNum = 0; colNum < state.grid.length; colNum++) {
+// 		const col = state.grid[colNum]
+
+// 		for (let rowNum = 0; rowNum < col.length; rowNum++) {
+// 			const cell = col[rowNum]
+// 			if (cell === currentCell) {
+// 	return () => {
+// 		switch (direction) {
+// 			case 'up':
+// 				return [col, row - 1]
+// 				break
+// 			case 'right':
+// 				return [col + 1, row]
+// 				break
+// 			case 'down':
+// 				return [col, row + 1]
+// 				break
+// 			case 'left':
+// 				return [col - 1, row]
+// 		}
+// 	}
+
+
+
+// 	return indices
+// 	return [getCell(...indices), ...indices]
+// }
+// 	}
+// }
+// }
+
 
 function moveToCell(currentCell, cell) {
 	cell.visited = true
+}
 
+// Returns array of unvisited cells around given cell:
+function getUnvisited(col, row) {
+	const unvisitedCells = []
+
+	// Up
+	if (row - 1 >= 0) {
+		const cell = getCell(col, row - 1)
+		if (!cell.visited) unvisitedCells.push(cell)
+	}
+
+	// Right
+	if (col + 1 <= config.environment.cellAmtX) {
+		const cell = getCell(col + 1, row)
+		if (!cell.visited) unvisitedCells.push(cell)
+	}
+
+	// Down
+	if (row + 1 <= config.environment.cellAmtY) {
+		const cell = getCell(col, row + 1)
+		if (!cell.visited) unvisitedCells.push(cell)
+	}
+
+	// Left
+	if (col - 1 >= 0) {
+		const cell = getCell(col - 1, row)
+		if (!cell.visited) unvisitedCells.push(cell)
+	}
+
+	return unvisitedCells
+}
+
+function mazify(col, row) {
+	const cell = getCell(col, row)
+
+	state.currentCell = cell
+	cell.visited = true
+
+	if (getUnvisited(col, row).length > 0) {
+		
+	}
 
 
 }
-
-function checkVisited(cell) {
-
-}
-
-
 
 function generateMaze() {
 	// Uses width / height of canvas (based off amt of cells and cellwidth) to generate rows and columns of cells:
 	for (let x = 0; x < width; x += config.environment.cellWidth) {
 		const column = []
+
 		for (let y = 0; y < height; y += config.environment.cellWidth) {
 			// Makes all walls:
 			const cell = new Cell(x, y)
@@ -114,12 +164,12 @@ function generateMaze() {
 		state.grid.push(column)
 	}
 
-	// Removes walls in maze pattern: //* https://en.wikipedia.org/wiki/Maze_generation_algorithm
+	// Starts maze generation //* https://en.wikipedia.org/wiki/Maze_generation_algorithm
+	mazify(0, 0)
 
 
 
 
 
 	// Removes some more random walls:
-
 }

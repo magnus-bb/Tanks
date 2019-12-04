@@ -4,7 +4,7 @@ function setup() {
 	const canvasWidth = config.environment.cellWidth * config.environment.cellAmtX
 	const canvasHeight = config.environment.cellWidth * config.environment.cellAmtY
 	const canvas = createCanvas(canvasWidth, canvasHeight)
-	canvas.parent('canvas-container');
+	canvas.parent('canvas-container')
 
 	// Sets cells, generates walls
 	generateMaze()
