@@ -56,83 +56,87 @@ function getTurnDirection(collisionAxis, dir) {
 
 // Returns reference to cell:
 function getCell(col, row) {
-	return state.grid[col][row]
+	try {
+		return state.grid[col][row]
+	}
+	catch(err) {
+		console.log(col, row)
+		throw err
+	}
 }
 
-// Returns col and row num of cell
+// Returns col and row num of cell:
 function getIndices(cell) {
 	for (let colNum = 0; colNum < state.grid.length; colNum++) {
 		const col = state.grid[colNum]
 		for (let rowNum = 0; rowNum < col.length; rowNum++) {
-			if (cell === state.grid[colNum, rowNum]) return [colNum, cellNum]
+			if (state.grid[colNum][rowNum] === cell) return [colNum, rowNum]
 		}
 	}
 }
 
-// Returns both reference to neighboring cell and the indices of the cell:
-// function getNeighborIndices(col, row, direction) {
-// 	for (let colNum = 0; colNum < state.grid.length; colNum++) {
-// 		const col = state.grid[colNum]
+//! LOL
+function moveCell(currentCell, cell) {
+	const prevIndices = getIndices(currentCell)
+	const indices = getIndices(cell.cell)
 
-// 		for (let rowNum = 0; rowNum < col.length; rowNum++) {
-// 			const cell = col[rowNum]
-// 			if (cell === currentCell) {
-// 	return () => {
-// 		switch (direction) {
-// 			case 'up':
-// 				return [col, row - 1]
-// 				break
-// 			case 'right':
-// 				return [col + 1, row]
-// 				break
-// 			case 'down':
-// 				return [col, row + 1]
-// 				break
-// 			case 'left':
-// 				return [col - 1, row]
-// 		}
-// 	}
-
-
-
-// 	return indices
-// 	return [getCell(...indices), ...indices]
-// }
-// 	}
-// }
-// }
-
-
-function moveToCell(currentCell, cell) {
-	cell.visited = true
+	// Removes the correct wall:
+	if (cell.dir === 'up') {
+		cell.cell.walls.bottom = null
+	} else if (cell.dir === 'right') {
+		currentCell.walls.right = null
+	} else if (cell.dir === 'down') {
+		currentCell.walls.bottom = null
+	} else if (cell.dir === 'left') {
+		cell.cell.walls.right = null
+	}
+	
+	mazify(...indices)
 }
 
-// Returns array of unvisited cells around given cell:
-function getUnvisited(col, row) {
+// Returns array of unvisited cells around given cell and their direction from the given cell:
+function getUnvisitedNeighbors(col, row) {
 	const unvisitedCells = []
+	const data = {}
 
 	// Up
 	if (row - 1 >= 0) {
 		const cell = getCell(col, row - 1)
-		if (!cell.visited) unvisitedCells.push(cell)
+		if (!cell.visited) {
+			data.cell = cell
+			data.dir = 'up'
+			unvisitedCells.push(data)
+		}
 	}
 
 	// Right
-	if (col + 1 <= config.environment.cellAmtX) {
+	if (col + 1 < config.environment.cellAmtX) {
 		const cell = getCell(col + 1, row)
-		if (!cell.visited) unvisitedCells.push(cell)
+		if (!cell.visited) {
+			data.cell = cell
+			data.dir = 'right'
+			unvisitedCells.push(data)
+		}
 	}
 
 	// Down
-	if (row + 1 <= config.environment.cellAmtY) {
+	if (row + 1 < config.environment.cellAmtY) {
 		const cell = getCell(col, row + 1)
-		if (!cell.visited) unvisitedCells.push(cell)
+		if (!cell.visited) {
+			data.cell = cell
+			data.dir = 'down'
+			unvisitedCells.push(data)
+		}
 	}
 
 	// Left
 	if (col - 1 >= 0) {
 		const cell = getCell(col - 1, row)
-		if (!cell.visited) unvisitedCells.push(cell)
+		if (!cell.visited) {
+			data.cell = cell
+			data.dir = 'left'
+			unvisitedCells.push(data)
+		}
 	}
 
 	return unvisitedCells
@@ -144,9 +148,12 @@ function mazify(col, row) {
 	state.currentCell = cell
 	cell.visited = true
 
-	const unvisitedCells = getUnvisited(col, row)
+	const unvisitedCells = getUnvisitedNeighbors(col, row)
 	if (unvisitedCells.length > 0) {
 		const nextCell = random(unvisitedCells)
+		
+		// Moves and removes wall:
+		moveCell(cell, nextCell)
 	}
 
 
