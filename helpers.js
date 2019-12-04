@@ -144,8 +144,9 @@ function mazify(col, row) {
 	state.currentCell = cell
 	cell.visited = true
 
-	if (getUnvisited(col, row).length > 0) {
-		
+	const unvisitedCells = getUnvisited(col, row)
+	if (unvisitedCells.length > 0) {
+		const nextCell = random(unvisitedCells)
 	}
 
 

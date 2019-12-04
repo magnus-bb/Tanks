@@ -24,7 +24,7 @@ config = {
 		framesAlive: 60 * 6 // 60fps * 5seconds
 	},
 	effects: {
-		muzzleSize: 2,
+		muzzleSize: 2.5,
 		defaultShakeMagnitude: 2,
 		bulletTrailAlpha: 50
 	}

@@ -34,6 +34,7 @@ Todos
 - En lækker effekt når et projektil kalder `destroy()`, så det ikke bare forsvinder. Evt. også fade på projektilets hale
 - Finde og loade open source lydeffekter til skud (*gud forbyde, at jeg bliver nødt til at optage mundlyde*)
 - `Bullet` class skal omskrives til at extende en `Projectile` class i stedet, og så skal fælleskarakteristika med andre våben flyttes dertil
+- Relevante hjælpefunktioner skal flyttes ind i deres class ved brug af `static` methods
 - `Bullet`'s startkoordinat skal være spidsen af kanonen
 - Flyt collision ved canvas-kanter ud af wall-loopet i `Bullet`
 - Mange dele af `checkCollisions()` og `outOfBounds()` går igen. Se om de kan samles i en hjælpefunktion eller lign
