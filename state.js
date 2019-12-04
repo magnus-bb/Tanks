@@ -2,5 +2,6 @@ state = {
 	players: [],
 	projectiles: [],
 	grid: [],
-	currentCell: null
+	currentCell: null,
+	cellStack: []
 }

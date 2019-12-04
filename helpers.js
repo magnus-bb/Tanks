@@ -59,7 +59,7 @@ function getCell(col, row) {
 	try {
 		return state.grid[col][row]
 	}
-	catch(err) {
+	catch (err) {
 		console.log(col, row)
 		throw err
 	}
@@ -75,37 +75,33 @@ function getIndices(cell) {
 	}
 }
 
-//! LOL
-function moveCell(currentCell, cell) {
-	const prevIndices = getIndices(currentCell)
-	const indices = getIndices(cell.cell)
+function removeWall(fromCell, toCell, dir) {
 
 	// Removes the correct wall:
-	if (cell.dir === 'up') {
-		cell.cell.walls.bottom = null
-	} else if (cell.dir === 'right') {
-		currentCell.walls.right = null
-	} else if (cell.dir === 'down') {
-		currentCell.walls.bottom = null
-	} else if (cell.dir === 'left') {
-		cell.cell.walls.right = null
+	if (dir === 'up') {
+		toCell.walls.bottom = null
+	} else if (dir === 'right') {
+		fromCell.walls.right = null
+	} else if (dir === 'down') {
+		fromCell.walls.bottom = null
+	} else if (dir === 'left') {
+		toCell.walls.right = null
 	}
-	
-	mazify(...indices)
 }
 
 // Returns array of unvisited cells around given cell and their direction from the given cell:
-function getUnvisitedNeighbors(col, row) {
+function getUnvisitedNeighbors(currentCell) {
+	const indices = getIndices(currentCell)
+	const col = indices[0]
+	const row = indices[1]
+
 	const unvisitedCells = []
-	const data = {}
 
 	// Up
 	if (row - 1 >= 0) {
 		const cell = getCell(col, row - 1)
 		if (!cell.visited) {
-			data.cell = cell
-			data.dir = 'up'
-			unvisitedCells.push(data)
+			unvisitedCells.push({ cell: cell, dir: 'up' })
 		}
 	}
 
@@ -113,9 +109,7 @@ function getUnvisitedNeighbors(col, row) {
 	if (col + 1 < config.environment.cellAmtX) {
 		const cell = getCell(col + 1, row)
 		if (!cell.visited) {
-			data.cell = cell
-			data.dir = 'right'
-			unvisitedCells.push(data)
+			unvisitedCells.push({ cell: cell, dir: 'right' })
 		}
 	}
 
@@ -123,9 +117,7 @@ function getUnvisitedNeighbors(col, row) {
 	if (row + 1 < config.environment.cellAmtY) {
 		const cell = getCell(col, row + 1)
 		if (!cell.visited) {
-			data.cell = cell
-			data.dir = 'down'
-			unvisitedCells.push(data)
+			unvisitedCells.push({ cell: cell, dir: 'down' })
 		}
 	}
 
@@ -133,34 +125,16 @@ function getUnvisitedNeighbors(col, row) {
 	if (col - 1 >= 0) {
 		const cell = getCell(col - 1, row)
 		if (!cell.visited) {
-			data.cell = cell
-			data.dir = 'left'
-			unvisitedCells.push(data)
+			unvisitedCells.push({ cell: cell, dir: 'left' })
 		}
 	}
 
 	return unvisitedCells
 }
 
-function mazify(col, row) {
-	const cell = getCell(col, row)
-
-	state.currentCell = cell
-	cell.visited = true
-
-	const unvisitedCells = getUnvisitedNeighbors(col, row)
-	if (unvisitedCells.length > 0) {
-		const nextCell = random(unvisitedCells)
-		
-		// Moves and removes wall:
-		moveCell(cell, nextCell)
-	}
-
-
-}
-
 function generateMaze() {
-	// Uses width / height of canvas (based off amt of cells and cellwidth) to generate rows and columns of cells:
+	// Creates grid:
+	// Uses width / height of canvas (based off amt of cells and cellwidth) to generate rows and columns of cells
 	for (let x = 0; x < width; x += config.environment.cellWidth) {
 		const column = []
 
@@ -172,12 +146,28 @@ function generateMaze() {
 		state.grid.push(column)
 	}
 
-	// Starts maze generation //* https://en.wikipedia.org/wiki/Maze_generation_algorithm
-	mazify(0, 0)
+	// https://en.wikipedia.org/wiki/Maze_generation_algorithm - Recursive Backtracker
+	// Starts maze generation: 
+	const initialIndices = [0, 0] // Starting point does not matter
+	const initialCell = getCell(...initialIndices)
 
+	initialCell.visited = true
+	state.cellStack.push(initialCell)
 
+	while (state.cellStack.length > 0) {
+		const currentCell = state.cellStack.pop()
 
+		const unvisitedCells = getUnvisitedNeighbors(currentCell)
+		if (unvisitedCells.length > 0) {
+			state.cellStack.push(currentCell)
 
+			const data = random(unvisitedCells)
+			const nextCell = data.cell
+			const dir = data.dir
 
-	// Removes some more random walls:
+			removeWall(currentCell, nextCell, dir)
+			nextCell.visited = true
+			state.cellStack.push(nextCell)
+		}
+	}
 }

@@ -7,7 +7,7 @@ config = {
 		cannonLength: 18,
 		ammo: 3,
 		collisionSlowFactor: 4,
-		jitterFactor: 2,
+		// jitterFactor: 2,
 		collisionTurnFactor: 10
 	},
 	environment: {
@@ -15,13 +15,13 @@ config = {
 		cellAmtX: 15,
 		cellAmtY: 10,
 		wallWidth: 6,
-		wallOccurrence: 0.5,
+		wallOccurrence: 0.8,
 		collisionLookaheadSteps: 3 // Same as bullet speed
 	},
 	bullet: {
 		speed: 3,
 		diameter: 8,
-		framesAlive: 60 * 6 // 60fps * 5seconds
+		framesAlive: 5 * 60 // 60fps * 5seconds
 	},
 	effects: {
 		muzzleSize: 2.5,

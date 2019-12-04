@@ -308,14 +308,19 @@ class Cell {
 		this.x = x
 		this.y = y
 		this.w = config.environment.cellWidth
-		// Makes both walls initially, if cell is not at the edge of the canvas
+		// Makes a wall at chance, if wall is not on canvas edge
 		this.walls = {
-			right: this.x !== width - config.environment.cellWidth ? new Wall(this, 'right') : null,
-			bottom: this.y !== height - config.environment.cellWidth ? new Wall(this, 'bottom') : null
+			right: this.x !== width - config.environment.cellWidth ? this.randomWall('right') : null,
+			bottom: this.y !== height - config.environment.cellWidth ? this.randomWall('bottom') : null
 		}
 		// For creating the maze:
 		this.visited = false
 	}
+
+	randomWall(side) {
+		return random() < config.environment.wallOccurrence ? new Wall(this, side) : null
+	}
+
 }
 
 class Wall {
