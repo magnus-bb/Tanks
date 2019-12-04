@@ -60,10 +60,14 @@ function getCell(row, col) {
 
 function getNeighborCell(currentCell, direction) {
 	// Values to return are the index nums in loops:
-	state.grid.forEach((col, colNum) => {
-		col.forEach((cell, cellNum) => {
+	for (let colNum = 0; colNum < state.grid.length; colNum++) {
+		const col = state.grid[colNum]
+
+		for (let cellNum = 0; cellNum < col.length; cellNum++) {
+			const cell = col[cellNum]
 			if (cell === currentCell) {
 				let indices
+
 				switch (direction) {
 					case 'up':
 						indices = [colNum, cellNum - 1]
@@ -76,19 +80,23 @@ function getNeighborCell(currentCell, direction) {
 						break
 					case 'left':
 						indices = [colNum - 1, cellNum]
-					
-					return getCell(...indices)
 				}
+
+				return getCell(...indices)
 			}
-		})
-	})
+		}
+	}
 }
 
 
-function mazifyCell(currentCell) {
-	currentCell.visited = true
+function moveToCell(currentCell, cell) {
+	cell.visited = true
 
 
+
+}
+
+function checkVisited(cell) {
 
 }
 
