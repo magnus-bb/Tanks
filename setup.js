@@ -10,17 +10,22 @@ function setup() {
 	generateMaze()
 
 	//! Creates players
-	state.players.push(new Tank(
-		'Tanko',
-		Math.floor(Math.random() * width),
-		Math.floor(Math.random() * height)
-	))
-	state.players.push(new Tank(
-		'Tankarino',
-		Math.floor(Math.random() * width),
-		Math.floor(Math.random() * height),
-		87, 68, 83, 65, 67
-	))
+	// Random cell:
+	const col = floor(random(0, config.environment.cellAmtX))
+	const row = floor(random(0, config.environment.cellAmtY))
+
+	// Mid of cell: //TODO: Move to class
+	const cell = state.grid[col][row]
+	const x = cell.x + cell.w / 2
+	const y = cell.y + cell.w / 2
+
+	state.players.push(new Tank('Tanko', x, y))
+	// state.players.push(new Tank(
+	// 	'Tankarino',
+	// 	Math.floor(Math.random() * width),
+	// 	Math.floor(Math.random() * height),
+	// 	87, 68, 83, 65, 67
+	// ))
 }
 
 // Keyboard handler for firing

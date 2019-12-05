@@ -5,10 +5,11 @@ config = {
 		moveSpeed: 1.5, // Has to be less than the width of walls to not pass through
 		turnSpeed: 4,
 		cannonLength: 18,
-		ammo: 3,
+		ammo: 5,
 		collisionSlowFactor: 4,
 		// jitterFactor: 2,
-		collisionTurnFactor: 10
+		collisionTurnFactor: 10,
+		spawnDistance: 4
 	},
 	environment: {
 		cellWidth: 55,
@@ -21,7 +22,7 @@ config = {
 	bullet: {
 		speed: 3,
 		diameter: 8,
-		framesAlive: 5 * 60 // 60fps * 5seconds
+		framesAlive: 6 * 60 // 60fps * 5seconds
 	},
 	effects: {
 		muzzleSize: 2.5,

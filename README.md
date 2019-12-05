@@ -30,7 +30,7 @@ Guidelines
 
 Todos
 -----
-- Tanks skal spawne i **midten** af en celle
+- Tanks skal spawne i **midten** af en tilfældig celle - gerne `config.player.spawnDistance` celler fra hinanden (skal flyttes fra `setup.js` ind i classen)
 - En lækker effekt når et projektil kalder `destroy()`, så det ikke bare forsvinder. Evt. også fade på projektilets hale
 - Finde og loade open source lydeffekter til skud (*gud forbyde, at jeg bliver nødt til at optage mundlyde*)
 - `Bullet` class skal omskrives til at extende en `Projectile` class i stedet, og så skal fælleskarakteristika med andre våben flyttes dertil
@@ -41,6 +41,7 @@ Todos
 - Bedre bullet collisions på kanterne af walls
 - Tilføjelse af tilfældige celler, der til tider "brænder" og ikke må passeres
 - Lav en pausefunktionalitet med noLoop() og loop() på en tast
+- Flyt spawn i midten af t
 
 Links
 -----

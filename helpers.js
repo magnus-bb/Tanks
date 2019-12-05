@@ -75,9 +75,47 @@ function getIndices(cell) {
 	}
 }
 
-function removeWall(fromCell, toCell, dir) {
+function generateMaze() {
+	// Creates grid:
+	// Uses width / height of canvas (based off amt of cells and cellwidth) to generate rows and columns of cells
+	for (let x = 0; x < width; x += config.environment.cellWidth) {
+		const column = []
 
-	// Removes the correct wall:
+		for (let y = 0; y < height; y += config.environment.cellWidth) {
+			// Makes all walls:
+			const cell = new Cell(x, y)
+			column.push(cell)
+		}
+		state.grid.push(column)
+	}
+
+	// https://en.wikipedia.org/wiki/Maze_generation_algorithm - Recursive Backtracker
+	// Starts maze generation: 
+	const initialIndices = [0, 0] // Starting point does not matter
+	const initialCell = getCell(...initialIndices)
+
+	initialCell.visited = true
+	state.cellStack.push(initialCell)
+
+	while (state.cellStack.length > 0) {
+		const currentCell = state.cellStack.pop()
+
+		const unvisitedCells = getUnvisitedNeighbors(currentCell)
+		if (unvisitedCells.length > 0) {
+			state.cellStack.push(currentCell)
+
+			const data = random(unvisitedCells)
+			const nextCell = data.cell
+			const dir = data.dir
+
+			removeWall(currentCell, nextCell, dir)
+			nextCell.visited = true
+			state.cellStack.push(nextCell)
+		}
+	}
+}
+
+function removeWall(fromCell, toCell, dir) {
 	if (dir === 'up') {
 		toCell.walls.bottom = null
 	} else if (dir === 'right') {
@@ -130,44 +168,4 @@ function getUnvisitedNeighbors(currentCell) {
 	}
 
 	return unvisitedCells
-}
-
-function generateMaze() {
-	// Creates grid:
-	// Uses width / height of canvas (based off amt of cells and cellwidth) to generate rows and columns of cells
-	for (let x = 0; x < width; x += config.environment.cellWidth) {
-		const column = []
-
-		for (let y = 0; y < height; y += config.environment.cellWidth) {
-			// Makes all walls:
-			const cell = new Cell(x, y)
-			column.push(cell)
-		}
-		state.grid.push(column)
-	}
-
-	// https://en.wikipedia.org/wiki/Maze_generation_algorithm - Recursive Backtracker
-	// Starts maze generation: 
-	const initialIndices = [0, 0] // Starting point does not matter
-	const initialCell = getCell(...initialIndices)
-
-	initialCell.visited = true
-	state.cellStack.push(initialCell)
-
-	while (state.cellStack.length > 0) {
-		const currentCell = state.cellStack.pop()
-
-		const unvisitedCells = getUnvisitedNeighbors(currentCell)
-		if (unvisitedCells.length > 0) {
-			state.cellStack.push(currentCell)
-
-			const data = random(unvisitedCells)
-			const nextCell = data.cell
-			const dir = data.dir
-
-			removeWall(currentCell, nextCell, dir)
-			nextCell.visited = true
-			state.cellStack.push(nextCell)
-		}
-	}
 }

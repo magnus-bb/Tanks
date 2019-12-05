@@ -81,10 +81,13 @@ class Tank {
 
 	checkCollision(wall, side) {
 		const wallWidth = config.environment.wallWidth / 2 // +/- from center of wall
+		const rad = this.d / 2 //! Testing
 
+		// Which side of the wall is the long side and which is the end:
 		const longAxis = side === 'right' ? 'y' : 'x' // Hack to help add wallWidth when needed and vice versa
 		const shortAxis = side === 'bottom' ? 'y' : 'x'
 
+		// Gets the pseudo width of the line, to be able to check if a point is inside the "rectangle":
 		const shortAxisPointOne = wall[shortAxis + '1'] - wallWidth
 		const shortAxisPointTwo = wall[shortAxis + '1'] + wallWidth
 
@@ -94,15 +97,35 @@ class Tank {
 			y: this.y + this.moveCoords.dY
 		}
 
-		//TODO: Include whole body of tank + cannon
-
-		// Interaction with walls:
-		if (between(lookAhead[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(this[shortAxis], shortAxisPointOne, shortAxisPointTwo)) {
+		//TODO: Include cannon
+		//TODO: Abstract this into helpers
+		//TODO: Make it like a circle, not a square
+		
+		//* Best
+		if ((between(lookAhead[longAxis] + rad, wall[longAxis + '1'], wall[longAxis + '2']) || between(lookAhead[longAxis] - rad, wall[longAxis + '1'], wall[longAxis + '2'])) && (between(shortAxisPointOne, this[shortAxis] - rad, this[shortAxis] + rad) || between(shortAxisPointTwo, this[shortAxis] - rad, this[shortAxis] + rad))) {
 			this.handleCollision(longAxis)
 		}
-		if (between(this[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(lookAhead[shortAxis], shortAxisPointOne, shortAxisPointTwo)) {
+		if ((between(this[longAxis] - rad, wall[longAxis + '1'], wall[longAxis + '2']) || between(this[longAxis] + rad, wall[longAxis + '1'], wall[longAxis + '2'])) && (between(shortAxisPointOne, lookAhead[shortAxis] - rad, lookAhead[shortAxis] + rad) || between(shortAxisPointTwo, lookAhead[shortAxis] - rad, lookAhead[shortAxis] + rad))) {
 			this.handleCollision(shortAxis)
 		}
+
+		// //! Better:
+		// // Interaction with walls:
+		// if ((between(lookAhead[longAxis] + rad, wall[longAxis + '1'], wall[longAxis + '2']) || between(lookAhead[longAxis] - rad, wall[longAxis + '1'], wall[longAxis + '2'])) && (between(this[shortAxis] + rad, shortAxisPointOne, shortAxisPointTwo) || between(this[shortAxis] - rad, shortAxisPointOne, shortAxisPointTwo))) {
+		// 	this.handleCollision(longAxis)
+		// }
+		// if ((between(this[longAxis] - rad, wall[longAxis + '1'], wall[longAxis + '2']) || between(this[longAxis] + rad, wall[longAxis + '1'], wall[longAxis + '2'])) && (between(lookAhead[shortAxis] + rad, shortAxisPointOne, shortAxisPointTwo) || between(lookAhead[shortAxis] - rad, shortAxisPointOne, shortAxisPointTwo))) {
+		// 	this.handleCollision(shortAxis)
+		// }
+
+		//! Original: 
+		// // Interaction with walls:
+		// if (between(lookAhead[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(this[shortAxis], shortAxisPointOne, shortAxisPointTwo)) {
+		// 	this.handleCollision(longAxis)
+		// }
+		// if (between(this[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(lookAhead[shortAxis], shortAxisPointOne, shortAxisPointTwo)) {
+		// 	this.handleCollision(shortAxis)
+		// }
 	}
 
 	handleCollision(axis) {
