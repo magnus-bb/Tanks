@@ -3,5 +3,8 @@ state = {
 	projectiles: [],
 	grid: [],
 	currentCell: null,
-	cellStack: []
+	cellStack: [],
+	effects: {
+		poofs: []
+	}
 }

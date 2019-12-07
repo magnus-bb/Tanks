@@ -100,7 +100,7 @@ class Tank {
 		//TODO: Include cannon
 		//TODO: Abstract this into helpers
 		//TODO: Make it like a circle, not a square
-		
+
 		//* Best
 		if ((between(lookAhead[longAxis] + rad, wall[longAxis + '1'], wall[longAxis + '2']) || between(lookAhead[longAxis] - rad, wall[longAxis + '1'], wall[longAxis + '2'])) && (between(shortAxisPointOne, this[shortAxis] - rad, this[shortAxis] + rad) || between(shortAxisPointTwo, this[shortAxis] - rad, this[shortAxis] + rad))) {
 			this.handleCollision(longAxis)
@@ -202,7 +202,7 @@ class Bullet {
 		this.x = (owner.d / 2 + this.d / 2 + 1) * cos(radians(this.direction)) + owner.x //TODO: ONLY NEEDS POINT AT THE TIP OF THE CANNON
 		this.y = (owner.d / 2 + this.d / 2 + 1) * sin(radians(this.direction)) + owner.y //TODO: ONLY NEEDS POINT AT THE TIP OF THE CANNON
 		// First frame alive is used to fade projectile
-		this.startFrame = frameCount
+		this.duration = config.bullet.duration
 
 		// Direction only needs to be recalculated every bounce on projectiles and on spawn:
 		const move = getMoveCoords(this.speed, this.direction, 'forward')
@@ -277,7 +277,7 @@ class Bullet {
 	}
 
 	// Makes a tail point for each frame
-	effect(color) {
+	trail(color) {
 		// Makes tail data
 		this.tail.push({ x: this.x, y: this.y })
 		if (this.tail.length > 40) {
@@ -300,27 +300,35 @@ class Bullet {
 		}
 	}
 
-	show() {
-		let ownerColor = color(this.owner.color) //! WILL CHANGE TO A SPRITE
+	show(index) {
+		// Removes projectile after duration has passed
+		if (this.duration <= 0) {
+			this.destroy(index)
+		} else {
+			let ownerColor = color(this.owner.color) //! WILL CHANGE TO A SPRITE
 
-		// Main bullet
-		fill(ownerColor)
-		noStroke()
-		circle(this.x, this.y, this.d)
+			// Main bullet
+			fill(ownerColor)
+			noStroke()
+			if (this.duration <= 60) {
+				// TODO: Sæt sidste value i color (skal bruge p5 color()) til at fade + opdatér med fill()
+			}
+			circle(this.x, this.y, this.d)
 
-		this.effect(ownerColor)
+			this.trail(ownerColor)
 
-		// Removes projectile after framesAlive has passed
-		if (frameCount >= this.startFrame + config.bullet.framesAlive) {
-			const projectileIndex = state.projectiles.findIndex(proj => proj === this)
-			this.destroy(projectileIndex)
+			this.duration--
 		}
 	}
 
 	// Uses index number to remove projectile from the game:
 	destroy(index) {
-		// TODO: Add fade / effect
+		// // Adds lingering 'Poof!' text in place:
+		// state.effects.poofs.push(new Poof(this.x, this.y))
+
+		// Removes projectile:
 		state.projectiles.splice(index, 1)
+
 		this.owner.ammo++
 	}
 }
@@ -376,3 +384,31 @@ class Wall {
 		line(this.x1, this.y1, this.x2, this.y2)
 	}
 }
+
+// //* Effects:
+// class Poof {
+// 	constructor(x, y) {
+// 		this.text = config.bullet.destructionText
+// 		this.x = x
+// 		this.y = y
+// 		this.duration = config.bullet.destructionEffectDuration
+// 	}
+
+// 	show(index) {
+// 		if (this.duration <= 0) {
+// 			// Removes effect:
+// 			state.effects.poofs.splice(index, 1)
+// 		} else {
+// 			// Displays effect:
+// 			textAlign(CENTER, CENTER)
+// 			textSize(14)
+// 			textStyle(BOLD)
+// 			stroke(0)
+// 			strokeWeight(3)
+// 			textFont('Comic Sans MS')
+// 			text(this.text, this.x, this.y)
+
+// 			this.duration--
+// 		}
+// 	}
+// }

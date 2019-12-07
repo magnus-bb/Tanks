@@ -45,6 +45,11 @@ function draw() {
 	for (let i = state.projectiles.length - 1; i >= 0; i--) { // We have to go backwards when removing projectiles
 		const projectile = state.projectiles[i]
 		projectile.move()
-		projectile.show() // Also removes projectile
+		projectile.show(i) // Also removes projectile after duration
 	}
+
+	// for (let i = state.effects.poofs.length - 1; i >= 0; i--) {
+	// 	const poof = state.effects.poofs[i]
+	// 	poof.show(i) // Also removes effect after duration
+	// }
 }

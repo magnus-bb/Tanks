@@ -22,7 +22,9 @@ config = {
 	bullet: {
 		speed: 3,
 		diameter: 8,
-		framesAlive: 6 * 60 // 60fps * 5seconds
+		duration: 6 * 60, // In frames
+		destructionText: "Poof!",
+		destructionEffectDuration: 60, // In frames
 	},
 	effects: {
 		muzzleSize: 2.5,
