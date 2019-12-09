@@ -37,7 +37,7 @@ Todos
 - Relevante hjælpefunktioner og instance-props (eks. cell.w) skal flyttes ind i deres class ved brug af static methods
 	- f.eks. skal `showTrail()` ind i classen, så trailet stadig kan renders færdigt efter `Bullet`en forsvinder
 	- `checkCollisions()` og `outOfBounds()` skal også i static methods
-		- + Abstraheres en smule til helpers
+		- Skal også abstraheres en smule til helpers
 - `Bullet`s startkoordinat skal være spidsen af kanonen
 - Flyt collision ved canvas-kanter ud af wall-loopet i `Bullet`
 - Tanks' kanoner skal også indgå i collisions
