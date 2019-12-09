@@ -38,7 +38,7 @@ Todos
 	- f.eks. skal `showTrail()` ind i classen, så trailet stadig kan renders færdigt efter `Bullet`en forsvinder
 	- `checkCollisions()` og `outOfBounds()` skal også i static methods
 		- Skal også abstraheres en smule til helpers
-- `Bullet`s startkoordinat skal være spidsen af kanonen
+- `Bullet`s startkoordinat skal være spidsen af kanonen, men ikke i walls
 - Flyt collision ved canvas-kanter ud af wall-loopet i `Bullet`
 - Tanks' kanoner skal også indgå i collisions
 - Bedre `Bullet` og `Tank` collisions på enderne af walls
