@@ -25,7 +25,7 @@ function getDirection(dX, dY) {
 }
 
 function randomColor() {
-	return [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)]
+	return color(Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256))
 }
 
 function randomWallSide() {

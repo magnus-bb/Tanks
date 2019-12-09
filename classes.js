@@ -174,7 +174,7 @@ class Tank {
 	show() {
 		stroke(51)
 		// Color of tank
-		fill(...this.color)
+		fill(this.color)
 		// Body of tank
 		strokeWeight(1)
 		circle(this.x, this.y, this.d)
@@ -203,6 +203,7 @@ class Bullet {
 		this.y = (owner.d / 2 + this.d / 2 + 1) * sin(radians(this.direction)) + owner.y //TODO: ONLY NEEDS POINT AT THE TIP OF THE CANNON
 		// First frame alive is used to fade projectile
 		this.duration = config.bullet.duration
+		this.color = owner.color
 
 		// Direction only needs to be recalculated every bounce on projectiles and on spawn:
 		const move = getMoveCoords(this.speed, this.direction, 'forward')
@@ -277,7 +278,7 @@ class Bullet {
 	}
 
 	// Makes a tail point for each frame
-	trail(color) {
+	trail() {
 		// Makes tail data
 		this.tail.push({ x: this.x, y: this.y })
 		if (this.tail.length > 40) {
@@ -285,8 +286,8 @@ class Bullet {
 		}
 
 		// Renders tail
-		color.setAlpha(config.effects.bulletTrailAlpha)
-		fill(color);
+		this.color.setAlpha(config.effects.bulletTrailAlpha)
+		fill(this.color);
 		for (let i = 0; i < this.tail.length; i++) {
 			let d = this.d - ((this.tail.length - i) / 10) > 1 ? this.d - ((this.tail.length - i) / 10) : 1
 			circle(this.tail[i].x, this.tail[i].y, d)
@@ -305,17 +306,16 @@ class Bullet {
 		if (this.duration <= 0) {
 			this.destroy(index)
 		} else {
-			let ownerColor = color(this.owner.color) //! WILL CHANGE TO A SPRITE
 
 			// Main bullet
-			fill(ownerColor)
+			fill(this.color)
 			noStroke()
 			if (this.duration <= 60) {
 				// TODO: Sæt sidste value i color (skal bruge p5 color()) til at fade + opdatér med fill()
 			}
 			circle(this.x, this.y, this.d)
 
-			this.trail(ownerColor)
+			this.trail()
 
 			this.duration--
 		}
