@@ -7,11 +7,10 @@ config = {
 		cannonLength: 18,
 		ammo: 5,
 		collisionSlowFactor: 4,
-		// jitterFactor: 2,
 		collisionTurnFactor: 10,
-		spawnDistance: 4
+		spawnDistance: 4 //TODO: Cells between spawned tanks
 	},
-	environment: {
+	env: {
 		cellWidth: 55,
 		cellAmtX: 15,
 		cellAmtY: 10,
@@ -27,9 +26,11 @@ config = {
 		destructionEffectDuration: 60, // In frames
 	},
 	effects: {
-		muzzleSize: 2.5,
+		muzzleSize: 2.5, // Times the size of regular bullet
+		muzzleSpeed: 1, // Px reduction per frame
 		defaultShakeMagnitude: 2,
-		bulletTrailAlpha: 50
+		bulletTrailAlpha: 100, // Out of 255
+		bulletTrailLength: 30 // Frames / points
 	}
 }
 

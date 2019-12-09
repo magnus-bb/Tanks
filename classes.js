@@ -62,7 +62,7 @@ class Tank {
 	}
 
 	outOfBounds() {
-		const wallWidth = config.environment.wallWidth / 2 // +/- from center of wall
+		const wallWidth = config.env.wallWidth / 2 // +/- from center of wall
 
 		// Next tank position (if no collision is observed)
 		const lookAhead = {
@@ -80,7 +80,7 @@ class Tank {
 	}
 
 	checkCollision(wall, side) {
-		const wallWidth = config.environment.wallWidth / 2 // +/- from center of wall
+		const wallWidth = config.env.wallWidth / 2 // +/- from center of wall
 		const rad = this.d / 2 //! Testing
 
 		// Which side of the wall is the long side and which is the end:
@@ -203,7 +203,7 @@ class Bullet {
 		this.y = (owner.d / 2 + this.d / 2 + 1) * sin(radians(this.direction)) + owner.y //TODO: ONLY NEEDS POINT AT THE TIP OF THE CANNON
 		// First frame alive is used to fade projectile
 		this.duration = config.bullet.duration
-		this.color = owner.color
+		this.color = color(red(this.owner.color), green(this.owner.color), blue(this.owner.color))
 
 		// Direction only needs to be recalculated every bounce on projectiles and on spawn:
 		const move = getMoveCoords(this.speed, this.direction, 'forward')
@@ -213,13 +213,13 @@ class Bullet {
 		}
 
 		// For effects:
-		this.tail = []
+		this.trail = [] // Not called trail, so it won't overlap with the method
 	}
 
 	//! WHEN FIRING INSIDE WALL, BULLET GETS STUCK
 	checkCollision(wall, side) {
-		const numSteps = config.environment.collisionLookaheadSteps // How many positions to check between bullet location and next frames' location
-		const wallWidth = config.environment.wallWidth / 2 // +/- from center of wall
+		const numSteps = config.env.collisionLookaheadSteps // How many positions to check between bullet location and next frames' location
+		const wallWidth = config.env.wallWidth / 2 // +/- from center of wall
 
 		const longAxis = side === 'right' ? 'y' : 'x' // Hack to help add wallWidth when needed and vice versa
 		const shortAxis = side === 'bottom' ? 'y' : 'x'
@@ -273,31 +273,19 @@ class Bullet {
 	}
 
 	move() {
+		// Sets the points for the trail
+		this.makeTrail()
+
+		// Moves bullet
 		this.x += this.moveCoords.dX
 		this.y += this.moveCoords.dY
 	}
 
-	// Makes a tail point for each frame
-	trail() {
-		// Makes tail data
-		this.tail.push({ x: this.x, y: this.y })
-		if (this.tail.length > 40) {
-			this.tail.shift()
-		}
-
-		// Renders tail
-		this.color.setAlpha(config.effects.bulletTrailAlpha)
-		fill(this.color);
-		for (let i = 0; i < this.tail.length; i++) {
-			let d = this.d - ((this.tail.length - i) / 10) > 1 ? this.d - ((this.tail.length - i) / 10) : 1
-			circle(this.tail[i].x, this.tail[i].y, d)
-		}
-
-		// Resizes bullet after muzzle flash
-		if (this.d > config.bullet.diameter) {
-			this.d -= 3
-		} else {
-			this.d = config.bullet.diameter
+	// Makes a trail point for each frame
+	makeTrail() {
+		this.trail.push({ x: this.x, y: this.y })
+		if (this.trail.length > config.effects.bulletTrailLength) {
+			this.trail.shift()
 		}
 	}
 
@@ -306,18 +294,33 @@ class Bullet {
 		if (this.duration <= 0) {
 			this.destroy(index)
 		} else {
-
 			// Main bullet
-			fill(this.color)
+			this.color.setAlpha(255) // Resets from the low opacity on trail
 			noStroke()
-			if (this.duration <= 60) {
-				// TODO: Sæt sidste value i color (skal bruge p5 color()) til at fade + opdatér med fill()
-			}
+			fill(this.color)
 			circle(this.x, this.y, this.d)
 
-			this.trail()
+			// Renders trail
+			this.showTrail()
+
+			// Resizes bullet for muzzle flash effect
+			if (this.d > config.bullet.diameter) {
+				this.d -= config.effects.muzzleSpeed
+			} else {
+				this.d = config.bullet.diameter
+			}
 
 			this.duration--
+		}
+	}
+
+	showTrail() {
+		this.color.setAlpha(config.effects.bulletTrailAlpha) // Lower opacity than normal
+		fill(this.color)
+		for (let i = 0; i < this.trail.length; i++) {
+			// Returns a diameter between 3 px and bullet diameter according to how close to the bullet the point is
+			let d = lerp(3, this.d, i / (this.trail.length - 1))
+			circle(this.trail[i].x, this.trail[i].y, d)
 		}
 	}
 
@@ -333,23 +336,30 @@ class Bullet {
 	}
 }
 
+
+
+
+
+
+
+
 //* Environment
 class Cell {
 	constructor(x, y) {
 		this.x = x
 		this.y = y
-		this.w = config.environment.cellWidth
+		this.w = config.env.cellWidth
 		// Makes a wall at chance, if wall is not on canvas edge
 		this.walls = {
-			right: this.x !== width - config.environment.cellWidth ? this.randomWall('right') : null,
-			bottom: this.y !== height - config.environment.cellWidth ? this.randomWall('bottom') : null
+			right: this.x !== width - config.env.cellWidth ? this.randomWall('right') : null,
+			bottom: this.y !== height - config.env.cellWidth ? this.randomWall('bottom') : null
 		}
 		// For creating the maze:
 		this.visited = false
 	}
 
 	randomWall(side) {
-		return random() < config.environment.wallOccurrence ? new Wall(this, side) : null
+		return random() < config.env.wallOccurrence ? new Wall(this, side) : null
 	}
 
 }
@@ -360,7 +370,7 @@ class Wall {
 		this.y1 = owner.y
 		this.x2 = owner.x
 		this.y2 = owner.y
-		this.w = config.environment.wallWidth
+		this.w = config.env.wallWidth
 
 		const length = owner.w
 		switch (side) {

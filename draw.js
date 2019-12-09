@@ -2,7 +2,7 @@ function draw() {
 	//* Canvas:
 	background(195)
 	stroke(40)
-	strokeWeight(config.environment.wallWidth)
+	strokeWeight(config.env.wallWidth)
 	noFill()
 	rect(0, 0, width, height) // Outer walls
 

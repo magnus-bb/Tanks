@@ -78,10 +78,10 @@ function getIndices(cell) {
 function generateMaze() {
 	// Creates grid:
 	// Uses width / height of canvas (based off amt of cells and cellwidth) to generate rows and columns of cells
-	for (let x = 0; x < width; x += config.environment.cellWidth) {
+	for (let x = 0; x < width; x += config.env.cellWidth) {
 		const column = []
 
-		for (let y = 0; y < height; y += config.environment.cellWidth) {
+		for (let y = 0; y < height; y += config.env.cellWidth) {
 			// Makes all walls:
 			const cell = new Cell(x, y)
 			column.push(cell)
@@ -144,7 +144,7 @@ function getUnvisitedNeighbors(currentCell) {
 	}
 
 	// Right
-	if (col + 1 < config.environment.cellAmtX) {
+	if (col + 1 < config.env.cellAmtX) {
 		const cell = getCell(col + 1, row)
 		if (!cell.visited) {
 			unvisitedCells.push({ cell: cell, dir: 'right' })
@@ -152,7 +152,7 @@ function getUnvisitedNeighbors(currentCell) {
 	}
 
 	// Down
-	if (row + 1 < config.environment.cellAmtY) {
+	if (row + 1 < config.env.cellAmtY) {
 		const cell = getCell(col, row + 1)
 		if (!cell.visited) {
 			unvisitedCells.push({ cell: cell, dir: 'down' })

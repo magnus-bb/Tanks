@@ -5,6 +5,6 @@ state = {
 	currentCell: null,
 	cellStack: [],
 	effects: {
-		poofs: []
+		
 	}
 }

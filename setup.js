@@ -1,8 +1,8 @@
 function setup() {
 	frameRate(config.fps)
 	// Makes world
-	const canvasWidth = config.environment.cellWidth * config.environment.cellAmtX
-	const canvasHeight = config.environment.cellWidth * config.environment.cellAmtY
+	const canvasWidth = config.env.cellWidth * config.env.cellAmtX
+	const canvasHeight = config.env.cellWidth * config.env.cellAmtY
 	const canvas = createCanvas(canvasWidth, canvasHeight)
 	canvas.parent('canvas-container')
 
@@ -11,8 +11,8 @@ function setup() {
 
 	//! Creates players
 	// Random cell:
-	const col = floor(random(0, config.environment.cellAmtX))
-	const row = floor(random(0, config.environment.cellAmtY))
+	const col = floor(random(0, config.env.cellAmtX))
+	const row = floor(random(0, config.env.cellAmtY))
 
 	// Mid of cell: //TODO: Move to class
 	const cell = state.grid[col][row]
