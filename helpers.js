@@ -89,7 +89,6 @@ function generateMaze() {
 		state.grid.push(column)
 	}
 
-	// https://en.wikipedia.org/wiki/Maze_generation_algorithm - Recursive Backtracker
 	// Starts maze generation: 
 	const initialIndices = [0, 0] // Starting point does not matter
 	const initialCell = getCell(...initialIndices)
