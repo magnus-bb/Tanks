@@ -1,3 +1,4 @@
+console.log('Draw')
 function draw() {
 	//* Canvas:
 	background(195)

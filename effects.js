@@ -1,3 +1,4 @@
+console.log('Effects')
 function shake(magnitude = config.effects.defaultShakeMagnitude) {
 	let shakeCount = 1;
 	const numShakes = 10
@@ -5,8 +6,6 @@ function shake(magnitude = config.effects.defaultShakeMagnitude) {
 	const startY = 0
 	const magnitudeUnit = magnitude / numShakes
 
-
-	
 	doShake = () => {
 		if (shakeCount < numShakes) {
 			canvas.style.transform = 'translate(' + startX + 'px, ' + startY + 'px)'

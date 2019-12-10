@@ -1,3 +1,4 @@
+console.log('State')
 state = {
 	players: [],
 	projectiles: [],

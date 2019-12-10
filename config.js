@@ -1,3 +1,4 @@
+console.log('Config')
 config = {
 	fps: 60,
 	player: {
