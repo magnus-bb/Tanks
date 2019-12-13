@@ -1,4 +1,3 @@
-console.log('Setup')
 function setup() {
 	frameRate(config.fps)
 	// Makes world

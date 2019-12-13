@@ -1,4 +1,4 @@
-export default class Tank {
+class Tank {
 	constructor(name, x, y, forward = UP_ARROW, right = RIGHT_ARROW, backward = DOWN_ARROW, left = LEFT_ARROW, fire = 32) {
 		this.name = name
 		this.x = x
@@ -22,6 +22,10 @@ export default class Tank {
 		this.moveCoords = {
 			dX: 0,
 			dY: 0
+		}
+		this.cannonTip = {
+			x: config.player.cannonLength * cos(radians(this.direction)) + this.x,
+			y: config.player.cannonLength * sin(radians(this.direction)) + this.y
 		}
 	}
 
@@ -60,7 +64,7 @@ export default class Tank {
 		}
 	}
 
-	outOfBounds() {
+	edgeCollision() {
 		const wallWidth = config.env.wallWidth / 2 // +/- from center of wall
 
 		// Next tank position (if no collision is observed)
@@ -78,7 +82,7 @@ export default class Tank {
 		}
 	}
 
-	checkCollision(wall, side) {
+	wallCollision(wall, side) {
 		const wallWidth = config.env.wallWidth / 2 // +/- from center of wall
 		
 		// Which side of the wall is the long side and which is the end:
@@ -127,7 +131,6 @@ export default class Tank {
 	}
 
 	handleCollision(axis) {
-
 		// For accessing dX or dY prop of moveCoords:
 		const deltaAxis = 'd' + axis.toUpperCase()
 
@@ -162,30 +165,29 @@ export default class Tank {
 			//TODO: Use weapon
 		} else if (this.ammo > 0) {
 			this.ammo--
-			state.projectiles.push(new Bullet(this))
+			state.projectiles.bullets.push(new Bullet(this))
 
 			shake() // Global effect
 		}
 	}
 
 	show() {
-		stroke(51)
 
-		// Color of tank
+		stroke(51)
 		fill(this.color)
 
-		// Body of tank
+		// Renders body:
 		strokeWeight(1)
 		circle(this.x, this.y, this.d)
 
-		// Direction of cannon + offset from center: 
-		const cannonXStart = (this.d / 5) * cos(radians(this.direction)) + this.x
-		const cannonYStart = (this.d / 5) * sin(radians(this.direction)) + this.y
-		const cannonXEnd = config.player.cannonLength * cos(radians(this.direction)) + this.x
-		const cannonYEnd = config.player.cannonLength * sin(radians(this.direction)) + this.y
+		// Updates cannon position:
+		const cannonStartX = (this.d / 5) * cos(radians(this.direction)) + this.x
+		const cannonStartY = (this.d / 5) * sin(radians(this.direction)) + this.y
+		this.cannonTip.x = config.player.cannonLength * cos(radians(this.direction)) + this.x
+		this.cannonTip.y = config.player.cannonLength * sin(radians(this.direction)) + this.y
 
-		// Cannon:
+		// Renders cannon:
 		strokeWeight(3)
-		line(cannonXStart, cannonYStart, cannonXEnd, cannonYEnd)
+		line(cannonStartX, cannonStartY, this.cannonTip.x, this.cannonTip.y)
 	}
 }

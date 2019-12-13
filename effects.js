@@ -1,4 +1,3 @@
-console.log('Effects')
 function shake(magnitude = config.effects.defaultShakeMagnitude) {
 	let shakeCount = 1;
 	const numShakes = 10

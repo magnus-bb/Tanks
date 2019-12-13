@@ -1,4 +1,4 @@
-export default class Wall {
+class Wall {
 	constructor(owner, side) {
 		this.x1 = owner.x
 		this.y1 = owner.y

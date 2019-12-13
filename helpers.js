@@ -1,4 +1,3 @@
-console.log('Helpers')
 // Converts a direction and speed to new coords
 function getMoveCoords(speed, direction, drive = false) {
 	if (drive === 'backward') {

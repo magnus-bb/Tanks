@@ -1,7 +1,9 @@
-console.log('State')
 state = {
 	players: [],
-	projectiles: [],
+	projectiles: {
+		bullets: [],
+		trails: new Map()
+	},
 	grid: [],
 	currentCell: null,
 	cellStack: [],

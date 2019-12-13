@@ -1,4 +1,3 @@
-console.log('Draw')
 function draw() {
 	//* Canvas:
 	background(195)
@@ -11,7 +10,7 @@ function draw() {
 	// Must happen before collisions, so a collision can overwrite player input
 	for (const player of state.players) {
 		player.input()
-		player.outOfBounds()
+		player.edgeCollision()
 	}
 
 	//* Cells & Walls:
@@ -25,11 +24,11 @@ function draw() {
 
 					//* Collisions:
 					for (const player of state.players) {
-						player.checkCollision(wallObj, wall)
+						player.wallCollision(wallObj, wall)
 					}
 
-					for (const projectile of state.projectiles) {
-						projectile.checkCollision(wallObj, wall)
+					for (const projectile of state.projectiles.bullets) {
+						projectile.wallCollision(wallObj, wall)
 					}
 				}
 			}
@@ -43,14 +42,23 @@ function draw() {
 	}
 
 	//* Projectiles:
-	for (let i = state.projectiles.length - 1; i >= 0; i--) { // We have to go backwards when removing projectiles
-		const projectile = state.projectiles[i]
-		projectile.move()
-		projectile.show(i) // Also removes projectile after duration
+	for (let i = state.projectiles.bullets.length - 1; i >= 0; i--) { // We have to go backwards when removing projectiles
+		const bullet = state.projectiles.bullets[i]
+		bullet.edgeCollision()
+		bullet.move()
+		bullet.show(i) // Also removes projectile after duration
 	}
 
-	// for (let i = state.effects.poofs.length - 1; i >= 0; i--) {
-	// 	const poof = state.effects.poofs[i]
-	// 	poof.show(i) // Also removes effect after duration
-	// }
+	for (const trailPair of state.projectiles.trails) {
+		Bullet.showTrail(trailPair)
+	}
+
+	let fps
+	if (frameCount % 10 === 0) {
+		fps = floor(getFrameRate())
+	}
+	fill(0)
+	textSize(30)
+	textAlign(CENTER, CENTER)
+	text(fps, width / 2, height / 2)
 }
