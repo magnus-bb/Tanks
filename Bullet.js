@@ -165,7 +165,9 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 				trail.shift()
 			}
 
+			// Important to control every draw phase, as to not just inherit any properties of another drawing:
 			color.setAlpha(config.effects.bulletTrailAlpha) // Lower opacity than bullet)
+			noStroke()
 			fill(color)
 
 			for (let i = 0; i < trail.length; i++) {
