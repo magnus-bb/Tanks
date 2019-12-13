@@ -10,7 +10,7 @@ function draw() {
 	// Must happen before collisions, so a collision can overwrite player input
 	for (const player of state.players) {
 		player.input()
-		player.edgeCollision()
+		player.checkCollision() // Automatically checks edge collisions when no args are given
 	}
 
 	//* Cells & Walls:
@@ -24,11 +24,11 @@ function draw() {
 
 					//* Collisions:
 					for (const player of state.players) {
-						player.wallCollision(wallObj, wall)
+						player.checkCollision(wallObj, wall) // Automatically checks wall collisions when args are given
 					}
 
 					for (const projectile of state.projectiles.bullets) {
-						projectile.wallCollision(wallObj, wall)
+						projectile.checkCollision(wallObj, wall) // Automatically checks wall collisions when args are given
 					}
 				}
 			}
@@ -44,7 +44,7 @@ function draw() {
 	//* Projectiles:
 	for (let i = state.projectiles.bullets.length - 1; i >= 0; i--) { // We have to go backwards when removing projectiles
 		const bullet = state.projectiles.bullets[i]
-		bullet.edgeCollision()
+		bullet.checkCollision() // Automatically checks edge collisions when no args are given
 		bullet.move()
 		bullet.show(i) // Also removes projectile after duration
 	}
@@ -53,6 +53,8 @@ function draw() {
 		Bullet.showTrail(trailPair)
 	}
 
+
+	//! FPS for performance indicator:
 	let fps
 	if (frameCount % 10 === 0) {
 		fps = floor(getFrameRate())

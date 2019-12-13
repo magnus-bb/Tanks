@@ -21,43 +21,22 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 		this.dead = false
 	}
 
-	edgeCollision() {
-		const numSteps = config.env.collisionLookaheadSteps // How many positions to check between bullet location and next frames' location
-		const wallWidth = config.env.wallWidth / 2 // +/- from center of wall
-
-		for (let step = 1; step <= numSteps; step++) {
-			const lookAhead = {
-				x: this.x + this.moveCoords.dX / numSteps * step,
-				y: this.y + this.moveCoords.dY / numSteps * step
-			}
-
-			const bounce = { x: false, y: false }
-
-			if (lookAhead.x <= 0 + wallWidth || lookAhead.x >= width - wallWidth) {
-				bounce.x = true
-			}
-			if (lookAhead.y <= 0 + wallWidth || lookAhead.y >= height - wallWidth) {
-				bounce.y = true
-			}
-
-			// A collision calls the bounce and stops further lookAheads
-			if (bounce.x || bounce.y) {
-				this.bounce(bounce)
-				break
-			}
-		}
-	}
+	//* INSTANCE METHODS
 
 	//! WHEN FIRING INSIDE WALL, BULLET GETS STUCK
-	wallCollision(wall, side) {
+	// Both wall and edge collisions
+	checkCollision(wall = null, side = null) {
 		const numSteps = config.env.collisionLookaheadSteps // How many positions to check between bullet location and next frames' location
 		const wallWidth = config.env.wallWidth / 2 // +/- from center of wall
 
-		const longAxis = side === 'right' ? 'y' : 'x' // Hack to help add wallWidth when needed and vice versa
-		const shortAxis = side === 'bottom' ? 'y' : 'x'
+		// Wall collisions only
+		if (wall && side) { 
+			var longAxis = side === 'right' ? 'y' : 'x' // Hack to help add wallWidth when needed and vice versa
+			var shortAxis = side === 'bottom' ? 'y' : 'x'
 
-		const shortAxisPointOne = wall[shortAxis + '1'] - wallWidth
-		const shortAxisPointTwo = wall[shortAxis + '1'] + wallWidth
+			var shortAxisPointOne = wall[shortAxis + '1'] - wallWidth
+			var shortAxisPointTwo = wall[shortAxis + '1'] + wallWidth
+		}
 
 		// Looks at "all" positions between location and next location
 		for (let step = 1; step <= numSteps; step++) {
@@ -68,11 +47,20 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 
 			const bounce = { x: false, y: false }
 
-			if (between(lookAhead[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(this[shortAxis], shortAxisPointOne, shortAxisPointTwo)) {
-				bounce[longAxis] = true
-			}
-			if (between(this[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(lookAhead[shortAxis], shortAxisPointOne, shortAxisPointTwo)) {
-				bounce[shortAxis] = true
+			if (wall && side) { // Wall collisions only
+				if (between(lookAhead[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(this[shortAxis], shortAxisPointOne, shortAxisPointTwo)) {
+					bounce[longAxis] = true
+				}
+				if (between(this[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(lookAhead[shortAxis], shortAxisPointOne, shortAxisPointTwo)) {
+					bounce[shortAxis] = true
+				}
+			} else { // Edge collisions only
+				if (lookAhead.x <= 0 + wallWidth || lookAhead.x >= width - wallWidth) {
+					bounce.x = true
+				}
+				if (lookAhead.y <= 0 + wallWidth || lookAhead.y >= height - wallWidth) {
+					bounce.y = true
+				}
 			}
 
 			// A collision calls the bounce and stops further lookAheads
@@ -150,12 +138,13 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 		this.owner.ammo++
 	}
 
-	//* Static methods
-	static showTrail(trailPair) { // Index is used to find the corresponding trail in state.projectiles.trails
+	//* STATIC METHODS
+
+	static showTrail(trailPair) { // Trailpair couples bullet to trail, since bullet cannot house trail itself
 		const bullet = trailPair[0]
 		const trail = trailPair[1]
 		const color = bullet.color
-		
+
 		if (trail.length <= 0 && bullet.dead) {
 			// Removes trail, when all points have run out:
 			state.projectiles.trails.delete(bullet)

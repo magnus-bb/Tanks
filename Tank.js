@@ -29,6 +29,8 @@ class Tank {
 		}
 	}
 
+	//* INSTANCE METHODS
+
 	input() {
 		// Forwards / backwards mobility
 		if (keyIsDown(this.keybindings.forward)) {
@@ -64,34 +66,20 @@ class Tank {
 		}
 	}
 
-	edgeCollision() {
+	// Both wall and edge collisions
+	checkCollision(wall = null, side = null) {
 		const wallWidth = config.env.wallWidth / 2 // +/- from center of wall
 
-		// Next tank position (if no collision is observed)
-		const lookAhead = {
-			x: this.x + this.moveCoords.dX,
-			y: this.y + this.moveCoords.dY
-		}
+		// Only wall collisions:
+		if (wall && side) {
+			// Which side of the wall is the long side and which is the end:
+			var longAxis = side === 'right' ? 'y' : 'x' // Hack to help add wallWidth when needed and vice versa
+			var shortAxis = side === 'bottom' ? 'y' : 'x'
 
-		// Interaction with edges of convas:
-		if (lookAhead.x <= 0 + wallWidth || lookAhead.x >= width - wallWidth) {
-			this.handleCollision('x')
+			// Gets the pseudo width of the line, to be able to check if a point is inside the "rectangle":
+			var shortAxisPointOne = wall[shortAxis + '1'] - wallWidth
+			var shortAxisPointTwo = wall[shortAxis + '1'] + wallWidth
 		}
-		if (lookAhead.y <= 0 + wallWidth || lookAhead.y >= height - wallWidth) {
-			this.handleCollision('y')
-		}
-	}
-
-	wallCollision(wall, side) {
-		const wallWidth = config.env.wallWidth / 2 // +/- from center of wall
-		
-		// Which side of the wall is the long side and which is the end:
-		const longAxis = side === 'right' ? 'y' : 'x' // Hack to help add wallWidth when needed and vice versa
-		const shortAxis = side === 'bottom' ? 'y' : 'x'
-
-		// Gets the pseudo width of the line, to be able to check if a point is inside the "rectangle":
-		const shortAxisPointOne = wall[shortAxis + '1'] - wallWidth
-		const shortAxisPointTwo = wall[shortAxis + '1'] + wallWidth
 
 		// Next tank position (if no collision is observed):
 		const lookAhead = {
@@ -99,19 +87,30 @@ class Tank {
 			y: this.y + this.moveCoords.dY
 		}
 
-		//TODO: Include cannon
-		//TODO: Abstract this into helpers
-		//TODO: Make it like a circle, not a square
-		//* Best
-		const rad = this.d / 2
-		if ((between(lookAhead[longAxis] + rad, wall[longAxis + '1'], wall[longAxis + '2']) || between(lookAhead[longAxis] - rad, wall[longAxis + '1'], wall[longAxis + '2'])) && (between(shortAxisPointOne, this[shortAxis] - rad, this[shortAxis] + rad) || between(shortAxisPointTwo, this[shortAxis] - rad, this[shortAxis] + rad))) {
-			this.handleCollision(longAxis)
-		}
-		if ((between(this[longAxis] - rad, wall[longAxis + '1'], wall[longAxis + '2']) || between(this[longAxis] + rad, wall[longAxis + '1'], wall[longAxis + '2'])) && (between(shortAxisPointOne, lookAhead[shortAxis] - rad, lookAhead[shortAxis] + rad) || between(shortAxisPointTwo, lookAhead[shortAxis] - rad, lookAhead[shortAxis] + rad))) {
-			this.handleCollision(shortAxis)
+		if (wall && side) { // Only wall collisions
+			//TODO: Include cannon
+			//TODO: Abstract this into helpers
+			//TODO: Make it like a circle, not a square
+
+			const rad = this.d / 2
+			if ((between(lookAhead[longAxis] + rad, wall[longAxis + '1'], wall[longAxis + '2']) || between(lookAhead[longAxis] - rad, wall[longAxis + '1'], wall[longAxis + '2'])) && (between(shortAxisPointOne, this[shortAxis] - rad, this[shortAxis] + rad) || between(shortAxisPointTwo, this[shortAxis] - rad, this[shortAxis] + rad))) {
+				this.handleCollision(longAxis)
+			}
+			if ((between(this[longAxis] - rad, wall[longAxis + '1'], wall[longAxis + '2']) || between(this[longAxis] + rad, wall[longAxis + '1'], wall[longAxis + '2'])) && (between(shortAxisPointOne, lookAhead[shortAxis] - rad, lookAhead[shortAxis] + rad) || between(shortAxisPointTwo, lookAhead[shortAxis] - rad, lookAhead[shortAxis] + rad))) {
+				this.handleCollision(shortAxis)
+			}
+		} else { // Only edge collisions
+			// Interaction with edges of convas:
+			if (lookAhead.x <= 0 + wallWidth || lookAhead.x >= width - wallWidth) {
+				this.handleCollision('x')
+			}
+			if (lookAhead.y <= 0 + wallWidth || lookAhead.y >= height - wallWidth) {
+				this.handleCollision('y')
+			}
 		}
 
-		// //! Better:
+
+		//? Old versions of wall collisions (for troubleshooting)
 		// // Interaction with walls:
 		// if ((between(lookAhead[longAxis] + rad, wall[longAxis + '1'], wall[longAxis + '2']) || between(lookAhead[longAxis] - rad, wall[longAxis + '1'], wall[longAxis + '2'])) && (between(this[shortAxis] + rad, shortAxisPointOne, shortAxisPointTwo) || between(this[shortAxis] - rad, shortAxisPointOne, shortAxisPointTwo))) {
 		// 	this.handleCollision(longAxis)
@@ -120,7 +119,6 @@ class Tank {
 		// 	this.handleCollision(shortAxis)
 		// }
 
-		//! Original: 
 		// // Interaction with walls:
 		// if (between(lookAhead[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(this[shortAxis], shortAxisPointOne, shortAxisPointTwo)) {
 		// 	this.handleCollision(longAxis)
