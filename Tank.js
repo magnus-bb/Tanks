@@ -192,8 +192,8 @@ class Tank {
 
 	// Uses index number to remove tank from the game:
 	destroy(index) {
-		// this.dead = true
 		state.players.splice(index, 1)
+		//? Display message
 	}
 
 	//* STATIC METHODS
@@ -203,9 +203,11 @@ class Tank {
 		const distance = dist(bullet.x, bullet.y, tank.x, tank.y)
 
 		// Checks if distance is smaller, when width of tank and bullet have been factored in:
-		if (distance < bullet.d + tank.d) {
+		if (distance < config.bullet.diameter / 2 + tank.d / 2) { // Does not use bullet.d, since the muzzle effect changes that size
 			bullet.destroy(bulletIndex)
 			tank.destroy(tankIndex)
+
+			//TODO: let bullet.owner know it gets a point
 		}
 	}
 }
