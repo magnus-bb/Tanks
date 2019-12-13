@@ -87,12 +87,13 @@ class Tank {
 			y: this.y + this.moveCoords.dY
 		}
 
+		const rad = this.d / 2
+
 		if (wall && side) { // Only wall collisions
 			//TODO: Include cannon
 			//TODO: Abstract this into helpers
 			//TODO: Make it like a circle, not a square
 
-			const rad = this.d / 2
 			if ((between(lookAhead[longAxis] + rad, wall[longAxis + '1'], wall[longAxis + '2']) || between(lookAhead[longAxis] - rad, wall[longAxis + '1'], wall[longAxis + '2'])) && (between(shortAxisPointOne, this[shortAxis] - rad, this[shortAxis] + rad) || between(shortAxisPointTwo, this[shortAxis] - rad, this[shortAxis] + rad))) {
 				this.handleCollision(longAxis)
 			}
@@ -101,10 +102,10 @@ class Tank {
 			}
 		} else { // Only edge collisions
 			// Interaction with edges of convas:
-			if (lookAhead.x <= 0 + wallWidth || lookAhead.x >= width - wallWidth) {
+			if (lookAhead.x - rad <= 0 + wallWidth || lookAhead.x + rad >= width - wallWidth) {
 				this.handleCollision('x')
 			}
-			if (lookAhead.y <= 0 + wallWidth || lookAhead.y >= height - wallWidth) {
+			if (lookAhead.y - rad <= 0 + wallWidth || lookAhead.y + rad >= height - wallWidth) {
 				this.handleCollision('y')
 			}
 		}

@@ -39,7 +39,6 @@ Todos
 		- Skal også abstraheres en smule til helpers
 - `Bullet` driller inde i vægge
 - `edgeCollision()` skal virke ligesom med vægge (ikke kun med centrum af tank)
-- Skriv `edgeCollision()` og `wallCollision` om til 1 funktion, der får at vide om den skal tjekke det ene eller det andet
 - Tanks' kanoner skal også indgå i collisions
 - Bedre `Bullet` og `Tank` collisions på enderne af walls
 - Tilføjelse af tilfældige celler, der til tider "brænder" og ikke må passeres
