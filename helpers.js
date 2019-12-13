@@ -75,45 +75,6 @@ function getIndices(cell) {
 	}
 }
 
-function generateMaze() {
-	// Creates grid:
-	// Uses width / height of canvas (based off amt of cells and cellwidth) to generate rows and columns of cells
-	for (let x = 0; x < width; x += config.env.cellWidth) {
-		const column = []
-
-		for (let y = 0; y < height; y += config.env.cellWidth) {
-			// Makes all walls:
-			const cell = new Cell(x, y)
-			column.push(cell)
-		}
-		state.grid.push(column)
-	}
-
-	// Starts maze generation: 
-	const initialIndices = [0, 0] // Starting point does not matter
-	const initialCell = getCell(...initialIndices)
-
-	initialCell.visited = true
-	state.cellStack.push(initialCell)
-
-	while (state.cellStack.length > 0) {
-		const currentCell = state.cellStack.pop()
-
-		const unvisitedCells = getUnvisitedNeighbors(currentCell)
-		if (unvisitedCells.length > 0) {
-			state.cellStack.push(currentCell)
-
-			const data = random(unvisitedCells)
-			const nextCell = data.cell
-			const dir = data.dir
-
-			removeWall(currentCell, nextCell, dir)
-			nextCell.visited = true
-			state.cellStack.push(nextCell)
-		}
-	}
-}
-
 function removeWall(fromCell, toCell, dir) {
 	if (dir === 'up') {
 		toCell.walls.bottom = null

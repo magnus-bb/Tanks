@@ -1,5 +1,5 @@
 class Tank {
-	constructor(name, x, y, forward = UP_ARROW, right = RIGHT_ARROW, backward = DOWN_ARROW, left = LEFT_ARROW, fire = 32) {
+	constructor(name, x, y, controls) {
 		this.name = name
 		this.x = x
 		this.y = y //TODO: Given a cell, calculate the center instead of giving a center coordinate
@@ -12,13 +12,7 @@ class Tank {
 		this.ammo = config.player.ammo
 		this.weapon = null
 		this.trail = [{ x: this.x, y: this.y }] //? For death recap - maybe
-		this.keybindings = {
-			forward: forward,
-			backward: backward,
-			left: left,
-			right: right,
-			fire: fire
-		}
+		this.controls = controls
 		this.moveCoords = {
 			dX: 0,
 			dY: 0
@@ -32,21 +26,20 @@ class Tank {
 	//* INSTANCE METHODS
 
 	input() {
-		// Forwards / backwards mobility
-		if (keyIsDown(this.keybindings.forward)) {
+		// Forwards / backwards mobility:
+		if (keyIsDown(this.controls.forward)) {
 			this.drive = 'forward'
-		} else if (keyIsDown(this.keybindings.backward)) {
+		} else if (keyIsDown(this.controls.backward)) {
 			this.drive = 'backward'
 		} else {
 			this.drive = false
 		}
 
-		// Turning
-		if (keyIsDown(this.keybindings.left)) {
+		// Turning:
+		if (keyIsDown(this.controls.left)) {
 			this.turn(-1)
 		}
-
-		if (keyIsDown(this.keybindings.right)) {
+		if (keyIsDown(this.controls.right)) {
 			this.turn(1)
 		}
 
@@ -193,7 +186,7 @@ class Tank {
 	// Uses index number to remove tank from the game:
 	destroy(index) {
 		state.players.splice(index, 1)
-		//? Display message
+		//TODO: Msg on death or counter etc + effect
 	}
 
 	//* STATIC METHODS

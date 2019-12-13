@@ -6,32 +6,14 @@ function setup() {
 	const canvas = createCanvas(canvasWidth, canvasHeight)
 	canvas.parent('canvas-container')
 
-	// Sets cells, generates walls
-	generateMaze()
-
-	//! Creates players
-	// Random cell:
-	const col = floor(random(0, config.env.cellAmtX))
-	const row = floor(random(0, config.env.cellAmtY))
-
-	// Mid of cell: //TODO: Move to class
-	const cell = state.grid[col][row]
-	const x = cell.x + cell.w / 2
-	const y = cell.y + cell.w / 2
-
-	state.players.push(new Tank('Tanko', x, y))
-	// state.players.push(new Tank(
-	// 	'Tankarino',
-	// 	Math.floor(Math.random() * width),
-	// 	Math.floor(Math.random() * height),
-	// 	87, 68, 83, 65, 67
-	// ))
+	// Makes grid structure
+	Cell.generateGrid()
 }
 
-// Keyboard handler for firing
-function keyPressed() {
+// Keyboard handler for firing:
+function keyPressed() { // Cannot be done in class, since we have to listen for all keypresses, and keyDown will spam
 	for (const player of state.players) {
-		if (keyCode == player.keybindings.fire) {
+		if (keyCode === player.controls.fire) {
 			player.fire()
 		}
 	}

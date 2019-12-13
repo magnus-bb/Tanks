@@ -15,10 +15,12 @@ Guidelines
 - Prøv så vidt muligt *kun* at holde kode, hvor det passer. Dvs:
 	- Brug filerne til at organisere
 		- **helpers.js**: Generiske hjælpemetoder (forkortelser, ikke spilrelaterede handlinger etc.)
-		- **config.js**: Alle spilindstillinger eller ting man sikkert gerne vil tweake, når spillet er bygget
+		- **config.js**: Alle spilindstillinger eller ting man sikkert gerne vil tweake, når spillet engang er bygget
 			- Opret props i config-objektet til disse indstillinger
-		- **classes.js**: Spilelementer - *specielt* dem, der skal kunne replikeres
+			- Brug `config` når det er noget, der kun indlæses af programmet, men aldrig ændres
+		- **[class].js**: Spilelementer - *specielt* dem, der skal kunne replikeres
 			- Hvis et objekt/spilelement skal interagere med andet eller mutere sig selv, skal det *specielt* være en class method
+			- Brug `static` props til at opbevare ting til setup af spillet, i modsætning til: `state` til at opbevare props relevante under spillet
 		- **draw.js**: Skal stort set *kun* kalde funktioner, der skal opdatere noget hvert frame (oftest rendering)
 		- **effects.js**: Større, globale effekter (som `shake()`). Eventuelt også fremtidige *events*, som ændrer lidt på spillet
 		- **preload.js**: Stort set kun til at loade sprites, lydeffekter og andet, der skal være loadet inden spillet starter
@@ -44,6 +46,7 @@ Todos
 - Lav en pausefunktionalitet med noLoop() og loop() på en tast
 - Bullet collision med tanks - når man skyder hinanden
 - Tank collisions med hinanden?
+- Fix helpers osv i sine rette classes først!
 
 Links
 -----
