@@ -90,7 +90,7 @@ class Tank {
 		const rad = this.d / 2
 
 		if (wall && side) { // Only wall collisions
-			//TODO: Include cannon
+			//TODO: Include cannon - probably in separate function, since turning is also affected
 			//TODO: Abstract this into helpers
 			//TODO: Make it like a circle, not a square
 
@@ -188,5 +188,24 @@ class Tank {
 		// Renders cannon:
 		strokeWeight(3)
 		line(cannonStartX, cannonStartY, this.cannonTip.x, this.cannonTip.y)
+	}
+
+	// Uses index number to remove tank from the game:
+	destroy(index) {
+		// this.dead = true
+		state.players.splice(index, 1)
+	}
+
+	//* STATIC METHODS
+
+	static checkHit(bullet, bulletIndex, tank, tankIndex) {
+		// Distance between center of tank and bullet:
+		const distance = dist(bullet.x, bullet.y, tank.x, tank.y)
+
+		// Checks if distance is smaller, when width of tank and bullet have been factored in:
+		if (distance < bullet.d + tank.d) {
+			bullet.destroy(bulletIndex)
+			tank.destroy(tankIndex)
+		}
 	}
 }

@@ -53,6 +53,18 @@ function draw() {
 		Bullet.showTrail(trailPair)
 	}
 
+	//* Players & Projectiles:
+	for (let i = state.projectiles.bullets.length - 1; i >= 0; i--) {
+		const bullet = state.projectiles.bullets[i]
+
+		for (let j = state.players.length - 1; j >= 0; j--) {
+			const player = state.players[j]
+
+			// Checks and handles bullet hits for both bullet and tank:
+			Tank.checkHit(bullet, i, player, j)
+		}
+	}
+
 
 	//! FPS for performance indicator:
 	let fps

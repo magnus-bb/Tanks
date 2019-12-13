@@ -31,19 +31,19 @@ Guidelines
 Todos
 -----
 - Tanks skal spawne med `config.player.spawnDistance` celler fra hinanden (skal flyttes fra `setup.js` ind i classen)
-- En lækker effekt når et projektil kalder `destroy()`, så det ikke bare forsvinder. Også fade på projektilets hale
+- En lækker effekt når et projektil kalder `destroy()`, så det ikke bare forsvinder.
 - Finde og loade open source lydeffekter til skud (*gud forbyde, at jeg bliver nødt til at optage mundlyde*)
 - `Bullet` class skal omskrives til at extende en `Projectile` class i stedet, og så skal fælleskarakteristika med andre våben flyttes dertil
-- Relevante hjælpefunktioner og instance-props (eks. cell.w) skal flyttes ind i deres class ved brug af static methods
-	- `wallCollision()` og `edgeCollision()` skal i static methods
+- Relevante hjælpefunktioner og instance-props (eks. `cell.w`) skal flyttes ind i deres class ved brug af static methods?
+	- `wallCollision()` og `edgeCollision()` skal evt i static methods
 		- Skal også abstraheres en smule til helpers
 - `Bullet` driller inde i vægge
-- `edgeCollision()` skal virke ligesom med vægge (ikke kun med centrum af tank)
 - Tanks' kanoner skal også indgå i collisions
 - Bedre `Bullet` og `Tank` collisions på enderne af walls
 - Tilføjelse af tilfældige celler, der til tider "brænder" og ikke må passeres
 - Lav en pausefunktionalitet med noLoop() og loop() på en tast
 - Bullet collision med tanks - når man skyder hinanden
+- Tank collisions med hinanden?
 
 Links
 -----
