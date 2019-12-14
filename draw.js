@@ -6,11 +6,11 @@ function draw() {
 	noFill()
 	rect(0, 0, width, height) // Outer walls
 
-	//* Players - inputs + out of bounds:
+	//* Tanks - inputs + out of bounds:
 	// Must happen before collisions, so a collision can overwrite player input
-	for (const player of state.players) {
-		player.input()
-		player.checkCollision() // Automatically checks edge collisions when no args are given
+	for (const tank of state.tanks) {
+		tank.input()
+		tank.checkCollision() // Automatically checks edge collisions when no args are given
 	}
 
 	//* Cells & Walls:
@@ -23,8 +23,8 @@ function draw() {
 					wallObj.show()
 
 					//* Collisions:
-					for (const player of state.players) {
-						player.checkCollision(wallObj, wall) // Automatically checks wall collisions when args are given
+					for (const tank of state.tanks) {
+						tank.checkCollision(wallObj, wall) // Automatically checks wall collisions when args are given
 					}
 
 					for (const projectile of state.projectiles.bullets) {
@@ -35,10 +35,10 @@ function draw() {
 		}
 	}
 
-	//* Players - updating:
-	for (const player of state.players) {
-		player.move()
-		player.show()
+	//* Tanks - updating:
+	for (const tank of state.tanks) {
+		tank.move()
+		tank.show()
 	}
 
 	//* Projectiles:
@@ -53,16 +53,20 @@ function draw() {
 		Bullet.showTrail(trailPair)
 	}
 
-	//* Players & Projectiles:
+	//* Tanks & Projectiles:
 	for (let i = state.projectiles.bullets.length - 1; i >= 0; i--) {
 		const bullet = state.projectiles.bullets[i]
 
-		for (let j = state.players.length - 1; j >= 0; j--) {
-			const player = state.players[j]
+		for (let j = state.tanks.length - 1; j >= 0; j--) {
+			const tank = state.tanks[j]
 
 			// Checks and handles bullet hits for both bullet and tank:
-			Tank.checkHit(bullet, i, player, j)
+			Tank.checkHit(bullet, i, tank, j)
 		}
+	}
+
+	if (Game.paused) {
+		noLoop()
 	}
 
 

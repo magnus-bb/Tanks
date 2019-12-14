@@ -3,13 +3,13 @@ class Tank {
 		this.name = name
 		this.x = x
 		this.y = y //TODO: Given a cell, calculate the center instead of giving a center coordinate
-		this.d = config.player.diameter
-		this.moveSpeed = config.player.moveSpeed
-		this.turnSpeed = config.player.turnSpeed
+		this.d = config.tank.diameter
+		this.moveSpeed = config.tank.moveSpeed
+		this.turnSpeed = config.tank.turnSpeed
 		this.drive = false // To look ahead before actually moving
 		this.direction = random(0, 360)
 		this.color = randomColor()
-		this.ammo = config.player.ammo
+		this.ammo = config.tank.ammo
 		this.weapon = null
 		this.trail = [{ x: this.x, y: this.y }] //? For death recap - maybe
 		this.controls = controls
@@ -18,8 +18,8 @@ class Tank {
 			dY: 0
 		}
 		this.cannonTip = {
-			x: config.player.cannonLength * cos(radians(this.direction)) + this.x,
-			y: config.player.cannonLength * sin(radians(this.direction)) + this.y
+			x: config.tank.cannonLength * cos(radians(this.direction)) + this.x,
+			y: config.tank.cannonLength * sin(radians(this.direction)) + this.y
 		}
 	}
 
@@ -53,7 +53,7 @@ class Tank {
 	turn(direction, collision = false) {
 		if (collision) {
 			// % 360 makes it so we don't have to deal with angles over 360 deg:
-			this.direction = (this.direction % 360) + this.turnSpeed / config.player.collisionTurnFactor * direction //TODO: Maybe use rotate() when we switch to sprites
+			this.direction = (this.direction % 360) + this.turnSpeed / config.tank.collisionTurnFactor * direction //TODO: Maybe use rotate() when we switch to sprites
 		} else {
 			this.direction = (this.direction % 360) + this.turnSpeed * direction //TODO: Maybe use rotate() when we switch to sprites
 		}
@@ -133,7 +133,7 @@ class Tank {
 		this.moveCoords[deltaAxis] = 0
 
 		// Slowing movement:
-		this.moveCoords[otherDeltaAxis] /= config.player.collisionSlowFactor
+		this.moveCoords[otherDeltaAxis] /= config.tank.collisionSlowFactor
 
 		// Turning
 		this.turn(getTurnDirection(axis, this.direction), true) // true lowers the turnspeed for collisions
@@ -175,8 +175,8 @@ class Tank {
 		// Updates cannon position:
 		const cannonStartX = (this.d / 5) * cos(radians(this.direction)) + this.x
 		const cannonStartY = (this.d / 5) * sin(radians(this.direction)) + this.y
-		this.cannonTip.x = config.player.cannonLength * cos(radians(this.direction)) + this.x
-		this.cannonTip.y = config.player.cannonLength * sin(radians(this.direction)) + this.y
+		this.cannonTip.x = config.tank.cannonLength * cos(radians(this.direction)) + this.x
+		this.cannonTip.y = config.tank.cannonLength * sin(radians(this.direction)) + this.y
 
 		// Renders cannon:
 		strokeWeight(3)
@@ -185,7 +185,7 @@ class Tank {
 
 	// Uses index number to remove tank from the game:
 	destroy(index) {
-		state.players.splice(index, 1)
+		state.tanks.splice(index, 1)
 		//TODO: Msg on death or counter etc + effect
 	}
 

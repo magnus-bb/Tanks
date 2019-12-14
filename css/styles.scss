@@ -1,0 +1,32 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	background: rgb(40,40,40);
+}
+
+#game-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#game-menu {
+	z-index: 10;
+	position: absolute;
+	width: 600px;
+	height: 400px;
+
+	// Edge styling:
+	border-radius: 5px;
+	border-top: 3px solid rgb(90,90,90);
+	border-left: 3px solid rgb(70,70,70);
+	border-right: 3px solid rgb(70,70,70);
+	border-bottom: 3px solid rgb(50,50,50);
+	background: rgb(60,60,60);
+	box-shadow: 0 10px 20px rgba(0,0,0,0.19),
+							0 6px 6px rgba(0,0,0,0.23);
+}

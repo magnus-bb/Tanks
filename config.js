@@ -1,6 +1,6 @@
 config = {
 	fps: 60,
-	player: {
+	tank: {
 		diameter: 20,
 		moveSpeed: 1.5, // Has to be less than the width of walls to not pass through
 		turnSpeed: 4,

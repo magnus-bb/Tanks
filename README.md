@@ -43,10 +43,10 @@ Todos
 - Tanks' kanoner skal også indgå i collisions
 - Bedre `Bullet` og `Tank` collisions på enderne af walls
 - Tilføjelse af tilfældige celler, der til tider "brænder" og ikke må passeres
-- Lav en pausefunktionalitet med noLoop() og loop() på en tast
 - Bullet collision med tanks - når man skyder hinanden
 - Tank collisions med hinanden?
 - Fix helpers osv i sine rette classes først!
+- Ændr `Player` til at være en class for sig selv, og ikke en `Tank` (`Tank` skal kun være inde i spil, `Player` skal være med score osv)
 
 Links
 -----

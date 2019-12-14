@@ -1,5 +1,5 @@
 state = {
-	players: [],
+	tanks: [],
 	projectiles: {
 		bullets: [],
 		trails: new Map()

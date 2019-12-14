@@ -1,37 +1,68 @@
 class Game {
-	static gameStarted = false
+	static started = false
+	static paused = true
 	static players = []
 
+	//* METHODS
+
 	static addPlayer(name, controls) { //TODO: Prime controls separately and use it here
-		if (!this.gameStarted) {
+		if (!this.started) {
 			const coords = Cell.randomCellCoords()
 			this.players.push(new Tank(name, coords.x, coords.y, controls))
 		}
 	}
 
-	static startGame() {
-		if (!this.gameStarted) {
+	static start() {
+		if (!this.started) {
 			console.log('Game started')
 
-			// Sets walls and generates maze
+			// Sets walls and generates maze:
 			Cell.populateWalls()
 			Cell.generateMaze()
 
-			// Adds players:
-			state.players.push(...this.players)
+			// Adds players' tanks:
+			state.tanks.push(...this.players) //TODO: Change player objects to be something other than tanks (contain wins, deaths etc)
 
-			
-			this.gameStarted = true
+			// Hides menu:
+			$('#game-menu').slideUp(() => {
+				this.started = true
+				this.paused = false
+				
+				// Starts drawing:
+				loop()
+			})
 		} else {
 			console.log('Game has already started')
-			//TODO: Cannot start game twice msg
 		}
 	}
 
-	static endGame() {
+	static end() {
 		console.log('Game ended')
 
 
-		this.gameStarted = false
+		this.started = false
+		this.paused = true
+
+		$('#game-menu').slideDown()
+	}
+
+	static pause() {
+		console.log('Game paused')
+
+		// Draw automatically pauses when it reads Game.paused to be true, but not other way around:
+		this.paused = true
+
+		$('#game-menu').slideDown()
+	}
+
+	static unPause() {
+		console.log('Game unpaused')
+
+		// Restarts when menu is gone:
+		$('#game-menu').slideUp(() => {
+			// change pause before looping, as to not get draw to re-pause:
+			this.paused = false
+			loop()
+		})
 	}
 }
