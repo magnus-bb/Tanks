@@ -38,19 +38,11 @@ class Cell {
 		return { x: x, y: y }
 	}
 
-	// Goes through all cells and randomly populates walls
-	static populateWalls() {
-		for (const col of state.grid) {
-			for (const cell of col) {
+	static resetGrid() {
+		state.grid = []
 
-				//if (cell.x !== width - config.env.cellWidth) {
-					cell.walls.right = cell.randomWall('right')
-				//}
-				//if (cell.y !== height - config.env.cellWidth) {
-					cell.walls.bottom = cell.randomWall('bottom')
-				//}
-			}
-		}
+		// The grid has to be present for calculating starting positions of tanks before maze is generated:
+		this.generateGrid()
 	}
 
 	static generateGrid() {
@@ -62,6 +54,21 @@ class Cell {
 			}
 
 			state.grid.push(column)
+		}
+	}
+
+	// Goes through all cells and randomly populates walls
+	static populateWalls() {
+		for (const col of state.grid) {
+			for (const cell of col) {
+
+				if (cell.x !== width - config.env.cellWidth) {
+					cell.walls.right = cell.randomWall('right')
+				}
+				if (cell.y !== height - config.env.cellWidth) {
+					cell.walls.bottom = cell.randomWall('bottom')
+				}
+			}
 		}
 	}
 

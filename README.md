@@ -47,6 +47,11 @@ Todos
 - Tank collisions med hinanden?
 - Fix helpers osv i sine rette classes først!
 - Ændr `Player` til at være en class for sig selv, og ikke en `Tank` (`Tank` skal kun være inde i spil, `Player` skal være med score osv)
+- Menuer
+	- Styling
+	- Handlers til knapper / inputs
+	- Clearing af felter + graying af brugte controls
+	- Feedback på players + controls oprettet?
 
 Links
 -----

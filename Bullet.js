@@ -48,10 +48,10 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 			const bounce = { x: false, y: false }
 
 			if (wall && side) { // Wall collisions only
-				if (between(lookAhead[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(this[shortAxis], shortAxisPointOne, shortAxisPointTwo)) {
+				if (lookAhead[longAxis].between(wall[longAxis + '1'], wall[longAxis + '2']) && this[shortAxis].between(shortAxisPointOne, shortAxisPointTwo)) {
 					bounce[longAxis] = true
 				}
-				if (between(this[longAxis], wall[longAxis + '1'], wall[longAxis + '2']) && between(lookAhead[shortAxis], shortAxisPointOne, shortAxisPointTwo)) {
+				if (this[longAxis].between(wall[longAxis + '1'], wall[longAxis + '2']) && lookAhead[shortAxis].between(shortAxisPointOne, shortAxisPointTwo)) {
 					bounce[shortAxis] = true
 				}
 			} else { // Edge collisions only

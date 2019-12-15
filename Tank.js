@@ -87,10 +87,10 @@ class Tank {
 			//TODO: Abstract this into helpers
 			//TODO: Make it like a circle, not a square
 
-			if ((between(lookAhead[longAxis] + rad, wall[longAxis + '1'], wall[longAxis + '2']) || between(lookAhead[longAxis] - rad, wall[longAxis + '1'], wall[longAxis + '2'])) && (between(shortAxisPointOne, this[shortAxis] - rad, this[shortAxis] + rad) || between(shortAxisPointTwo, this[shortAxis] - rad, this[shortAxis] + rad))) {
+			if (((lookAhead[longAxis] + rad).between(wall[longAxis + '1'], wall[longAxis + '2']) || (lookAhead[longAxis] - rad).between(wall[longAxis + '1'], wall[longAxis + '2'])) && (shortAxisPointOne.between(this[shortAxis] - rad, this[shortAxis] + rad) || shortAxisPointTwo.between(this[shortAxis] - rad, this[shortAxis] + rad))) {
 				this.handleCollision(longAxis)
 			}
-			if ((between(this[longAxis] - rad, wall[longAxis + '1'], wall[longAxis + '2']) || between(this[longAxis] + rad, wall[longAxis + '1'], wall[longAxis + '2'])) && (between(shortAxisPointOne, lookAhead[shortAxis] - rad, lookAhead[shortAxis] + rad) || between(shortAxisPointTwo, lookAhead[shortAxis] - rad, lookAhead[shortAxis] + rad))) {
+			if (((this[longAxis] - rad).between(wall[longAxis + '1'], wall[longAxis + '2']) || (this[longAxis] + rad).between(wall[longAxis + '1'], wall[longAxis + '2'])) && (shortAxisPointOne.between(lookAhead[shortAxis] - rad, lookAhead[shortAxis] + rad) || shortAxisPointTwo.between(lookAhead[shortAxis] - rad, lookAhead[shortAxis] + rad))) {
 				this.handleCollision(shortAxis)
 			}
 		} else { // Only edge collisions
