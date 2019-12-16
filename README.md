@@ -52,6 +52,10 @@ Todos
 	- Handlers til knapper / inputs
 	- Clearing af felter + graying af brugte controls
 	- Feedback på players + controls oprettet?
+- Omskriv `add-player` til at være en html-`form`
+- Tilføj grafik af en tank i stedet for `placeholder`s i controls input
+- Tilføj fejlmeddelelse, hvis ikke alle controls er valgt
+- FÆRDIGGØR COLOR SELECTOR I MENU
 
 Links
 -----

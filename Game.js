@@ -1,20 +1,19 @@
 class Game {
 	static started = false
 	static paused = true
-	static players = []
+	static players = [] //? evt et map til at holde styr på tanks?
 
 	//* METHODS
 
-	static addPlayer(name, controls) { //TODO: Prime controls separately and use it here
-		if (!this.started) {
-			const coords = Cell.randomCellCoords()
-			this.players.push(new Tank(name, coords.x, coords.y, controls)) //TODO: Change player objects to be something other than tanks (contain wins, deaths etc)
-		}
+	static addPlayer(player) {
+		if (this.started) return console.log("Game has already started")
+
+		this.players.push(player)
 	}
 
 	static start() {
 		// Cannot start twice or if there are no players:
-		if (this.started || this.players.length <= 0) return console.log("An error ocurred")
+		if (this.started || this.players.length <= 0) return console.log("Cannot start game")
 
 		console.log('Game started')
 
@@ -26,7 +25,12 @@ class Game {
 		Cell.generateMaze()
 
 		// Adds players' tanks:
-		state.tanks.push(...this.players) //TODO: Change player objects to be something other than tanks (contain wins, deaths etc)
+		for (const player of this.players) {
+			//TODO: ADD SPAWN DISTANCE TO randomCellCoords()
+
+			const spawnCoords = Cell.randomCellCoords()
+			state.tanks.push(new Tank(player.name, player.color, spawnCoords.x, spawnCoords.y, player.controls))
+		}
 
 		// Hides menu:
 		$('#game-menu').slideUp(() => {

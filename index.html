@@ -13,12 +13,17 @@
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js"
 		integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 
+	<!-- P5 for canvas manipulation -->
 	<script src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/p5.min.js" defer></script>
+
+	<!-- jscolor for the small player color picker -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.0.4/jscolor.min.js" defer></script>
 
 	<script src="preload.js" defer></script>
 	<script src="config.js" defer></script>
 	<script src="menu.js" defer></script>
 	<script src="Game.js" defer></script>
+	<script src="Player.js" defer></script>
 	<script src="Bullet.js" defer></script>
 	<script src="Cell.js" defer></script>
 	<script src="Wall.js" defer></script>
@@ -36,10 +41,28 @@
 		<div id="game-menu">
 			<div id="start-menu">
 				<button id="start-game">Start Game</button>
-				<button id="add-player">Add Player</button>
-				<input id="player-name" type="text">
-				<div id="controls-section">
-					<!-- inputs -->
+				<div class="add-player-container">
+					<button id="add-player-button">Add Player</button>
+
+					<input id="player-name-input" type="text" placeholder="Player Name" maxlength=10>
+
+					<!-- Default to red color -->
+					<button id="player-color-button" class="jscolor {valueElement:null,value:'ff0000'}" 
+						style="width:50px; height:20px;"></button> <!--! GET COLOR FROM BACKGROUND-IMAGE CSS -->
+
+					<br>
+
+					<label for="controls-container">Select your controls:</label>
+					<div id="controls-container">
+						<!-- readonly because we handle the input in menu.js -->
+						<!--! REMOVE PLACEHOLDERS AND PUT A TANK IN THE MIDDLE AS A DIAGRAM -->
+						<input id="forward-key-input" class="key-selector-input" type="text" readonly placeholder="Forward">
+						<input id="backward-key-input" class="key-selector-input" type="text" readonly placeholder="Backward">
+						<input id="left-key-input" class="key-selector-input" type="text" readonly placeholder="Left">
+						<input id="right-key-input" class="key-selector-input" type="text" readonly placeholder="Right">
+						<input id="fire-key-input" class="key-selector-input" type="text" readonly placeholder="Fire">
+
+					</div>
 				</div>
 			</div>
 

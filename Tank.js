@@ -1,5 +1,5 @@
 class Tank {
-	constructor(name, x, y, controls) {
+	constructor(name, color, x, y, controls) {
 		this.name = name
 		this.x = x
 		this.y = y //TODO: Given a cell, calculate the center instead of giving a center coordinate
@@ -8,7 +8,7 @@ class Tank {
 		this.turnSpeed = config.tank.turnSpeed
 		this.drive = false // To look ahead before actually moving
 		this.direction = random(0, 360)
-		this.color = randomColor()
+		this.color = color
 		this.ammo = config.tank.ammo
 		this.weapon = null
 		this.trail = [{ x: this.x, y: this.y }] //? For death recap - maybe

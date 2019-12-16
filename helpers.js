@@ -124,3 +124,7 @@ function getUnvisitedNeighbors(currentCell) {
 
 	return unvisitedCells
 }
+
+function getColorButtonVal() {
+	return $('#player-color-button')[0].jscolor.rgb
+}
