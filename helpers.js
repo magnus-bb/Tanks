@@ -1,5 +1,5 @@
 // Converts a direction and speed to new coords:
-function getMoveCoords(speed, direction, drive = false) {
+function getMoveCoords(speed, direction, drive = null) { //TODO: Omskriv til noget andet, bruges mere til andet end move
 	if (drive === 'backward') {
 		return {
 			x: -speed * cos(radians(direction)),

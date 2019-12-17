@@ -11,6 +11,7 @@ function draw() {
 	for (const tank of state.tanks) {
 		tank.input()
 		tank.checkCollision() // Automatically checks edge collisions when no args are given
+		tank.checkTurnCollision() // Automatically checks edge collisions when no args are given
 	}
 
 	//* Cells & Walls:
@@ -25,6 +26,7 @@ function draw() {
 					//* Collisions:
 					for (const tank of state.tanks) {
 						tank.checkCollision(wallObj, wall) // Automatically checks wall collisions when args are given
+						tank.checkTurnCollision(wallObj, wall) // Automatically checks wall collisions when args are given
 					}
 
 					for (const projectile of state.projectiles.bullets) {

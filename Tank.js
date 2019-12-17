@@ -17,9 +17,22 @@ class Tank {
 			dX: 0,
 			dY: 0
 		}
-		this.cannonTip = {
-			x: config.tank.cannonLength * cos(radians(this.direction)) + this.x,
-			y: config.tank.cannonLength * sin(radians(this.direction)) + this.y
+
+		/* Used to check if the tank is turning in a frame, to be able to "bounce" back, if there is a turn collision.
+		It is not possible to just annull the turning, since the new coords have to be present when checking for tank collisions */
+		this.turning = 0
+
+		const cannonRoot = getMoveCoords(this.d / config.tank.cannon.midOffsetFraction, this.direction, 'forward')
+		const cannonTip = getMoveCoords(config.tank.cannon.length, this.direction, 'forward')
+		this.cannon = {
+			root: {
+				x: cannonRoot.x + this.x,
+				y: cannonRoot.y + this.y
+			},
+			tip: {
+				x: cannonTip.x + this.x,
+				y: cannonTip.y + this.y
+			}
 		}
 	}
 
@@ -36,11 +49,14 @@ class Tank {
 		}
 
 		// Turning:
+		this.turning = 0 // Resets
 		if (keyIsDown(this.controls.left)) {
 			this.turn(-1)
+			this.turning = -1
 		}
 		if (keyIsDown(this.controls.right)) {
 			this.turn(1)
+			this.turning = 1
 		}
 
 		// Angle and amount (if any) to move:
@@ -50,8 +66,8 @@ class Tank {
 	}
 
 	// Takes -1 for left and 1 for right:
-	turn(direction, collision = false) {
-		if (collision) {
+	turn(direction, bodyCollision = false) {
+		if (bodyCollision) {
 			// % 360 makes it so we don't have to deal with angles over 360 deg:
 			this.direction = (this.direction % 360) + this.turnSpeed / config.tank.collisionTurnFactor * direction //TODO: Maybe use rotate() when we switch to sprites
 		} else {
@@ -63,17 +79,6 @@ class Tank {
 	checkCollision(wall = null, side = null) {
 		const wallWidth = config.env.wallWidth / 2 // +/- from center of wall
 
-		// Only wall collisions:
-		if (wall && side) {
-			// Which side of the wall is the long side and which is the end:
-			var longAxis = side === 'right' ? 'y' : 'x' // Hack to help add wallWidth when needed and vice versa
-			var shortAxis = side === 'bottom' ? 'y' : 'x'
-
-			// Gets the pseudo width of the line, to be able to check if a point is inside the "rectangle":
-			var shortAxisPointOne = wall[shortAxis + '1'] - wallWidth
-			var shortAxisPointTwo = wall[shortAxis + '1'] + wallWidth
-		}
-
 		// Next tank position (if no collision is observed):
 		const lookAhead = {
 			x: this.x + this.moveCoords.dX,
@@ -82,9 +87,18 @@ class Tank {
 
 		const rad = this.d / 2
 
-		if (wall && side) { // Only wall collisions
-			//TODO: Include cannon - probably in separate function, since turning is also affected
-			//TODO: Abstract this into helpers
+		// Only wall collisions:
+		if (wall && side) {
+			// Which side of the wall is the long side and which is the end:
+			const longAxis = side === 'right' ? 'y' : 'x' // Hack to help add wallWidth when needed and vice versa
+			const shortAxis = side === 'bottom' ? 'y' : 'x'
+
+			// Gets the pseudo width of the line, to be able to check if a point is inside the "rectangle":
+			const shortAxisPointOne = wall[shortAxis + '1'] - wallWidth
+			const shortAxisPointTwo = wall[shortAxis + '1'] + wallWidth
+
+			//TODO: Include cannon tip, lav helpers først, ellers er det umuligt
+			//TODO: ABSTRAHER TIL HELPERS, DER TAGER IMOD ET OBJEKT MED X + Y OG EN WALL, OG LAVER ALLE DISSE TJEK
 			//TODO: Make it like a circle, not a square
 
 			if (((lookAhead[longAxis] + rad).between(wall[longAxis + '1'], wall[longAxis + '2']) || (lookAhead[longAxis] - rad).between(wall[longAxis + '1'], wall[longAxis + '2'])) && (shortAxisPointOne.between(this[shortAxis] - rad, this[shortAxis] + rad) || shortAxisPointTwo.between(this[shortAxis] - rad, this[shortAxis] + rad))) {
@@ -93,7 +107,9 @@ class Tank {
 			if (((this[longAxis] - rad).between(wall[longAxis + '1'], wall[longAxis + '2']) || (this[longAxis] + rad).between(wall[longAxis + '1'], wall[longAxis + '2'])) && (shortAxisPointOne.between(lookAhead[shortAxis] - rad, lookAhead[shortAxis] + rad) || shortAxisPointTwo.between(lookAhead[shortAxis] - rad, lookAhead[shortAxis] + rad))) {
 				this.handleCollision(shortAxis)
 			}
-		} else { // Only edge collisions
+
+			// Only edge collisions:
+		} else {
 			// Interaction with edges of convas:
 			if (lookAhead.x - rad <= 0 + wallWidth || lookAhead.x + rad >= width - wallWidth) {
 				this.handleCollision('x')
@@ -139,6 +155,47 @@ class Tank {
 		this.turn(getTurnDirection(axis, this.direction), true) // true lowers the turnspeed for collisions
 	}
 
+	checkTurnCollision(wall = null, side = null) {
+		// Starts from edge of tank, not cannon root:
+		for (let i = this.d / 2; i <= config.tank.cannon.length; i++) {
+			// Every point on the cannon...
+			const point = getMoveCoords(i, this.direction, 'forward')
+			// Relative to the tank:
+			point.x += this.x
+			point.y += this.y
+
+			const wallWidth = config.env.wallWidth / 2 // +/- from center of wall
+
+			// Only wall collisions:
+			if (wall && side) {
+				// Which side of the wall is the long side and which is the end:
+				const longAxis = side === 'right' ? 'y' : 'x' // Hack to help add wallWidth when needed and vice versa
+				const shortAxis = side === 'bottom' ? 'y' : 'x'
+
+				// Gets the pseudo width of the line, to be able to check if a point is inside the "rectangle":
+				const shortAxisPointOne = wall[shortAxis + '1'] - wallWidth
+				const shortAxisPointTwo = wall[shortAxis + '1'] + wallWidth
+
+				if (point[longAxis].between(wall[longAxis + '1'], wall[longAxis + '2']) && point[shortAxis].between(shortAxisPointOne, shortAxisPointTwo)) {
+					console.log('Wall')
+					return this.handleTurnCollision() // Stop checking points
+				}
+
+			} else {
+
+				// Interaction with edges of convas:
+				if (point.x <= 0 + wallWidth || point.x >= width - wallWidth || point.y <= 0 + wallWidth || point.y >= height - wallWidth) {
+					console.log('Edge')
+					return this.handleTurnCollision() // Stop checking points
+				}
+			}
+		}
+	}
+
+	handleTurnCollision() {
+		this.turn(this.turning * -1) // Turn back (effectively annulling a turn made in input)
+	}
+
 	move() {
 		// Takes collisions into consideration, since moveCoords will be updated accordingly
 		if (this.drive) {
@@ -173,14 +230,16 @@ class Tank {
 		circle(this.x, this.y, this.d)
 
 		// Updates cannon position:
-		const cannonStartX = (this.d / 5) * cos(radians(this.direction)) + this.x
-		const cannonStartY = (this.d / 5) * sin(radians(this.direction)) + this.y
-		this.cannonTip.x = config.tank.cannonLength * cos(radians(this.direction)) + this.x
-		this.cannonTip.y = config.tank.cannonLength * sin(radians(this.direction)) + this.y
+		const cannonRoot = getMoveCoords(this.d / config.tank.cannon.midOffsetFraction, this.direction, 'forward') // Same function as with moving - gets coords based on distance from center and a direction
+		const cannonTip = getMoveCoords(config.tank.cannon.length, this.direction, 'forward') // Same function as with moving - gets coords based on distance from center and a direction
+		this.cannon.root.x = cannonRoot.x + this.x
+		this.cannon.root.y = cannonRoot.y + this.y
+		this.cannon.tip.x = cannonTip.x + this.x
+		this.cannon.tip.y = cannonTip.y + this.y
 
 		// Renders cannon:
-		strokeWeight(3)
-		line(cannonStartX, cannonStartY, this.cannonTip.x, this.cannonTip.y)
+		strokeWeight(config.tank.cannon.width)
+		line(this.cannon.root.x, this.cannon.root.y, this.cannon.tip.x, this.cannon.tip.y)
 	}
 
 	// Uses index number to remove tank from the game:

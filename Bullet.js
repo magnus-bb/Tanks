@@ -7,11 +7,11 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 		this.owner = owner
 
 		// Starts offset from tank center:
-		this.x = this.owner.cannonTip.x
-		this.y = this.owner.cannonTip.y
+		this.x = this.owner.cannon.tip.x
+		this.y = this.owner.cannon.tip.y
 
 		this.duration = config.bullet.duration
-		this.color = color(red(this.owner.color), green(this.owner.color), blue(this.owner.color))
+		this.color = color(this.owner.color) // Must convert to P5-color object to be able to set alpha
 
 		const move = getMoveCoords(this.speed, this.direction, 'forward')
 		this.moveCoords = {
