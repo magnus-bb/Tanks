@@ -55,6 +55,21 @@ Todos
 - Tilføj grafik af en tank i stedet for `placeholder`s i controls input
 - Tilføj fejlmeddelelse, hvis ikke alle controls er valgt
 
+Idéer til pick ups / våben
+--------------------------
+- Aktivér for at bytte plads, modstanders `direction` randomizes
+- Bruger får lov at bruge musen (lol) i 20? sekunder. Kun 1 ad gangen.
+- Laser, men med lidt vedvarende beam også, uden tracing
+- Nedbryder af væg
+- Mortar, der lobbes en fixed afstand (over vægge også)
+- Hjemsøgende missil
+- Minigun
+- Kortere lifetime på projektiler i en stund / flere projektiler
+- Portal (skyd 1, aktiver for at sætte. Gentag)
+- Sniper - hurtigt projektil med tracing, der ikke bouncer
+- Skjold der dækker x grader omkring tank indtil 1 hit
+- Mini-ai som hjælper
+
 Links
 -----
 - **Collisions**: https://happycoding.io/tutorials/processing/collision-detection
