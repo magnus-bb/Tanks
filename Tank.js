@@ -8,7 +8,7 @@ class Tank {
 		this.turnSpeed = config.tank.turnSpeed
 		this.drive = false // To look ahead before actually moving
 		this.direction = random(0, 360)
-		this.color = color
+		this.color = color // Array of RGB
 		this.ammo = config.tank.ammo
 		this.weapon = null
 		this.trail = [{ x: this.x, y: this.y }] //? For death recap - maybe

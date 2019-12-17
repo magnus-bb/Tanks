@@ -12,10 +12,10 @@ $('#add-player-button').on('click', () => { // TODO: Gray out button if no playe
 	if (fieldVals.some(val => val === '')) return console.log("Fill out all fields")
 	//TODO: FEJLMEDDELELSE OMKRING MANGLENDE FELTER + FEEDBACK PÅ FELT
 
-	// Sets arguments for new Player:
 	const name = $('#player-name-input').val()
-	const color = $('#player-color-input').val()
-	console.log(color.red)
+
+	// A bit quirky because of jscolor:
+	const color = $('#player-color-button')[0].jscolor.rgb
 
 	// Gets all keybindings from the input fields:
 	const keys = jQuery.map($('.key-selector-input'), inputField => $(inputField).data('keybinding'))
