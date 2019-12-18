@@ -40,30 +40,34 @@
 	<div id="game-container">
 		<div id="game-menu">
 			<div id="start-menu">
-				<button id="start-game">Start Game</button>
 				<div class="add-player-container">
-					<button id="add-player-button">Add Player</button>
+					<div class="player-info-container">
 
-					<input id="player-name-input" type="text" placeholder="Player Name" maxlength=10>
+						<input id="player-name-input" type="text" placeholder="Player Name" maxlength=10>
 
-					<!-- Default to red color (config.tank.defaultColor) -->
-					<label for="player-color-button">Select a Color:</label>
-					<button id="player-color-button" class="jscolor {valueElement: null, value: 'ff0000'}"></button>
+						<!-- Default to red color (config.tank.defaultColor) -->
+						<div class="color-container">
+							<p>Select a Color:</p>
+							<button id="player-color-button" class="jscolor {valueElement: null, value: 'ff0000'}"></button>
+						</div>
 
-					<br>
+						<button id="add-player-button">Add Player</button>
+					</div>
 
-					<label for="controls-container">Select your controls:</label>
-					<div id="controls-container">
+					<div class="controls-container">
 						<!-- readonly because we handle the input in menu.js -->
+						<img class="tank-diagram" src="assets/sprites/King Tiger II.svg" alt="tank">
 						<!--! REMOVE PLACEHOLDERS AND PUT A TANK IN THE MIDDLE AS A DIAGRAM -->
-						<input id="forward-key-input" class="key-selector-input" type="text" readonly placeholder="Forward">
-						<input id="backward-key-input" class="key-selector-input" type="text" readonly placeholder="Backward">
-						<input id="left-key-input" class="key-selector-input" type="text" readonly placeholder="Left">
-						<input id="right-key-input" class="key-selector-input" type="text" readonly placeholder="Right">
-						<input id="fire-key-input" class="key-selector-input" type="text" readonly placeholder="Fire">
+						<input id="forward-key-input" class="key-selector-input" type="text" readonly placeholder="⭡">
+						<input id="backward-key-input" class="key-selector-input" type="text" readonly placeholder="⭣">
+						<input id="left-key-input" class="key-selector-input" type="text" readonly placeholder="⭠">
+						<input id="right-key-input" class="key-selector-input" type="text" readonly placeholder="⭢">
+						<input id="fire-key-input" class="key-selector-input" type="text" readonly placeholder="•">
 
 					</div>
 				</div>
+
+				<button id="start-game-button">Start Game</button>
 			</div>
 
 			<!-- Not displayed initially -->

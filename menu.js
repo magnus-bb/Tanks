@@ -1,6 +1,6 @@
 //* START MENU
 
-$('#start-game').on('click', () => { // TODO: Gray out button if no players
+$('#start-game-button').on('click', () => { // TODO: Gray out button if no players
 	Game.start()
 })
 
@@ -26,4 +26,10 @@ $('#add-player-button').on('click', () => { // TODO: Gray out button if no playe
 	console.log(player)
 
 	Game.addPlayer(player)
+
+	// Resets fields:
+	$('.add-player-container input').each(function() {
+		$(this).data('keybinding', '')
+		$(this).val('')
+	})
 })

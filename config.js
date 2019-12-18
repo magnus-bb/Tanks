@@ -11,7 +11,7 @@ config = {
 		},
 		ammo: 5,
 		collisionSlowFactor: 4,
-		collisionTurnFactor: 10,
+		collisionTurnFraction: 5,
 		spawnDistance: 4, //TODO: Cells between spawned tanks
 		defaultColor: 'ff0000',
 	},

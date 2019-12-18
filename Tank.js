@@ -82,7 +82,7 @@ class Tank {
 	turn(direction, bodyCollision = false) {
 		if (bodyCollision) {
 			// % 360 makes it so we don't have to deal with angles over 360 deg:
-			this.direction = (this.direction % 360) + this.turnSpeed / config.tank.collisionTurnFactor * direction //TODO: Maybe use rotate() when we switch to sprites
+			this.direction = (this.direction % 360) + this.turnSpeed / config.tank.collisionTurnFraction * direction //TODO: Maybe use rotate() when we switch to sprites
 		} else {
 			this.direction = (this.direction % 360) + this.turnSpeed * direction //TODO: Maybe use rotate() when we switch to sprites
 		}
@@ -106,6 +106,11 @@ class Tank {
 
 		const rad = this.d / 2
 
+		const collision = {
+			x: false,
+			y: false
+		}
+
 		// Only wall collisions:
 		if (wall) {
 
@@ -121,42 +126,70 @@ class Tank {
 			// Gets the pseudo width of the line, to be able to check if a point is inside the "rectangle":
 			const shortAxisPointOne = wall[shortAxis + '1'] - wallWidth
 			const shortAxisPointTwo = wall[shortAxis + '1'] + wallWidth
+			// Cannon body:
+			if (((lookAhead[longAxis] + rad).between(wall[longAxis + '1'], wall[longAxis + '2']) || (lookAhead[longAxis] - rad).between(wall[longAxis + '1'], wall[longAxis + '2']))
+				&&
+				(shortAxisPointOne.between(this[shortAxis] - rad, this[shortAxis] + rad) || shortAxisPointTwo.between(this[shortAxis] - rad, this[shortAxis] + rad))
+				|| // Cannon tip:
+				(lookAhead[longAxis] + this.relCannon.tip[longAxis]).between(wall[longAxis + '1'], wall[longAxis + '2'])
+				&&
+				(this[shortAxis] + this.relCannon.tip[shortAxis]).between(shortAxisPointOne, shortAxisPointTwo)
+			) {
 
-			if (((lookAhead[longAxis] + rad).between(wall[longAxis + '1'], wall[longAxis + '2']) || (lookAhead[longAxis] - rad).between(wall[longAxis + '1'], wall[longAxis + '2'])) && (shortAxisPointOne.between(this[shortAxis] - rad, this[shortAxis] + rad) || shortAxisPointTwo.between(this[shortAxis] - rad, this[shortAxis] + rad))) {
-				return longAxis
+				collision[longAxis] = true
+				//return longAxis
 			}
-			if (((this[longAxis] - rad).between(wall[longAxis + '1'], wall[longAxis + '2']) || (this[longAxis] + rad).between(wall[longAxis + '1'], wall[longAxis + '2'])) && (shortAxisPointOne.between(lookAhead[shortAxis] - rad, lookAhead[shortAxis] + rad) || shortAxisPointTwo.between(lookAhead[shortAxis] - rad, lookAhead[shortAxis] + rad))) {
-				return shortAxis
+			// Cannon body:
+			if (((this[longAxis] - rad).between(wall[longAxis + '1'], wall[longAxis + '2']) || (this[longAxis] + rad).between(wall[longAxis + '1'], wall[longAxis + '2']))
+				&&
+				(shortAxisPointOne.between(lookAhead[shortAxis] - rad, lookAhead[shortAxis] + rad) || shortAxisPointTwo.between(lookAhead[shortAxis] - rad, lookAhead[shortAxis] + rad))
+				||
+				(this[longAxis] + this.relCannon.tip[longAxis]).between(wall[longAxis + '1'], wall[longAxis + '2'])
+				&&
+				(lookAhead[shortAxis] + this.relCannon.tip[shortAxis]).between(shortAxisPointOne, shortAxisPointTwo)) {
+
+				collision[shortAxis] = true
+				//return shortAxis
 			}
 
 			// Only edge collisions:
 		} else {
 			// Interaction with edges of convas:
 			if (lookAhead.x - rad <= 0 + wallWidth || lookAhead.x + rad >= width - wallWidth) {
-				return 'x'
+				collision.x = true
 			}
 			if (lookAhead.y - rad <= 0 + wallWidth || lookAhead.y + rad >= height - wallWidth) {
-				return 'y'
+				collision.y = true
 			}
 		}
+
+		return collision
 	}
 
-	handleCollision(axis) {
+	//? REMOVE SLOW IN ANY DIRECTION WHEN COLLIDING, JUST HAVE SLOW TURN ON CANNON COLLISION
+	//? THIS WILL MAKE AXES DISAPPEAR FROM TANK COLLISIONS AND MAKE FEWER GLITCES WITH WALLS
+	handleCollision(axes) {
 		// For accessing dX or dY prop of moveCoords:
-		const deltaAxis = 'd' + axis.toUpperCase()
+		for (const axis in axes) {
 
-		// For slowing movement of the tank
-		const otherDeltaAxis = axis === 'x' ? 'dY' : 'dX'
+			if (axes[axis]) {
+				const deltaAxis = 'd' + axis.toUpperCase()
 
-		// No crossing walls:
-		this.moveCoords[deltaAxis] = 0
+				// For slowing movement of the tank
+				const otherDeltaAxis = axis === 'x' ? 'dY' : 'dX'
 
-		// Slowing movement:
-		this.moveCoords[otherDeltaAxis] /= config.tank.collisionSlowFactor
+				// No crossing walls:
+				this.moveCoords[deltaAxis] = 0
 
-		// Turns slowly, if driving forward:
-		if (this.drive === 'forward') {
-			this.turn(getTurnDirection(axis, this.direction), true) // true lowers the turnspeed for collisions
+				// Slowing movement:
+				this.moveCoords[otherDeltaAxis] /= config.tank.collisionSlowFactor
+
+				// Turns slowly, if driving forward:
+				if (this.drive === 'forward') {
+					//TODO: ONLY WITH CANNON COLLISION
+					this.turn(getTurnDirection(axis, this.direction), true) // true lowers the turnspeed for collisions
+				}
+			}
 		}
 	}
 

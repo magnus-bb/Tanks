@@ -40,13 +40,9 @@ Todos
 	- `wallCollision()` og `edgeCollision()` skal evt i static methods
 		- Skal også abstraheres en smule til helpers
 - `Bullet` driller inde i vægge
-- Tanks' kanoner skal også indgå i collisions
-- Bedre `Bullet` og `Tank` collisions på enderne af walls
 - Tilføjelse af tilfældige celler, der til tider "brænder" og ikke må passeres
-- Bullet collision med tanks - når man skyder hinanden
 - Tank collisions med hinanden?
 - Fix helpers osv i sine rette classes først!
-- Ændr `Player` til at være en class for sig selv, og ikke en `Tank` (`Tank` skal kun være inde i spil, `Player` skal være med score osv)
 - Menuer
 	- Styling
 	- Handlers til knapper / inputs
@@ -55,6 +51,8 @@ Todos
 - Tilføj grafik af en tank i stedet for `placeholder`s i controls input
 - Tilføj fejlmeddelelse, hvis ikke alle controls er valgt
 - Flyt handlers ud af checks
+- Separér alle collision checks og ryd op
+- Fjern slow move ved collisions og slow turn ved andet end cannon
 
 Idéer til pick ups / våben
 --------------------------
