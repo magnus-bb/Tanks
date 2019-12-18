@@ -26,15 +26,20 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 	//* INSTANCE METHODS
 
 	//! WHEN FIRING INSIDE WALL, BULLET GETS STUCK
-	// Both wall and edge collisions
-	checkCollision(wall = null, side = null) {
+	// Both wall and edge collisions:
+	checkCollision(wall = null) {
 		const numSteps = config.env.collisionLookaheadSteps // How many positions to check between bullet location and next frames' location
 		const wallWidth = config.env.wallStroke / 2 // +/- from center of wall
 
-		// Wall collisions only
-		if (wall && side) { 
-			var longAxis = side === 'right' ? 'y' : 'x' // Hack to help add wallWidth when needed and vice versa
-			var shortAxis = side === 'bottom' ? 'y' : 'x'
+		// Wall collisions only:
+		if (wall) { // Check is done before loop as to not reassign these variables every iteration
+			if (wall.x1 === wall.x2) {
+				var longAxis = 'y'
+				var shortAxis = 'x'
+			} else {
+				var longAxis = 'x'
+				var shortAxis = 'y'
+			}
 
 			var shortAxisPointOne = wall[shortAxis + '1'] - wallWidth
 			var shortAxisPointTwo = wall[shortAxis + '1'] + wallWidth
@@ -49,7 +54,7 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 
 			const bounce = { x: false, y: false }
 
-			if (wall && side) { // Wall collisions only
+			if (wall) { // Wall collisions only
 				if (lookAhead[longAxis].between(wall[longAxis + '1'], wall[longAxis + '2']) && this[shortAxis].between(shortAxisPointOne, shortAxisPointTwo)) {
 					bounce[longAxis] = true
 				}
