@@ -18,6 +18,8 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 			dX: move.x,
 			dY: move.y
 		}
+
+		// For knowing when to stop rendering trail:
 		this.dead = false
 	}
 
@@ -27,7 +29,7 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 	// Both wall and edge collisions
 	checkCollision(wall = null, side = null) {
 		const numSteps = config.env.collisionLookaheadSteps // How many positions to check between bullet location and next frames' location
-		const wallWidth = config.env.wallWidth / 2 // +/- from center of wall
+		const wallWidth = config.env.wallStroke / 2 // +/- from center of wall
 
 		// Wall collisions only
 		if (wall && side) { 
@@ -63,10 +65,11 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 				}
 			}
 
-			// A collision calls the bounce and stops further lookAheads
+			// A collision calls the bounce and stops further lookAheads:
 			if (bounce.x || bounce.y) {
-				this.bounce(bounce)
-				break
+				return bounce
+			} else if (step === numSteps) { // Last lookAhead step also returns empty bounce
+				return bounce
 			}
 		}
 	}

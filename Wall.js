@@ -4,7 +4,7 @@ class Wall {
 		this.y1 = owner.y
 		this.x2 = owner.x
 		this.y2 = owner.y
-		this.w = config.env.wallWidth
+		this.w = config.env.wallStroke
 
 		const length = owner.w
 		switch (side) {

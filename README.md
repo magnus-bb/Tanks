@@ -54,6 +54,7 @@ Todos
 	- Feedback på players + controls oprettet?
 - Tilføj grafik af en tank i stedet for `placeholder`s i controls input
 - Tilføj fejlmeddelelse, hvis ikke alle controls er valgt
+- Flyt handlers ud af checks
 
 Idéer til pick ups / våben
 --------------------------

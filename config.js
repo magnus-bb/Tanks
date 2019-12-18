@@ -19,7 +19,7 @@ config = {
 		cellWidth: 55,
 		cellAmtX: 15,
 		cellAmtY: 10,
-		wallWidth: 6,
+		wallStroke: 6,
 		wallOccurrence: 0.8,
 		collisionLookaheadSteps: 3 // Same as bullet speed
 	},

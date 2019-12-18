@@ -128,3 +128,29 @@ function getUnvisitedNeighbors(currentCell) {
 function getColorButtonVal() {
 	return $('#player-color-button')[0].jscolor.rgb
 }
+
+// Takes an object of x and y and a wall obj, and returns true if the point is inside the wall, depending on the type of wall:
+function pointInWall(x, y, wall) {
+	// Makes me able to get the right prop with longAxis and shortAxis:
+	const point = {
+		x: x,
+		y: y
+	}
+
+	// Determines if wall is vertical or horizontal:
+	if (wall.x1 === wall.x2) {
+		var longAxis = 'y'
+		var shortAxis = 'x'
+	} else {
+		var longAxis = 'x'
+		var shortAxis = 'y'
+	}
+
+	const wallWidth = config.env.wallStroke / 2
+
+	if (point[longAxis].between(wall[longAxis + 1], wall[longAxis + 2]) && point[shortAxis].between(wall[shortAxis + 1] - wallWidth, wall[shortAxis + 1] + wallWidth)) {
+		return true
+	} else {
+		return false
+	}
+}
