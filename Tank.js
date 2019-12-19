@@ -282,20 +282,22 @@ class Tank {
 	destroy(index) {
 		state.tanks.splice(index, 1)
 		//TODO: Msg on death or counter etc + effect
+
+		// Checks if game should end:
+		if (state.tanks.length <= 1) {
+			Game.end()
+		}
 	}
 
 	//* STATIC METHODS
 
-	static checkHit(bullet, bulletIndex, tank, tankIndex) {
+	static checkHit(bullet, tank) {
 		// Distance between center of tank and bullet:
 		const distance = dist(bullet.x, bullet.y, tank.x, tank.y)
 
 		// Checks if distance is smaller, when width of tank and bullet have been factored in:
 		if (distance < config.bullet.diameter / 2 + tank.d / 2) { // Does not use bullet.d, since the muzzle effect changes that size
-			bullet.destroy(bulletIndex)
-			tank.destroy(tankIndex)
-
-			//TODO: let bullet.owner know it gets a point
+			return true
 		}
 	}
 }

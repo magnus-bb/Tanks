@@ -32,31 +32,30 @@ class Game {
 			state.tanks.push(new Tank(player.name, player.color, spawnCoords.x, spawnCoords.y, player.controls))
 		}
 
-		// Hides menu:
-		$('#game-menu').slideUp(() => {
-			this.started = true
-			this.paused = false
+		this.started = true
 
-			// Starts drawing:
-			loop()
-		})
+		// Hides menu:
+		this.unPause()
 	}
 
 	static end() {
 		console.log('Game ended')
 
+		// Resets all ingame state:
+		state = new GameState
+
 
 		this.started = false
-		this.paused = true
-
-		$('#game-menu').slideDown()
+		
+		//TODO: CHANGE TO ANOTHER MENU, SO IT WILL BE DISPLAYED WHEN pause() SHOWS GAMEMENU
+		this.pause()
 	}
 
 	static pause() {
 		console.log('Game paused')
 
-		// Draw automatically pauses when it reads Game.paused to be true, but not other way around:
 		this.paused = true
+		noLoop()
 
 		$('#game-menu').slideDown()
 	}
@@ -66,7 +65,6 @@ class Game {
 
 		// Restarts when menu is gone:
 		$('#game-menu').slideUp(() => {
-			// change pause before looping, as to not get draw to re-pause:
 			this.paused = false
 			loop()
 		})

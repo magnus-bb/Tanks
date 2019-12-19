@@ -23,13 +23,15 @@
 	<script src="config.js" defer></script>
 	<script src="menu.js" defer></script>
 	<script src="Game.js" defer></script>
+	<script src="Status.js" defer></script>
+	<script src="State.js" defer></script>
 	<script src="Player.js" defer></script>
 	<script src="Bullet.js" defer></script>
 	<script src="Cell.js" defer></script>
 	<script src="Wall.js" defer></script>
 	<script src="Controls.js" defer></script>
 	<script src="Tank.js" defer></script>
-	<script src="state.js" defer></script>
+	
 	<script src="setup.js" defer></script>
 	<script src="draw.js" defer></script>
 	<script src="helpers.js" defer></script>
@@ -57,7 +59,7 @@
 					<div class="controls-container">
 						<!-- readonly because we handle the input in menu.js -->
 						<img class="tank-diagram" src="assets/sprites/King Tiger II.svg" alt="tank">
-						<!--! REMOVE PLACEHOLDERS AND PUT A TANK IN THE MIDDLE AS A DIAGRAM -->
+
 						<input id="forward-key-input" class="key-selector-input" type="text" readonly placeholder="⭡">
 						<input id="backward-key-input" class="key-selector-input" type="text" readonly placeholder="⭣">
 						<input id="left-key-input" class="key-selector-input" type="text" readonly placeholder="⭠">
@@ -77,8 +79,12 @@
 
 
 		</div>
-		<!-- canvas here! -->
+
+		<div id="canvas-container"><!-- canvas here! --></div>
+
 	</div>
+
+	<div class="status-bar"></div>
 </body>
 
 </html>

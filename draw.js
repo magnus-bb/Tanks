@@ -14,9 +14,9 @@ function draw() {
 		// Checks and handles collisions with edges:
 		const collision = tank.checkCollision() // Automatically checks edge collisions when no args are given
 		if (collision.x || collision.y) tank.handleCollision(collision)
-		
+
 		// Checks and handles turn collisions with edges:
-		if(tank.checkTurnCollision()) tank.handleTurnCollision() // Automatically checks edge collisions when no args are given
+		if (tank.checkTurnCollision()) tank.handleTurnCollision() // Automatically checks edge collisions when no args are given
 	}
 
 	//* Cells & Walls:
@@ -78,22 +78,25 @@ function draw() {
 			const tank = state.tanks[j]
 
 			// Checks and handles bullet hits for both bullet and tank:
-			Tank.checkHit(bullet, i, tank, j)
+			if (Tank.checkHit(bullet, tank)) {
+				bullet.destroy(i)
+				tank.destroy(j)
+
+				// Goes on to next bullet, now that this one is destroyed:
+				break
+
+				//TODO: let bullet.owner ('s player) know it gets a point
+			}
 		}
 	}
 
-	if (Game.paused) {
-		noLoop()
-	}
-
-
 	//! FPS for performance indicator:
-	// let fps
-	// if (frameCount % 10 === 0) {
-	// 	fps = floor(getFrameRate())
-	// }
-	// fill(0)
-	// textSize(30)
-	// textAlign(CENTER, CENTER)
-	// text(fps, width / 2, height / 2)
+	let fps
+	if (frameCount % 10 === 0) {
+		fps = floor(getFrameRate())
+	}
+	fill(0)
+	textSize(30)
+	textAlign(CENTER, CENTER)
+	text(fps, width / 2, height / 2)
 }
