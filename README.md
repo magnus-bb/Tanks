@@ -53,6 +53,9 @@ Todos
 - Flyt handlers ud af checks
 - Separér alle collision checks og ryd op
 - Fjern slow move ved collisions og slow turn ved andet end cannon
+- Sørg for at `Game.end()` ændrer den menu, der vises, så man ikke får den samme som første gang
+- Fix statusbar
+
 
 Idéer til pick ups / våben
 --------------------------
