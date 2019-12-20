@@ -91,12 +91,12 @@ function draw() {
 	}
 
 	//! FPS for performance indicator:
-	let fps
-	if (frameCount % 10 === 0) {
-		fps = floor(getFrameRate())
-	}
-	fill(0)
-	textSize(30)
-	textAlign(CENTER, CENTER)
-	text(fps, width / 2, height / 2)
+	// let fps
+	// if (frameCount % 10 === 0) {
+	// 	fps = floor(getFrameRate())
+	// }
+	// fill(0)
+	// textSize(30)
+	// textAlign(CENTER, CENTER)
+	// text(fps, width / 2, height / 2)
 }

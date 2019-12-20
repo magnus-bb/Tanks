@@ -1,7 +1,7 @@
 //* START MENU
 
 $('#start-game-button').on('click', () => { // TODO: Gray out button if no players
-	Game.start()
+	Game.new()
 })
 
 
@@ -33,3 +33,12 @@ $('#add-player-button').on('click', () => { // TODO: Gray out button if no playe
 		$(this).val('')
 	})
 })
+
+$('#resume-game-button').on('click', () => {
+	Game.unpause()
+})
+
+$('#next-round-button').on('click', () => {
+	Game.start()
+})
+

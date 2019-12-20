@@ -53,8 +53,9 @@ Todos
 - Flyt handlers ud af checks
 - Separér alle collision checks og ryd op
 - Fjern slow move ved collisions og slow turn ved andet end cannon
-- Sørg for at `Game.end()` ændrer den menu, der vises, så man ikke får den samme som første gang
-- Fix statusbar
+- Sørg for at pause, unpause, end game etc KUN åbner (og lukker) de rette menuer
+	- evt vises start self i starten, men display: none når spillet startes. Så kan alt andet bare huske både at åbne og lukke sin menu
+- Fix statusbar opdatering
 
 
 Idéer til pick ups / våben

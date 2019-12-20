@@ -9,12 +9,23 @@ class Game {
 		if (this.started) return console.log("Game has already started")
 
 		this.players.push(player)
+
+		// Uses index to ID the status-DIV:
+		const index = this.players.length - 1
+
+		// Shows div in status bar:
+		Status.initPlayer(player, index) 
 	}
 
-	static start() {
+	static new() {
 		// Cannot start twice or if there are no players:
 		if (this.started || this.players.length <= 0) return console.log("Cannot start game")
 
+		$('#start-menu').fadeOut(100)
+		this.start()
+	}
+
+	static start() {
 		console.log('Game started')
 
 		// Wipes all cells and remakes them:
@@ -34,8 +45,9 @@ class Game {
 
 		this.started = true
 
+		$('#next-round-menu').fadeOut(100)
 		// Hides menu:
-		this.unPause()
+		this.unpause()
 	}
 
 	static end() {
@@ -44,10 +56,10 @@ class Game {
 		// Resets all ingame state:
 		state = new GameState
 
-
 		this.started = false
 		
 		//TODO: CHANGE TO ANOTHER MENU, SO IT WILL BE DISPLAYED WHEN pause() SHOWS GAMEMENU
+		$('#next-round-menu').fadeIn(100)
 		this.pause()
 	}
 
@@ -60,7 +72,7 @@ class Game {
 		$('#game-menu').slideDown()
 	}
 
-	static unPause() {
+	static unpause() {
 		console.log('Game unpaused')
 
 		// Restarts when menu is gone:
