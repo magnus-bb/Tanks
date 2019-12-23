@@ -57,6 +57,7 @@ Todos
 	- Tank body collision
 	- Tank tip collision
 	- ... med separate handlers
+- Evt. ændr walls til at have de props, der skal bruges for at udregne collisions, så de ikke skal udregnes hver gang
 
 
 Idéer til pick ups / våben

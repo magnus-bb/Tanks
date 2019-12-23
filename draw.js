@@ -12,8 +12,13 @@ function draw() {
 		tank.input()
 
 		// Checks and handles collisions with edges:
-		const collision = tank.checkCollision() // Automatically checks edge collisions when no args are given
-		if (collision.x || collision.y) tank.handleCollision(collision)
+		// // const collision = tank.checkCollision() // Automatically checks edge collisions when no args are given
+		// // if (collision.x || collision.y) tank.handleCollision(collision)
+
+		// Automatically checks edge collisions when no args are given:
+		if (tank.checkBodyCollision()) {
+			tank.handleBodyCollision()
+		}
 
 		// Checks and handles turn collisions with edges:
 		if (tank.checkTurnCollision()) tank.handleTurnCollision() // Automatically checks edge collisions when no args are given
@@ -31,8 +36,13 @@ function draw() {
 					//* Collisions:
 					for (const tank of state.tanks) {
 						// Checks and handles collisions with walls:
-						const collision = tank.checkCollision(wallObj) // Automatically checks wall collisions when args are given
-						if (collision.x || collision.y) tank.handleCollision(collision)
+						// // const collision = tank.checkCollision(wallObj) // Automatically checks wall collisions when args are given
+						// // if (collision.x || collision.y) tank.handleCollision(collision)
+
+						// Automatically checks wall collisions when args are given
+						if (tank.checkBodyCollision(wallObj)) {
+							tank.handleBodyCollision()
+						}
 
 						// Checks and handles turn collisions with walls:
 						if (tank.checkTurnCollision(wallObj, wall)) tank.handleTurnCollision() // Automatically checks wall collisions when args are given

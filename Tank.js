@@ -99,152 +99,156 @@ class Tank {
 
 
 
+//! DELETE THESE
+
+
+	// // // Both wall and edge collisions
+	// // checkCollision(wall = null) {
+
+	// // 	//TODO: Include cannon tip, lav helpers først, ellers er det umuligt
+	// // 	//TODO: ABSTRAHER TIL HELPER SJIOT
+	// // 	//TODO: Make it like a circle, not a square
+
+
+	// // 	const wallWidth = config.env.wallStroke / 2 // +/- from center of wall
+
+	// // 	// Next tank position (if no collision is observed):
+	// // 	const lookAhead = {
+	// // 		x: this.x + this.moveCoords.dX,
+	// // 		y: this.y + this.moveCoords.dY
+	// // 	}
+
+	// // 	const rad = this.d / 2
+
+	// // 	const collision = {
+	// // 		x: false,
+	// // 		y: false
+	// // 	}
+
+	// // 	// Only wall collisions:
+	// // 	if (wall) {
+
+	// // 		// Which side of the wall is the long side and which is the end:
+	// // 		if (wall.x1 === wall.x2) {
+	// // 			var longAxis = 'y'
+	// // 			var shortAxis = 'x'
+	// // 		} else {
+	// // 			var longAxis = 'x'
+	// // 			var shortAxis = 'y'
+	// // 		}
+
+	// // 		// Gets the pseudo width of the line, to be able to check if a point is inside the "rectangle":
+	// // 		const shortAxisPointOne = wall[shortAxis + '1'] - wallWidth
+	// // 		const shortAxisPointTwo = wall[shortAxis + '1'] + wallWidth
+	// // 		// Tank body:
+	// // 		if (((lookAhead[longAxis] + rad).between(wall[longAxis + '1'], wall[longAxis + '2']) || (lookAhead[longAxis] - rad).between(wall[longAxis + '1'], wall[longAxis + '2']))
+	// // 			&&
+	// // 			(shortAxisPointOne.between(this[shortAxis] - rad, this[shortAxis] + rad) || shortAxisPointTwo.between(this[shortAxis] - rad, this[shortAxis] + rad))
+	// // 			|| // Cannon:
+	// // 			(lookAhead[longAxis] + this.relCannon.tip[longAxis]).between(wall[longAxis + '1'], wall[longAxis + '2'])
+	// // 			&&
+	// // 			(this[shortAxis] + this.relCannon.tip[shortAxis]).between(shortAxisPointOne, shortAxisPointTwo)
+	// // 		) {
+
+	// // 			collision[longAxis] = true
+	// // 			//return longAxis
+	// // 		}
+	// // 		// Tank body:
+	// // 		if (((this[longAxis] - rad).between(wall[longAxis + '1'], wall[longAxis + '2']) || (this[longAxis] + rad).between(wall[longAxis + '1'], wall[longAxis + '2']))
+	// // 			&&
+	// // 			(shortAxisPointOne.between(lookAhead[shortAxis] - rad, lookAhead[shortAxis] + rad) || shortAxisPointTwo.between(lookAhead[shortAxis] - rad, lookAhead[shortAxis] + rad))
+	// // 			|| // Cannon:
+	// // 			(this[longAxis] + this.relCannon.tip[longAxis]).between(wall[longAxis + '1'], wall[longAxis + '2'])
+	// // 			&&
+	// // 			(lookAhead[shortAxis] + this.relCannon.tip[shortAxis]).between(shortAxisPointOne, shortAxisPointTwo)) {
+
+	// // 			collision[shortAxis] = true
+	// // 			//return shortAxis
+	// // 		}
+
+	// // 		// Only edge collisions:
+	// // 	} else {
+	// // 		// Interaction with edges of convas:
+	// // 		if (lookAhead.x - rad <= 0 + wallWidth || lookAhead.x + rad >= width - wallWidth) {
+	// // 			collision.x = true
+	// // 		}
+	// // 		if (lookAhead.y - rad <= 0 + wallWidth || lookAhead.y + rad >= height - wallWidth) {
+	// // 			collision.y = true
+	// // 		}
+	// // 	}
+
+	// // 	return collision
+	// // }
+
+	// // //? REMOVE SLOW IN ANY DIRECTION WHEN COLLIDING, JUST HAVE SLOW TURN ON CANNON COLLISION
+	// // //? THIS WILL MAKE AXES DISAPPEAR FROM TANK COLLISIONS AND MAKE FEWER GLITCES WITH WALLS
+	// // handleCollision(axes) {
+	// // 	// For accessing dX or dY prop of moveCoords:
+	// // 	for (const axis in axes) {
+
+	// // 		if (axes[axis]) {
+	// // 			const deltaAxis = 'd' + axis.toUpperCase()
+
+	// // 			// For slowing movement of the tank
+	// // 			const otherDeltaAxis = axis === 'x' ? 'dY' : 'dX'
+
+	// // 			// No crossing walls:
+	// // 			this.moveCoords[deltaAxis] = 0
+
+	// // 			// Slowing movement:
+	// // 			this.moveCoords[otherDeltaAxis] /= config.tank.collisionSlowFactor
+
+	// // 			// Turns slowly, if driving forward:
+	// // 			if (this.drive === 'forward') {
+	// // 				//TODO: ONLY WITH CANNON COLLISION
+	// // 				this.turn(getTurnDirection(axis, this.direction), true) // true lowers the turnspeed for collisions
+	// // 			}
+	// // 		}
+	// // 	}
+	// // }
+
+	// // checkTurnCollision(wall = null, side = null) {
+	// // 	// Starts from edge of tank, not cannon root:
+	// // 	for (let i = this.d / 2; i <= config.tank.cannon.length; i++) {
+	// // 		// Every point on the cannon...
+	// // 		const point = getMoveCoords(i, this.direction, 'forward')
+	// // 		// Relative to the tank:
+	// // 		point.x += this.x
+	// // 		point.y += this.y
+
+	// // 		const wallWidth = config.env.wallStroke / 2 // +/- from center of wall
+
+	// // 		// Only wall collisions:
+	// // 		if (wall && side) {
+	// // 			// Which side of the wall is the long side and which is the end:
+	// // 			const longAxis = side === 'right' ? 'y' : 'x' // Hack to help add wallWidth when needed and vice versa
+	// // 			const shortAxis = side === 'bottom' ? 'y' : 'x'
+
+	// // 			// Gets the pseudo width of the line, to be able to check if a point is inside the "rectangle":
+	// // 			const shortAxisPointOne = wall[shortAxis + '1'] - wallWidth
+	// // 			const shortAxisPointTwo = wall[shortAxis + '1'] + wallWidth
+
+	// // 			if (point[longAxis].between(wall[longAxis + '1'], wall[longAxis + '2']) && point[shortAxis].between(shortAxisPointOne, shortAxisPointTwo)) {
+	// // 				return true
+	// // 			}
+
+	// // 		} else {
+
+	// // 			// Interaction with edges of convas:
+	// // 			if (point.x <= 0 + wallWidth || point.x >= width - wallWidth || point.y <= 0 + wallWidth || point.y >= height - wallWidth) {
+	// // 				return true
+	// // 			}
+	// // 		}
+	// // 	}
+	// // }
+
+	// // handleTurnCollision() {
+	// // 	this.turn(this.turning * -1) // Turn back (effectively annulling a turn made in input)
+	// // }
 
 
 
-	// Both wall and edge collisions
-	checkCollision(wall = null) {
 
-		//TODO: Include cannon tip, lav helpers først, ellers er det umuligt
-		//TODO: ABSTRAHER TIL HELPER SJIOT
-		//TODO: Make it like a circle, not a square
-
-
-		const wallWidth = config.env.wallStroke / 2 // +/- from center of wall
-
-		// Next tank position (if no collision is observed):
-		const lookAhead = {
-			x: this.x + this.moveCoords.dX,
-			y: this.y + this.moveCoords.dY
-		}
-
-		const rad = this.d / 2
-
-		const collision = {
-			x: false,
-			y: false
-		}
-
-		// Only wall collisions:
-		if (wall) {
-
-			// Which side of the wall is the long side and which is the end:
-			if (wall.x1 === wall.x2) {
-				var longAxis = 'y'
-				var shortAxis = 'x'
-			} else {
-				var longAxis = 'x'
-				var shortAxis = 'y'
-			}
-
-			// Gets the pseudo width of the line, to be able to check if a point is inside the "rectangle":
-			const shortAxisPointOne = wall[shortAxis + '1'] - wallWidth
-			const shortAxisPointTwo = wall[shortAxis + '1'] + wallWidth
-			// Tank body:
-			if (((lookAhead[longAxis] + rad).between(wall[longAxis + '1'], wall[longAxis + '2']) || (lookAhead[longAxis] - rad).between(wall[longAxis + '1'], wall[longAxis + '2']))
-				&&
-				(shortAxisPointOne.between(this[shortAxis] - rad, this[shortAxis] + rad) || shortAxisPointTwo.between(this[shortAxis] - rad, this[shortAxis] + rad))
-				|| // Cannon:
-				(lookAhead[longAxis] + this.relCannon.tip[longAxis]).between(wall[longAxis + '1'], wall[longAxis + '2'])
-				&&
-				(this[shortAxis] + this.relCannon.tip[shortAxis]).between(shortAxisPointOne, shortAxisPointTwo)
-			) {
-
-				collision[longAxis] = true
-				//return longAxis
-			}
-			// Tank body:
-			if (((this[longAxis] - rad).between(wall[longAxis + '1'], wall[longAxis + '2']) || (this[longAxis] + rad).between(wall[longAxis + '1'], wall[longAxis + '2']))
-				&&
-				(shortAxisPointOne.between(lookAhead[shortAxis] - rad, lookAhead[shortAxis] + rad) || shortAxisPointTwo.between(lookAhead[shortAxis] - rad, lookAhead[shortAxis] + rad))
-				|| // Cannon:
-				(this[longAxis] + this.relCannon.tip[longAxis]).between(wall[longAxis + '1'], wall[longAxis + '2'])
-				&&
-				(lookAhead[shortAxis] + this.relCannon.tip[shortAxis]).between(shortAxisPointOne, shortAxisPointTwo)) {
-
-				collision[shortAxis] = true
-				//return shortAxis
-			}
-
-			// Only edge collisions:
-		} else {
-			// Interaction with edges of convas:
-			if (lookAhead.x - rad <= 0 + wallWidth || lookAhead.x + rad >= width - wallWidth) {
-				collision.x = true
-			}
-			if (lookAhead.y - rad <= 0 + wallWidth || lookAhead.y + rad >= height - wallWidth) {
-				collision.y = true
-			}
-		}
-
-		return collision
-	}
-
-	//? REMOVE SLOW IN ANY DIRECTION WHEN COLLIDING, JUST HAVE SLOW TURN ON CANNON COLLISION
-	//? THIS WILL MAKE AXES DISAPPEAR FROM TANK COLLISIONS AND MAKE FEWER GLITCES WITH WALLS
-	handleCollision(axes) {
-		// For accessing dX or dY prop of moveCoords:
-		for (const axis in axes) {
-
-			if (axes[axis]) {
-				const deltaAxis = 'd' + axis.toUpperCase()
-
-				// For slowing movement of the tank
-				const otherDeltaAxis = axis === 'x' ? 'dY' : 'dX'
-
-				// No crossing walls:
-				this.moveCoords[deltaAxis] = 0
-
-				// Slowing movement:
-				this.moveCoords[otherDeltaAxis] /= config.tank.collisionSlowFactor
-
-				// Turns slowly, if driving forward:
-				if (this.drive === 'forward') {
-					//TODO: ONLY WITH CANNON COLLISION
-					this.turn(getTurnDirection(axis, this.direction), true) // true lowers the turnspeed for collisions
-				}
-			}
-		}
-	}
-
-	checkTurnCollision(wall = null, side = null) {
-		// Starts from edge of tank, not cannon root:
-		for (let i = this.d / 2; i <= config.tank.cannon.length; i++) {
-			// Every point on the cannon...
-			const point = getMoveCoords(i, this.direction, 'forward')
-			// Relative to the tank:
-			point.x += this.x
-			point.y += this.y
-
-			const wallWidth = config.env.wallStroke / 2 // +/- from center of wall
-
-			// Only wall collisions:
-			if (wall && side) {
-				// Which side of the wall is the long side and which is the end:
-				const longAxis = side === 'right' ? 'y' : 'x' // Hack to help add wallWidth when needed and vice versa
-				const shortAxis = side === 'bottom' ? 'y' : 'x'
-
-				// Gets the pseudo width of the line, to be able to check if a point is inside the "rectangle":
-				const shortAxisPointOne = wall[shortAxis + '1'] - wallWidth
-				const shortAxisPointTwo = wall[shortAxis + '1'] + wallWidth
-
-				if (point[longAxis].between(wall[longAxis + '1'], wall[longAxis + '2']) && point[shortAxis].between(shortAxisPointOne, shortAxisPointTwo)) {
-					return true
-				}
-
-			} else {
-
-				// Interaction with edges of convas:
-				if (point.x <= 0 + wallWidth || point.x >= width - wallWidth || point.y <= 0 + wallWidth || point.y >= height - wallWidth) {
-					return true
-				}
-			}
-		}
-	}
-
-	handleTurnCollision() {
-		this.turn(this.turning * -1) // Turn back (effectively annulling a turn made in input)
-	}
 
 
 
@@ -254,50 +258,33 @@ class Tank {
 
 	// Checks both wall and edge collisions:
 	checkBodyCollision(wall = null) { // Defaults to check edge-collisions
-
-		// Used to add / subtract from middle of wall:
-		const wallWidth = config.env.wallStroke / 2
-
-		// Calculates and sets the 4 points of the wall (rect), depending on the wall's axes:
-		const wallRect = {}
-		if (wall.x1 === wall.x2) {
-			// var longAxis = 'y'
-			// var shortAxis = 'x'
-
-			// Y is long axis:
-			wallRect.y1 = wall.y1
-			wallRect.y2 = wall.y2
-			wallRect.x1 = wall.x1 - wallWidth
-			wallRect.x2 = wall.x2 + wallWidth
-		} else {
-			// var longAxis = 'x'
-			// var shortAxis = 'y'
-
-			// X is long axis:
-			wallRect.y1 = wall.y1 - wallWidth
-			wallRect.y2 = wall.y2 + wallWidth
-			wallRect.x1 = wall.x1 
-			wallRect.x2 = wall.x2 
-		}
-
 		// Next tank (center) position (if no collision is observed):
 		const next = {
 			x: this.x + this.moveCoords.dX,
 			y: this.y + this.moveCoords.dY
 		}
 
+		const body = {
+			x: next.x,
+			y: next.y,
+			r: this.r
+		}
+
 		//* Checking collisions with walls
 		if (wall) { //* https://stackoverflow.com/questions/21089959/detecting-collision-of-rectangle-with-circle
-			// 
-			if (pointInRect(next.x, next.y, wallRect)) {
-				handleBodyCollision()
-			}
+			const wallRect = getWallRect(wall)
 
+			return bodyIntersectsWall(body, wallRect)
 
 		//* Checking edge collisions:
 		} else {
-
+			return bodyIntersectsEdge(body)
 		}
+	}
+
+	handleBodyCollision() {
+		this.moveCoords.dX = 0
+		this.moveCoords.dY = 0
 	}
 
 

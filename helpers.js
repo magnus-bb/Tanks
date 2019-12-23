@@ -137,3 +137,50 @@ function pointInRect(pointX, pointY, rect) {
 		return false
 	}
 }
+
+
+
+//* https://stackoverflow.com/questions/21089959/detecting-collision-of-rectangle-with-circle
+function bodyIntersectsWall(body, wall) {
+	const distX = abs(body.x - wall.x - wall.w/2)
+	const distY = abs(body.y - wall.y - wall.h/2)
+
+	if (distX > (wall.w/2 + body.r) || distY > (wall.h/2 + body.r)) return false 
+
+	if (distX <= (wall.w/2) || distY <= (wall.h/2)) return true
+
+	const dx = distX - wall.w/2
+	const dy = distY - wall.h/2
+
+	return (dx*dx + dy*dy <= body.r * body.r)
+}
+
+function bodyIntersectsEdge(body) {
+	const wallHalfWidth = config.env.wallStroke / 2
+
+	if (body.x - body.r <= wallHalfWidth || body.x + body.r >= width - wallHalfWidth || body.y - body.r <= wallHalfWidth || body.y + body.r >= height - wallHalfWidth) {
+		return true
+	} else {
+		return false
+	}
+}
+
+function getWallRect(wall) {
+	const wallRect = {}
+	
+	if (wall.x1 === wall.x2) {
+		// Y is long axis:
+		wallRect.x = wall.x1 - wall.w / 2
+		wallRect.y = wall.y1
+		wallRect.w = wall.w
+		wallRect.h = wall.y2 - wall.y1
+	} else {
+		// X is long axis:
+		wallRect.x = wall.x1
+		wallRect.y = wall.y1 - wall.w / 2
+		wallRect.w = wall.x2 - wall.x1
+		wallRect.h = wall.w
+	}
+
+	return wallRect
+}
