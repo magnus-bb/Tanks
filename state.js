@@ -9,5 +9,5 @@ class GameState {
 	}
 }
 
-// Makes first state-object:
+// Makes first state-object ready:
 let state = new GameState

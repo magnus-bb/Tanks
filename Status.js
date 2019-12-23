@@ -35,8 +35,8 @@ class Status {
 		statusBar.append(playerBox)
 	}
 
-	static updateScores() {
-
+	static update(playerId) {
+		// const playerBox = $('')
 	}
 
 	static clearAll() {

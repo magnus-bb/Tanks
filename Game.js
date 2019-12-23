@@ -40,7 +40,7 @@ class Game {
 			//TODO: ADD SPAWN DISTANCE TO randomCellCoords()
 
 			const spawnCoords = Cell.randomCellCoords()
-			state.tanks.push(new Tank(player.name, player.color, spawnCoords.x, spawnCoords.y, player.controls))
+			state.tanks.push(new Tank(player.name, player.color, spawnCoords.x, spawnCoords.y, player.controls, player))
 		}
 
 		this.started = true

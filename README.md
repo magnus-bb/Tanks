@@ -36,31 +36,32 @@ Todos
 - En lækker effekt når et projektil kalder `destroy()`, så det ikke bare forsvinder.
 - Finde og loade open source lydeffekter til skud (*gud forbyde, at jeg bliver nødt til at optage mundlyde*)
 - `Bullet` class skal omskrives til at extende en `Projectile` class i stedet, og så skal fælleskarakteristika med andre våben flyttes dertil
-- Relevante hjælpefunktioner og instance-props (eks. `cell.w`) skal flyttes ind i deres class ved brug af static methods?
-	- `wallCollision()` og `edgeCollision()` skal evt i static methods
-		- Skal også abstraheres en smule til helpers
 - `Bullet` driller inde i vægge
 - Tilføjelse af tilfældige celler, der til tider "brænder" og ikke må passeres
 - Tank collisions med hinanden?
-- Fix helpers osv i sine rette classes først!
+- Find et system for helpers - static i classes vs i instances vs globale funktioner
+- Tilføj grafik af en tank i stedet for `placeholder`s i controls input
+- Tilføj fejlmeddelelse, hvis ikke alle controls er valgt
+- Sørg for at pause, unpause, end game etc KUN åbner (og lukker) de rette menuer
+	- evt vises start self i starten, men display: none når spillet startes. Så kan alt andet bare huske både at åbne og lukke sin menu
+- Vue overhaul til menu / status etc.
 - Menuer
 	- Styling
 	- Handlers til knapper / inputs
 	- Clearing af felter + graying af brugte controls
 	- Feedback på players + controls oprettet?
-- Tilføj grafik af en tank i stedet for `placeholder`s i controls input
-- Tilføj fejlmeddelelse, hvis ikke alle controls er valgt
-- Flyt handlers ud af checks
-- Separér alle collision checks og ryd op
+- giv ID til `Tank`, så den let kan finde sig selv i `state`
 - Fjern slow move ved collisions og slow turn ved andet end cannon
-- Sørg for at pause, unpause, end game etc KUN åbner (og lukker) de rette menuer
-	- evt vises start self i starten, men display: none når spillet startes. Så kan alt andet bare huske både at åbne og lukke sin menu
-- Fix statusbar opdatering
+- Lav en `checkCollision` funktion, der opsætter relevante variabler og kalder separate checks for:
+	- Turn collision
+	- Tank body collision
+	- Tank tip collision
+	- ... med separate handlers
 
 
 Idéer til pick ups / våben
 --------------------------
-- Aktivér for at bytte plads, modstanders `direction` randomizes
+- Aktivér for at bytte plads, modstanders `direction` randomizes (kan evt give collision issues med vægge)
 - Bruger får lov at bruge musen (lol) i 20? sekunder. Kun 1 ad gangen.
 - Laser, men med lidt vedvarende beam også, uden tracing
 - Nedbryder af væg

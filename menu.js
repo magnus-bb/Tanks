@@ -12,6 +12,8 @@ $('#add-player-button').on('click', () => { // TODO: Gray out button if no playe
 	if (fieldVals.some(val => val === '')) return console.log("Fill out all fields")
 	//TODO: FEJLMEDDELELSE OMKRING MANGLENDE FELTER + FEEDBACK PÅ FELT
 
+	const id = Game.players.length // Corresponds to the index num of the player to be added
+
 	const name = $('#player-name-input').val()
 
 	// A bit quirky because of jscolor:
@@ -22,7 +24,7 @@ $('#add-player-button').on('click', () => { // TODO: Gray out button if no playe
 
 	const controls = new Controls(...keys)
 
-	const player = new Player(name, color, controls)
+	const player = new Player(id, name, color, controls)
 	console.log(player)
 
 	Game.addPlayer(player)
@@ -34,9 +36,15 @@ $('#add-player-button').on('click', () => { // TODO: Gray out button if no playe
 	})
 })
 
+
+//* PAUSE MENU
+
 $('#resume-game-button').on('click', () => {
 	Game.unpause()
 })
+
+
+//* NEXT ROUND MENU
 
 $('#next-round-button').on('click', () => {
 	Game.start()

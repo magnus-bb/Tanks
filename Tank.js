@@ -1,9 +1,11 @@
 class Tank {
-	constructor(name, color, x, y, controls) {
+	constructor(name, color, x, y, controls, owner) {
+		this.owner = owner
 		this.name = name
 		this.x = x
 		this.y = y //TODO: Given a cell, calculate the center instead of giving a center coordinate
 		this.d = config.tank.diameter
+		this.r = this.d / 2
 		this.moveSpeed = config.tank.moveSpeed
 		this.turnSpeed = config.tank.turnSpeed
 		this.drive = false // To look ahead before actually moving
@@ -88,6 +90,18 @@ class Tank {
 		}
 	}
 
+
+
+
+
+
+
+
+
+
+
+
+
 	// Both wall and edge collisions
 	checkCollision(wall = null) {
 
@@ -126,11 +140,11 @@ class Tank {
 			// Gets the pseudo width of the line, to be able to check if a point is inside the "rectangle":
 			const shortAxisPointOne = wall[shortAxis + '1'] - wallWidth
 			const shortAxisPointTwo = wall[shortAxis + '1'] + wallWidth
-			// Cannon body:
+			// Tank body:
 			if (((lookAhead[longAxis] + rad).between(wall[longAxis + '1'], wall[longAxis + '2']) || (lookAhead[longAxis] - rad).between(wall[longAxis + '1'], wall[longAxis + '2']))
 				&&
 				(shortAxisPointOne.between(this[shortAxis] - rad, this[shortAxis] + rad) || shortAxisPointTwo.between(this[shortAxis] - rad, this[shortAxis] + rad))
-				|| // Cannon tip:
+				|| // Cannon:
 				(lookAhead[longAxis] + this.relCannon.tip[longAxis]).between(wall[longAxis + '1'], wall[longAxis + '2'])
 				&&
 				(this[shortAxis] + this.relCannon.tip[shortAxis]).between(shortAxisPointOne, shortAxisPointTwo)
@@ -139,11 +153,11 @@ class Tank {
 				collision[longAxis] = true
 				//return longAxis
 			}
-			// Cannon body:
+			// Tank body:
 			if (((this[longAxis] - rad).between(wall[longAxis + '1'], wall[longAxis + '2']) || (this[longAxis] + rad).between(wall[longAxis + '1'], wall[longAxis + '2']))
 				&&
 				(shortAxisPointOne.between(lookAhead[shortAxis] - rad, lookAhead[shortAxis] + rad) || shortAxisPointTwo.between(lookAhead[shortAxis] - rad, lookAhead[shortAxis] + rad))
-				||
+				|| // Cannon:
 				(this[longAxis] + this.relCannon.tip[longAxis]).between(wall[longAxis + '1'], wall[longAxis + '2'])
 				&&
 				(lookAhead[shortAxis] + this.relCannon.tip[shortAxis]).between(shortAxisPointOne, shortAxisPointTwo)) {
@@ -232,6 +246,77 @@ class Tank {
 		this.turn(this.turning * -1) // Turn back (effectively annulling a turn made in input)
 	}
 
+
+
+
+
+
+
+	// Checks both wall and edge collisions:
+	checkBodyCollision(wall = null) { // Defaults to check edge-collisions
+
+		// Used to add / subtract from middle of wall:
+		const wallWidth = config.env.wallStroke / 2
+
+		// Calculates and sets the 4 points of the wall (rect), depending on the wall's axes:
+		const wallRect = {}
+		if (wall.x1 === wall.x2) {
+			// var longAxis = 'y'
+			// var shortAxis = 'x'
+
+			// Y is long axis:
+			wallRect.y1 = wall.y1
+			wallRect.y2 = wall.y2
+			wallRect.x1 = wall.x1 - wallWidth
+			wallRect.x2 = wall.x2 + wallWidth
+		} else {
+			// var longAxis = 'x'
+			// var shortAxis = 'y'
+
+			// X is long axis:
+			wallRect.y1 = wall.y1 - wallWidth
+			wallRect.y2 = wall.y2 + wallWidth
+			wallRect.x1 = wall.x1 
+			wallRect.x2 = wall.x2 
+		}
+
+		// Next tank (center) position (if no collision is observed):
+		const next = {
+			x: this.x + this.moveCoords.dX,
+			y: this.y + this.moveCoords.dY
+		}
+
+		//* Checking collisions with walls
+		if (wall) { //* https://stackoverflow.com/questions/21089959/detecting-collision-of-rectangle-with-circle
+			// 
+			if (pointInRect(next.x, next.y, wallRect)) {
+				handleBodyCollision()
+			}
+
+
+		//* Checking edge collisions:
+		} else {
+
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	move() {
 		// Takes collisions into consideration, since moveCoords will be updated accordingly
 		if (this.drive) {
@@ -257,7 +342,6 @@ class Tank {
 	}
 
 	show() {
-
 		stroke(51)
 		fill(this.color)
 
@@ -291,6 +375,7 @@ class Tank {
 
 	//* STATIC METHODS
 
+	//? FLYT UD?
 	static checkHit(bullet, tank) {
 		// Distance between center of tank and bullet:
 		const distance = dist(bullet.x, bullet.y, tank.x, tank.y)

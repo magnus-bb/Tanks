@@ -79,6 +79,7 @@ function draw() {
 
 			// Checks and handles bullet hits for both bullet and tank:
 			if (Tank.checkHit(bullet, tank)) {
+				bullet.owner.owner.gotKill() // The player that owns the tank that spawned the bullet
 				bullet.destroy(i)
 				tank.destroy(j)
 
