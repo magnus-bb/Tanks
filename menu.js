@@ -16,6 +16,11 @@ $('#add-player-button').on('click', () => { // TODO: Gray out button if no playe
 
 	const name = $('#player-name-input').val()
 
+	//! DELETE
+	if (name.toLowerCase() === 'nichlaes') {
+		alert("Velkommen, agent Fnatmide.")
+	}
+
 	// A bit quirky because of jscolor:
 	const color = $('#player-color-button')[0].jscolor.rgb
 
