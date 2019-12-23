@@ -5,7 +5,6 @@ class Tank {
 		this.x = x
 		this.y = y //TODO: Given a cell, calculate the center instead of giving a center coordinate
 		this.d = config.tank.diameter
-		this.r = this.d / 2
 		this.moveSpeed = config.tank.moveSpeed
 		this.turnSpeed = config.tank.turnSpeed
 		this.drive = false // To look ahead before actually moving
@@ -21,7 +20,7 @@ class Tank {
 		}
 
 		/* Used to check if the tank is turning in a frame, to be able to "bounce" back, if there is a turn collision.
-		It is not possible to just annull the turning, since the new coords have to be present when checking for tank collisions */
+		It is not possible to just annull the turning, since the new coords have to be present when checking for tank collisions: */
 		this.turning = 0
 
 		const relCannonRoot = getMoveCoords(this.d / config.tank.cannon.midOffsetFraction, this.direction, 'forward')
@@ -37,9 +36,6 @@ class Tank {
 			},
 		}
 	}
-
-	//* INSTANCE METHODS
-
 	get cannon() {
 		return {
 			root: {
@@ -52,6 +48,17 @@ class Tank {
 			}
 		}
 	}
+	get next() { // Next tank (center) position (if no collision is observed):
+		return {
+			x: this.x + this.moveCoords.dX,
+			y: this.y + this.moveCoords.dY
+		}
+	}
+	get r() {
+		return this.d / 2
+	}
+
+	//* INSTANCE METHODS
 
 	input() {
 		// Forwards / backwards mobility:
@@ -99,7 +106,7 @@ class Tank {
 
 
 
-//! DELETE THESE
+	//! DELETE THESE
 
 
 	// // // Both wall and edge collisions
@@ -258,40 +265,84 @@ class Tank {
 
 	// Checks both wall and edge collisions:
 	checkBodyCollision(wall = null) { // Defaults to check edge-collisions
-		// Next tank (center) position (if no collision is observed):
-		const next = {
-			x: this.x + this.moveCoords.dX,
-			y: this.y + this.moveCoords.dY
-		}
 
 		const body = {
-			x: next.x,
-			y: next.y,
+			x: this.next.x,
+			y: this.next.y,
 			r: this.r
 		}
 
-		//* Checking collisions with walls
+		//* Checking collisions with walls:
 		if (wall) { //* https://stackoverflow.com/questions/21089959/detecting-collision-of-rectangle-with-circle
 			const wallRect = getWallRect(wall)
 
 			return bodyIntersectsWall(body, wallRect)
 
-		//* Checking edge collisions:
+			//* Checking edge collisions:
 		} else {
 			return bodyIntersectsEdge(body)
 		}
 	}
 
+	// Halts movement:
 	handleBodyCollision() {
 		this.moveCoords.dX = 0
 		this.moveCoords.dY = 0
 	}
 
+	// Checks both wall and edge collisions:
+	checkCannonCollision(wall = null) {
+		const wallHalfWidth = config.env.wallStroke / 2
 
+		const nextCannonTip = {
+			x: this.next.x + this.relCannon.tip.x,
+			y: this.next.y + this.relCannon.tip.y
+		}
 
+		// To be returned:
+		const collision = {
+			x: false,
+			y: false
+		}
 
+		//* Checking wall collisions:
+		if (wall) {
+			const wallRect = getWallRect(wall, true)
 
+			if (pointInRect(nextCannonTip.x, this.cannon.tip.y, wallRect)) {
+				collision.x = true
+			}
+			if (pointInRect(this.cannon.tip.x, nextCannonTip.y, wallRect)) {
+				collision.y = true
+			}
 
+			//* Checking edge collisions:
+		} else {
+			if (nextCannonTip.x <= wallHalfWidth || nextCannonTip.x >= width - wallHalfWidth) {
+				collision.x = true
+			}
+			if (nextCannonTip.y <= wallHalfWidth || nextCannonTip.y >= height - wallHalfWidth) {
+				collision.y = true
+			}
+		}
+
+		return collision
+	}
+
+	handleCannonCollision(axes) {
+		// Halts movement:
+		this.moveCoords.dX = 0
+		this.moveCoords.dY = 0
+
+		// Turns slowly, if driving forward:
+		for (const axis in axes) {
+			if (axes[axis] && this.drive === 'forward') {
+				// console.log(axis, axes[axis])
+				this.turn(getTurnDirection(axis, this.direction), true) // true lowers the turnspeed for collisions
+			}
+		}
+
+	}
 
 
 

@@ -20,8 +20,13 @@ function draw() {
 			tank.handleBodyCollision()
 		}
 
-		// Checks and handles turn collisions with edges:
-		if (tank.checkTurnCollision()) tank.handleTurnCollision() // Automatically checks edge collisions when no args are given
+		const axes = tank.checkCannonCollision()
+		if (axes.x || axes.y) {
+			tank.handleCannonCollision(axes)
+		}
+
+		// // // Checks and handles turn collisions with edges:
+		// // if (tank.checkTurnCollision()) tank.handleTurnCollision() // Automatically checks edge collisions when no args are given
 	}
 
 	//* Cells & Walls:
@@ -39,13 +44,18 @@ function draw() {
 						// // const collision = tank.checkCollision(wallObj) // Automatically checks wall collisions when args are given
 						// // if (collision.x || collision.y) tank.handleCollision(collision)
 
-						// Automatically checks wall collisions when args are given
+						// Automatically checks wall collisions when args are given:
 						if (tank.checkBodyCollision(wallObj)) {
 							tank.handleBodyCollision()
 						}
 
-						// Checks and handles turn collisions with walls:
-						if (tank.checkTurnCollision(wallObj, wall)) tank.handleTurnCollision() // Automatically checks wall collisions when args are given
+						const axes = tank.checkCannonCollision(wallObj)
+						if (axes.x || axes.y) {
+							tank.handleCannonCollision(axes)
+						}
+
+						// // // Checks and handles turn collisions with walls:
+						// // if (tank.checkTurnCollision(wallObj, wall)) tank.handleTurnCollision() // Automatically checks wall collisions when args are given
 					}
 
 					for (const bullet of state.projectiles.bullets) {

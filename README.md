@@ -74,6 +74,7 @@ Idéer til pick ups / våben
 - Sniper - hurtigt projektil med tracing, der ikke bouncer
 - Skjold der dækker x grader omkring tank indtil 1 hit
 - Mini-ai som hjælper
+- Debuff fjenders move-/projektil-speed
 
 Links
 -----

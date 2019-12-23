@@ -42,9 +42,9 @@ function getTurnDirection(collisionAxis, dir) {
 	// Lower right and top left quadrant:
 	if (dir.between(0, 90, false) || dir < -270 || dir.between(180, 270, false) || dir.between(-180, -90, false)) {
 		return collisionAxis === 'x' ? 1 : -1
-	}
-	// Lower left and top right quadrant:
-	if (dir.between(90, 180, false) || dir.between(-270, -180, false) || dir > 270 || dir.between(-90, 0, false)) {
+
+		// Lower left and top right quadrant:
+	} else if (dir.between(90, 180, false) || dir.between(-270, -180, false) || dir > 270 || dir.between(-90, 0, false)) {
 		return collisionAxis === 'x' ? -1 : 1
 	}
 }
@@ -165,21 +165,38 @@ function bodyIntersectsEdge(body) {
 	}
 }
 
-function getWallRect(wall) {
+// Returns a rectangle representation of a wall-object for different types of intersection checks:
+function getWallRect(wall, singlePoint = false) {
 	const wallRect = {}
-	
-	if (wall.x1 === wall.x2) {
-		// Y is long axis:
-		wallRect.x = wall.x1 - wall.w / 2
-		wallRect.y = wall.y1
-		wallRect.w = wall.w
-		wallRect.h = wall.y2 - wall.y1
-	} else {
-		// X is long axis:
-		wallRect.x = wall.x1
-		wallRect.y = wall.y1 - wall.w / 2
-		wallRect.w = wall.x2 - wall.x1
-		wallRect.h = wall.w
+
+	if (singlePoint) { //* For single point intersections:
+		if (wall.x1 === wall.x2) {
+			// Y is long axis:
+			wallRect.x1 = wall.x1 - wall.w / 2
+			wallRect.x2 = wall.x2 + wall.w / 2
+			wallRect.y1 = wall.y1
+			wallRect.y2 = wall.y2
+		} else {
+			// X is long axis:
+			wallRect.x1 = wall.x1
+			wallRect.x2 = wall.x2
+			wallRect.y1 = wall.y1 - wall.w / 2
+			wallRect.y2 = wall.y2 + wall.w / 2
+		}
+	} else { //* For circle intersections:
+		if (wall.x1 === wall.x2) {
+			// Y is long axis:
+			wallRect.x = wall.x1 - wall.w / 2
+			wallRect.y = wall.y1
+			wallRect.w = wall.w
+			wallRect.h = wall.y2 - wall.y1
+		} else {
+			// X is long axis:
+			wallRect.x = wall.x1
+			wallRect.y = wall.y1 - wall.w / 2
+			wallRect.w = wall.x2 - wall.x1
+			wallRect.h = wall.w
+		}
 	}
 
 	return wallRect
