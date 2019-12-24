@@ -23,8 +23,8 @@ class Tank {
 		It is not possible to just annull the turning, since the new coords have to be present when checking for tank collisions: */
 		this.turning = 0
 
-		const relCannonRoot = getMoveCoords(this.d / config.tank.cannon.midOffsetFraction, this.direction, 'forward')
-		const relCannonTip = getMoveCoords(config.tank.cannon.length, this.direction, 'forward')
+		const relCannonRoot = getOffsetPoint(this.d / config.tank.cannon.midOffsetFraction, this.direction)
+		const relCannonTip = getOffsetPoint(config.tank.cannon.length, this.direction)
 		this.relCannon = {
 			root: {
 				x: relCannonRoot.x,
@@ -82,7 +82,7 @@ class Tank {
 		}
 
 		// Angle and amount (if any) to move:
-		const move = getMoveCoords(this.moveSpeed, this.direction, this.drive)
+		const move = getOffsetPoint(this.moveSpeed, this.direction, this.drive)
 		this.moveCoords.dX = move.x
 		this.moveCoords.dY = move.y
 	}
@@ -97,172 +97,6 @@ class Tank {
 		}
 	}
 
-
-
-
-
-
-
-
-
-
-	//! DELETE THESE
-
-
-	// // // Both wall and edge collisions
-	// // checkCollision(wall = null) {
-
-	// // 	//TODO: Include cannon tip, lav helpers først, ellers er det umuligt
-	// // 	//TODO: ABSTRAHER TIL HELPER SJIOT
-	// // 	//TODO: Make it like a circle, not a square
-
-
-	// // 	const wallWidth = config.env.wallStroke / 2 // +/- from center of wall
-
-	// // 	// Next tank position (if no collision is observed):
-	// // 	const lookAhead = {
-	// // 		x: this.x + this.moveCoords.dX,
-	// // 		y: this.y + this.moveCoords.dY
-	// // 	}
-
-	// // 	const rad = this.d / 2
-
-	// // 	const collision = {
-	// // 		x: false,
-	// // 		y: false
-	// // 	}
-
-	// // 	// Only wall collisions:
-	// // 	if (wall) {
-
-	// // 		// Which side of the wall is the long side and which is the end:
-	// // 		if (wall.x1 === wall.x2) {
-	// // 			var longAxis = 'y'
-	// // 			var shortAxis = 'x'
-	// // 		} else {
-	// // 			var longAxis = 'x'
-	// // 			var shortAxis = 'y'
-	// // 		}
-
-	// // 		// Gets the pseudo width of the line, to be able to check if a point is inside the "rectangle":
-	// // 		const shortAxisPointOne = wall[shortAxis + '1'] - wallWidth
-	// // 		const shortAxisPointTwo = wall[shortAxis + '1'] + wallWidth
-	// // 		// Tank body:
-	// // 		if (((lookAhead[longAxis] + rad).between(wall[longAxis + '1'], wall[longAxis + '2']) || (lookAhead[longAxis] - rad).between(wall[longAxis + '1'], wall[longAxis + '2']))
-	// // 			&&
-	// // 			(shortAxisPointOne.between(this[shortAxis] - rad, this[shortAxis] + rad) || shortAxisPointTwo.between(this[shortAxis] - rad, this[shortAxis] + rad))
-	// // 			|| // Cannon:
-	// // 			(lookAhead[longAxis] + this.relCannon.tip[longAxis]).between(wall[longAxis + '1'], wall[longAxis + '2'])
-	// // 			&&
-	// // 			(this[shortAxis] + this.relCannon.tip[shortAxis]).between(shortAxisPointOne, shortAxisPointTwo)
-	// // 		) {
-
-	// // 			collision[longAxis] = true
-	// // 			//return longAxis
-	// // 		}
-	// // 		// Tank body:
-	// // 		if (((this[longAxis] - rad).between(wall[longAxis + '1'], wall[longAxis + '2']) || (this[longAxis] + rad).between(wall[longAxis + '1'], wall[longAxis + '2']))
-	// // 			&&
-	// // 			(shortAxisPointOne.between(lookAhead[shortAxis] - rad, lookAhead[shortAxis] + rad) || shortAxisPointTwo.between(lookAhead[shortAxis] - rad, lookAhead[shortAxis] + rad))
-	// // 			|| // Cannon:
-	// // 			(this[longAxis] + this.relCannon.tip[longAxis]).between(wall[longAxis + '1'], wall[longAxis + '2'])
-	// // 			&&
-	// // 			(lookAhead[shortAxis] + this.relCannon.tip[shortAxis]).between(shortAxisPointOne, shortAxisPointTwo)) {
-
-	// // 			collision[shortAxis] = true
-	// // 			//return shortAxis
-	// // 		}
-
-	// // 		// Only edge collisions:
-	// // 	} else {
-	// // 		// Interaction with edges of convas:
-	// // 		if (lookAhead.x - rad <= 0 + wallWidth || lookAhead.x + rad >= width - wallWidth) {
-	// // 			collision.x = true
-	// // 		}
-	// // 		if (lookAhead.y - rad <= 0 + wallWidth || lookAhead.y + rad >= height - wallWidth) {
-	// // 			collision.y = true
-	// // 		}
-	// // 	}
-
-	// // 	return collision
-	// // }
-
-	// // //? REMOVE SLOW IN ANY DIRECTION WHEN COLLIDING, JUST HAVE SLOW TURN ON CANNON COLLISION
-	// // //? THIS WILL MAKE AXES DISAPPEAR FROM TANK COLLISIONS AND MAKE FEWER GLITCES WITH WALLS
-	// // handleCollision(axes) {
-	// // 	// For accessing dX or dY prop of moveCoords:
-	// // 	for (const axis in axes) {
-
-	// // 		if (axes[axis]) {
-	// // 			const deltaAxis = 'd' + axis.toUpperCase()
-
-	// // 			// For slowing movement of the tank
-	// // 			const otherDeltaAxis = axis === 'x' ? 'dY' : 'dX'
-
-	// // 			// No crossing walls:
-	// // 			this.moveCoords[deltaAxis] = 0
-
-	// // 			// Slowing movement:
-	// // 			this.moveCoords[otherDeltaAxis] /= config.tank.collisionSlowFactor
-
-	// // 			// Turns slowly, if driving forward:
-	// // 			if (this.drive === 'forward') {
-	// // 				//TODO: ONLY WITH CANNON COLLISION
-	// // 				this.turn(getTurnDirection(axis, this.direction), true) // true lowers the turnspeed for collisions
-	// // 			}
-	// // 		}
-	// // 	}
-	// // }
-
-	// // checkTurnCollision(wall = null, side = null) {
-	// // 	// Starts from edge of tank, not cannon root:
-	// // 	for (let i = this.d / 2; i <= config.tank.cannon.length; i++) {
-	// // 		// Every point on the cannon...
-	// // 		const point = getMoveCoords(i, this.direction, 'forward')
-	// // 		// Relative to the tank:
-	// // 		point.x += this.x
-	// // 		point.y += this.y
-
-	// // 		const wallWidth = config.env.wallStroke / 2 // +/- from center of wall
-
-	// // 		// Only wall collisions:
-	// // 		if (wall && side) {
-	// // 			// Which side of the wall is the long side and which is the end:
-	// // 			const longAxis = side === 'right' ? 'y' : 'x' // Hack to help add wallWidth when needed and vice versa
-	// // 			const shortAxis = side === 'bottom' ? 'y' : 'x'
-
-	// // 			// Gets the pseudo width of the line, to be able to check if a point is inside the "rectangle":
-	// // 			const shortAxisPointOne = wall[shortAxis + '1'] - wallWidth
-	// // 			const shortAxisPointTwo = wall[shortAxis + '1'] + wallWidth
-
-	// // 			if (point[longAxis].between(wall[longAxis + '1'], wall[longAxis + '2']) && point[shortAxis].between(shortAxisPointOne, shortAxisPointTwo)) {
-	// // 				return true
-	// // 			}
-
-	// // 		} else {
-
-	// // 			// Interaction with edges of convas:
-	// // 			if (point.x <= 0 + wallWidth || point.x >= width - wallWidth || point.y <= 0 + wallWidth || point.y >= height - wallWidth) {
-	// // 				return true
-	// // 			}
-	// // 		}
-	// // 	}
-	// // }
-
-	// // handleTurnCollision() {
-	// // 	this.turn(this.turning * -1) // Turn back (effectively annulling a turn made in input)
-	// // }
-
-
-
-
-
-
-
-
-
-
-
 	// Checks both wall and edge collisions:
 	checkBodyCollision(wall = null) { // Defaults to check edge-collisions
 
@@ -274,7 +108,7 @@ class Tank {
 
 		//* Checking collisions with walls:
 		if (wall) { //* https://stackoverflow.com/questions/21089959/detecting-collision-of-rectangle-with-circle
-			const wallRect = getWallRect(wall)
+			const wallRect = getWallRect(wall, true)
 
 			return bodyIntersectsWall(body, wallRect)
 
@@ -307,7 +141,7 @@ class Tank {
 
 		//* Checking wall collisions:
 		if (wall) {
-			const wallRect = getWallRect(wall, true)
+			const wallRect = getWallRect(wall)
 
 			if (pointInRect(nextCannonTip.x, this.cannon.tip.y, wallRect)) {
 				collision.x = true
@@ -318,10 +152,12 @@ class Tank {
 
 			//* Checking edge collisions:
 		} else {
-			if (nextCannonTip.x <= wallHalfWidth || nextCannonTip.x >= width - wallHalfWidth) {
+			const out = outOfBounds(nextCannonTip.x, nextCannonTip.y)
+
+			if (out.x) {
 				collision.x = true
 			}
-			if (nextCannonTip.y <= wallHalfWidth || nextCannonTip.y >= height - wallHalfWidth) {
+			if (out.y) {
 				collision.y = true
 			}
 		}
@@ -341,7 +177,44 @@ class Tank {
 				this.turn(getTurnDirection(axis, this.direction), true) // true lowers the turnspeed for collisions
 			}
 		}
+	}
 
+	checkTurnCollision(wall = null) {
+		if (wall) {
+			var wallRect = getWallRect(wall)
+		}
+
+		const wallHalfWidth = config.env.wallStroke
+
+		// Starts from edge of tank, not cannon root:
+		for (let i = this.r; i <= config.tank.cannon.length; i++) {
+
+			// Every point on the cannon...
+			const point = getOffsetPoint(i, this.direction)
+
+			// Relative to the tank:
+			point.x += this.x
+			point.y += this.y
+
+			//* Wall collisions:
+			if (wall) { 
+				if (pointInRect(point.x, point.y, wallRect)) {
+					return true
+				}
+				
+				//* Edge collisions:
+			} else {
+				const out = outOfBounds(point.x, point.y)
+
+				if (out.x || out.y) {
+					return true
+				}
+			}
+		}
+	}
+
+	handleTurnCollision() {
+		this.turn(this.turning * -1) // Turn back (effectively annulling a turn made in input)
 	}
 
 
@@ -388,8 +261,8 @@ class Tank {
 		circle(this.x, this.y, this.d)
 
 		// Updates cannon position:
-		const root = getMoveCoords(this.d / config.tank.cannon.midOffsetFraction, this.direction, 'forward') // Same function as with moving - gets coords based on distance from center and a direction
-		const tip = getMoveCoords(config.tank.cannon.length, this.direction, 'forward') // Same function as with moving - gets coords based on distance from center and a direction
+		const root = getOffsetPoint(this.d / config.tank.cannon.midOffsetFraction, this.direction) // Same function as with moving - gets coords based on distance from center and a direction
+		const tip = getOffsetPoint(config.tank.cannon.length, this.direction) // Same function as with moving - gets coords based on distance from center and a direction
 		this.relCannon.root.x = root.x
 		this.relCannon.root.y = root.y
 		this.relCannon.tip.x = tip.x

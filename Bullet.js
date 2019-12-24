@@ -3,77 +3,72 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 		this.d = config.bullet.diameter * config.effects.muzzleSize // Initial size is bigger for a muzzle flash effect
 		this.direction = owner.direction
 		this.speed = config.bullet.speed
-
 		this.owner = owner
-
 		// Starts offset from tank center:
 		this.x = this.owner.cannon.tip.x
 		this.y = this.owner.cannon.tip.y
 
 		this.duration = config.bullet.duration
 		this.color = color(this.owner.color) // Must convert to P5-color object to be able to set alpha
-
-		const move = getMoveCoords(this.speed, this.direction, 'forward')
+		const move = getOffsetPoint(this.speed, this.direction)
 		this.moveCoords = {
 			dX: move.x,
 			dY: move.y
 		}
-
 		// For knowing when to stop rendering trail:
 		this.dead = false
 	}
 
 	//* INSTANCE METHODS
 
-	//! WHEN FIRING INSIDE WALL, BULLET GETS STUCK
 	// Both wall and edge collisions:
 	checkCollision(wall = null) {
 		const numSteps = config.env.collisionLookaheadSteps // How many positions to check between bullet location and next frames' location
-		const wallWidth = config.env.wallStroke / 2 // +/- from center of wall
 
 		// Wall collisions only:
-		if (wall) { // Check is done before loop as to not reassign these variables every iteration
-			if (wall.x1 === wall.x2) {
-				var longAxis = 'y'
-				var shortAxis = 'x'
-			} else {
-				var longAxis = 'x'
-				var shortAxis = 'y'
-			}
-
-			var shortAxisPointOne = wall[shortAxis + '1'] - wallWidth
-			var shortAxisPointTwo = wall[shortAxis + '1'] + wallWidth
+		if (wall) { // Check is done before loop as to not reassign every iteration
+			var wallRect = getWallRect(wall)
 		}
 
-		// Looks at "all" positions between location and next location
+		// Looks at "all" positions between location and (fraction of) 'next' location:
 		for (let step = 1; step <= numSteps; step++) {
-			const lookAhead = {
+			const next = {
 				x: this.x + this.moveCoords.dX / numSteps * step,
 				y: this.y + this.moveCoords.dY / numSteps * step
 			}
 
-			const bounce = { x: false, y: false }
+			const bounce = {
+				x: false,
+				y: false
+			}
 
-			if (wall) { // Wall collisions only
-				if (lookAhead[longAxis].between(wall[longAxis + '1'], wall[longAxis + '2']) && this[shortAxis].between(shortAxisPointOne, shortAxisPointTwo)) {
-					bounce[longAxis] = true
-				}
-				if (this[longAxis].between(wall[longAxis + '1'], wall[longAxis + '2']) && lookAhead[shortAxis].between(shortAxisPointOne, shortAxisPointTwo)) {
-					bounce[shortAxis] = true
-				}
-			} else { // Edge collisions only
-				if (lookAhead.x <= 0 + wallWidth || lookAhead.x >= width - wallWidth) {
+			//* Wall collisions:
+			if (wall) {
+				if (pointInRect(next.x, this.y, wallRect)) {
 					bounce.x = true
 				}
-				if (lookAhead.y <= 0 + wallWidth || lookAhead.y >= height - wallWidth) {
+				if (pointInRect(this.x, next.y, wallRect)) {
+					bounce.y = true
+				}
+
+				//* Edge collisions:
+			} else {
+				const out = outOfBounds(next.x, next.y)
+
+				if (out.x) {
+					bounce.x = true
+				}
+				if (out.y) {
 					bounce.y = true
 				}
 			}
 
-			// A collision calls the bounce and stops further lookAheads:
+			// A collision calls the bounce and stops further lookaheads:
 			if (bounce.x || bounce.y) {
 				return bounce
-			} else if (step === numSteps) { // Last lookAhead step also returns empty bounce
+
+				// Last lookAhead step also returns empty bounce:
+			} else if (step === numSteps) { 
 				return bounce
 			}
 		}

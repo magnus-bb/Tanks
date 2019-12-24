@@ -11,10 +11,6 @@ function draw() {
 	for (const tank of state.tanks) {
 		tank.input()
 
-		// Checks and handles collisions with edges:
-		// // const collision = tank.checkCollision() // Automatically checks edge collisions when no args are given
-		// // if (collision.x || collision.y) tank.handleCollision(collision)
-
 		// Automatically checks edge collisions when no args are given:
 		if (tank.checkBodyCollision()) {
 			tank.handleBodyCollision()
@@ -25,8 +21,9 @@ function draw() {
 			tank.handleCannonCollision(axes)
 		}
 
-		// // // Checks and handles turn collisions with edges:
-		// // if (tank.checkTurnCollision()) tank.handleTurnCollision() // Automatically checks edge collisions when no args are given
+		if (tank.checkTurnCollision()) {
+			tank.handleTurnCollision() // Automatically checks edge collisions when no args are given
+		}
 	}
 
 	//* Cells & Walls:
@@ -40,10 +37,7 @@ function draw() {
 
 					//* Collisions:
 					for (const tank of state.tanks) {
-						// Checks and handles collisions with walls:
-						// // const collision = tank.checkCollision(wallObj) // Automatically checks wall collisions when args are given
-						// // if (collision.x || collision.y) tank.handleCollision(collision)
-
+				
 						// Automatically checks wall collisions when args are given:
 						if (tank.checkBodyCollision(wallObj)) {
 							tank.handleBodyCollision()
@@ -54,14 +48,17 @@ function draw() {
 							tank.handleCannonCollision(axes)
 						}
 
-						// // // Checks and handles turn collisions with walls:
-						// // if (tank.checkTurnCollision(wallObj, wall)) tank.handleTurnCollision() // Automatically checks wall collisions when args are given
+						if (tank.checkTurnCollision(wallObj)) {
+							tank.handleTurnCollision()
+						}
 					}
 
 					for (const bullet of state.projectiles.bullets) {
 						// Checks and handles collisions with walls:
 						const bounceAxis = bullet.checkCollision(wallObj) // Automatically checks wall collisions when args are given
-						if (bounceAxis.x || bounceAxis.y) bullet.bounce(bounceAxis)
+						if (bounceAxis.x || bounceAxis.y) {
+							bullet.bounce(bounceAxis)
+						}
 					}
 				}
 			}
@@ -80,7 +77,9 @@ function draw() {
 
 		// Checks and handles collisions with edges:
 		const bounceAxis = bullet.checkCollision() // Automatically checks edge collisions when no args are given
-		if (bounceAxis.x || bounceAxis.y) bullet.bounce(bounceAxis)
+		if (bounceAxis.x || bounceAxis.y) {
+			bullet.bounce(bounceAxis)
+		}
 
 		bullet.move()
 		bullet.show(i) // Also removes projectile after duration

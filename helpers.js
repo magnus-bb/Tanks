@@ -1,14 +1,14 @@
 // Converts a direction and speed to new coords:
-function getMoveCoords(speed, direction, drive = null) { //TODO: Omskriv til noget andet, bruges mere til andet end move
+function getOffsetPoint(dist, dir, drive = 'forward') { // Defaults to 'forward' since it is used for more than just moving objects
 	if (drive === 'backward') {
 		return {
-			x: -speed * cos(radians(direction)),
-			y: -speed * sin(radians(direction))
+			x: -dist * cos(radians(dir)),
+			y: -dist * sin(radians(dir))
 		}
 	} else if (drive === 'forward') {
 		return {
-			x: speed * cos(radians(direction)),
-			y: speed * sin(radians(direction))
+			x: dist * cos(radians(dir)),
+			y: dist * sin(radians(dir))
 		}
 	} else {
 		return {
@@ -166,24 +166,10 @@ function bodyIntersectsEdge(body) {
 }
 
 // Returns a rectangle representation of a wall-object for different types of intersection checks:
-function getWallRect(wall, singlePoint = false) {
+function getWallRect(wall, circle = false) {
 	const wallRect = {}
 
-	if (singlePoint) { //* For single point intersections:
-		if (wall.x1 === wall.x2) {
-			// Y is long axis:
-			wallRect.x1 = wall.x1 - wall.w / 2
-			wallRect.x2 = wall.x2 + wall.w / 2
-			wallRect.y1 = wall.y1
-			wallRect.y2 = wall.y2
-		} else {
-			// X is long axis:
-			wallRect.x1 = wall.x1
-			wallRect.x2 = wall.x2
-			wallRect.y1 = wall.y1 - wall.w / 2
-			wallRect.y2 = wall.y2 + wall.w / 2
-		}
-	} else { //* For circle intersections:
+	if (circle) { //* For circle intersections:
 		if (wall.x1 === wall.x2) {
 			// Y is long axis:
 			wallRect.x = wall.x1 - wall.w / 2
@@ -197,7 +183,40 @@ function getWallRect(wall, singlePoint = false) {
 			wallRect.w = wall.x2 - wall.x1
 			wallRect.h = wall.w
 		}
+	} else { //* For single point intersections:
+		if (wall.x1 === wall.x2) {
+			// Y is long axis:
+			wallRect.x1 = wall.x1 - wall.w / 2
+			wallRect.x2 = wall.x2 + wall.w / 2
+			wallRect.y1 = wall.y1
+			wallRect.y2 = wall.y2
+		} else {
+			// X is long axis:
+			wallRect.x1 = wall.x1
+			wallRect.x2 = wall.x2
+			wallRect.y1 = wall.y1 - wall.w / 2
+			wallRect.y2 = wall.y2 + wall.w / 2
+		}
 	}
 
 	return wallRect
+}
+
+function outOfBounds(pointX, pointY) {
+	const wallHalfWidth = config.env.wallStroke / 2
+
+	const out = {
+		x: false,
+		y: false
+	}
+
+	if (pointX <= wallHalfWidth || pointX >= width - wallHalfWidth) {
+		out.x = true
+	}
+
+	if (pointY <= wallHalfWidth || pointY >= height - wallHalfWidth) {
+		out.y = true
+	}
+
+	return out
 }
