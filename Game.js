@@ -37,9 +37,13 @@ class Game {
 
 		// Adds players' tanks:
 		for (const player of this.players) {
-			//TODO: ADD SPAWN DISTANCE TO randomCellCoords()
+			//TODO: ADD SPAWN DISTANCE TO randomSpawnCoords()
 
-			const spawnCoords = Cell.randomCellCoords()
+			let spawnCoords = Tank.randomSpawnCoords()
+			while (pointCloseToTank(spawnCoords)) {
+				spawnCoords = Tank.randomSpawnCoords
+			}
+
 			state.tanks.push(new Tank(player.name, player.color, spawnCoords.x, spawnCoords.y, player.controls, player))
 		}
 

@@ -1,11 +1,11 @@
 // Converts a direction and speed to new coords:
-function getOffsetPoint(dist, dir, drive = 'forward') { // Defaults to 'forward' since it is used for more than just moving objects
-	if (drive === 'backward') {
+function getOffsetPoint(dist, dir, driving = 'forward') { // Defaults to 'forward' since it is used for more than just moving objects
+	if (driving === 'backward') {
 		return {
 			x: -dist * cos(radians(dir)),
 			y: -dist * sin(radians(dir))
 		}
-	} else if (drive === 'forward') {
+	} else if (driving === 'forward') {
 		return {
 			x: dist * cos(radians(dir)),
 			y: dist * sin(radians(dir))
@@ -24,19 +24,6 @@ function getDirection(dX, dY) {
 	return degrees(direction)
 }
 
-function randomColor() {
-	return color(Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256))
-}
-
-// Every number can call .between:
-Number.prototype.between = function(min, max, include = true) { // Cannot be arrow function because of 'this'-binding
-	if (include) {
-		return this <= max && this >= min
-	} else {
-		return this < max && this > min
-	}
-}
-
 // Returns left (-1) or right (1) based on the axis of collision and pointing direction of tank
 function getTurnDirection(collisionAxis, dir) {
 	// Lower right and top left quadrant:
@@ -49,19 +36,26 @@ function getTurnDirection(collisionAxis, dir) {
 	}
 }
 
-// Returns reference to cell:
-function getCell(col, row) {
-	try {
-		return state.grid[col][row]
-	}
-	catch (err) {
-		console.log(col, row)
-		throw err
+function randomColor() {
+	return color(Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256))
+}
+
+// Every number can call .between:
+Number.prototype.between = function (min, max, include = true) { // Cannot be arrow function because of 'this'-binding
+	if (include) {
+		return this <= max && this >= min
+	} else {
+		return this < max && this > min
 	}
 }
 
+// Returns reference to cell:
+function getCell(col, row) {
+	return state.grid[col][row]
+}
+
 // Returns col and row num of cell:
-function getIndices(cell) {
+function getCellIndices(cell) {
 	for (let colNum = 0; colNum < state.grid.length; colNum++) {
 		const col = state.grid[colNum]
 		for (let rowNum = 0; rowNum < col.length; rowNum++) {
@@ -84,7 +78,7 @@ function removeWall(fromCell, toCell, dir) {
 
 // Returns array of unvisited cells around given cell and their direction from the given cell:
 function getUnvisitedNeighbors(currentCell) {
-	const indices = getIndices(currentCell)
+	const indices = getCellIndices(currentCell)
 	const col = indices[0]
 	const row = indices[1]
 
@@ -130,29 +124,27 @@ function getColorButtonVal() {
 }
 
 // Takes a point and a rect-object and returns true if the point exists inside the four points that make up a rectangle:
-function pointInRect(pointX, pointY, rect) {
-	if (pointX.between(rect.x1, rect.x2) && pointY.between(rect.y1, rect.y2)) {
+function pointInRect(point, rect) {
+	if (point.x.between(rect.x1, rect.x2) && point.y.between(rect.y1, rect.y2)) {
 		return true
 	} else {
 		return false
 	}
 }
 
-
-
 //* https://stackoverflow.com/questions/21089959/detecting-collision-of-rectangle-with-circle
 function bodyIntersectsWall(body, wall) {
-	const distX = abs(body.x - wall.x - wall.w/2)
-	const distY = abs(body.y - wall.y - wall.h/2)
+	const distX = abs(body.x - wall.x - wall.w / 2)
+	const distY = abs(body.y - wall.y - wall.h / 2)
 
-	if (distX > (wall.w/2 + body.r) || distY > (wall.h/2 + body.r)) return false 
+	if (distX > (wall.w / 2 + body.r) || distY > (wall.h / 2 + body.r)) return false
 
-	if (distX <= (wall.w/2) || distY <= (wall.h/2)) return true
+	if (distX <= (wall.w / 2) || distY <= (wall.h / 2)) return true
 
-	const dx = distX - wall.w/2
-	const dy = distY - wall.h/2
+	const dx = distX - wall.w / 2
+	const dy = distY - wall.h / 2
 
-	return (dx*dx + dy*dy <= body.r * body.r)
+	return (dx * dx + dy * dy <= body.r * body.r)
 }
 
 function bodyIntersectsEdge(body) {
@@ -219,4 +211,14 @@ function outOfBounds(pointX, pointY) {
 	}
 
 	return out
+}
+
+function pointCloseToTank(point) {
+	for (const tank of state.tanks) {
+		if (dist(point.x, point.y, tank.x, tank.y) <= config.env.cellWidth * config.tank.spawnDistance) {
+			return true
+		}
+
+		continue
+	}
 }

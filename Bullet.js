@@ -44,10 +44,10 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 
 			//* Wall collisions:
 			if (wall) {
-				if (pointInRect(next.x, this.y, wallRect)) {
+				if (pointInRect({ x: next.x, y: this.y }, wallRect)) {
 					bounce.x = true
 				}
-				if (pointInRect(this.x, next.y, wallRect)) {
+				if (pointInRect({ x: this.x, y: next.y }, wallRect)) {
 					bounce.y = true
 				}
 
@@ -75,7 +75,7 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 	}
 
 	bounce(axis) {
-		// Reverses move direction of the axis
+		// Reverses move direction of the axis:
 		if (axis.x) {
 			this.moveCoords.dX *= -1
 		}
@@ -83,24 +83,24 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 			this.moveCoords.dY *= -1
 		}
 
-		// Updates direction to match the new moveCoords
+		// Updates direction to match the new moveCoords:
 		this.direction = getDirection(this.moveCoords.dX, this.moveCoords.dY)
 	}
 
 	move() {
-		// Sets the points for the trail
+		// Sets the points for the trail:
 		this.makeTrail(this)
 
-		// Moves bullet
+		// Moves bullet:
 		this.x += this.moveCoords.dX
 		this.y += this.moveCoords.dY
 	}
 
-	// Makes a trail point for each frame
+	// Makes a trail point for each frame:
 	makeTrail(bullet) {
 		const trails = state.projectiles.trails // Trails are made in state to allow for continuous rendering when bullet is destroyed
 
-		// When first point is made, the bullet's trail has to be initiated
+		// When first point is made, the bullet's trail has to be initiated:
 		if (!trails.has(bullet)) {
 			trails.set(bullet, [])
 		}
@@ -111,7 +111,7 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 	}
 
 	show(index) {
-		// Removes projectile after duration has passed
+		// Removes projectile after duration has passed:
 		if (this.duration <= 0) {
 			this.destroy(index)
 		} else {
@@ -122,7 +122,7 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 			fill(this.color)
 			circle(this.x, this.y, this.d)
 
-			// Resizes bullet for muzzle flash effect
+			// Resizes bullet for muzzle flash effect:
 			if (this.d > config.bullet.diameter) {
 				this.d -= config.effects.muzzleSpeed
 			} else {

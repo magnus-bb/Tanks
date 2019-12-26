@@ -12,13 +12,14 @@ function draw() {
 		tank.input()
 
 		// Automatically checks edge collisions when no args are given:
-		if (tank.checkBodyCollision()) {
-			tank.handleBodyCollision()
+		const bodyAxes = tank.checkBodyCollision()
+		if (bodyAxes.x || bodyAxes.y) {
+			tank.handleBodyCollision(bodyAxes)
 		}
 
-		const axes = tank.checkCannonCollision()
-		if (axes.x || axes.y) {
-			tank.handleCannonCollision(axes)
+		const cannonAxes = tank.checkCannonCollision()
+		if (cannonAxes.x || cannonAxes.y) {
+			tank.handleCannonCollision(cannonAxes)
 		}
 
 		if (tank.checkTurnCollision()) {
@@ -39,13 +40,14 @@ function draw() {
 					for (const tank of state.tanks) {
 				
 						// Automatically checks wall collisions when args are given:
-						if (tank.checkBodyCollision(wallObj)) {
-							tank.handleBodyCollision()
+						const bodyAxes = tank.checkBodyCollision(wallObj)
+						if (bodyAxes.x || bodyAxes.y) {
+							tank.handleBodyCollision(bodyAxes/*, wallObj*/)
 						}
 
-						const axes = tank.checkCannonCollision(wallObj)
-						if (axes.x || axes.y) {
-							tank.handleCannonCollision(axes)
+						const cannonAxes = tank.checkCannonCollision(wallObj)
+						if (cannonAxes.x || cannonAxes.y) {
+							tank.handleCannonCollision(cannonAxes)
 						}
 
 						if (tank.checkTurnCollision(wallObj)) {

@@ -32,7 +32,7 @@ Guidelines
 
 Todos
 -----
-- Tanks skal spawne med `config.player.spawnDistance` celler fra hinanden (skal flyttes fra `setup.js` ind i classen)
+- Sæt max antal spillere (9 med spawndistance på 1 cell)
 - En lækker effekt når et projektil kalder `destroy()`, så det ikke bare forsvinder.
 - Finde og loade open source lydeffekter til skud (*gud forbyde, at jeg bliver nødt til at optage mundlyde*)
 - `Bullet` class skal omskrives til at extende en `Projectile` class i stedet, og så skal fælleskarakteristika med andre våben flyttes dertil
@@ -40,24 +40,20 @@ Todos
 - Tilføjelse af tilfældige celler, der til tider "brænder" og ikke må passeres
 - Tank collisions med hinanden?
 - Find et system for helpers - static i classes vs i instances vs globale funktioner
-- Tilføj grafik af en tank i stedet for `placeholder`s i controls input
-- Tilføj fejlmeddelelse, hvis ikke alle controls er valgt
-- Sørg for at pause, unpause, end game etc KUN åbner (og lukker) de rette menuer
-	- evt vises start self i starten, men display: none når spillet startes. Så kan alt andet bare huske både at åbne og lukke sin menu
-- Vue overhaul til menu / status etc.
-- Menuer
+- Menu / status
+	- **Vue overhaul til menu / status etc.**
+	- Tilføj fejlmeddelelse, hvis ikke alle controls er valgt
+	- Sørg for at pause, unpause, end game etc KUN åbner (og lukker) de rette menuer
 	- Styling
 	- Handlers til knapper / inputs
 	- Clearing af felter + graying af brugte controls
 	- Feedback på players + controls oprettet?
-- giv ID til `Tank`, så den let kan finde sig selv i `state`
-- Fjern slow move ved collisions og slow turn ved andet end cannon
-- Lav en `checkCollision` funktion, der opsætter relevante variabler og kalder separate checks for:
-	- Turn collision
-	- Tank body collision
-	- Tank tip collision
-	- ... med separate handlers
+	- Statusfelter skal kun vise det mest basale, og så give udvidet info ved hover (f.eks. antal selvmord)
+- giv ID til `Tank`, så den let kan finde sig selv i `state` (eller evt map det med players, da den kender sin egen player)
 - Evt. ændr walls til at have de props, der skal bruges for at udregne collisions, så de ikke skal udregnes hver gang
+- Tilføj en counter til selvmord, sørg for at et selvmord ikke tæller almindelige kills
+- Sæt en timeout efter spillet er slut, så man kan se animationer + lige nå at dræbe sig selv (ingen point uddeles, bare kills)
+- Flyt turn ind i (eller sidestående med) `tank.move`, den skal udregne en direction på baggrund af `tank.turning` og sætte this.direction til den. Imellem `tank.input` og `tank.turn` skal man så kunne lave checks, der også skal udregne et lookahead på baggrund af `tank.turning`, og potentielt nulstille `tank.turning`, så turn **ikke** gør noget. Dette skulle fjerne problemet med at turne imens man slider helt stopper tanken, da der egentlig ikke når at være en cannon collision til at stoppe movement.
 
 
 Idéer til pick ups / våben
@@ -75,6 +71,7 @@ Idéer til pick ups / våben
 - Skjold der dækker x grader omkring tank indtil 1 hit
 - Mini-ai som hjælper
 - Debuff fjenders move-/projektil-speed
+- En cooldown på en slags dash, som en ability alle har.
 
 Links
 -----

@@ -10,9 +10,9 @@ config = {
 			midOffsetFraction: 5
 		},
 		ammo: 5,
-		collisionSlowFactor: 4,
-		collisionTurnFraction: 5,
-		spawnDistance: 4, //TODO: Cells between spawned tanks
+		collisionMoveSlow: 2.5,
+		collisionTurnSlow: 2,
+		spawnDistance: 1, //TODO: Cells between spawned tanks
 		defaultColor: 'ff0000',
 	},
 	env: { //TODO: omskriv til cell. og wall.

@@ -25,19 +25,6 @@ class Cell {
 
 	//* STATIC METHODS
 
-	static randomCellCoords() {
-		// Random cell:
-		const col = floor(random(0, config.env.cellAmtX))
-		const row = floor(random(0, config.env.cellAmtY))
-		const cell = state.grid[col][row]
-
-		// Midpoint of cell:
-		const x = cell.x + cell.w / 2
-		const y = cell.y + cell.w / 2
-
-		return { x: x, y: y }
-	}
-
 	static resetGrid() {
 		state.grid = []
 
