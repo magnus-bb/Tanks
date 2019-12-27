@@ -16,8 +16,8 @@ class Pickup {
 
 				return random(this.pickups[type])
 			}
-			
-	// Random from all:
+
+			// Random from all:
 		} else {
 			const allPickups = []
 			for (const type of Object.values(this.pickups)) {
@@ -28,7 +28,7 @@ class Pickup {
 		}
 	}
 
-	static createPickup(pickupName) {
+	static createPickup(pickupName) { //TODO: MAYBE THIS SHOULD JUST CALL new Pickup THAT EITHER CALLS CLASSES OR CLONES
 		//TODO: THIS DEPENDS ON WHETHER WE CLONE FROM this.pickups OR IF WE MAKE CLASSES
 	}
 }
