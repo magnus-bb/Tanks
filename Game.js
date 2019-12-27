@@ -54,17 +54,20 @@ class Game {
 		this.unpause()
 	}
 
-	static end() {
-		console.log('Game ended')
+	static decreaseEndTimer() {
+		state.endTimer--
+	}
 
-		// Resets all ingame state:
-		state = new GameState
+	static end() { //TODO: Handle winner by checking who is left (if (state.tanks[0]) state.tanks[0].owner.wins++?)
+		console.log('Game ended')
 
 		this.started = false
 		
-		//TODO: CHANGE TO ANOTHER MENU, SO IT WILL BE DISPLAYED WHEN pause() SHOWS GAMEMENU
 		$('#next-round-menu').fadeIn(100)
 		this.pause()
+
+		// Resets all ingame state:
+		state = new GameState
 	}
 
 	static pause() {

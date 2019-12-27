@@ -38,11 +38,11 @@ function draw() {
 
 					//* Collisions:
 					for (const tank of state.tanks) {
-				
+
 						// Automatically checks wall collisions when args are given:
 						const bodyAxes = tank.checkBodyCollision(wallObj)
 						if (bodyAxes.x || bodyAxes.y) {
-							tank.handleBodyCollision(bodyAxes/*, wallObj*/)
+							tank.handleBodyCollision(bodyAxes)
 						}
 
 						const cannonAxes = tank.checkCannonCollision(wallObj)
@@ -70,6 +70,8 @@ function draw() {
 	//* Tanks - updating:
 	for (const tank of state.tanks) {
 		tank.move()
+		tank.addTrailPoint()
+		tank.turn(tank.turning) // Importantly done after .move() because of collision checking being done in the same order
 		tank.show()
 	}
 
@@ -84,7 +86,10 @@ function draw() {
 		}
 
 		bullet.move()
-		bullet.show(i) // Also removes projectile after duration
+		bullet.show()
+		if (bullet.duration <= 0) {
+			bullet.destroy(i)
+		}
 	}
 
 	for (const trailPair of state.projectiles.trails) {
@@ -110,6 +115,17 @@ function draw() {
 				//TODO: let bullet.owner ('s player) know it gets a point
 			}
 		}
+	}
+
+	//* Round Conditions
+
+	// Begins counting down for end:
+	if (state.tanks.length <= 0) { //! CHANGE TO 1 AFTER TESTING IS DONE
+		Game.decreaseEndTimer()
+	}
+	// Checks if game should end:
+	if (state.endTimer <= 0) {
+		Game.end()
 	}
 
 	//! FPS for performance indicator:

@@ -18,9 +18,6 @@ class Tank {
 			dX: 0,
 			dY: 0
 		}
-
-		/* Used to check if the tank is turning in a frame, to be able to "bounce" back, if there is a turn collision.
-		It is not possible to just annull the turning, since the new coords have to be present when checking for tank collisions: */
 		this.turning = 0
 
 		const relCannonRoot = getOffsetPoint(this.d / config.tank.cannon.midOffsetFraction, this.direction)
@@ -73,11 +70,9 @@ class Tank {
 		// Turning:
 		this.turning = 0 // Resets
 		if (keyIsDown(this.controls.left)) {
-			this.turn(-1)
 			this.turning = -1
 		}
 		if (keyIsDown(this.controls.right)) {
-			this.turn(1)
 			this.turning = 1
 		}
 
@@ -87,28 +82,12 @@ class Tank {
 		this.moveCoords.dY = move.y
 	}
 
-	// Takes -1 for left and 1 for right:
-	turn(direction, bodyCollision = false) {
-		if (bodyCollision) {
-			// % 360 makes it so we don't have to deal with angles over 360 deg:
-			this.direction = (this.direction % 360) + this.turnSpeed / config.tank.collisionTurnSlow * direction //TODO: Maybe use rotate() when we switch to sprites
-		} else {
-			this.direction = (this.direction % 360) + this.turnSpeed * direction //TODO: Maybe use rotate() when we switch to sprites
-		}
-	}
-
 	// Checks both wall and edge collisions:
 	checkBodyCollision(wall = null) { // Defaults to check edge-collisions
 		const collision = {
 			x: false,
 			y: false
 		}
-
-		// // const body = {
-		// // 	x: this.next.x,
-		// // 	y: this.next.y,
-		// // 	r: this.r
-		// // }
 
 		const bodyX = {
 			x: this.next.x,
@@ -147,15 +126,7 @@ class Tank {
 	}
 
 	// Halts movement:
-	handleBodyCollision(axes, /*wallObj = null*/) {
-		// During wall checks, also has to check if any point on cannon intersects with wall, cannon will not get stuck while sliding:
-		// if (wallObj) {
-		// 	if (this.checkTurnCollision(wallObj)) {
-		// 		this.moveCoords.dX = 0
-		// 		this.moveCoords.dY = 0
-		// 		return
-		// 	}
-		// }
+	handleBodyCollision(axes) {
 
 		if (axes.x) {
 			this.moveCoords.dX = 0
@@ -170,11 +141,6 @@ class Tank {
 	// Checks both wall and edge collisions:
 	checkCannonCollision(wall = null) {
 
-		const nextCannonTip = {
-			x: this.next.x + this.relCannon.tip.x,
-			y: this.next.y + this.relCannon.tip.y
-		}
-
 		// To be returned:
 		const collision = {
 			x: false,
@@ -185,7 +151,6 @@ class Tank {
 		if (wall) {
 			const wallRect = getWallRect(wall)
 
-			//! TEST FROM
 			for (let i = this.r; i <= config.tank.cannon.length; i++) {
 
 				// Every point on the cannon...
@@ -198,18 +163,22 @@ class Tank {
 				// Relative to the tank:
 				point.x += this.x
 				point.y += this.y
-				//! TEST TO
 
-				if (pointInRect({ x: /*nextCannonTip*/nextPoint.x, y: /*this.cannon.tip*/point.y }, wallRect)) {
+				if (pointInRect({ x: nextPoint.x, y: point.y }, wallRect)) {
 					collision.x = true
 				}
-				if (pointInRect({ x: /*this.cannon.tip*/point.x, y: /*nextCannonTip*/nextPoint.y }, wallRect)) {
+				if (pointInRect({ x: point.x, y: nextPoint.y }, wallRect)) {
 					collision.y = true
 				}
-			} //! ALSO TEST BRACKET
+			}
 
 			//* Checking edge collisions:
 		} else {
+			const nextCannonTip = {
+				x: this.next.x + this.relCannon.tip.x,
+				y: this.next.y + this.relCannon.tip.y
+			}
+
 			const out = outOfBounds(nextCannonTip.x, nextCannonTip.y)
 
 			if (out.x) {
@@ -237,45 +206,60 @@ class Tank {
 		// Turns slowly, if driving forward:
 		for (const axis in axes) {
 			if (axes[axis] && this.driving === 'forward') {
-				// console.log(axis, axes[axis])
 				this.turn(getTurnDirection(axis, this.direction), true) // true lowers the turnspeed for collisions
 			}
 		}
 	}
 
 	checkTurnCollision(wall = null) {
+
+		const nextDir = (this.direction % 360) + this.turnSpeed * this.turning
+
+		//* Wall collisions:
 		if (wall) {
-			var wallRect = getWallRect(wall)
-		}
+			const wallRect = getWallRect(wall)
 
-		// Starts from edge of tank, not cannon root:
-		for (let i = this.r; i <= config.tank.cannon.length; i++) {
+			// Starts from edge of tank, not cannon root:
+			for (let i = this.r; i <= config.tank.cannon.length; i++) {
 
-			// Every point on the cannon...
-			const point = getOffsetPoint(i, this.direction)
-			// Relative to the tank:
-			point.x += this.x
-			point.y += this.y
+				// Every point on the cannon...
+				const nextPoint = getOffsetPoint(i, nextDir)
+		
+				// Relative to the recalculated next location of the tank (since we don't want to turn and then move in the "old" direction)
+				nextPoint.x += this.next.x
+				nextPoint.y += this.next.y
 
-			//* Wall collisions:
-			if (wall) {
-				if (pointInRect({ x: point.x, y: point.y }, wallRect)) {
+				if (pointInRect({ x: nextPoint.x, y: nextPoint.y }, wallRect)) {
 					return true
 				}
+			}
 
-				//* Edge collisions:
-			} else {
-				const out = outOfBounds(point.x, point.y)
+			//* Edge collisions:
+		} else {
+			const nextCannonTip = {
+				x: this.next.x + this.relCannon.tip.x,
+				y: this.next.y + this.relCannon.tip.y
+			}
+			const out = outOfBounds(nextCannonTip.x, nextCannonTip.y)
 
-				if (out.x || out.y) {
-					return true
-				}
+			if (out.x || out.y) {
+				return true
 			}
 		}
 	}
 
 	handleTurnCollision() {
-		this.turn(this.turning * -1) // Turn back (effectively annulling a turn made in input)
+		this.turning = 0
+	}
+
+	// Takes -1 for left and 1 for right:
+	turn(turnDirection, bodyCollision = false) {
+		if (bodyCollision) {
+			// % 360 makes it so we don't have to deal with angles over 360 deg:
+			this.direction = (this.direction % 360) + this.turnSpeed / config.tank.collisionTurnSlow * turnDirection //TODO: Maybe use rotate() when we switch to sprites
+		} else {
+			this.direction = (this.direction % 360) + this.turnSpeed * turnDirection //TODO: Maybe use rotate() when we switch to sprites
+		}
 	}
 
 	move() {
@@ -283,11 +267,6 @@ class Tank {
 		if (this.driving) {
 			this.x += this.moveCoords.dX
 			this.y += this.moveCoords.dY
-		}
-
-		// Trail only updates if tank is not standing still:
-		if (this.trail[this.trail.length - 1].x !== this.x || this.trail[this.trail.length - 1].y !== this.y) {
-			this.trail.push({ x: this.x, y: this.y })
 		}
 	}
 
@@ -299,6 +278,13 @@ class Tank {
 			state.projectiles.bullets.push(new Bullet(this))
 
 			shake() // Global effect
+		}
+	}
+
+	// Adds a trail point if tank is not standing still:
+	addTrailPoint() {
+		if (this.trail[this.trail.length - 1].x !== this.x || this.trail[this.trail.length - 1].y !== this.y) {
+			this.trail.push({ x: this.x, y: this.y })
 		}
 	}
 
@@ -327,11 +313,6 @@ class Tank {
 	destroy(index) {
 		state.tanks.splice(index, 1)
 		//TODO: Msg on death or counter etc + effect
-
-		// Checks if game should end:
-		if (state.tanks.length <= 1) {
-			Game.end()
-		}
 	}
 
 	//* STATIC METHODS

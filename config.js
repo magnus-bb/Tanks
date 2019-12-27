@@ -1,5 +1,8 @@
 config = {
 	fps: 60,
+	game: {
+		endFrames: 60 * 3
+	},
 	tank: {
 		diameter: 20,
 		moveSpeed: 1.5, // Has to be less than the width of walls to not pass through
@@ -26,7 +29,7 @@ config = {
 	bullet: {
 		speed: 3,
 		diameter: 8,
-		duration: 6 * 60, // In frames
+		duration: 60 * 6, // In frames
 	},
 	effects: {
 		muzzleSize: 2.5, // Times the size of regular bullet

@@ -68,7 +68,7 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 				return bounce
 
 				// Last lookAhead step also returns empty bounce:
-			} else if (step === numSteps) { 
+			} else if (step === numSteps) {
 				return bounce
 			}
 		}
@@ -110,27 +110,23 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 		trail.push({ x: this.x, y: this.y })
 	}
 
-	show(index) {
-		// Removes projectile after duration has passed:
-		if (this.duration <= 0) {
-			this.destroy(index)
+	show() {
+
+		// Main bullet
+		this.color.setAlpha(255) // Resets from the low opacity on trail
+		noStroke()
+		fill(this.color)
+		circle(this.x, this.y, this.d)
+
+		// Resizes bullet for muzzle flash effect:
+		if (this.d > config.bullet.diameter) {
+			this.d -= config.effects.muzzleSpeed
 		} else {
-
-			// Main bullet
-			this.color.setAlpha(255) // Resets from the low opacity on trail
-			noStroke()
-			fill(this.color)
-			circle(this.x, this.y, this.d)
-
-			// Resizes bullet for muzzle flash effect:
-			if (this.d > config.bullet.diameter) {
-				this.d -= config.effects.muzzleSpeed
-			} else {
-				this.d = config.bullet.diameter
-			}
-
-			this.duration--
+			this.d = config.bullet.diameter
 		}
+
+		// Countdown to destruction:
+		this.duration--
 	}
 
 	// Uses index number to remove projectile from the game:

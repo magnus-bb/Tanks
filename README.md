@@ -49,11 +49,15 @@ Todos
 	- Clearing af felter + graying af brugte controls
 	- Feedback på players + controls oprettet?
 	- Statusfelter skal kun vise det mest basale, og så give udvidet info ved hover (f.eks. antal selvmord)
+	- Settings / modifiers menu til at ændre configs etc.
 - giv ID til `Tank`, så den let kan finde sig selv i `state` (eller evt map det med players, da den kender sin egen player)
 - Evt. ændr walls til at have de props, der skal bruges for at udregne collisions, så de ikke skal udregnes hver gang
 - Tilføj en counter til selvmord, sørg for at et selvmord ikke tæller almindelige kills
 - Sæt en timeout efter spillet er slut, så man kan se animationer + lige nå at dræbe sig selv (ingen point uddeles, bare kills)
 - Flyt turn ind i (eller sidestående med) `tank.move`, den skal udregne en direction på baggrund af `tank.turning` og sætte this.direction til den. Imellem `tank.input` og `tank.turn` skal man så kunne lave checks, der også skal udregne et lookahead på baggrund af `tank.turning`, og potentielt nulstille `tank.turning`, så turn **ikke** gør noget. Dette skulle fjerne problemet med at turne imens man slider helt stopper tanken, da der egentlig ikke når at være en cannon collision til at stoppe movement.
+- Se på om body + cannon kan tegnes som 1 p5 shape, som kan roteres ved turning
+- Rename helpers navne til at give bedre mening
+- Tildeling af point i `Game.end()` eller i en funktion, den kalder
 
 
 Idéer til pick ups / våben
@@ -71,7 +75,7 @@ Idéer til pick ups / våben
 - Skjold der dækker x grader omkring tank indtil 1 hit
 - Mini-ai som hjælper
 - Debuff fjenders move-/projektil-speed
-- En cooldown på en slags dash, som en ability alle har.
+- En cooldown på en slags dash som en ability alle har.
 
 Links
 -----
