@@ -57,7 +57,8 @@ Todos
 - Rename helpers navne til at give bedre mening
 - Tildeling af point i `Game.end()` eller i en funktion, den kalder
 - Loops i `draw.js` kan slås sammen. F.eks. kan tanks + projectiles vist lægges ind i projectiles (bare tjek om rækkefølgen tillader det først)
-- Omskriv `bullet.d` til ikke at være større i muzzle-effekt, men skal bare tegnes større i `show()` med `lerp()` ligesom med trails
+- Brug push og pop i alle show()
+- Hvert våben / bullet skal måske selv tjekke collisions i stedet for, at draw loopet tjekker, så draw ikke skal tjekke alle mulige forskellige conditions?
 
 
 Idéer til pick ups / våben

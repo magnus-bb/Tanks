@@ -1,13 +1,11 @@
 class Bullet { //TODO: Should be extension of a Projectile class, so other weapons can extend as well
 	constructor(owner) {
-		this.d = config.bullet.diameter * config.effects.muzzleSize // Initial size is bigger for a muzzle flash effect
+		this.d = config.bullet.diameter // Initial size is bigger for a muzzle flash effect
 		this.direction = owner.direction
 		this.speed = config.bullet.speed
 		this.owner = owner
-		// Starts offset from tank center:
 		this.x = this.owner.cannon.x
 		this.y = this.owner.cannon.y
-
 		this.duration = config.bullet.duration
 		this.color = color(this.owner.color) // Must convert to P5-color object to be able to set alpha
 		const move = getOffsetPoint(this.speed, this.direction)
@@ -112,18 +110,17 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 
 	show() {
 
-		// Main bullet
-		this.color.setAlpha(255) // Resets from the low opacity on trail
+		// Drawn diameter is increased in first few frames for a muzzle effect:
+		let drawDiameter = this.d * config.effects.muzzleSize - (config.bullet.duration - this.duration) * config.effects.muzzleSpeed
+		drawDiameter = drawDiameter > this.d ? drawDiameter : this.d
+
+		push()
+
 		noStroke()
 		fill(this.color)
-		circle(this.x, this.y, this.d) //TODO: Tegn den større med lerp ligesom i trails, og lad this.d være konstant
+		circle(this.x, this.y, drawDiameter)
 
-		// Resizes bullet for muzzle flash effect:
-		if (this.d > config.bullet.diameter) {
-			this.d -= config.effects.muzzleSpeed
-		} else {
-			this.d = config.bullet.diameter
-		}
+		pop()
 
 		// Countdown to destruction:
 		this.duration--
@@ -154,9 +151,8 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 
 			push()
 
-			const color = bullet.color
-			color.setAlpha(config.effects.bulletTrailAlpha) // Lower opacity than bullet)
-			fill(color)
+			bullet.color.setAlpha(config.effects.bulletTrailAlpha) // Lower opacity than bullet)
+			fill(bullet.color)
 			noStroke()
 
 			for (let i = 0; i < trail.length; i++) {
@@ -165,6 +161,9 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 
 				circle(trail[i].x, trail[i].y, d)
 			}
+
+			// Resets alpha, since it carries over:
+			bullet.color.setAlpha(255)
 
 			pop()
 

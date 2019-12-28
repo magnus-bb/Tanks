@@ -39,7 +39,7 @@ config = {
 		muzzleSpeed: 1, // Px reduction per frame
 		defaultShakeMagnitude: 2,
 		bulletTrailAlpha: 80, // Out of 255
-		bulletTrailLength: 30 // Frames / points
+		bulletTrailLength: 25 // Frames / points
 	}
 }
 
