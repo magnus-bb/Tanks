@@ -5,8 +5,8 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 		this.speed = config.bullet.speed
 		this.owner = owner
 		// Starts offset from tank center:
-		this.x = this.owner.cannon.tip.x
-		this.y = this.owner.cannon.tip.y
+		this.x = this.owner.cannon.x
+		this.y = this.owner.cannon.y
 
 		this.duration = config.bullet.duration
 		this.color = color(this.owner.color) // Must convert to P5-color object to be able to set alpha
@@ -116,7 +116,7 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 		this.color.setAlpha(255) // Resets from the low opacity on trail
 		noStroke()
 		fill(this.color)
-		circle(this.x, this.y, this.d)
+		circle(this.x, this.y, this.d) //TODO: Tegn den større med lerp ligesom i trails, og lad this.d være konstant
 
 		// Resizes bullet for muzzle flash effect:
 		if (this.d > config.bullet.diameter) {
@@ -142,7 +142,6 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 	static showTrail(trailPair) { // Trailpair couples bullet to trail, since bullet cannot house trail itself
 		const bullet = trailPair[0]
 		const trail = trailPair[1]
-		const color = bullet.color
 
 		if (trail.length <= 0 && bullet.dead) {
 			// Removes trail, when all points have run out:
@@ -153,10 +152,12 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 				trail.shift()
 			}
 
-			// Important to control every draw phase, as to not just inherit any properties of another drawing:
+			push()
+
+			const color = bullet.color
 			color.setAlpha(config.effects.bulletTrailAlpha) // Lower opacity than bullet)
-			noStroke()
 			fill(color)
+			noStroke()
 
 			for (let i = 0; i < trail.length; i++) {
 				// Lerp returns a diameter between 3 px and bullet diameter according to how close to the bullet the point is
@@ -164,6 +165,8 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 
 				circle(trail[i].x, trail[i].y, d)
 			}
+
+			pop()
 
 			if (bullet.dead === true) {
 				trail.shift()

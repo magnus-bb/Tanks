@@ -117,8 +117,13 @@ function draw() {
 		}
 	}
 
-	//* Round Conditions
+	//* Pickups
+	for (const pickup of state.pickups) {
+		pickup.show()
+		//TODO: Collisions med tanks
+	}
 
+	//* Round Conditions
 	// Begins counting down for end:
 	if (state.tanks.length <= 0) { //! CHANGE TO 1 AFTER TESTING IS DONE
 		Game.decreaseEndTimer()

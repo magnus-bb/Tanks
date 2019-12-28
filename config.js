@@ -3,6 +3,9 @@ config = {
 	game: {
 		endFrames: 60 * 3
 	},
+	pickup: {
+		size: 20 //* ~20px should be default for designs
+	},
 	tank: {
 		diameter: 20,
 		moveSpeed: 1.5, // Has to be less than the width of walls to not pass through

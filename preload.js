@@ -1,6 +1,8 @@
-let wpn
+const assets = {
+	pickups: {},
+}
 
 function preload() {
-	wpn = loadImage('assets/sprites/wpn-placeholder.svg')
+	assets.pickups.placeholder = loadImage('assets/pickups/placeholder.svg')
 	
 }

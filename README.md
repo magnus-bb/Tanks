@@ -56,6 +56,8 @@ Todos
 - Se på om body + cannon kan tegnes som 1 p5 shape, som kan roteres ved turning
 - Rename helpers navne til at give bedre mening
 - Tildeling af point i `Game.end()` eller i en funktion, den kalder
+- Loops i `draw.js` kan slås sammen. F.eks. kan tanks + projectiles vist lægges ind i projectiles (bare tjek om rækkefølgen tillader det først)
+- Omskriv `bullet.d` til ikke at være større i muzzle-effekt, men skal bare tegnes større i `show()` med `lerp()` ligesom med trails
 
 
 Idéer til pick ups / våben

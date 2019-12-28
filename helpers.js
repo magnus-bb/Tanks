@@ -2,13 +2,13 @@
 function getOffsetPoint(dist, dir, driving = 'forward') { // Defaults to 'forward' since it is used for more than just moving objects
 	if (driving === 'backward') {
 		return {
-			x: -dist * cos(radians(dir)),
-			y: -dist * sin(radians(dir))
+			x: -dist * cos(dir),
+			y: -dist * sin(dir)
 		}
 	} else if (driving === 'forward') {
 		return {
-			x: dist * cos(radians(dir)),
-			y: dist * sin(radians(dir))
+			x: dist * cos(dir),
+			y: dist * sin(dir)
 		}
 	} else {
 		return {
@@ -21,7 +21,7 @@ function getOffsetPoint(dist, dir, driving = 'forward') { // Defaults to 'forwar
 // Converts difference in x and y coords to a direction in degrees:
 function getDirection(dX, dY) {
 	let direction = atan2(dY, dX) // x & y are reversed because of the function, don't change
-	return degrees(direction)
+	return direction
 }
 
 // Returns left (-1) or right (1) based on the axis of collision and pointing direction of tank
@@ -221,4 +221,18 @@ function pointCloseToTank(point) {
 
 		continue
 	}
+}
+
+function randomSpawnCoords() {
+	// Random cell:
+	const col = floor(random(0, config.env.cellAmtX))
+	const row = floor(random(0, config.env.cellAmtY))
+	const cell = getCell(col, row)
+
+	// Midpoint of cell:
+	const x = cell.x + cell.w / 2
+	const y = cell.y + cell.w / 2
+
+	console.log(col, row)
+	return { x: x, y: y }
 }

@@ -1,4 +1,6 @@
 function setup() {
+	noLoop()
+
 	frameRate(config.fps)
 	const canvasWidth = config.env.cellWidth * config.env.cellAmtX
 	const canvasHeight = config.env.cellWidth * config.env.cellAmtY
@@ -10,6 +12,6 @@ function setup() {
 	Cell.populateWalls()
 	Cell.generateMaze()
 
-	// Game has to be started first:
-	noLoop()
+	imageMode(CENTER)
+	angleMode(DEGREES)
 }

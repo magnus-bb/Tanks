@@ -20,29 +20,16 @@ class Tank {
 		}
 		this.turning = 0
 
-		const relCannonRoot = getOffsetPoint(this.d / config.tank.cannon.midOffsetFraction, this.direction)
 		const relCannonTip = getOffsetPoint(config.tank.cannon.length, this.direction)
 		this.relCannon = {
-			root: {
-				x: relCannonRoot.x,
-				y: relCannonRoot.y
-			},
-			tip: {
-				x: relCannonTip.x,
-				y: relCannonTip.y
-			},
+			x: relCannonTip.x,
+			y: relCannonTip.y
 		}
 	}
 	get cannon() {
 		return {
-			root: {
-				x: this.relCannon.root.x + this.x,
-				y: this.relCannon.root.y + this.y
-			},
-			tip: {
-				x: this.relCannon.tip.x + this.x,
-				y: this.relCannon.tip.y + this.y
-			}
+			x: this.relCannon.x + this.x,
+			y: this.relCannon.y + this.y
 		}
 	}
 	get next() { // Next tank (center) position (if no collision is observed):
@@ -175,8 +162,8 @@ class Tank {
 			//* Checking edge collisions:
 		} else {
 			const nextCannonTip = {
-				x: this.next.x + this.relCannon.tip.x,
-				y: this.next.y + this.relCannon.tip.y
+				x: this.next.x + this.relCannon.x,
+				y: this.next.y + this.relCannon.y
 			}
 
 			const out = outOfBounds(nextCannonTip.x, nextCannonTip.y)
@@ -224,7 +211,7 @@ class Tank {
 
 				// Every point on the cannon...
 				const nextPoint = getOffsetPoint(i, nextDir)
-		
+
 				// Relative to the recalculated next location of the tank (since we don't want to turn and then move in the "old" direction)
 				nextPoint.x += this.next.x
 				nextPoint.y += this.next.y
@@ -237,8 +224,8 @@ class Tank {
 			//* Edge collisions:
 		} else {
 			const nextCannonTip = {
-				x: this.next.x + this.relCannon.tip.x,
-				y: this.next.y + this.relCannon.tip.y
+				x: this.next.x + this.relCannon.x,
+				y: this.next.y + this.relCannon.y
 			}
 			const out = outOfBounds(nextCannonTip.x, nextCannonTip.y)
 
@@ -268,6 +255,11 @@ class Tank {
 			this.x += this.moveCoords.dX
 			this.y += this.moveCoords.dY
 		}
+
+		// Updates cannon coords:
+		const tip = getOffsetPoint(config.tank.cannon.length, this.direction) // Same function as with moving - gets coords based on distance from center and a direction
+		this.relCannon.x = tip.x
+		this.relCannon.y = tip.y
 	}
 
 	fire() {
@@ -289,24 +281,30 @@ class Tank {
 	}
 
 	show() {
+		push()
+
 		stroke(51)
 		fill(this.color)
 
 		// Renders body:
+		push()
+
 		strokeWeight(1)
 		circle(this.x, this.y, this.d)
 
-		// Updates cannon position:
-		const root = getOffsetPoint(this.d / config.tank.cannon.midOffsetFraction, this.direction) // Same function as with moving - gets coords based on distance from center and a direction
-		const tip = getOffsetPoint(config.tank.cannon.length, this.direction) // Same function as with moving - gets coords based on distance from center and a direction
-		this.relCannon.root.x = root.x
-		this.relCannon.root.y = root.y
-		this.relCannon.tip.x = tip.x
-		this.relCannon.tip.y = tip.y
+		pop()
 
 		// Renders cannon:
+		push()
+
 		strokeWeight(config.tank.cannon.width)
-		line(this.cannon.root.x, this.cannon.root.y, this.cannon.tip.x, this.cannon.tip.y)
+		translate(this.x, this.y)
+		rotate(this.direction)
+		line(this.d / config.tank.cannon.midOffsetFraction, 0, config.tank.cannon.length, 0) // Straight line the length of the cannon
+
+		pop()
+
+		pop()
 	}
 
 	// Uses index number to remove tank from the game:
@@ -326,18 +324,5 @@ class Tank {
 		if (distance < config.bullet.diameter / 2 + tank.d / 2) { // Does not use bullet.d, since the muzzle effect changes that size
 			return true
 		}
-	}
-
-	static randomSpawnCoords() {
-		// Random cell:
-		const col = floor(random(0, config.env.cellAmtX))
-		const row = floor(random(0, config.env.cellAmtY))
-		const cell = getCell(col, row)
-
-		// Midpoint of cell:
-		const x = cell.x + cell.w / 2
-		const y = cell.y + cell.w / 2
-
-		return { x: x, y: y }
 	}
 }

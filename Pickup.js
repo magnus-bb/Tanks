@@ -1,4 +1,29 @@
 class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på banen. Det skal så kalde new XXX ved opsamling og sætte det nye objekt (baseret på selvstændig class) ind i inventory
+	constructor(name, x, y) {
+		this.name = name
+		this.x = x
+		this.y = y
+		this.rotation = random(0, 360) //? Maybe inherit rotation if pickup is swapped with something already equipped
+	}
+
+	//* INSTANCE METHODS
+
+	get asset() {
+		return assets.pickups[this.name]
+	}
+
+	show() {
+		push()
+
+		translate(this.x, this.y)
+		rotate(this.rotation)
+		image(this.asset, 0, 0, config.pickup.size, config.pickup.size)
+
+		pop()
+	}
+
+	//* STATIC PROPS
+
 	static pickups = { 
 		offensive: ['placeholder'],
 		defensive: ['placeholder2'],
@@ -28,7 +53,14 @@ class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på ba
 		}
 	}
 
-	static createPickup(pickupName) { 
-		//TODO: Make pickup and put in maze based on just the name
+	static createPickup(pickupName, coords = false) { 
+
+		// Uses given coords or randomCoords:
+		const { x, y } = coords || randomSpawnCoords()
+
+		const pickup = new Pickup(pickupName, x, y)
+
+		// Adds to maze to be rendered:
+		state.pickups.push(pickup)
 	}
 }
