@@ -1,5 +1,5 @@
-class Pickup {
-	static pickups = { //TODO: MAYBE REFACTOR TO BE ACTUAL OBJECTS IN CHARGE OF DISPLAYING THEMSELVES AND EVERYTHING, IF WE DO COMPOSITIONAL. OTHERWISE MAYBE MAKE THEM REFER TO SEPARATE CLASSES
+class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på banen. Det skal så kalde new XXX ved opsamling og sætte det nye objekt (baseret på selvstændig class) ind i inventory
+	static pickups = { 
 		offensive: ['placeholder'],
 		defensive: ['placeholder2'],
 		instaUse: ['placeholder3'],
@@ -28,7 +28,7 @@ class Pickup {
 		}
 	}
 
-	static createPickup(pickupName) { //TODO: MAYBE THIS SHOULD JUST CALL new Pickup THAT EITHER CALLS CLASSES OR CLONES
-		//TODO: THIS DEPENDS ON WHETHER WE CLONE FROM this.pickups OR IF WE MAKE CLASSES
+	static createPickup(pickupName) { 
+		//TODO: Make pickup and put in maze based on just the name
 	}
 }
