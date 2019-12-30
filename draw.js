@@ -7,7 +7,7 @@ function draw() {
 	noFill()
 	rect(0, 0, width, height) // Outer walls
 
-	//* Tanks - inputs + out of bounds:
+	//* Tanks & Pickups:
 	// Must happen before collisions, so a collision can overwrite player input
 	for (const tank of state.tanks) {
 		tank.input()
@@ -25,6 +25,15 @@ function draw() {
 
 		if (tank.checkTurnCollision()) {
 			tank.handleTurnCollision() // Automatically checks edge collisions when no args are given
+		}
+
+		//* Pickups:
+		for (let i = state.pickups.length - 1; i >= 0; i--) {
+			const pickup = state.pickups[i]
+
+			if (pickup.checkCollision(tank) && !tank.weapon) {
+				pickup.pickedUp(i, tank)
+			}
 		}
 	}
 
@@ -76,7 +85,7 @@ function draw() {
 		tank.show()
 	}
 
-	//* Projectiles:
+	//* Projectiles & Tanks:
 	for (let i = state.projectiles.bullets.length - 1; i >= 0; i--) { // We have to go backwards when removing projectiles
 		const bullet = state.projectiles.bullets[i]
 
@@ -91,16 +100,9 @@ function draw() {
 		if (bullet.duration <= 0) {
 			bullet.destroy(i)
 		}
-	}
 
-	for (const trailPair of state.projectiles.trails) {
-		Bullet.showTrail(trailPair)
-	}
 
-	//* Tanks & Projectiles:
-	for (let i = state.projectiles.bullets.length - 1; i >= 0; i--) {
-		const bullet = state.projectiles.bullets[i]
-
+		//* Tanks:
 		for (let j = state.tanks.length - 1; j >= 0; j--) {
 			const tank = state.tanks[j]
 
@@ -118,13 +120,18 @@ function draw() {
 		}
 	}
 
-	//* Pickups
+	//* Effects:
+	for (const trailPair of state.projectiles.trails) {
+		Bullet.showTrail(trailPair)
+	}
+
+	//* Pickups:
 	for (const pickup of state.pickups) {
 		pickup.show()
 		//TODO: Collisions med tanks
 	}
 
-	//* Round Conditions
+	//* Round Conditions:
 	// Begins counting down for end:
 	if (state.tanks.length <= 0) { //! CHANGE TO 1 AFTER TESTING IS DONE
 		Game.decreaseEndTimer()
@@ -133,15 +140,4 @@ function draw() {
 	if (state.endTimer <= 0) {
 		Game.end()
 	}
-
-	//! FPS for performance indicator:
-	// let fps
-	// if (frameCount % 10 === 0) {
-	// 	fps = floor(getFrameRate())
-	// }
-	// fill(0)
-	// textSize(30)
-	// textAlign(CENTER, CENTER)
-	// text(fps, width / 2, height / 2)
-
 }

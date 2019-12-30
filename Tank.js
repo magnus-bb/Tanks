@@ -91,20 +91,20 @@ class Tank {
 			const wallRect = getWallRect(wall, true)
 
 			// Checks with a lookahead on x:
-			if (bodyIntersectsWall(bodyX, wallRect)) {
+			if (circleIntersectsRect(bodyX, wallRect)) {
 				collision.x = true
 			}
 			// Checks with a lookahead on y:
-			if (bodyIntersectsWall(bodyY, wallRect)) {
+			if (circleIntersectsRect(bodyY, wallRect)) {
 				collision.y = true
 			}
 		} else {
 			// Checks with a lookahead on x:
-			if (bodyIntersectsEdge(bodyX)) {
+			if (circleIntersectsEdge(bodyX)) {
 				collision.x = true
 			}
 			// Checks with a lookahead on y:
-			if (bodyIntersectsEdge(bodyY)) {
+			if (circleIntersectsEdge(bodyY)) {
 				collision.y = true
 			}
 		}
@@ -264,7 +264,11 @@ class Tank {
 
 	fire() {
 		if (this.weapon) {
-			//TODO: Use weapon
+			console.log("Weapon used!")
+			//TODO: Use weapon - weapon should take care of removing itself when done
+			//* this.weapon.use() SHOULD MAKE EVERYTHING WORK
+			this.weapon = null
+
 		} else if (this.ammo > 0) {
 			this.ammo--
 			state.projectiles.bullets.push(new Bullet(this))

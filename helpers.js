@@ -133,24 +133,26 @@ function pointInRect(point, rect) {
 }
 
 //* https://stackoverflow.com/questions/21089959/detecting-collision-of-rectangle-with-circle
-function bodyIntersectsWall(body, wall) {
-	const distX = abs(body.x - wall.x - wall.w / 2)
-	const distY = abs(body.y - wall.y - wall.h / 2)
+function circleIntersectsRect(circle, rect) { // Takes circle object with x, y, and r + rect with x, y, w, and h
+	
+	// Circle coords are centered, rect coords are top left corner:
+	const distX = abs(circle.x - rect.x - rect.w / 2)
+	const distY = abs(circle.y - rect.y - rect.h / 2)
 
-	if (distX > (wall.w / 2 + body.r) || distY > (wall.h / 2 + body.r)) return false
+	if (distX > (rect.w / 2 + circle.r) || distY > (rect.h / 2 + circle.r)) return false
 
-	if (distX <= (wall.w / 2) || distY <= (wall.h / 2)) return true
+	if (distX <= (rect.w / 2) || distY <= (rect.h / 2)) return true
 
-	const dx = distX - wall.w / 2
-	const dy = distY - wall.h / 2
+	const dx = distX - rect.w / 2
+	const dy = distY - rect.h / 2
 
-	return (dx * dx + dy * dy <= body.r * body.r)
+	return (dx * dx + dy * dy <= circle.r * circle.r)
 }
 
-function bodyIntersectsEdge(body) {
+function circleIntersectsEdge(circle) {
 	const wallHalfWidth = config.env.wallStroke / 2
 
-	if (body.x - body.r <= wallHalfWidth || body.x + body.r >= width - wallHalfWidth || body.y - body.r <= wallHalfWidth || body.y + body.r >= height - wallHalfWidth) {
+	if (circle.x - circle.r <= wallHalfWidth || circle.x + circle.r >= width - wallHalfWidth || circle.y - circle.r <= wallHalfWidth || circle.y + circle.r >= height - wallHalfWidth) {
 		return true
 	} else {
 		return false
@@ -233,6 +235,5 @@ function randomSpawnCoords() {
 	const x = cell.x + cell.w / 2
 	const y = cell.y + cell.w / 2
 
-	console.log(col, row)
 	return { x: x, y: y }
 }

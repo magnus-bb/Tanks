@@ -4,7 +4,7 @@ config = {
 		endFrames: 60 * 3
 	},
 	pickup: {
-		size: 20 //* ~20px should be default for designs
+		size: 25 //* ~25px should be default for designs
 	},
 	tank: {
 		diameter: 20,
