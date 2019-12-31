@@ -11,7 +11,7 @@ class Tank {
 		this.direction = random(0, 360)
 		this.color = color // Array of RGB
 		this.ammo = config.tank.ammo
-		this.weapon = null
+		this.equipment = null
 		this.trail = [{ x: this.x, y: this.y }] //? For death recap - maybe
 		this.controls = controls
 		this.moveCoords = {
@@ -263,11 +263,9 @@ class Tank {
 	}
 
 	fire() {
-		if (this.weapon) {
-			console.log("Weapon used!")
-			//TODO: Use weapon - weapon should take care of removing itself when done
-			//* this.weapon.use() SHOULD MAKE EVERYTHING WORK
-			this.weapon = null
+		if (this.equipment) {
+			
+			this.equipment.use()
 
 		} else if (this.ammo > 0) {
 			this.ammo--

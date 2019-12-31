@@ -35,20 +35,20 @@ class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på ba
 
 	pickedUp(index, tank) {
 		//TODO: create instance of pickup-specific class
-		tank.weapon = this.name //! DELETE AND MAKE AN OBJECT, NOT JUST NAME OF PICKUP
+		tank.equipment = this.toEquipment(tank) //! DELETE AND MAKE AN OBJECT, NOT JUST NAME OF PICKUP
 
 		// Removes self from maze:
 		state.pickups.splice(index, 1)
 	}
 
+	toEquipment(tank) {
+		const className = this.name.capitalize()
+
+		return new equipment[className](tank, className)
+	}
+
 	show() {
-		//  push()
-
-		// translate(this.x, this.y)
-		// rotate(this.rotation)
 		image(this.asset, this.x, this.y, config.pickup.size, config.pickup.size)
-
-		// pop()
 	}
 
 	//* STATIC PROPS

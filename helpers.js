@@ -41,12 +41,17 @@ function randomColor() {
 }
 
 // Every number can call .between:
-Number.prototype.between = function (min, max, include = true) { // Cannot be arrow function because of 'this'-binding
+Number.prototype.between = function(min, max, include = true) { // Cannot be arrow function because of 'this'-binding
 	if (include) {
 		return this <= max && this >= min
 	} else {
 		return this < max && this > min
 	}
+}
+
+// Capitalize string to call a class constructor:
+String.prototype.capitalize = function() {
+	return this.charAt(0).toUpperCase() + this.slice(1)
 }
 
 // Returns reference to cell:

@@ -31,7 +31,7 @@ function draw() {
 		for (let i = state.pickups.length - 1; i >= 0; i--) {
 			const pickup = state.pickups[i]
 
-			if (pickup.checkCollision(tank) && !tank.weapon) {
+			if (pickup.checkCollision(tank) && !tank.equipment) {
 				pickup.pickedUp(i, tank)
 			}
 		}
