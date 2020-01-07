@@ -6,6 +6,9 @@ config = {
 	pickup: {
 		size: 25 //* ~25px should be default for designs
 	},
+	equipment: {
+		wormholeChargeTime: 60 * 2 //seconds
+	},
 	tank: {
 		diameter: 20,
 		moveSpeed: 1.5, // Has to be less than the width of walls to not pass through

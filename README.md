@@ -29,6 +29,10 @@ Guidelines
 	- Opdel lange scripts i hjælpefunktioner, der så står sit eget sted
 	- Hvis en funktion eksempelvis hedder `bounce()`, så sørg for at funktionen kun **bouncer**, og abstrahér underprocesser til en anden funktion, *eller* navngiv funktionen noget andet
 - Permanente kommentarer og variabel-/funktionsnavne på engelsk, hvis projektet senere skal deles
+- Sørg for at bruge `pop()` og `push()` til at containe canvas-ændringer
+- Brug hvert objekts `onFrame()` til at redigere alt, der *kun* har med objektet selv at gøre
+	- Dette skal ikke være listeners
+	- Dette skal ikke være noget, der gennemløber andre elementer i `state`
 
 Todos
 -----
@@ -58,12 +62,13 @@ Todos
 - Tildeling af point i `Game.end()` eller i en funktion, den kalder
 - Loops i `draw.js` kan slås sammen. F.eks. kan tanks + projectiles vist lægges ind i projectiles (bare tjek om rækkefølgen tillader det først)
 - Brug push og pop i alle show()
-- Hvert våben / bullet skal måske selv tjekke collisions i stedet for, at draw loopet tjekker, så draw ikke skal tjekke alle mulige forskellige conditions?
+- Hvert våbenobjekt/bullet ELLER deres class skal tjekke collisions med tanks, så de kan tjekke på deres egen måde
+- Random selections, der skal ekskludere noget bestemt (f.eks de steder, der allerede er en pickup eller tanks, der ikke skal vælge sig selv) skal omskrives så de tager arrayet, kloner det og fjerner sig selv/de ekskluderede fra klonen og bare vælger en random. På denne måde skal den ikke loope indtil en ny bliver fundet
 
 
 Idéer til pick ups / våben
 --------------------------
-- Aktivér for at bytte plads, modstanders `direction` randomizes (kan evt give collision issues med vægge)
+- Aktivér for at bytte plads, modstanders `direction` randomizes (kan evt give collision issues med vægge - bør måske ikke randomize)
 - Bruger får lov at bruge musen (lol) i 20? sekunder. Kun 1 ad gangen.
 - Laser, men med lidt vedvarende beam også, uden tracing
 - Nedbryder af væg

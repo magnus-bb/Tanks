@@ -23,6 +23,13 @@ class Cell {
 		return random() < config.env.wallOccurrence ? new Wall(this, side) : null
 	}
 
+	getMidpoint() {
+		return {
+			x: this.x + this.w / 2,
+			y: this.y + this.w / 2
+		}
+	}
+
 	//* STATIC METHODS
 
 	static resetGrid() {

@@ -41,7 +41,7 @@ function randomColor() {
 }
 
 // Every number can call .between:
-Number.prototype.between = function(min, max, include = true) { // Cannot be arrow function because of 'this'-binding
+Number.prototype.between = function (min, max, include = true) { // Cannot be arrow function because of 'this'-binding
 	if (include) {
 		return this <= max && this >= min
 	} else {
@@ -50,7 +50,7 @@ Number.prototype.between = function(min, max, include = true) { // Cannot be arr
 }
 
 // Capitalize string to call a class constructor:
-String.prototype.capitalize = function() {
+String.prototype.capitalize = function () {
 	return this.charAt(0).toUpperCase() + this.slice(1)
 }
 
@@ -139,7 +139,7 @@ function pointInRect(point, rect) {
 
 //* https://stackoverflow.com/questions/21089959/detecting-collision-of-rectangle-with-circle
 function circleIntersectsRect(circle, rect) { // Takes circle object with x, y, and r + rect with x, y, w, and h
-	
+
 	// Circle coords are centered, rect coords are top left corner:
 	const distX = abs(circle.x - rect.x - rect.w / 2)
 	const distY = abs(circle.y - rect.y - rect.h / 2)
@@ -221,6 +221,7 @@ function outOfBounds(pointX, pointY) {
 }
 
 function pointCloseToTank(point) {
+
 	for (const tank of state.tanks) {
 		if (dist(point.x, point.y, tank.x, tank.y) <= config.env.cellWidth * config.tank.spawnDistance) {
 			return true
@@ -240,5 +241,29 @@ function randomSpawnCoords() {
 	const x = cell.x + cell.w / 2
 	const y = cell.y + cell.w / 2
 
-	return { x: x, y: y }
+	return { x: x, y: y, col: col, row: row }
+}
+
+// Returns a random tank from state.tanks, an array (or single number) of excluded indices being optional:
+function randomTank(exclude = null) {
+
+	// Copies tanks array:
+	const tanks = [...state.tanks]
+
+	if (exclude !== null) { // Has to check against null, since index 0 is also falsy
+
+		// Removes any exclusions from clone:
+		if (typeof exclude === 'number') { // Can use both single index (faster), or array of exclusions
+			tanks.splice(exclude, 1)
+
+		} else {
+			for (let i = exclude.length - 1; i >= 0; i--) {
+				const index = exclude[i]
+				tanks.splice(index, 1)
+			}
+		}
+	}
+
+	// Returns random tank from remainder (or undefined if none are left):
+	return random(tanks)
 }

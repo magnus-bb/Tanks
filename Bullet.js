@@ -121,17 +121,27 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 		circle(this.x, this.y, drawDiameter)
 
 		pop()
-
-		// Countdown to destruction:
-		this.duration--
+		
 	}
 
-	// Uses index number to remove projectile from the game:
-	destroy(index) {
+	destroy(i) {
 		this.dead = true
-		state.projectiles.bullets.splice(index, 1)
+
+		state.projectiles.bullets.splice(i, 1)
 
 		this.owner.ammo++
+	}
+
+	// Called once every frame:
+	onFrame(i) {
+		this.move()
+		this.show()
+
+		this.duration--
+
+		if (this.duration <= 0) {
+			this.destroy(i)
+		}
 	}
 
 	//* STATIC METHODS

@@ -8,6 +8,7 @@ class GameState {
 		}
 		this.pickups = []
 		this.endTimer = config.game.endFrames
+		this.ending = false
 	}
 }
 

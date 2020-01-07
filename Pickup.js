@@ -1,10 +1,11 @@
 class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på banen. Det skal så kalde new XXX ved opsamling og sætte det nye objekt (baseret på selvstændig class) ind i inventory
-	constructor(name, type, x, y) {
+	constructor(name, type, x, y, col, row) {
 		this.name = name
 		this.type = type
 		this.x = x
 		this.y = y
-		//this.rotation = random(0, 360) //? Maybe inherit rotation if pickup is swapped with something already equipped
+		this.col = col
+		this.row = row
 	}
 
 	//* INSTANCE METHODS
@@ -33,17 +34,17 @@ class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på ba
 		}
 	}
 
-	pickedUp(index, tank) {
-		//TODO: create instance of pickup-specific class
-		tank.equipment = this.toEquipment(tank) //! DELETE AND MAKE AN OBJECT, NOT JUST NAME OF PICKUP
+	pickedUp(i, tank) {
+		tank.equipment = this.toEquipment(tank)
 
 		// Removes self from maze:
-		state.pickups.splice(index, 1)
+		state.pickups.splice(i, 1)
 	}
 
 	toEquipment(tank) {
 		const className = this.name.capitalize()
 
+		// Returns an instantiation of the class corresponding to this pickup's name by doing a lookup in equipment:
 		return new equipment[className](tank, className)
 	}
 
@@ -51,12 +52,17 @@ class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på ba
 		image(this.asset, this.x, this.y, config.pickup.size, config.pickup.size)
 	}
 
+	// Called every frame:
+	onFrame() {
+		this.show()
+	}
+
 	//* STATIC PROPS
 
 	static pickups = { //! DELETE PLACEHOLDERS
 		offensive: ['placeholder'],
 		defensive: [],
-		instaUse: [],
+		instaUse: ['wormhole'],
 
 	}
 
@@ -82,21 +88,34 @@ class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på ba
 		}
 	}
 
-	static create(pickupName, coords = false) { 
+	static create(pickupName, cellIndices = null) { 
 
-		// Uses given coords or randomCoords:
-		const { x, y } = coords || randomSpawnCoords()
+		if (cellIndices) {
+			var { col, row } = cellIndices
+			var { x, y } = getCell(col, row).getMidpoint()
+		} else {
+			var { x, y, col, row } = randomSpawnCoords()
 
-		for (const type in this.pickups) {
+			// Remake if pickup is already at this location:
+			for (const pickup of state.pickups) {
+				if (col === pickup.col && row === pickup.row) {
+					return this.create(pickupName)
+				}
+			}
+		}
+
+		for (const type in this.pickups) { // Has to use for...in, since type should be the string value of the key
 			if (this.pickups[type].includes(pickupName)) {
 				var pickupType = type
 				break
 			}
 		}
 
-		const pickup = new Pickup(pickupName, pickupType, x, y)
+		const pickup = new Pickup(pickupName, pickupType, x, y, col, row)
 
-		// Adds to maze to be rendered:
-		state.pickups.push(pickup)
+		// Adds to maze to be rendered if maze is not full:
+		if (state.pickups.length < config.env.cellAmtX * config.env.cellAmtY) {
+			state.pickups.push(pickup)
+		}
 	}
 }

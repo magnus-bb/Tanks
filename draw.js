@@ -7,7 +7,12 @@ function draw() {
 	noFill()
 	rect(0, 0, width, height) // Outer walls
 
-	//* Tanks & Pickups:
+	//* Pickups:
+	for (const pickup of state.pickups) {
+		pickup.onFrame()
+	}
+
+	//* Tanks - input and collision only:
 	// Must happen before collisions, so a collision can overwrite player input
 	for (const tank of state.tanks) {
 		tank.input()
@@ -27,7 +32,7 @@ function draw() {
 			tank.handleTurnCollision() // Automatically checks edge collisions when no args are given
 		}
 
-		//* Pickups:
+		//* Tanks & Pickups:
 		for (let i = state.pickups.length - 1; i >= 0; i--) {
 			const pickup = state.pickups[i]
 
@@ -37,7 +42,7 @@ function draw() {
 		}
 	}
 
-	//* Cells & Walls:
+	//* Walls:
 	for (const column of state.grid) {
 		for (const cell of column) {
 			for (let wall in cell.walls) {
@@ -46,7 +51,7 @@ function draw() {
 					wallObj = cell.walls[wall] // binds wall to the object, not the prop name
 					wallObj.show()
 
-					//* Collisions:
+					//* Walls & Tanks:
 					for (const tank of state.tanks) {
 
 						// Automatically checks wall collisions when args are given:
@@ -65,6 +70,7 @@ function draw() {
 						}
 					}
 
+					//* Walls & Bullets:
 					for (const bullet of state.projectiles.bullets) {
 						// Checks and handles collisions with walls:
 						const bounceAxis = bullet.checkCollision(wallObj) // Automatically checks wall collisions when args are given
@@ -79,13 +85,11 @@ function draw() {
 
 	//* Tanks - updating:
 	for (const tank of state.tanks) {
-		tank.move()
-		tank.addTrailPoint()
-		tank.turn(tank.turning) // Importantly done after .move() because of collision checking being done in the same order
-		tank.show()
+		tank.onFrame() // Importantly done after input + collision handling
+		tank.equipment && tank.equipment.onFrame() // Only done if equipment present and has onFrame()
 	}
 
-	//* Projectiles & Tanks:
+	//* Projectiles:
 	for (let i = state.projectiles.bullets.length - 1; i >= 0; i--) { // We have to go backwards when removing projectiles
 		const bullet = state.projectiles.bullets[i]
 
@@ -95,14 +99,9 @@ function draw() {
 			bullet.bounce(bounceAxis)
 		}
 
-		bullet.move()
-		bullet.show()
-		if (bullet.duration <= 0) {
-			bullet.destroy(i)
-		}
+		bullet.onFrame(i)
 
-
-		//* Tanks:
+		//* Projectiles & Tanks:
 		for (let j = state.tanks.length - 1; j >= 0; j--) {
 			const tank = state.tanks[j]
 
@@ -125,19 +124,7 @@ function draw() {
 		Bullet.showTrail(trailPair)
 	}
 
-	//* Pickups:
-	for (const pickup of state.pickups) {
-		pickup.show()
-		//TODO: Collisions med tanks
-	}
-
 	//* Round Conditions:
-	// Begins counting down for end:
-	if (state.tanks.length <= 0) { //! CHANGE TO 1 AFTER TESTING IS DONE
-		Game.decreaseEndTimer()
-	}
-	// Checks if game should end:
-	if (state.endTimer <= 0) {
-		Game.end()
-	}
+
+	Game.onFrame()
 }

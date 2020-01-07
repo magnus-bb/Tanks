@@ -1,4 +1,5 @@
 class Game {
+	// For menu manipulation, not state/round management:
 	static started = false
 	static paused = true
 	static players = [] //? evt et map til at holde styr på tanks?
@@ -37,11 +38,12 @@ class Game {
 
 		// Adds players' tanks:
 		for (const player of this.players) {
-			//TODO: ADD SPAWN DISTANCE TO randomSpawnCoords()
 
 			let spawnCoords = randomSpawnCoords()
+
+			// Makes new point if prior was too close to a tank:
 			while (pointCloseToTank(spawnCoords)) {
-				spawnCoords = randomSpawnCoords
+				spawnCoords = randomSpawnCoords()
 			}
 
 			state.tanks.push(new Tank(player.name, player.color, spawnCoords.x, spawnCoords.y, player.controls, player))
@@ -54,8 +56,11 @@ class Game {
 		this.unpause()
 	}
 
-	static decreaseEndTimer() {
-		state.endTimer--
+	// Checks if game should start counting towards ending:
+	static tankDestroyed() {
+		if (state.tanks.length <= 1) {
+			state.ending = true
+		}
 	}
 
 	static end() { //TODO: Handle winner by checking who is left (if (state.tanks[0]) state.tanks[0].owner.wins++?)
@@ -87,5 +92,18 @@ class Game {
 			this.paused = false
 			loop()
 		})
+	}
+
+	// Called once every frame:
+	static onFrame() {
+		if (state.ending) {
+			// Begins counting down for end:
+			state.endTimer--
+		}
+
+		// Checks if game should end:
+		if (state.endTimer <= 0) {
+			this.end()
+		}
 	}
 }

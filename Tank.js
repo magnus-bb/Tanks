@@ -264,8 +264,8 @@ class Tank {
 
 	fire() {
 		if (this.equipment) {
-			
-			this.equipment.use()
+
+			this.equipment.use() || console.log("You cannot use this item at the moment.")
 
 		} else if (this.ammo > 0) {
 			this.ammo--
@@ -310,9 +310,19 @@ class Tank {
 	}
 
 	// Uses index number to remove tank from the game:
-	destroy(index) {
-		state.tanks.splice(index, 1)
+	destroy(i) {
+		state.tanks.splice(i, 1)
+
+		Game.tankDestroyed()
 		//TODO: Msg on death or counter etc + effect
+	}
+
+	// Called every frame:
+	onFrame() {
+		this.move()
+		this.addTrailPoint()
+		this.turn(this.turning) // Importantly done after .move() because of collision checking being done in the same order
+		this.show()
 	}
 
 	//* STATIC METHODS
