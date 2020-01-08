@@ -4,7 +4,9 @@ config = { //TODO: Lav om til class, som også kan mutere sig selv
 		endFrames: 60 * 3 // Seconds
 	},
 	pickup: {
-		size: 25 // ~25px should be default for designs
+		size: 25, // ~25px should be default for designs
+		spawnInterval: 60 * 5, // Secs
+		spawnChance: 0.5
 	},
 	equipment: {
 		wormhole: {

@@ -69,6 +69,7 @@ Todos
 - FLYT ALLE COLLISION CHECKS IND I TANKENS OBJEKT (måske lige på nær projektil + tank, som altid skal resultere i kill), SÅ PROJEKTILER SELV KAN HÅNDTERE COLLISIONS PÅ DERES MÅDE
 	- Skal ikke gøres i `onFrame()`, da dette kun skal ske 1 gang per frame. Det skal være så der kan være forskellige (eller ingen) collision checks og forskellige handlers, når man looper over ALLE projektiler
 - Sørg for effects in FX.js i stedet for funktionelle classes
+- Skriv `config` om til class
 - Adskil edge og wall collisions, nu hvor de har en kaldende funktion (`colission()`)
 - Omskriv metoder, der *kun* kaldes af et objekt selv til private (med underscores) - .show(), .move() etc som kaldes af onFrame
 - Lav et pickup spawn loop

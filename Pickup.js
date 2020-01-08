@@ -60,13 +60,19 @@ class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på ba
 	//* STATIC PROPS
 
 	static pickups = { //! DELETE PLACEHOLDERS
-		offensive: ['placeholder', 'm82'],
+		offensive: ['m82'],
 		defensive: [],
 		instaUse: ['wormhole'],
 
 	}
 
 	//* STATIC METHODS
+
+	static spawn() {
+		if (frameCount % config.pickup.spawnInterval === 0) {
+			random() < config.pickup.spawnChance ? this.create(this.random()) : false
+		}
+	}
 
 	// Returns random pickup name, optionally in a category:
 	static random(type = null) {

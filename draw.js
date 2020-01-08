@@ -8,6 +8,8 @@ function draw() {
 	rect(0, 0, width, height) // Outer walls
 
 	//* Pickups:
+	Pickup.spawn()
+
 	for (const pickup of state.pickups) {
 		pickup.onFrame()
 	}
