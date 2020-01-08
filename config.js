@@ -7,10 +7,15 @@ config = { //TODO: Lav om til class, som også kan mutere sig selv
 		size: 25 // ~25px should be default for designs
 	},
 	equipment: {
-		wormholeChargeTime: 60 * 2, // Seconds
-		m82Ammo: 3,
-		m82Diameter: 3, // px
-		m82Speed: 12
+		wormhole: {
+			chargeFrames: 60 * 2 // Seconds
+		},
+		m82: {
+			ammo: 3,
+			diameter: 3, // px
+			speed: 12,
+			penetrationSpeedDivisor: 3
+		}
 	},
 	tank: {
 		diameter: 20,
@@ -28,7 +33,7 @@ config = { //TODO: Lav om til class, som også kan mutere sig selv
 		defaultColor: 'ff0000', //? remove
 	},
 	env: { //TODO: omskriv til cell. og wall.
-		cellWidth: 55,
+		cellWidth: 55, // px
 		cellAmtX: 15,
 		cellAmtY: 10,
 		wallStroke: 6,
@@ -38,7 +43,7 @@ config = { //TODO: Lav om til class, som også kan mutere sig selv
 	bullet: {
 		speed: 3,
 		diameter: 8,
-		duration: 60 * 6, // In frames
+		duration: 60 * 6, // Seconds
 	},
 	effects: {
 		muzzleSize: 2.5, // Times the size of regular bullet

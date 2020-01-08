@@ -45,12 +45,6 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 
 	// Both wall and edge collisions:
 	_checkCollision(wall) { // 'wall' can be passed as null, if we are checking edges
-		const numSteps = this.speed // check for every frame of movement
-
-		// Wall collisions only:
-		if (wall) { // Check is done before loop as to not reassign every iteration
-			var wallRect = getWallRect(wall)
-		}
 
 		const bounce = {
 			x: false,
@@ -59,6 +53,8 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 
 		//* Wall collisions:
 		if (wall) {
+			const wallRect = getWallRect(wall)
+
 			if (pointInRect({ x: this.next.x, y: this.y }, wallRect)) {
 				bounce.x = true
 			}
@@ -205,9 +201,9 @@ class M82Bullet {
 	constructor(owner) {
 		this.owner = owner
 		this.type = 'm82'
-		this.d = config.equipment.m82Diameter
+		this.d = config.equipment.m82.diameter
 		this.direction = owner.direction
-		this.speed = config.equipment.m82Speed
+		this.speed = config.equipment.m82.speed
 		this.x = this.owner.cannon.x
 		this.y = this.owner.cannon.y
 		this.color = this.owner.color // Convert to p5-color (like Bullet) if alpha is needed
@@ -220,15 +216,21 @@ class M82Bullet {
 			x: this.x + this.moveCoords.dX,
 			y: this.y + this.moveCoords.dY
 		}
+		this.penetratedWall = null
 	}
 
-	collision(i, wall = null) {
+	collision(i, wall = null) { // Wall is not passed when checking edge collisions //TODO: Make separate functions for edge / wall
+
+		// Checks if projectile collides with wall:
 		if (this._checkCollision(wall)) {
-			this.destroy(i)
+
+			// Checks if it should go through (if it was the first wall hit / rechecking the first wall) or if it should be destroyed (if it was the second collision / with another wall):
+			if (!this._penetration(wall)) { 
+				this.destroy(i)
+			}
 		}
 	}
 
-	//! PASSES THROUGH WALLS
 	_checkCollision(wall) { // 'wall' can be passed as null, if we are checking edges
 
 		// Does not need to be as complex when it doesn't bounce (doesn't need to calculate the axis of impact):
@@ -258,6 +260,31 @@ class M82Bullet {
 					return true // NOTHING (not even false) may be returned if !pointInRect, since this stops looping
 				}
 			}
+		}
+	}
+
+	_penetration(wallObj) {
+		// First collision with a wall: 
+		if (!this.penetratedWall) {
+
+			// Saves the wall:
+			this.penetratedWall = wallObj
+
+			// Reduces speed:
+			this.speed /= config.equipment.m82.penetrationSpeedDivisor
+
+			// Recalculates moveCoords based on new speed:
+			const { x, y } = getOffsetPoint(this.speed, this.direction)
+			this.moveCoords = {
+				dX: x,
+				dY: y
+			}
+
+			// Returns true to not call .destroy() (pass through wall) in .collision():
+			return true
+		} else {
+			// If there is a saved wall already, pass through if the wall is the same (if we have not gone all the way through wall yet), otherwise .destroy():
+			return wallObj === this.penetratedWall
 		}
 	}
 

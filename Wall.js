@@ -23,7 +23,7 @@ class Wall {
 
 	show() {
 		strokeWeight(this.w)
-		strokeCap(ROUND) //? PROJECT?
+		strokeCap(ROUND)
 		stroke(41)
 		line(this.x1, this.y1, this.x2, this.y2)
 	}

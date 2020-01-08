@@ -31,7 +31,7 @@ class M82 extends Equipment {
 	constructor(owner, name) {
 		super(owner, name)
 
-		this.ammo = config.equipment.m82Ammo
+		this.ammo = config.equipment.m82.ammo
 	}
 
 	use() {
@@ -55,7 +55,7 @@ class M82 extends Equipment {
 class Wormhole extends Equipment {
 	constructor(owner, name) {
 		super(owner, name)
-		this.duration = config.equipment.wormholeChargeTime
+		this.duration = config.equipment.wormhole.chargeFrames
 	}
 
 	autoUse() { //TODO: nyt navn? Cooldown etc. Skal evt sættes i instause parent
@@ -75,7 +75,7 @@ class Wormhole extends Equipment {
 
 		otherTank && this.swap(otherTank) // Has to check for undefined since this can happen during end timer with just 1 tank (random returns undefined)
 
-		this.remove
+		this.remove()
 	}
 
 	// Swaps x, y, and direction with other tank:

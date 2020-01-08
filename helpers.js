@@ -1,14 +1,15 @@
 // Converts a direction and speed to new coords:
 function getOffsetPoint(dist, dir, driving = 'forward') { // Defaults to 'forward' since it is used for more than just moving objects
-	if (driving === 'backward') {
-		return {
-			x: -dist * cos(dir),
-			y: -dist * sin(dir)
-		}
-	} else if (driving === 'forward') {
+	if (driving === 'forward') {
 		return {
 			x: dist * cos(dir),
 			y: dist * sin(dir)
+		}
+		
+	} else if (driving === 'backward') {
+		return {
+			x: -dist * cos(dir),
+			y: -dist * sin(dir)
 		}
 	} else {
 		return {

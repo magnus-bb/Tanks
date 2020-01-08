@@ -335,7 +335,7 @@ class Tank {
 	//* STATIC METHODS
 
 	//? FLYT UD?
-	static checkHit(projectile, tank) {
+	static checkHit(projectile, tank) { //? Could m82 fly completely through tank if we don't do lookaheads with steps?
 		// Distance between center of tank and proj:
 		const distance = dist(projectile.x, projectile.y, tank.x, tank.y)
 

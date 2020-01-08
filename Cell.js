@@ -42,7 +42,7 @@ class Cell {
 	static generateGrid() {
 		for (let x = 0; x < width; x += config.env.cellWidth) { // Uses width / height of canvas (based off amt of cells and cellwidth) to generate rows and columns of cells
 			const column = []
-	
+
 			for (let y = 0; y < height; y += config.env.cellWidth) {
 				column.push(new Cell(x, y))
 			}
@@ -70,24 +70,45 @@ class Cell {
 		// Starts maze generation: 
 		const initialIndices = [0, 0] // Starting point does not matter
 		const initialCell = getCell(...initialIndices)
-	
+
 		initialCell.visited = true
 		Cell.cellStack.push(initialCell)
-	
+
 		while (Cell.cellStack.length > 0) {
 			const currentCell = Cell.cellStack.pop()
-	
+
 			const unvisitedCells = getUnvisitedNeighbors(currentCell)
 			if (unvisitedCells.length > 0) {
 				Cell.cellStack.push(currentCell)
-	
+
 				const data = random(unvisitedCells)
 				const nextCell = data.cell
 				const dir = data.dir
-	
+
 				removeWall(currentCell, nextCell, dir)
 				nextCell.visited = true
 				Cell.cellStack.push(nextCell)
+			}
+		}
+	}
+
+	static fixWallOverlaps() {
+		for (let x = 0; x < state.grid.length; x++) {
+			for (let y = 0; y < state.grid[x].length; y++) {
+
+				if (state.grid[x][y].walls.bottom) {
+
+					if (state.grid[x][y].walls.right || state.grid[x][y + 1].walls.right) {
+						state.grid[x][y].walls.bottom.x2 -= config.env.wallStroke / 2
+					}
+
+					// Has to do preliminary x-1 check, to not assume it exists when trying to check the y:
+					if (state.grid[x - 1]) {
+						if (state.grid[x - 1][y].walls.right || state.grid[x - 1][y + 1].walls.right) {
+							state.grid[x][y].walls.bottom.x1 += config.env.wallStroke / 2
+						}
+					}
+				}
 			}
 		}
 	}
