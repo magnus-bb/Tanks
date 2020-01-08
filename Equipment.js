@@ -1,9 +1,21 @@
-//* OFFENSIVE
-
-class Placeholder {
+//* BASES
+class Equipment {
 	constructor(owner, name) {
 		this.owner = owner
 		this.name = name
+	}
+
+	remove() {
+		this.owner.equipment = null
+	}
+}
+
+
+//* OFFENSIVE
+
+class Placeholder extends Equipment {
+	constructor(owner, name) {
+		super(owner, name)
 	}
 
 	use() {
@@ -11,21 +23,42 @@ class Placeholder {
 
 
 		// Last step:
-		this.owner.equipment = null
+		this.remove()
+	}
+}
+
+class M82 extends Equipment {
+	constructor(owner, name) {
+		super(owner, name)
+
+		this.ammo = config.equipment.m82Ammo
+	}
+
+	use() {
+		console.log(this.name + " used by: " + this.owner.name)
+
+		this.ammo--
+
+		// Putting self-sufficient bullet in state with the same owner as this equip:
+		state.projectiles.push(new M82Bullet(this.owner))
+
+		// Last step:
+		if (this.ammo <= 0) {
+			this.remove()
+		}
 	}
 }
 
 
-//* INSTA
+//* INSTAUSE
 
-class Wormhole {
+class Wormhole extends Equipment {
 	constructor(owner, name) {
-		this.owner = owner
-		this.name = name
+		super(owner, name)
 		this.duration = config.equipment.wormholeChargeTime
 	}
 
-	autoUse() {
+	autoUse() { //TODO: nyt navn? Cooldown etc. Skal evt sættes i instause parent
 		if (this.duration <= 0) {
 			this._use()
 		}
@@ -33,7 +66,8 @@ class Wormhole {
 		this.duration--
 	}
 
-	_use() { // Private to not make tank be able to use()
+	// Private to not make tank be able to use():
+	_use() { 
 		console.log(this.name + " used by: " + this.owner.name)
 
 		const selfIndex = state.tanks.findIndex(i => i.equipment === this)
@@ -41,7 +75,7 @@ class Wormhole {
 
 		otherTank && this.swap(otherTank) // Has to check for undefined since this can happen during end timer with just 1 tank (random returns undefined)
 
-		this.owner.equipment = null
+		this.remove
 	}
 
 	// Swaps x, y, and direction with other tank:
@@ -68,5 +102,6 @@ class Wormhole {
 
 const equipment = {
 	Placeholder,
-	Wormhole
+	Wormhole,
+	M82
 }

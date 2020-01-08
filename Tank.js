@@ -265,11 +265,18 @@ class Tank {
 	fire() {
 		if (this.equipment) {
 
-			this.equipment.use() || console.log("You cannot use this item at the moment.")
+			// If the item is usable:
+			try {
+				this.equipment.use()
+			}
+			// If the item is on cooldown (e.g. wormhole):
+			catch(err) {
+				console.log("You cannot use this item at the moment.")
+			} 
 
 		} else if (this.ammo > 0) {
 			this.ammo--
-			state.projectiles.bullets.push(new Bullet(this))
+			state.projectiles.push(new Bullet(this))
 
 			shake() // Global effect
 		}
@@ -328,13 +335,11 @@ class Tank {
 	//* STATIC METHODS
 
 	//? FLYT UD?
-	static checkHit(bullet, tank) {
-		// Distance between center of tank and bullet:
-		const distance = dist(bullet.x, bullet.y, tank.x, tank.y)
+	static checkHit(projectile, tank) {
+		// Distance between center of tank and proj:
+		const distance = dist(projectile.x, projectile.y, tank.x, tank.y)
 
 		// Checks if distance is smaller, when width of tank and bullet have been factored in:
-		if (distance < config.bullet.diameter / 2 + tank.d / 2) { // Does not use bullet.d, since the muzzle effect changes that size
-			return true
-		}
+		return distance < projectile.d / 2 + tank.d / 2
 	}
 }

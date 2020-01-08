@@ -1,13 +1,16 @@
-config = {
+config = { //TODO: Lav om til class, som også kan mutere sig selv
 	fps: 60,
 	game: {
-		endFrames: 60 * 3
+		endFrames: 60 * 3 // Seconds
 	},
 	pickup: {
-		size: 25 //* ~25px should be default for designs
+		size: 25 // ~25px should be default for designs
 	},
 	equipment: {
-		wormholeChargeTime: 60 * 2 //seconds
+		wormholeChargeTime: 60 * 2, // Seconds
+		m82Ammo: 3,
+		m82Diameter: 3, // px
+		m82Speed: 12
 	},
 	tank: {
 		diameter: 20,
@@ -21,8 +24,8 @@ config = {
 		ammo: 5,
 		collisionMoveSlow: 2.5,
 		collisionTurnSlow: 2,
-		spawnDistance: 1, //TODO: Cells between spawned tanks
-		defaultColor: 'ff0000',
+		spawnDistance: 1,
+		defaultColor: 'ff0000', //? remove
 	},
 	env: { //TODO: omskriv til cell. og wall.
 		cellWidth: 55,
@@ -30,7 +33,7 @@ config = {
 		cellAmtY: 10,
 		wallStroke: 6,
 		wallOccurrence: 0.8,
-		collisionLookaheadSteps: 3 // Same as bullet speed
+		collisionStepSize: null // SET AFTER INITIATION - Steps for checking will be highest possible value, that's still lower than walls (so projectiles faster than wallStrokes will not fly through)
 	},
 	bullet: {
 		speed: 3,
@@ -46,3 +49,5 @@ config = {
 	}
 }
 
+// Setting step size, without the size having to be calculated every time it is accessed:
+config.env.collisionStepSize = config.env.wallStroke - 1

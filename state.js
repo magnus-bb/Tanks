@@ -2,10 +2,8 @@ class GameState {
 	constructor() {
 		this.grid = []
 		this.tanks = []
-		this.projectiles = {
-			bullets: [],
-			trails: new Map()
-		}
+		this.projectiles = []
+		this.bulletTrails = new Map()
 		this.pickups = []
 		this.endTimer = config.game.endFrames
 		this.ending = false

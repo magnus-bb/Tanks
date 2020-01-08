@@ -71,12 +71,11 @@ function draw() {
 					}
 
 					//* Walls & Bullets:
-					for (const bullet of state.projectiles.bullets) {
+					for (let i = state.projectiles.length - 1; i >= 0; i--) { // We have to go backwards when removing projectiles
+						const projectile = state.projectiles[i]
+
 						// Checks and handles collisions with walls:
-						const bounceAxis = bullet.checkCollision(wallObj) // Automatically checks wall collisions when args are given
-						if (bounceAxis.x || bounceAxis.y) {
-							bullet.bounce(bounceAxis)
-						}
+						projectile.collision(i, wallObj) || true // Only checks collisions if projectile has collision-interactions
 					}
 				}
 			}
@@ -86,29 +85,27 @@ function draw() {
 	//* Tanks - updating:
 	for (const tank of state.tanks) {
 		tank.onFrame() // Importantly done after input + collision handling
-		tank.equipment && tank.equipment.onFrame() // Only done if equipment present and has onFrame()
+		if (tank.equipment && tank.equipment.onFrame) { // Only done if equipment present and has onFrame() (instause with CD needs to keep track of time)
+			tank.equipment.onFrame()
+		} 
 	}
 
 	//* Projectiles:
-	for (let i = state.projectiles.bullets.length - 1; i >= 0; i--) { // We have to go backwards when removing projectiles
-		const bullet = state.projectiles.bullets[i]
+	for (let i = state.projectiles.length - 1; i >= 0; i--) { // We have to go backwards when removing projectiles
+		const projectile = state.projectiles[i]
 
-		// Checks and handles collisions with edges:
-		const bounceAxis = bullet.checkCollision() // Automatically checks edge collisions when no args are given
-		if (bounceAxis.x || bounceAxis.y) {
-			bullet.bounce(bounceAxis)
-		}
+		projectile.collision(i)
 
-		bullet.onFrame(i)
+		projectile.onFrame(i)
 
 		//* Projectiles & Tanks:
 		for (let j = state.tanks.length - 1; j >= 0; j--) {
 			const tank = state.tanks[j]
 
 			// Checks and handles bullet hits for both bullet and tank:
-			if (Tank.checkHit(bullet, tank)) {
-				bullet.owner.owner.gotKill() // The player that owns the tank that spawned the bullet
-				bullet.destroy(i)
+			if (Tank.checkHit(projectile, tank)) {
+				projectile.owner.owner.gotKill() // The player that owns the tank that spawned the bullet
+				projectile.destroy(i)
 				tank.destroy(j)
 
 				// Goes on to next bullet, now that this one is destroyed:
@@ -120,7 +117,7 @@ function draw() {
 	}
 
 	//* Effects:
-	for (const trailPair of state.projectiles.trails) {
+	for (const trailPair of state.bulletTrails) {
 		Bullet.showTrail(trailPair)
 	}
 

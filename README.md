@@ -39,8 +39,9 @@ Todos
 - Sæt max antal spillere (9 med spawndistance på 1 cell)
 - En lækker effekt når et projektil kalder `destroy()`, så det ikke bare forsvinder.
 - Finde og loade open source lydeffekter til skud (*gud forbyde, at jeg bliver nødt til at optage mundlyde*)
-- `Bullet` class skal omskrives til at extende en `Projectile` class i stedet, og så skal fælleskarakteristika med andre våben flyttes dertil
-- `Bullet` driller inde i vægge
+- `Bullet` class skal omskrives til at extende en `Projectile` class i stedet til det mest basic gentagede
+	- Men det meste skal laves med composition
+- Projektiler skal alle være i ét `state.projectiles`
 - Tilføjelse af tilfældige celler, der til tider "brænder" og ikke må passeres
 - Tank collisions med hinanden?
 - Find et system for helpers - static i classes vs i instances vs globale funktioner
@@ -64,6 +65,10 @@ Todos
 - Brug push og pop i alle show()
 - Hvert våbenobjekt/bullet ELLER deres class skal tjekke collisions med tanks, så de kan tjekke på deres egen måde
 - Random selections, der skal ekskludere noget bestemt (f.eks de steder, der allerede er en pickup eller tanks, der ikke skal vælge sig selv) skal omskrives så de tager arrayet, kloner det og fjerner sig selv/de ekskluderede fra klonen og bare vælger en random. På denne måde skal den ikke loope indtil en ny bliver fundet
+- Lav muzzle-effekt om til noget nyt grafisk i stedet for at manipulere størrelsen af projektilet
+- FLYT ALLE COLLISION CHECKS IND I TANKENS OBJEKT (måske lige på nær projektil + tank, som altid skal resultere i kill), SÅ PROJEKTILER SELV KAN HÅNDTERE COLLISIONS PÅ DERES MÅDE
+	- Skal ikke gøres i `onFrame()`, da dette kun skal ske 1 gang per frame. Det skal være så der kan være forskellige (eller ingen) collision checks og forskellige handlers, når man looper over ALLE projektiler
+- Sørg for effects in FX.js i stedet for funktionelle classes
 
 
 Idéer til pick ups / våben
@@ -81,7 +86,8 @@ Idéer til pick ups / våben
 - Skjold der dækker x grader omkring tank indtil 1 hit
 - Mini-ai som hjælper
 - Debuff fjenders move-/projektil-speed
-- En cooldown på en slags dash som en ability alle har.
+- En cooldown på en slags dash som en ability alle har
+- Stealth-projektiler, der er *næsten* usynlige, men heller ikke rammer en selv
 
 Links
 -----

@@ -60,7 +60,7 @@ class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på ba
 	//* STATIC PROPS
 
 	static pickups = { //! DELETE PLACEHOLDERS
-		offensive: ['placeholder'],
+		offensive: ['placeholder', 'm82'],
 		defensive: [],
 		instaUse: ['wormhole'],
 
