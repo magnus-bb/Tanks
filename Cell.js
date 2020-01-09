@@ -2,7 +2,7 @@ class Cell {
 	constructor(x, y) {
 		this.x = x
 		this.y = y
-		this.w = config.env.cellWidth
+		this.w = Config.current.cell.width
 		// Makes a wall at chance, if wall is not on canvas edge
 		this.walls = {
 			right: null,
@@ -20,10 +20,10 @@ class Cell {
 	//* INSTANCE METHODS
 
 	randomWall(side) {
-		return random() < config.env.wallOccurrence ? new Wall(this, side) : null
+		return random() < Config.current.wall.occurrenceRate ? new Wall(this, side) : null
 	}
 
-	getMidpoint() {
+	get midpoint() {
 		return {
 			x: this.x + this.w / 2,
 			y: this.y + this.w / 2
@@ -40,10 +40,10 @@ class Cell {
 	}
 
 	static generateGrid() {
-		for (let x = 0; x < width; x += config.env.cellWidth) { // Uses width / height of canvas (based off amt of cells and cellwidth) to generate rows and columns of cells
+		for (let x = 0; x < width; x += Config.current.cell.width) { // Uses width / height of canvas (based off amt of cells and cellwidth) to generate rows and columns of cells
 			const column = []
 
-			for (let y = 0; y < height; y += config.env.cellWidth) {
+			for (let y = 0; y < height; y += Config.current.cell.width) {
 				column.push(new Cell(x, y))
 			}
 
@@ -56,10 +56,10 @@ class Cell {
 		for (const col of state.grid) {
 			for (const cell of col) {
 
-				if (cell.x !== width - config.env.cellWidth) {
+				if (cell.x !== width - Config.current.cell.width) {
 					cell.walls.right = cell.randomWall('right')
 				}
-				if (cell.y !== height - config.env.cellWidth) {
+				if (cell.y !== height - Config.current.cell.width) {
 					cell.walls.bottom = cell.randomWall('bottom')
 				}
 			}
@@ -92,24 +92,21 @@ class Cell {
 		}
 	}
 
-	static fixWallOverlaps() {
-		for (let x = 0; x < state.grid.length; x++) {
-			for (let y = 0; y < state.grid[x].length; y++) {
-
-				if (state.grid[x][y].walls.bottom) {
-
-					if (state.grid[x][y].walls.right || state.grid[x][y + 1].walls.right) {
-						state.grid[x][y].walls.bottom.x2 -= config.env.wallStroke / 2
-					}
-
-					// Has to do preliminary x-1 check, to not assume it exists when trying to check the y:
-					if (state.grid[x - 1]) {
-						if (state.grid[x - 1][y].walls.right || state.grid[x - 1][y + 1].walls.right) {
-							state.grid[x][y].walls.bottom.x1 += config.env.wallStroke / 2
-						}
-					}
-				}
-			}
-		}
-	}
+	//! static fixWallOverlaps() {
+	//! 	for (let x = 0; x < state.grid.length; x++) {
+	//! 		for (let y = 0; y < state.grid[x].length; y++)!
+	//! 			if (state.grid[x][y].walls.bottom)!
+	//! 				if (state.grid[x][y].walls.right || state.grid[x][y + 1].walls.right) {
+	//! 					state.grid[x][y].walls.bottom.x2 -= Config.current.wall.strokeWidth / 2
+	//! 			!
+	//! 				// Has to do preliminary x-1 check, to not assume it exists when trying to check the y:
+	//! 				if (state.grid[x - 1]) {
+	//! 					if (state.grid[x - 1][y].walls.right || state.grid[x - 1][y + 1].walls.right) {
+	//! 						state.grid[x][y].walls.bottom.x1 += Config.current.wall.strokeWidth / 2
+	//! 					}
+	//! 				}
+	//! 			}
+	//! 		}
+	//! 	}
+	//! }
 }

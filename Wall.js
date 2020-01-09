@@ -4,7 +4,7 @@ class Wall {
 		this.y1 = owner.y
 		this.x2 = owner.x
 		this.y2 = owner.y
-		this.w = config.env.wallStroke
+		this.w = Config.current.wall.strokeWidth
 
 		const length = owner.w
 		switch (side) {
@@ -21,10 +21,18 @@ class Wall {
 		}
 	}
 
-	show() {
+	_show() {
+		push()
+
 		strokeWeight(this.w)
 		strokeCap(ROUND)
 		stroke(41)
 		line(this.x1, this.y1, this.x2, this.y2)
+
+		pop()
+	}
+
+	onFrame() {
+		this._show()
 	}
 }

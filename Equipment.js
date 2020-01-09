@@ -31,7 +31,7 @@ class M82 extends Equipment {
 	constructor(owner, name) {
 		super(owner, name)
 
-		this.ammo = config.equipment.m82.ammo
+		this.ammo = Config.current.equipment.m82.ammo
 	}
 
 	use() {
@@ -55,7 +55,7 @@ class M82 extends Equipment {
 class Wormhole extends Equipment {
 	constructor(owner, name) {
 		super(owner, name)
-		this.duration = config.equipment.wormhole.chargeFrames
+		this.duration = Config.current.equipment.wormhole.chargeFrames
 	}
 
 	autoUse() { //TODO: nyt navn? Cooldown etc. Skal evt sættes i instause parent

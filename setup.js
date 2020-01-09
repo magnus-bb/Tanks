@@ -1,9 +1,9 @@
 function setup() {
 	noLoop()
 
-	frameRate(config.fps)
-	const canvasWidth = config.env.cellWidth * config.env.cellAmtX
-	const canvasHeight = config.env.cellWidth * config.env.cellAmtY
+	frameRate(Config.current.fps)
+	const canvasWidth = Config.current.cell.width * Config.current.cell.xAmt
+	const canvasHeight = Config.current.cell.width * Config.current.cell.yAmt
 	const canvas = createCanvas(canvasWidth, canvasHeight)
 	canvas.parent('canvas-container')
 

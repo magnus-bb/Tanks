@@ -12,12 +12,12 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 	constructor(owner) {
 		this.owner = owner
 		this.type = 'bullet'
-		this.d = config.bullet.diameter // Initial size is bigger for a muzzle flash effect
+		this.d = Config.current.bullet.diameter // Initial size is bigger for a muzzle flash effect
 		this.direction = owner.direction
-		this.speed = config.bullet.speed
+		this.speed = Config.current.bullet.speed
 		this.x = this.owner.cannon.x
 		this.y = this.owner.cannon.y
-		this.duration = config.bullet.duration
+		this.duration = Config.current.bullet.duration
 		this.color = color(this.owner.color) // Must convert to P5-color object to be able to set alpha
 		const move = getOffsetPoint(this.speed, this.direction)
 		this.moveCoords = {
@@ -102,14 +102,14 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 
 	// Makes a trail point for each frame:
 	makeTrail(bullet) {
-		const trails = state.bulletTrails // Trails are made in state to allow for continuous rendering when bullet is destroyed
+		const trails = state.fx.bulletTrails // Trails are made in state to allow for continuous rendering when bullet is destroyed
 
 		// When first point is made, the bullet's trail has to be initiated:
 		if (!trails.has(bullet)) {
 			trails.set(bullet, [])
 		}
 
-		const trail = state.bulletTrails.get(bullet)
+		const trail = state.fx.bulletTrails.get(bullet)
 
 		trail.push({ x: this.x, y: this.y })
 	}
@@ -117,7 +117,7 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 	show() {
 
 		// Drawn diameter is increased in first few frames for a muzzle effect:
-		let drawDiameter = this.d * config.effects.muzzleSize - (config.bullet.duration - this.duration) * config.effects.muzzleSpeed
+		let drawDiameter = this.d * Config.current.fx.muzzleSize - (Config.current.bullet.duration - this.duration) * Config.current.fx.muzzleSpeed
 		drawDiameter = drawDiameter > this.d ? drawDiameter : this.d
 
 		push()
@@ -156,54 +156,15 @@ class Bullet { //TODO: Should be extension of a Projectile class, so other weapo
 			this.destroy(i)
 		}
 	}
-
-	//* STATIC METHODS
-
-	static showTrail(trailPair) { // Trailpair couples bullet to trail, since bullet cannot house trail itself
-		const bullet = trailPair[0]
-		const trail = trailPair[1]
-
-		if (trail.length <= 0 && bullet.dead) {
-			// Removes trail, when all points have run out:
-			state.bulletTrails.delete(bullet)
-		} else {
-			// Keeps the trail from growing forever:
-			if (trail.length > config.effects.bulletTrailLength) {
-				trail.shift()
-			}
-
-			push()
-
-			bullet.color.setAlpha(config.effects.bulletTrailAlpha) // Lower opacity than bullet)
-			fill(bullet.color)
-			noStroke()
-
-			for (let i = 0; i < trail.length; i++) {
-				// Lerp returns a diameter between 3 px and bullet diameter according to how close to the bullet the point is
-				const d = lerp(3, bullet.d, i / (trail.length - 1))
-
-				circle(trail[i].x, trail[i].y, d)
-			}
-
-			// Resets alpha, since it carries over:
-			bullet.color.setAlpha(255)
-
-			pop()
-
-			if (bullet.dead === true) {
-				trail.shift()
-			}
-		}
-	}
 }
 
 class M82Bullet {
 	constructor(owner) {
 		this.owner = owner
 		this.type = 'm82'
-		this.d = config.equipment.m82.diameter
+		this.d = Config.current.equipment.m82.diameter
 		this.direction = owner.direction
-		this.speed = config.equipment.m82.speed
+		this.speed = Config.current.equipment.m82.speed
 		this.x = this.owner.cannon.x
 		this.y = this.owner.cannon.y
 		this.color = this.owner.color // Convert to p5-color (like Bullet) if alpha is needed
@@ -248,7 +209,7 @@ class M82Bullet {
 			const wallRect = getWallRect(wall)
 
 			// Looks at "all" positions between location and (fraction of) 'next' location:
-			for (let step = 0; step <= this.speed; step += config.env.collisionStepSize) {
+			for (let step = 0; step <= this.speed; step += Config.current.wall.collisionCheckStepSize) {
 
 				// This has to be in fractions of moveCoords (and not just +- some values) to account for the direction of the movement - we don't want to ADD to a negative and vice versa:
 				const next = {
@@ -271,7 +232,7 @@ class M82Bullet {
 			this.penetratedWall = wallObj
 
 			// Reduces speed:
-			this.speed /= config.equipment.m82.penetrationSpeedDivisor
+			this.speed /= Config.current.equipment.m82.penetrationSpeedDivisor
 
 			// Recalculates moveCoords based on new speed:
 			const { x, y } = getOffsetPoint(this.speed, this.direction)

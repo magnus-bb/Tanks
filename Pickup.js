@@ -23,10 +23,10 @@ class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på ba
 		}
 
 		const pickupRect = {
-			x: this.x - config.pickup.size / 2,
-			y: this.y - config.pickup.size / 2,
-			h: config.pickup.size,
-			w: config.pickup.size
+			x: this.x - Config.current.pickup.size / 2,
+			y: this.y - Config.current.pickup.size / 2,
+			h: Config.current.pickup.size,
+			w: Config.current.pickup.size
 		}
 
 		if (circleIntersectsRect(tankBody, pickupRect)) {
@@ -49,7 +49,7 @@ class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på ba
 	}
 
 	show() {
-		image(this.asset, this.x, this.y, config.pickup.size, config.pickup.size)
+		image(this.asset, this.x, this.y, Config.current.pickup.size, Config.current.pickup.size)
 	}
 
 	// Called every frame:
@@ -69,8 +69,8 @@ class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på ba
 	//* STATIC METHODS
 
 	static spawn() {
-		if (frameCount % config.pickup.spawnInterval === 0) {
-			random() < config.pickup.spawnChance ? this.create(this.random()) : false
+		if (frameCount % Config.current.pickup.spawnInterval === 0) {
+			random() < Config.current.pickup.spawnChance ? this.create(this.random()) : false
 		}
 	}
 
@@ -98,7 +98,7 @@ class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på ba
 
 		if (cellIndices) {
 			var { col, row } = cellIndices
-			var { x, y } = getCell(col, row).getMidpoint()
+			var { x, y } = getCell(col, row).midpoint
 		} else {
 			var { x, y, col, row } = randomSpawnCoords()
 
@@ -120,7 +120,7 @@ class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på ba
 		const pickup = new Pickup(pickupName, pickupType, x, y, col, row)
 
 		// Adds to maze to be rendered if maze is not full:
-		if (state.pickups.length < config.env.cellAmtX * config.env.cellAmtY) {
+		if (state.pickups.length < Config.current.cell.xAmt * Config.current.cell.yAmt) {
 			state.pickups.push(pickup)
 		}
 	}

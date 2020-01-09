@@ -1,11 +1,16 @@
 function draw() {
 
 	//* Canvas:
+	//TODO: Canvas-class?
+	push()
+
 	background(195)
 	stroke(40)
-	strokeWeight(config.env.wallStroke)
+	strokeWeight(Config.current.wall.strokeWidth)
 	noFill()
 	rect(0, 0, width, height) // Outer walls
+
+	pop()
 
 	//* Pickups:
 	Pickup.spawn()
@@ -19,20 +24,7 @@ function draw() {
 	for (const tank of state.tanks) {
 		tank.input()
 
-		// Automatically checks edge collisions when no args are given:
-		const bodyAxes = tank.checkBodyCollision()
-		if (bodyAxes.x || bodyAxes.y) {
-			tank.handleBodyCollision(bodyAxes)
-		}
-
-		const cannonAxes = tank.checkCannonCollision()
-		if (cannonAxes.x || cannonAxes.y) {
-			tank.handleCannonCollision(cannonAxes)
-		}
-
-		if (tank.checkTurnCollision()) {
-			tank.handleTurnCollision() // Automatically checks edge collisions when no args are given
-		}
+		tank.collision()
 
 		//* Tanks & Pickups:
 		for (let i = state.pickups.length - 1; i >= 0; i--) {
@@ -51,25 +43,11 @@ function draw() {
 				if (cell.walls[wall]) { // checks for existing walls only
 
 					wallObj = cell.walls[wall] // binds wall to the object, not the prop name
-					wallObj.show()
+					wallObj.onFrame()
 
 					//* Walls & Tanks:
 					for (const tank of state.tanks) {
-
-						// Automatically checks wall collisions when args are given:
-						const bodyAxes = tank.checkBodyCollision(wallObj)
-						if (bodyAxes.x || bodyAxes.y) {
-							tank.handleBodyCollision(bodyAxes)
-						}
-
-						const cannonAxes = tank.checkCannonCollision(wallObj)
-						if (cannonAxes.x || cannonAxes.y) {
-							tank.handleCannonCollision(cannonAxes)
-						}
-
-						if (tank.checkTurnCollision(wallObj)) {
-							tank.handleTurnCollision()
-						}
+						tank.collision(wallObj)
 					}
 
 					//* Walls & Bullets:
@@ -105,7 +83,7 @@ function draw() {
 			const tank = state.tanks[j]
 
 			// Checks and handles bullet hits for both bullet and tank:
-			if (Tank.checkHit(projectile, tank)) {
+			if (Tank.checkHit(projectile, tank)) { //TODO: Pak ind i class method, á la .collision()?
 				projectile.owner.owner.gotKill() // The player that owns the tank that spawned the bullet
 				projectile.destroy(i)
 				tank.destroy(j)
@@ -119,11 +97,10 @@ function draw() {
 	}
 
 	//* Effects:
-	for (const trailPair of state.bulletTrails) {
-		Bullet.showTrail(trailPair)
+	for (const trailPair of state.fx.bulletTrails) {
+		FX.showBulletTrail(trailPair)
 	}
 
 	//* Round Conditions:
-
 	Game.onFrame()
 }

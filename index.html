@@ -22,7 +22,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jscolor/2.0.4/jscolor.min.js" defer></script>
 
 	<script src="preload.js" defer></script>
-	<script src="config.js" defer></script>
+	<script src="Config.js" defer></script>
 	<script src="menu.js" defer></script>
 	<script src="Game.js" defer></script>
 	<script src="Status.js" defer></script>
@@ -38,63 +38,64 @@
 	<script src="setup.js" defer></script>
 	<script src="draw.js" defer></script>
 	<script src="helpers.js" defer></script>
-	<script src="effects.js" defer></script>
+	<script src="FX.js" defer></script>
 	
 </head>
 
 <body>
-	<div id="game-container">
-		<div id="game-menu">
-			<div id="start-menu">
+	<div class="game-container">
+		<div id="gameMenu">
+			<div id="startMenu">
 				<div class="add-player-container">
 					<div class="player-info-container">
 
-						<input id="player-name-input" type="text" placeholder="Player Name" maxlength=10>
+						<input id="playerNameInput" type="text" placeholder="Player Name" maxlength=10>
 
-						<!-- Default to red color (config.tank.defaultColor) -->
+						<!-- Default to red color (Config.current.tank.defaultColor) -->
 						<div class="color-container">
 							<p>Select a Color:</p>
-							<button id="player-color-button" class="jscolor {valueElement: null, value: 'ff0000'}"></button>
+							<button id="playerColorButton" class="jscolor {valueElement: null, value: 'ff0000'}"></button>
 						</div>
 
-						<button id="add-player-button">Add Player</button>
+						<button id="addPlayerButton">Add Player</button>
 					</div>
 
 					<div class="controls-container">
 						<!-- readonly because we handle the input in menu.js -->
 						<img class="tank-diagram" src="assets/sprites/King Tiger II.svg" alt="tank">
 
-						<input id="forward-key-input" class="key-selector-input" type="text" readonly placeholder="⭡">
-						<input id="backward-key-input" class="key-selector-input" type="text" readonly placeholder="⭣">
-						<input id="left-key-input" class="key-selector-input" type="text" readonly placeholder="⭠">
-						<input id="right-key-input" class="key-selector-input" type="text" readonly placeholder="⭢">
-						<input id="fire-key-input" class="key-selector-input" type="text" readonly placeholder="•">
+						<input id="forwardKeyInput" class="key-selector-input" type="text" readonly placeholder="⭡">
+						<input id="backwardKeyInput" class="key-selector-input" type="text" readonly placeholder="⭣">
+						<input id="leftKeyInput" class="key-selector-input" type="text" readonly placeholder="⭠">
+						<input id="rightKeyInput" class="key-selector-input" type="text" readonly placeholder="⭢">
+						<input id="fireKeyInput" class="key-selector-input" type="text" readonly placeholder="•">
 
 					</div>
 				</div>
 
-				<button id="start-game-button">Start Game</button>
+				<button id="startGameButton">Start Game</button>
 			</div>
 
 			<!-- Not displayed initially -->
-			<div id="pause-menu">
-				<button id="resume-game-button">Resume Game</button>
+			<div id="pauseMenu">
+				<button id="resumeGameButton">Resume Game</button>
 			</div>
 
-			<div id="next-round-menu">
-				<h1 id="winner-heading">A WINNER IS YOU!</h1>
-				<button id="next-round-button">Next Round</button>
+			<div id="nextRoundMenu">
+				<h1 id="winnerHeading">A WINNER IS YOU!</h1>
+				<button id="nextRoundButton">Next Round</button>
 			</div>
 
 
 		</div>
 
-		<div id="canvas-container"><!-- canvas here! --></div>
+		<div id="canvasContainer"><!-- canvas here! --></div>
 
 	</div>
 
-	<div id="status-bar"></div>
+	<div id="statusBar"></div>
 
+<!--! TESTING -->
 	<div class="testing">
 		<h1>Quick Testing:</h1>
 		<button onClick="Game.addPlayer(new Player(1, 'One', [255, 0, 0], new Controls(69, 68, 83, 70, 86))); Game.addPlayer(new Player(2, 'Other', [0, 255, 0], new Controls)); Game.new()">2 Players + Start</button>

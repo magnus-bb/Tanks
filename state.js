@@ -3,10 +3,12 @@ class GameState {
 		this.grid = []
 		this.tanks = []
 		this.projectiles = []
-		this.bulletTrails = new Map()
 		this.pickups = []
-		this.endTimer = config.game.endFrames
+		this.endTimer = Config.current.game.endFrames
 		this.ending = false
+		this.fx = {
+			bulletTrails: new Map()
+		}
 	}
 }
 

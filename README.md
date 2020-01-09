@@ -62,18 +62,14 @@ Todos
 - Rename helpers navne til at give bedre mening
 - Tildeling af point i `Game.end()` eller i en funktion, den kalder
 - Loops i `draw.js` kan slås sammen. F.eks. kan tanks + projectiles vist lægges ind i projectiles (bare tjek om rækkefølgen tillader det først)
-- Brug push og pop i alle show()
-- Hvert våbenobjekt/bullet ELLER deres class skal tjekke collisions med tanks, så de kan tjekke på deres egen måde
 - Random selections, der skal ekskludere noget bestemt (f.eks de steder, der allerede er en pickup eller tanks, der ikke skal vælge sig selv) skal omskrives så de tager arrayet, kloner det og fjerner sig selv/de ekskluderede fra klonen og bare vælger en random. På denne måde skal den ikke loope indtil en ny bliver fundet
 - Lav muzzle-effekt om til noget nyt grafisk i stedet for at manipulere størrelsen af projektilet
-- FLYT ALLE COLLISION CHECKS IND I TANKENS OBJEKT (måske lige på nær projektil + tank, som altid skal resultere i kill), SÅ PROJEKTILER SELV KAN HÅNDTERE COLLISIONS PÅ DERES MÅDE
-	- Skal ikke gøres i `onFrame()`, da dette kun skal ske 1 gang per frame. Det skal være så der kan være forskellige (eller ingen) collision checks og forskellige handlers, når man looper over ALLE projektiler
 - Sørg for effects in FX.js i stedet for funktionelle classes
-- Skriv `config` om til class
 - Adskil edge og wall collisions, nu hvor de har en kaldende funktion (`colission()`)
 - Omskriv metoder, der *kun* kaldes af et objekt selv til private (med underscores) - .show(), .move() etc som kaldes af onFrame
-- Lav et pickup spawn loop
-- jSuites components med en fed, let color picker
+- `jSuites` components med en fed, let color picker
+- `started` / `paused` (etc.) i `state` frem for `Game`, da det relaterer sig til spil-specifikke forhold? Så kan `Game` være metoder + setup
+- **FORTSÆT PÅ OPRYDNING AF CLASSES OG IDs**
 
 
 Idéer til pick ups / våben
@@ -81,7 +77,7 @@ Idéer til pick ups / våben
 - Aktivér for at bytte plads, modstanders `direction` randomizes (kan evt give collision issues med vægge - bør måske ikke randomize)
 - Bruger får lov at bruge musen (lol) i 20? sekunder. Kun 1 ad gangen.
 - Laser, men med lidt vedvarende beam også, uden tracing
-- Nedbryder af væg
+- Nedbryder af væg (loop baglæns igennem vægge i `draw()` så)
 - Mortar, der lobbes en fixed afstand (over vægge også)
 - Hjemsøgende missil
 - Minigun
