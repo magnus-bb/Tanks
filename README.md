@@ -73,6 +73,7 @@ Todos
 - Adskil edge og wall collisions, nu hvor de har en kaldende funktion (`colission()`)
 - Omskriv metoder, der *kun* kaldes af et objekt selv til private (med underscores) - .show(), .move() etc som kaldes af onFrame
 - Lav et pickup spawn loop
+- jSuites components med en fed, let color picker
 
 
 Idéer til pick ups / våben
