@@ -18,7 +18,7 @@ body {
 	align-items: center;
 }
 
-#game-menu {
+.game-menu {
 	z-index: 10;
 	position: absolute;
 	width: 600px;
@@ -47,7 +47,7 @@ body {
 	}
 }
 
-#start-menu {
+.start-menu {
 	// To be shown initially
 	display: flex;
 	flex-direction: column;
@@ -73,7 +73,7 @@ body {
 	align-items: center;
 	justify-content: space-evenly;
 
-	#player-name-input {
+	.player-name-input {
 		width: 95%;
 		font-size: 1.2rem;
 		appearance: none;
@@ -93,7 +93,7 @@ body {
 			font-style: italic;
 		}
 
-		#player-color-button {
+		.jscolor {
 			margin-top: 10px;
 			outline: none;
 
@@ -104,7 +104,7 @@ body {
 		}
 	}
 
-	#add-player-button {
+	.add-player-button {
 		height: 30px;
 		width: 100px;
 		color: rgb(60, 60, 60);
@@ -155,34 +155,34 @@ body {
 		}
 	}
 
-	#fire-key-input {
-		grid-area: fire;
-	}
-
-	#forward-key-input {
-		grid-area: forward;
-	}
-
-	#left-key-input {
-		grid-area: left;
-	}
-
 	.tank-diagram {
 		grid-area: tank;
 		transform: rotate(180deg);
 		height: 150px;
 	}
 
-	#right-key-input {
+	.fire-key-input {
+		grid-area: fire;
+	}
+
+	.forward-key-input {
+		grid-area: forward;
+	}
+
+	.left-key-input {
+		grid-area: left;
+	}
+
+	.right-key-input {
 		grid-area: right;
 	}
 
-	#backward-key-input {
+	.backward-key-input {
 		grid-area: backward;
 	}
 }
 
-#start-game-button {
+.start-game-button {
 	align-self: center;
 	font-size: 1.2rem;
 	padding: 10px;
@@ -204,21 +204,14 @@ body {
 	}
 }
 
-#pause-menu {
+.next-round-menu {
 	display: none;
 	position: absolute;
 	width: 100%;
 	height: 100%;
 }
 
-#next-round-menu {
-	display: none;
-	position: absolute;
-	width: 100%;
-	height: 100%;
-}
-
-#status-bar {
+.status-bar {
 	margin-top: 10px;
 	display: flex;
 	justify-content: center;

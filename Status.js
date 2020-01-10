@@ -6,7 +6,7 @@ class Status {
 	}
 
 	static initPlayer(player, ID) {
-		const statusBar = $('#status-bar')
+		const statusBar = $('#statusBar')
 
 		const playerBox = $(`<div id="player-${ID}" class="player-status-container">`)
 
@@ -40,6 +40,6 @@ class Status {
 	}
 
 	static clearAll() {
-		$('#status-bar').empty()
+		$('#statusBar').empty()
 	}
 }

@@ -22,7 +22,7 @@ class Game {
 		// Cannot start twice or if there are no players:
 		if (this.started || this.players.length <= 0) return console.log("Cannot start game")
 
-		$('#start-menu').fadeOut(100)
+		$('#startMenu').fadeOut(100)
 		this.start()
 	}
 
@@ -53,7 +53,7 @@ class Game {
 
 		this.started = true
 
-		$('#next-round-menu').fadeOut(100)
+		$('#nextRoundMenu').fadeOut(100)
 		// Hides menu:
 		this.unpause()
 	}
@@ -70,7 +70,7 @@ class Game {
 
 		this.started = false
 		
-		$('#next-round-menu').fadeIn(100)
+		$('#nextRoundMenu').fadeIn(100)
 		this.pause()
 
 		// Resets all ingame state:
@@ -83,14 +83,14 @@ class Game {
 		this.paused = true
 		noLoop()
 
-		$('#game-menu').slideDown()
+		$('#gameMenu').slideDown()
 	}
 
 	static unpause() {
 		console.log('Game unpaused')
 
 		// Restarts when menu is gone:
-		$('#game-menu').slideUp(() => {
+		$('#gameMenu').slideUp(() => {
 			this.paused = false
 			loop()
 		})

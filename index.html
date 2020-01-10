@@ -44,12 +44,12 @@
 
 <body>
 	<div class="game-container">
-		<div id="gameMenu">
-			<div id="startMenu">
-				<div class="add-player-container">
+		<div id="gameMenu" class="game-menu">
+			<div id="startMenu" class="start-menu">
+				<div id="addPlayerContainer" class="add-player-container">
 					<div class="player-info-container">
 
-						<input id="playerNameInput" type="text" placeholder="Player Name" maxlength=10>
+						<input id="playerNameInput" class="player-name-input" type="text" placeholder="Player Name" maxlength=10>
 
 						<!-- Default to red color (Config.current.tank.defaultColor) -->
 						<div class="color-container">
@@ -57,33 +57,28 @@
 							<button id="playerColorButton" class="jscolor {valueElement: null, value: 'ff0000'}"></button>
 						</div>
 
-						<button id="addPlayerButton">Add Player</button>
+						<button id="addPlayerButton" class="add-player-button">Add Player</button>
 					</div>
 
 					<div class="controls-container">
 						<!-- readonly because we handle the input in menu.js -->
 						<img class="tank-diagram" src="assets/sprites/King Tiger II.svg" alt="tank">
 
-						<input id="forwardKeyInput" class="key-selector-input" type="text" readonly placeholder="⭡">
-						<input id="backwardKeyInput" class="key-selector-input" type="text" readonly placeholder="⭣">
-						<input id="leftKeyInput" class="key-selector-input" type="text" readonly placeholder="⭠">
-						<input id="rightKeyInput" class="key-selector-input" type="text" readonly placeholder="⭢">
-						<input id="fireKeyInput" class="key-selector-input" type="text" readonly placeholder="•">
+						<input class="key-selector-input forward-key-input" type="text" readonly placeholder="⭡">
+						<input class="key-selector-input backward-key-input" type="text" readonly placeholder="⭣">
+						<input class="key-selector-input left-key-input" type="text" readonly placeholder="⭠">
+						<input class="key-selector-input right-key-input" type="text" readonly placeholder="⭢">
+						<input class="key-selector-input fire-key-input" type="text" readonly placeholder="•">
 
 					</div>
 				</div>
 
-				<button id="startGameButton">Start Game</button>
+				<button id="startGameButton" class="start-game-button">Start Game</button>
 			</div>
 
-			<!-- Not displayed initially -->
-			<div id="pauseMenu">
-				<button id="resumeGameButton">Resume Game</button>
-			</div>
-
-			<div id="nextRoundMenu">
-				<h1 id="winnerHeading">A WINNER IS YOU!</h1>
-				<button id="nextRoundButton">Next Round</button>
+			<div id="nextRoundMenu" class="next-round-menu">
+				<h1 class="winner-heading">A WINNER IS YOU!</h1>
+				<button id="nextRoundButton" class="next-round-button">Next Round</button>
 			</div>
 
 
@@ -93,7 +88,7 @@
 
 	</div>
 
-	<div id="statusBar"></div>
+	<div id="statusBar" class="status-bar"></div>
 
 <!--! TESTING -->
 	<div class="testing">

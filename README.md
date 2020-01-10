@@ -69,7 +69,8 @@ Todos
 - Omskriv metoder, der *kun* kaldes af et objekt selv til private (med underscores) - .show(), .move() etc som kaldes af onFrame
 - `jSuites` components med en fed, let color picker
 - `started` / `paused` (etc.) i `state` frem for `Game`, da det relaterer sig til spil-specifikke forhold? Så kan `Game` være metoder + setup
-- **FORTSÆT PÅ OPRYDNING AF CLASSES OG IDs**
+- Fix up / down / space keys scrolling on page
+
 
 
 Idéer til pick ups / våben

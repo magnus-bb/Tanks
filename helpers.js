@@ -126,7 +126,7 @@ function getUnvisitedNeighbors(currentCell) {
 }
 
 function getColorButtonVal() {
-	return $('#player-color-button')[0].jscolor.rgb
+	return $('#playerColorButton')[0].jscolor.rgb
 }
 
 // Takes a point and a rect-object and returns true if the point exists inside the four points that make up a rectangle:
