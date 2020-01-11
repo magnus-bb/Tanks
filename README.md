@@ -40,7 +40,7 @@ Todos
 - En lækker effekt når et projektil kalder `destroy()`, så det ikke bare forsvinder.
 - Finde og loade open source lydeffekter til skud (*gud forbyde, at jeg bliver nødt til at optage mundlyde*)
 - `Bullet` class skal omskrives til at extende en `Projectile` class i stedet til det mest basic gentagede
-	- Men det meste skal laves med composition
+- Brug composition (f.eks. til projektil-tank checks og projektil-wall checks)
 - Projektiler skal alle være i ét `state.projectiles`
 - Tilføjelse af tilfældige celler, der til tider "brænder" og ikke må passeres
 - Tank collisions med hinanden?
@@ -55,7 +55,7 @@ Todos
 	- Feedback på players + controls oprettet?
 	- Statusfelter skal kun vise det mest basale, og så give udvidet info ved hover (f.eks. antal selvmord)
 	- Settings / modifiers menu til at ændre configs etc.
-- giv ID til `Tank`, så den let kan finde sig selv i `state` (eller evt map det med players, da den kender sin egen player)
+- Map `player` med `tank`?
 - Evt. ændr walls til at have de props, der skal bruges for at udregne collisions, så de ikke skal udregnes hver gang
 - Tilføj en counter til selvmord, sørg for at et selvmord ikke tæller almindelige kills
 - Se på om body + cannon kan tegnes som 1 p5 shape, som kan roteres ved turning
@@ -64,18 +64,18 @@ Todos
 - Loops i `draw.js` kan slås sammen. F.eks. kan tanks + projectiles vist lægges ind i projectiles (bare tjek om rækkefølgen tillader det først)
 - Random selections, der skal ekskludere noget bestemt (f.eks de steder, der allerede er en pickup eller tanks, der ikke skal vælge sig selv) skal omskrives så de tager arrayet, kloner det og fjerner sig selv/de ekskluderede fra klonen og bare vælger en random. På denne måde skal den ikke loope indtil en ny bliver fundet
 - Lav muzzle-effekt om til noget nyt grafisk i stedet for at manipulere størrelsen af projektilet
-- Sørg for effects in FX.js i stedet for funktionelle classes
-- Adskil edge og wall collisions, nu hvor de har en kaldende funktion (`colission()`)
 - Omskriv metoder, der *kun* kaldes af et objekt selv til private (med underscores) - .show(), .move() etc som kaldes af onFrame
 - `jSuites` components med en fed, let color picker
 - `started` / `paused` (etc.) i `state` frem for `Game`, da det relaterer sig til spil-specifikke forhold? Så kan `Game` være metoder + setup
-- Fix up / down / space keys scrolling on page
+- Evt. del tanks handleHit til handleHit og killed, så handleHit kan tjekke eventuelle skjolde etc?
+- Move static props and methods to top of classes
+- Lad `FX` bruge `onFrame()` til at ordne bullet trails (og fremtidige)
+- Autostørrelse (på max eller evt default) af canvas ved at tage vinduets width divideret med cellestørrelsen
 
 
 
-Idéer til pick ups / våben
+Idéer til pick ups / våben / environment
 --------------------------
-- Aktivér for at bytte plads, modstanders `direction` randomizes (kan evt give collision issues med vægge - bør måske ikke randomize)
 - Bruger får lov at bruge musen (lol) i 20? sekunder. Kun 1 ad gangen.
 - Laser, men med lidt vedvarende beam også, uden tracing
 - Nedbryder af væg (loop baglæns igennem vægge i `draw()` så)
@@ -83,6 +83,7 @@ Idéer til pick ups / våben
 - Hjemsøgende missil
 - Minigun
 - Kortere lifetime på projektiler i en stund / flere projektiler
+- Ammo pickup (+1 projektil permanent)
 - Portal (skyd 1, aktiver for at sætte. Gentag)
 - Sniper - hurtigt projektil med tracing, der ikke bouncer
 - Skjold der dækker x grader omkring tank indtil 1 hit
@@ -90,6 +91,7 @@ Idéer til pick ups / våben
 - Debuff fjenders move-/projektil-speed
 - En cooldown på en slags dash som en ability alle har
 - Stealth-projektiler, der er *næsten* usynlige, men heller ikke rammer en selv
+- Til tider skal vægge skifte / fjernes / tilføjes
 
 Links
 -----

@@ -3,13 +3,11 @@ function draw() {
 	//* Canvas:
 	//TODO: Canvas-class?
 	push()
-
 	background(195)
 	stroke(40)
 	strokeWeight(Config.current.wall.strokeWidth)
 	noFill()
 	rect(0, 0, width, height) // Outer walls
-
 	pop()
 
 	//* Pickups:
@@ -19,7 +17,7 @@ function draw() {
 		pickup.onFrame()
 	}
 
-	//* Tanks - input and collision only:
+	//* Tanks (& Edges) - input and collision only:
 	// Must happen before collisions, so a collision can overwrite player input
 	for (const tank of state.tanks) {
 		tank.input()
@@ -30,19 +28,19 @@ function draw() {
 		for (let i = state.pickups.length - 1; i >= 0; i--) {
 			const pickup = state.pickups[i]
 
-			if (pickup.checkCollision(tank) && !tank.equipment) {
-				pickup.pickedUp(i, tank)
-			}
+			pickup.pickup(i, tank)
 		}
 	}
 
 	//* Walls:
 	for (const column of state.grid) {
 		for (const cell of column) {
-			for (let wall in cell.walls) {
+
+			wallLoop:
+			for (const wall in cell.walls) { // for...in does not need to loop backwards 
 				if (cell.walls[wall]) { // checks for existing walls only
 
-					wallObj = cell.walls[wall] // binds wall to the object, not the prop name
+					wallObj = cell.walls[wall] // binds wall to the object, not the prop name //TODO: bare kald for wall?
 					wallObj.onFrame()
 
 					//* Walls & Tanks:
@@ -50,12 +48,17 @@ function draw() {
 						tank.collision(wallObj)
 					}
 
-					//* Walls & Bullets:
+					//* Walls & Projectiles:
 					for (let i = state.projectiles.length - 1; i >= 0; i--) { // We have to go backwards when removing projectiles
 						const projectile = state.projectiles[i]
 
-						// Checks and handles collisions with walls:
-						projectile.collision(i, wallObj) || true // Only checks collisions if projectile has collision-interactions
+						if (projectile.envCollision) {
+							// 'Breaker' removes a wall, and then needs to continue wall-loop to not try to read same wall:
+							const action = projectile.envCollision(i, wallObj)
+							if (action === 'continue') {
+								continue wallLoop
+							}
+						}
 					}
 				}
 			}
@@ -65,16 +68,23 @@ function draw() {
 	//* Tanks - updating:
 	for (const tank of state.tanks) {
 		tank.onFrame() // Importantly done after input + collision handling
+
 		if (tank.equipment && tank.equipment.onFrame) { // Only done if equipment present and has onFrame() (instause with CD needs to keep track of time)
 			tank.equipment.onFrame()
-		} 
+		}
+
+		if (tank.equipment && tank.equipment.instaUse) { // Only done if equipment present and has onFrame() (instause with CD needs to keep track of time)
+			tank.equipment.instaUse()
+		}
 	}
 
-	//* Projectiles:
+	//* Projectiles (& Edges):
 	for (let i = state.projectiles.length - 1; i >= 0; i--) { // We have to go backwards when removing projectiles
 		const projectile = state.projectiles[i]
 
-		projectile.collision(i)
+		if (projectile.envCollision) {
+			projectile.envCollision(i)
+		}
 
 		projectile.onFrame(i)
 
@@ -82,23 +92,17 @@ function draw() {
 		for (let j = state.tanks.length - 1; j >= 0; j--) {
 			const tank = state.tanks[j]
 
-			// Checks and handles bullet hits for both bullet and tank:
-			if (Tank.checkHit(projectile, tank)) { //TODO: Pak ind i class method, á la .collision()?
-				projectile.owner.owner.gotKill() // The player that owns the tank that spawned the bullet
-				projectile.destroy(i)
-				tank.destroy(j)
-
-				// Goes on to next bullet, now that this one is destroyed:
-				break
-
-				//TODO: let bullet.owner ('s player) know it gets a point
+			// Only for the projectiles that interact with tanks:
+			if (projectile.tankHit) {
+				// Checks (with projectile's own conditions) whether it hits a tank, and breaks out of tank loop, since it will continue the proj loop now that we removed the current proj.
+				if (projectile.tankHit(i, j, tank)) break // i, j is for removing proj, tank
 			}
 		}
 	}
 
 	//* Effects:
 	for (const trailPair of state.fx.bulletTrails) {
-		FX.showBulletTrail(trailPair)
+		FX.showBulletTrail(trailPair) //TODO: lad FX loope igennem trails selv igennem FX.onFrame()
 	}
 
 	//* Round Conditions:

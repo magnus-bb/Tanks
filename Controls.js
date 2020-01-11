@@ -8,10 +8,9 @@ class Controls {
 	}
 }
 
-// Cannot be done in class, since we have to listen for all keypresses, and keyIsDown will spam:
-function keyPressed() { 
 
-	// Keyboard handler for firing:
+// Keyboard handler for firing:
+function keyPressed() { // Cannot be done in class, since we have to listen for all keypresses, and keyIsDown will spam
 	if (!Game.paused) {
 		for (const tank of state.tanks) {
 			if (keyCode === tank.controls.fire) {
@@ -37,3 +36,11 @@ function keyPressed() {
 		$(':focus').data('keybinding', keyCode)
 	}
 }
+
+// Prevents scroll issues:
+$(window).on("keydown", e => {
+	// space and arrow keys
+	if([32, 37, 38, 39, 40].includes(e.keyCode)) {
+			e.preventDefault();
+	}
+}, false);

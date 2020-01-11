@@ -15,9 +15,11 @@ class Config {
 			},
 			m82: {
 				ammo: 3,
-				diameter: 3, // px
 				speed: 12,
 				penetrationSpeedDivisor: 3
+			},
+			breaker: {
+				speed: 3
 			}
 		}
 		this.tank = {
@@ -65,7 +67,7 @@ class Config {
 	static saved = {}
 
 	//TODO: Load last used from local storage
-	static current = new Config
+	static current = new Config //? Måske bare global variabel?
 
 	static saveConfig(name, configuration) {
 		if (this.saved[name]) {

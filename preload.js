@@ -1,10 +1,16 @@
 const assets = {
 	pickups: {},
+	projectiles: {}
 }
 
 function preload() {
 	// Runs through all types of pickups in Pickup.pickups, loads their asset, and saves it in the assets-object:
 	for (const type of Object.values(Pickup.pickups)) {
 		type.forEach(pickup => assets.pickups[pickup] = loadImage(`assets/pickups/${pickup}.svg`))
+	}
+
+	// Runs through all types of projectiles and saves them in the assets-object:
+	for (const projectile of Projectile.projectiles) {
+		assets.projectiles[projectile] = loadImage(`assets/projectiles/${projectile}.svg`)
 	}
 }

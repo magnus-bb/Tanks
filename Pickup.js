@@ -1,69 +1,10 @@
 class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på banen. Det skal så kalde new XXX ved opsamling og sætte det nye objekt (baseret på selvstændig class) ind i inventory
-	constructor(name, type, x, y, col, row) {
-		this.name = name
-		this.type = type
-		this.x = x
-		this.y = y
-		this.col = col
-		this.row = row
-	}
-
-	//* INSTANCE METHODS
-
-	get asset() {
-		return assets.pickups[this.name]
-	}
-
-	checkCollision(tank) {
-
-		const tankBody = {
-			x: tank.x,
-			y: tank.y,
-			r: tank.r
-		}
-
-		const pickupRect = {
-			x: this.x - Config.current.pickup.size / 2,
-			y: this.y - Config.current.pickup.size / 2,
-			h: Config.current.pickup.size,
-			w: Config.current.pickup.size
-		}
-
-		if (circleIntersectsRect(tankBody, pickupRect)) {
-			return true
-		}
-	}
-
-	pickedUp(i, tank) {
-		tank.equipment = this.toEquipment(tank)
-
-		// Removes self from maze:
-		state.pickups.splice(i, 1)
-	}
-
-	toEquipment(tank) {
-		const className = this.name.capitalize()
-
-		// Returns an instantiation of the class corresponding to this pickup's name by doing a lookup in equipment:
-		return new equipment[className](tank, className)
-	}
-
-	show() {
-		image(this.asset, this.x, this.y, Config.current.pickup.size, Config.current.pickup.size)
-	}
-
-	// Called every frame:
-	onFrame() {
-		this.show()
-	}
-
 	//* STATIC PROPS
 
-	static pickups = { //! DELETE PLACEHOLDERS
+	static pickups = {
 		offensive: ['m82'],
 		defensive: [],
-		instaUse: ['wormhole'],
-
+		utility: ['wormhole', 'breaker', 'ammo']
 	}
 
 	//* STATIC METHODS
@@ -123,5 +64,64 @@ class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på ba
 		if (state.pickups.length < Config.current.cell.xAmt * Config.current.cell.yAmt) {
 			state.pickups.push(pickup)
 		}
+	}
+	
+	//* INSTANCE
+	constructor(name, type, x, y, col, row) {
+		this.name = name
+		this.type = type
+		this.x = x
+		this.y = y
+		this.col = col
+		this.row = row
+		this.asset = assets.pickups[this.name]
+	}
+
+	pickup(i, tank) {
+		if (this._checkPickup(tank) && !tank.equipment) {
+			this._pickedUp(i, tank)
+		}
+	}
+
+	_checkPickup(tank) {
+		const tankBody = {
+			x: tank.x,
+			y: tank.y,
+			r: tank.r
+		}
+
+		const pickupRect = {
+			x: this.x - Config.current.pickup.size / 2,
+			y: this.y - Config.current.pickup.size / 2,
+			h: Config.current.pickup.size,
+			w: Config.current.pickup.size
+		}
+
+		if (circleIntersectsRect(tankBody, pickupRect)) {
+			return true
+		}
+	}
+
+	_pickedUp(i, tank) {
+		tank.equipment = this._toEquipment(tank)
+
+		// Removes self from maze:
+		state.pickups.splice(i, 1)
+	}
+
+	_toEquipment(tank) {
+		const className = this.name.capitalize()
+
+		// Returns an instantiation of the class corresponding to this pickup's name by doing a lookup in equipment:
+		return new equipment[className](tank, className)
+	}
+
+	_show() {
+		image(this.asset, this.x, this.y, Config.current.pickup.size, Config.current.pickup.size)
+	}
+
+	// Called every frame:
+	onFrame() {
+		this._show()
 	}
 }

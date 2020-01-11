@@ -9,8 +9,13 @@ class Player {
 		this.kills = 0
 	}
 
-	gotKill() {
-		this.kills++
+	gotKill(tank) {
+		// Suicide:
+		if (tank.owner === this) {
+			this.suicides++
+		} else {
+			this.kills++
+		}
 
 		Status.update(this.id)
 	}

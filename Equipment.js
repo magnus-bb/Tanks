@@ -5,27 +5,29 @@ class Equipment {
 		this.name = name
 	}
 
-	remove() {
+	_remove() {
 		this.owner.equipment = null
 	}
 }
 
+//TODO: Instause equipment to extend Equipment?
 
-//* OFFENSIVE
-
-class Placeholder extends Equipment {
+class Breaker extends Equipment {
 	constructor(owner, name) {
-		super(owner, name)
+		super(owner, name) 
 	}
 
 	use() {
 		console.log(this.name + " used by: " + this.owner.name)
 
+		state.projectiles.push(new BreakerBullet(this.owner))
 
-		// Last step:
-		this.remove()
+		this._remove()
 	}
 }
+
+
+//* OFFENSIVE
 
 class M82 extends Equipment {
 	constructor(owner, name) {
@@ -44,13 +46,13 @@ class M82 extends Equipment {
 
 		// Last step:
 		if (this.ammo <= 0) {
-			this.remove()
+			this._remove()
 		}
 	}
 }
 
 
-//* INSTAUSE
+//* UTILITY
 
 class Wormhole extends Equipment {
 	constructor(owner, name) {
@@ -58,7 +60,7 @@ class Wormhole extends Equipment {
 		this.duration = Config.current.equipment.wormhole.chargeFrames
 	}
 
-	autoUse() { //TODO: nyt navn? Cooldown etc. Skal evt sættes i instause parent
+	_autoUse() { //TODO: nyt navn? Cooldown etc. Skal evt sættes i instause parent
 		if (this.duration <= 0) {
 			this._use()
 		}
@@ -73,13 +75,13 @@ class Wormhole extends Equipment {
 		const selfIndex = state.tanks.findIndex(i => i.equipment === this)
 		const otherTank = randomTank(selfIndex)
 
-		otherTank && this.swap(otherTank) // Has to check for undefined since this can happen during end timer with just 1 tank (random returns undefined)
+		otherTank && this._swap(otherTank) // Has to check for undefined since this can happen during end timer with just 1 tank (random returns undefined)
 
-		this.remove()
+		this._remove()
 	}
 
 	// Swaps x, y, and direction with other tank:
-	swap(otherTank) {
+	_swap(otherTank) {
 		const temp = {
 			x: this.owner.x,
 			y: this.owner.y,
@@ -96,12 +98,28 @@ class Wormhole extends Equipment {
 	}
 
 	onFrame() {
-		this.autoUse()
+		this._autoUse()
 	}
 }
 
+class Ammo extends Equipment {
+	constructor(owner) {
+		super(owner)
+	}
+
+	instaUse() {
+		this.owner.ammo++
+
+		this._remove()
+	}
+}
+
+
+
+//* Dictionary
 const equipment = {
-	Placeholder,
 	Wormhole,
-	M82
+	M82,
+	Breaker,
+	Ammo
 }

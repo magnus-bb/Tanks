@@ -1,5 +1,7 @@
 class Wall {
 	constructor(owner, side) {
+		this.owner = owner
+		this.side = side
 		this.x1 = owner.x
 		this.y1 = owner.y
 		this.x2 = owner.x
@@ -19,6 +21,10 @@ class Wall {
 				this.y2 += length
 				break
 		}
+	}
+
+	destroy() {
+		this.owner.walls[this.side] = null
 	}
 
 	_show() {
