@@ -194,6 +194,8 @@ class M82Bullet extends Projectile {
 
 		this.type = 'm82'
 		this.asset = assets.projectiles[this.type]
+		// A circle with diameter the width of the projectile image will be good enough:
+		this.d = this.asset.height // To make p5-rotate work normally, all images must be on their side, hence: width of projectile is height of image
 		this.direction = owner.direction
 		this.speed = Config.current.equipment.m82.speed
 		this.x = this.owner.cannon.x
@@ -312,6 +314,8 @@ class BreakerBullet extends Projectile {
 
 		this.type = 'breaker'
 		this.asset = assets.projectiles[this.type]
+		// A circle with diameter the width of the projectile image will be good enough:
+		this.d = this.asset.height // To make p5-rotate work normally, all images must be on their side, hence: width of projectile is height of image
 		this.direction = owner.direction
 		this.speed = Config.current.equipment.breaker.speed
 		this.x = this.owner.cannon.x
