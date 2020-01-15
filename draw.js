@@ -101,9 +101,7 @@ function draw() {
 	}
 
 	//* Effects:
-	for (const trailPair of state.fx.bulletTrails) {
-		FX.showBulletTrail(trailPair) //TODO: lad FX loope igennem trails selv igennem FX.onFrame()
-	}
+	FX.onFrame()
 
 	//* Round Conditions:
 	Game.onFrame()

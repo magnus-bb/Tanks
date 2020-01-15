@@ -64,13 +64,13 @@ Todos
 - Loops i `draw.js` kan slås sammen. F.eks. kan tanks + projectiles vist lægges ind i projectiles (bare tjek om rækkefølgen tillader det først)
 - Random selections, der skal ekskludere noget bestemt (f.eks de steder, der allerede er en pickup eller tanks, der ikke skal vælge sig selv) skal omskrives så de tager arrayet, kloner det og fjerner sig selv/de ekskluderede fra klonen og bare vælger en random. På denne måde skal den ikke loope indtil en ny bliver fundet
 - Lav muzzle-effekt om til noget nyt grafisk i stedet for at manipulere størrelsen af projektilet
-- Omskriv metoder, der *kun* kaldes af et objekt selv til private (med underscores) - .show(), .move() etc som kaldes af onFrame
+- Omskriv metoder, der *kun* kaldes af et objekt selv til private (med underscores) - .show(), .move() etc som kaldes af `onFrame()`
 - `jSuites` components med en fed, let color picker
 - `started` / `paused` (etc.) i `state` frem for `Game`, da det relaterer sig til spil-specifikke forhold? Så kan `Game` være metoder + setup
 - Evt. del tanks handleHit til handleHit og killed, så handleHit kan tjekke eventuelle skjolde etc?
 - Move static props and methods to top of classes
-- Lad `FX` bruge `onFrame()` til at ordne bullet trails (og fremtidige)
 - Autostørrelse (på max eller evt default) af canvas ved at tage vinduets width divideret med cellestørrelsen
+- Evt en `modifier` prop (array, hvis flere applikeres) på tanks, som kan handle timede effekter, der ikke skal være i equipment
 
 
 
@@ -78,12 +78,10 @@ Idéer til pick ups / våben / environment
 --------------------------
 - Bruger får lov at bruge musen (lol) i 20? sekunder. Kun 1 ad gangen.
 - Laser, men med lidt vedvarende beam også, uden tracing
-- Nedbryder af væg (loop baglæns igennem vægge i `draw()` så)
 - Mortar, der lobbes en fixed afstand (over vægge også)
 - Hjemsøgende missil
 - Minigun
 - Kortere lifetime på projektiler i en stund / flere projektiler
-- Ammo pickup (+1 projektil permanent)
 - Portal (skyd 1, aktiver for at sætte. Gentag)
 - Sniper - hurtigt projektil med tracing, der ikke bouncer
 - Skjold der dækker x grader omkring tank indtil 1 hit
