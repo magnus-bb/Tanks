@@ -172,7 +172,7 @@ class Bullet extends Projectile {
 
 		state.projectiles.splice(i, 1)
 
-		this.owner.ammo++
+		if (!this.stealthed) this.owner.ammo++
 	}
 
 	// Called once every frame:
