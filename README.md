@@ -11,6 +11,9 @@ Guidelines
 	- Skriv '`@param XXX`' efterfulgt af tekst, for at beskrive et bestemt parameter til en funktion
 	- Skriv '`//`' inde i kommentaren for at overstrege
 	- Eks: `//! Not working yet. Fix before testing` - Laver kommentaren **rød**, så den lettere ses
+- Assets
+	- Skal have samme filnavn som deres tilsvarende navn i koden, for at tillade generisk loading
+	- Images skal original vende mod højre, hvis `rotate()` skal bruges
 - Brug *ikke* semikolon i slutningen af linjer; kun ved flere single line statements (det er bare en personlig præference, men vil gerne have det uniformt)
 - Prøv så vidt muligt *kun* at holde kode, hvor det passer. Dvs:
 	- Brug filerne til at organisere
@@ -41,7 +44,6 @@ Todos
 - Finde og loade open source lydeffekter til skud (*gud forbyde, at jeg bliver nødt til at optage mundlyde*)
 - `Bullet` class skal omskrives til at extende en `Projectile` class i stedet til det mest basic gentagede
 - Brug composition (f.eks. til projektil-tank checks og projektil-wall checks)
-- Projektiler skal alle være i ét `state.projectiles`
 - Tilføjelse af tilfældige celler, der til tider "brænder" og ikke må passeres
 - Tank collisions med hinanden?
 - Find et system for helpers - static i classes vs i instances vs globale funktioner
@@ -71,6 +73,8 @@ Todos
 - Move static props and methods to top of classes
 - Autostørrelse (på max eller evt default) af canvas ved at tage vinduets width divideret med cellestørrelsen
 - Evt en `modifier` prop (array, hvis flere applikeres) på tanks, som kan handle timede effekter, der ikke skal være i equipment
+	- Brug et `set` til at sørge for, der ikke er duplicates. Ved pickup skal den kunne samles op, hvis settet tager imod modifieren
+- Stealthed bullets skal ikke kunne ramme en selv
 
 
 
@@ -88,7 +92,7 @@ Idéer til pick ups / våben / environment
 - Mini-ai som hjælper
 - Debuff fjenders move-/projektil-speed
 - En cooldown på en slags dash som en ability alle har
-- Stealth-projektiler, der er *næsten* usynlige, men heller ikke rammer en selv
+- Stealthed tank (alpha kommer nok til at influere bullets etc, der arver color)
 - Til tider skal vægge skifte / fjernes / tilføjes
 
 Links

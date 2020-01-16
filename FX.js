@@ -1,5 +1,9 @@
 class FX {
 
+	static fx = [
+
+	]
+
 	static shake(magnitude = Config.current.fx.defaultShakeMagnitude) {
 		let shakeCount = 1;
 		const numShakes = 10
@@ -56,9 +60,6 @@ class FX {
 
 					circle(trail[i].x, trail[i].y, d)
 				}
-
-				// Resets alpha, since it carries over:
-				bullet.color.setAlpha(255)
 
 				pop()
 

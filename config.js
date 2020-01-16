@@ -18,6 +18,10 @@ class Config {
 				speed: 12,
 				penetrationSpeedDivisor: 3
 			},
+			stealthBullets: {
+				ammo: 5,
+				alpha: 15
+			},
 			breaker: {
 				speed: 3
 			}

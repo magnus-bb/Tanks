@@ -2,7 +2,7 @@ class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på ba
 	//* STATIC PROPS
 
 	static pickups = {
-		offensive: ['m82'],
+		offensive: ['m82', 'stealthBullets'],
 		defensive: [],
 		utility: ['wormhole', 'breaker', 'ammo']
 	}

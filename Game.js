@@ -33,10 +33,8 @@ class Game {
 		Cell.resetGrid()
 		// Sets random walls:
 		Cell.populateWalls()
-		// Removes specific walls to make sure every part is traversable:
+		// Removes specific walls to make sure every part is traversible:
 		Cell.generateMaze()
-		// Shortens some walls to avoid overlapping corners:
-		//!Cell.fixWallOverlaps()
 
 		// Adds players' tanks:
 		for (const player of this.players) {

@@ -2,7 +2,7 @@ class Projectile { //TODO: LAV EN SAMLING AF GÆNGSE METODER OSV OG BRUG COMPOSI
 
 	static projectiles = [
 		'm82',
-		'breaker'
+		'breaker',
 	]
 
 
@@ -36,17 +36,18 @@ class Projectile { //TODO: LAV EN SAMLING AF GÆNGSE METODER OSV OG BRUG COMPOSI
 
 //* BULLET
 class Bullet extends Projectile {
-	constructor(owner) {
+	constructor(owner, stealth = false) {
 		super(owner)
 
-		this.type = 'bullet'
+		this.type = stealth ? 'stealthBullet' : 'bullet'
+		this.stealthed = stealth
 		this.d = Config.current.bullet.diameter // Initial size is bigger for a muzzle flash effect
 		this.direction = owner.direction
 		this.speed = Config.current.bullet.speed
 		this.x = this.owner.cannon.x
 		this.y = this.owner.cannon.y
 		this.duration = Config.current.bullet.duration
-		this.color = color(this.owner.color) // Must convert to P5-color object to be able to set alpha
+		this.color = stealth ? color(0, 0, 0, Config.current.equipment.stealthBullets.alpha) : color(this.owner.color) // Must convert to P5-color object to be able to set alpha dynamically (back and forth with trail fx)
 		const move = getOffsetPoint(this.speed, this.direction)
 		this.moveCoords = {
 			dX: move.x,
@@ -151,6 +152,8 @@ class Bullet extends Projectile {
 		push()
 
 		noStroke()
+		// Resets alpha on normal bullets, since it carries over from trail:
+		if (!this.stealthed) this.color.setAlpha(255)
 		fill(this.color)
 		circle(this.x, this.y, drawDiameter)
 
@@ -175,7 +178,7 @@ class Bullet extends Projectile {
 	// Called once every frame:
 	onFrame(i) {
 		this._move()
-		this._makeTrailPoint()
+		if (!this.stealthed) this._makeTrailPoint()
 		this._show()
 		this._updateNext()
 
@@ -186,6 +189,7 @@ class Bullet extends Projectile {
 		}
 	}
 }
+
 
 //* M82
 class M82Bullet extends Projectile {
