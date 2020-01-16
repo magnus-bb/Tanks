@@ -71,7 +71,6 @@ Todos
 - Move static props and methods to top of classes
 - Autostørrelse (på max eller evt default) af canvas ved at tage vinduets width divideret med cellestørrelsen
 - Evt en `modifier` prop (array, hvis flere applikeres) på tanks, som kan handle timede effekter, der ikke skal være i equipment
-- Scroll-problem skal lige laves om til første version igen, da den preventer alle defaults pt.
 
 
 
