@@ -51,26 +51,6 @@ class M82 extends Equipment {
 	}
 }
 
-class StealthBullets extends Equipment {
-	constructor(owner, name) {
-		super(owner, name)
-
-		this.ammo = Config.current.equipment.stealthBullets.ammo
-	}
-
-	use() {
-		console.log(this.name + " used by: " + this.owner.name)
-
-		this.ammo--
-
-		state.projectiles.push(new Bullet(this.owner, true)) // True for stealth
-
-		if (this.ammo <= 0) {
-			this._remove()
-		}
-	}
-}
-
 
 //* UTILITY
 
@@ -141,6 +121,5 @@ const equipment = {
 	Wormhole,
 	M82,
 	Breaker,
-	Ammo,
-	StealthBullets
+	Ammo
 }

@@ -2,9 +2,10 @@ class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på ba
 	//* STATIC PROPS
 
 	static pickups = {
-		offensive: ['m82', 'stealthBullets'],
+		offensive: ['m82'],
 		defensive: [],
-		utility: ['wormhole', 'breaker', 'ammo']
+		utility: ['wormhole', 'breaker', 'ammo'],
+		modifier: ['stealthBullets']
 	}
 
 	//* STATIC METHODS
@@ -78,12 +79,12 @@ class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på ba
 	}
 
 	pickup(i, tank) {
-		if (this._checkPickup(tank) && !tank.equipment) {
+		if (this._checkIntersection(tank) && this._checkPrerequisites(tank)) {
 			this._pickedUp(i, tank)
 		}
 	}
 
-	_checkPickup(tank) {
+	_checkIntersection(tank) {
 		const tankBody = {
 			x: tank.x,
 			y: tank.y,
@@ -102,18 +103,44 @@ class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på ba
 		}
 	}
 
+	_checkPrerequisites(tank) {
+		// If the pickup is equipment type:
+		if (this.type !== 'modifier') {
+			// Return true if tank has nothing equipped:
+			return !tank.equipment
+
+			// If the pickup is a timed modifier:
+		} else {
+			// Return true if no applied modifiers are dupes of this pickup:
+			for (const mod of tank.modifiers) {
+				if (mod.name === this.name.capitalize()) return false
+			}
+
+			return true
+		}
+	}
+
 	_pickedUp(i, tank) {
-		tank.equipment = this._toEquipment(tank)
+		const className = this.name.capitalize()
+
+		if (this.type === 'modifier') {
+			tank.modifiers.add(this._toModifier(tank, className))
+		} else {
+			tank.equipment = this._toEquipment(tank, className)
+		}
 
 		// Removes self from maze:
 		state.pickups.splice(i, 1)
 	}
 
-	_toEquipment(tank) {
-		const className = this.name.capitalize()
-
+	_toEquipment(tank, className) {
 		// Returns an instantiation of the class corresponding to this pickup's name by doing a lookup in equipment:
 		return new equipment[className](tank, className)
+	}
+
+	_toModifier(tank, className) {
+		// Returns an instantiation of the class corresponding to this pickup's name by doing a lookup in modifier:
+		return new modifier[className](tank, className)
 	}
 
 	_show() {

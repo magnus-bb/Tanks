@@ -74,7 +74,8 @@ Todos
 - Autostørrelse (på max eller evt default) af canvas ved at tage vinduets width divideret med cellestørrelsen
 - Evt en `modifier` prop (array, hvis flere applikeres) på tanks, som kan handle timede effekter, der ikke skal være i equipment
 	- Brug et `set` til at sørge for, der ikke er duplicates. Ved pickup skal den kunne samles op, hvis settet tager imod modifieren
-- Stealthed bullets skal ikke kunne ramme en selv, og skal være en timed modifier
+- FIX STEALTHED BULLETS
+	- Modifiers skal sætte en tilstand på tanken, som altid bliver passed til projektiler, der bliver affyret - `show()` på projektilet skal have stealthed ? setAlpha(stealthNum) : setAlpha(255) etc
 
 
 

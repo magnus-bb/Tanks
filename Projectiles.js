@@ -11,7 +11,10 @@ class Projectile { //TODO: LAV EN SAMLING AF GÆNGSE METODER OSV OG BRUG COMPOSI
 		this.owner = owner
 	}
 
+	//! MOVE HIT HANDLING ETC TO INDIVIDUAL PROJHECTILES
 	tankHit(selfIndex, tankIndex, tankObj) {
+		if (this.stealthed && this.owner === tankObj) return // Stealthed projectiles cannot hit self
+
 		if (this._checkHit(tankObj)) {
 			this._handleHit(selfIndex, tankObj)
 			tankObj.handleHit(tankIndex)

@@ -18,14 +18,16 @@ class Config {
 				speed: 12,
 				penetrationSpeedDivisor: 3
 			},
-			stealthBullets: {
-				ammo: 5,
-				alpha: 15
-			},
 			breaker: {
 				speed: 3
 			}
-		}
+		},
+		this.modifiers = {
+			stealthBullets: {
+				duration: 5,
+				alpha: 15
+			},
+		},
 		this.tank = {
 			diameter: 20,
 			moveSpeed: 1.5, // Has to be less than the width of walls to not pass through

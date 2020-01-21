@@ -12,6 +12,7 @@ class Tank {
 		this.color = color // Array of RGB
 		this.ammo = Config.current.tank.ammo
 		this.equipment = null
+		this.modifiers = new Set()
 		this.trail = [{ x: this.x, y: this.y }] //? For death recap - maybe
 		this.controls = controls
 		this.moveCoords = {
@@ -283,6 +284,12 @@ class Tank {
 		}
 	}
 
+	_useModifiers() {
+		for (const modifier of this.modifiers) {
+			modifier.use()
+		}
+	}
+
 	_move() {
 		// Takes collisions into consideration, since moveCoords will be updated accordingly
 		if (this.driving) {
@@ -352,6 +359,7 @@ class Tank {
 
 	// Called every frame:
 	onFrame() {
+		this._useModifiers()
 		this._move()
 		this._turn(this.turning) // Importantly done after .move() because of collision checking being done in the same order
 		this._addTrailPoint()
