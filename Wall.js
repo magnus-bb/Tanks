@@ -6,7 +6,7 @@ class Wall {
 		this.y1 = owner.y
 		this.x2 = owner.x
 		this.y2 = owner.y
-		this.w = Config.current.wall.strokeWidth
+		this.w = config.wall.strokeWidth
 
 		const length = owner.w
 		switch (side) {

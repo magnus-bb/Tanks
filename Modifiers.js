@@ -5,27 +5,32 @@ class Modifier {
 	}
 }
 
-class StealthBullets extends Modifier {
+class StealthAmmo extends Modifier {
 	constructor(owner, name) {
 		super(owner, name)
 
-		this.duration = Config.current.modifiers.stealthBullets.duration
+		this.duration = config.modifiers.stealthAmmo.duration
 	}
 
-	use() {
-		//!console.log(this.name + " used by: " + this.owner.name)
-//!
-		//!this.ammo--
-//!
-		//!state.projectiles.push(new Bullet(this.owner, true)) // True for stealth
-//!
-		//!if (this.ammo <= 0) {
-		//!	this._remove()
-		//!}
+	onFrame() {
+		if (!this.owner.stealthedAmmo) {
+			this.owner.stealthedAmmo = true
+		}
+
+		this.duration--
+
+		if (this.duration <= 0) {
+			this._remove()
+		}
+	}
+
+	_remove() {
+		this.owner.stealthedAmmo = false
+		this.owner.modifiers.delete(this)
 	}
 }
 
 //* Dictionary
 const modifier = {
-	StealthBullets
+	StealthAmmo
 }

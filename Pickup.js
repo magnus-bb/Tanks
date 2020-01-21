@@ -2,17 +2,16 @@ class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på ba
 	//* STATIC PROPS
 
 	static pickups = {
-		offensive: ['m82'],
-		defensive: [],
-		utility: ['wormhole', 'breaker', 'ammo'],
-		modifier: ['stealthBullets']
+		powerup: ['ammo'],
+		equipment: ['m82', 'wormhole', 'breaker'],
+		modifier: ['stealthAmmo']
 	}
 
 	//* STATIC METHODS
 
 	static spawn() {
-		if (frameCount % Config.current.pickup.spawnInterval === 0) {
-			random() < Config.current.pickup.spawnChance ? this.create(this.random()) : false
+		if (frameCount % config.pickup.spawnInterval === 0) {
+			random() < config.pickup.spawnChance ? this.create(this.random()) : false
 		}
 	}
 
@@ -62,7 +61,7 @@ class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på ba
 		const pickup = new Pickup(pickupName, pickupType, x, y, col, row)
 
 		// Adds to maze to be rendered if maze is not full:
-		if (state.pickups.length < Config.current.cell.xAmt * Config.current.cell.yAmt) {
+		if (state.pickups.length < config.cell.xAmt * config.cell.yAmt) {
 			state.pickups.push(pickup)
 		}
 	}
@@ -92,10 +91,10 @@ class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på ba
 		}
 
 		const pickupRect = {
-			x: this.x - Config.current.pickup.size / 2,
-			y: this.y - Config.current.pickup.size / 2,
-			h: Config.current.pickup.size,
-			w: Config.current.pickup.size
+			x: this.x - config.pickup.size / 2,
+			y: this.y - config.pickup.size / 2,
+			h: config.pickup.size,
+			w: config.pickup.size
 		}
 
 		if (circleIntersectsRect(tankBody, pickupRect)) {
@@ -105,17 +104,20 @@ class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på ba
 
 	_checkPrerequisites(tank) {
 		// If the pickup is equipment type:
-		if (this.type !== 'modifier') {
+		if (this.type === 'equipment') {
 			// Return true if tank has nothing equipped:
 			return !tank.equipment
 
 			// If the pickup is a timed modifier:
-		} else {
+		} else if (this.type === 'modifier') {
 			// Return true if no applied modifiers are dupes of this pickup:
 			for (const mod of tank.modifiers) {
 				if (mod.name === this.name.capitalize()) return false
 			}
 
+			return true
+		} else {
+			//TODO: POWERUP PREREQS?
 			return true
 		}
 	}
@@ -123,10 +125,12 @@ class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på ba
 	_pickedUp(i, tank) {
 		const className = this.name.capitalize()
 
-		if (this.type === 'modifier') {
+		if (this.type === 'equipment') {
+			tank.equipment = this._toEquipment(tank, className)
+		} else if (this.type === 'modifier') {
 			tank.modifiers.add(this._toModifier(tank, className))
 		} else {
-			tank.equipment = this._toEquipment(tank, className)
+			tank.powerups.push(this._toPowerup(tank, className))
 		}
 
 		// Removes self from maze:
@@ -143,12 +147,35 @@ class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på ba
 		return new modifier[className](tank, className)
 	}
 
+	_toPowerup(tank, className) {
+		// Returns an instantiation of the class corresponding to this pickup's name by doing a lookup in modifier:
+		return new powerup[className](tank, className)
+	}
+
 	_show() {
-		image(this.asset, this.x, this.y, Config.current.pickup.size, Config.current.pickup.size)
+		image(this.asset, this.x, this.y, config.pickup.size, config.pickup.size)
 	}
 
 	// Called every frame:
 	onFrame() {
 		this._show()
+	}
+}
+
+class EquipmentPickup extends Pickup {
+	constructor(name, type, x, y, col, row) {
+		super(name, type, x, y, col, row)
+	}
+}
+
+class ModifierPickup extends Pickup {
+	constructor(name, type, x, y, col, row) {
+		super(name, type, x, y, col, row)
+	}
+}
+
+class PowerupPickup extends Pickup {
+	constructor(name, type, x, y, col, row) {
+		super(name, type, x, y, col, row)
 	}
 }

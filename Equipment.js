@@ -33,7 +33,7 @@ class M82 extends Equipment {
 	constructor(owner, name) {
 		super(owner, name)
 
-		this.ammo = Config.current.equipment.m82.ammo
+		this.ammo = config.equipment.m82.ammo
 	}
 
 	use() {
@@ -57,19 +57,19 @@ class M82 extends Equipment {
 class Wormhole extends Equipment {
 	constructor(owner, name) {
 		super(owner, name)
-		this.duration = Config.current.equipment.wormhole.chargeFrames
+		this.duration = config.equipment.wormhole.chargeFrames
 	}
 
-	_autoUse() { //TODO: nyt navn? Cooldown etc. Skal evt sættes i instause parent
+	_timer() { 
 		if (this.duration <= 0) {
-			this._use()
+			this._autoUse()
 		}
 
 		this.duration--
 	}
 
 	// Private to not make tank be able to use():
-	_use() { 
+	_autoUse() { 
 		console.log(this.name + " used by: " + this.owner.name)
 
 		const selfIndex = state.tanks.findIndex(i => i.equipment === this)
@@ -98,28 +98,13 @@ class Wormhole extends Equipment {
 	}
 
 	onFrame() {
-		this._autoUse()
+		this._timer()
 	}
 }
-
-class Ammo extends Equipment {
-	constructor(owner) {
-		super(owner)
-	}
-
-	instaUse() {
-		this.owner.ammo++
-
-		this._remove()
-	}
-}
-
-
 
 //* Dictionary
 const equipment = {
 	Wormhole,
 	M82,
-	Breaker,
-	Ammo
+	Breaker
 }

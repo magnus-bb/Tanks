@@ -76,6 +76,7 @@ Todos
 	- Brug et `set` til at sørge for, der ikke er duplicates. Ved pickup skal den kunne samles op, hvis settet tager imod modifieren
 - FIX STEALTHED BULLETS
 	- Modifiers skal sætte en tilstand på tanken, som altid bliver passed til projektiler, der bliver affyret - `show()` på projektilet skal have stealthed ? setAlpha(stealthNum) : setAlpha(255) etc
+- Omskriv `Pickup` til at have subclasses for modifier / equipment / powerup, så de hver kan handle deres eget pickup osv
 
 
 

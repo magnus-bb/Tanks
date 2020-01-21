@@ -4,7 +4,7 @@ class FX {
 
 	]
 
-	static shake(magnitude = Config.current.fx.defaultShakeMagnitude) {
+	static shake(magnitude = config.fx.defaultShakeMagnitude) {
 		let shakeCount = 1;
 		const numShakes = 10
 		const startX = 0
@@ -44,13 +44,13 @@ class FX {
 				state.fx.bulletTrails.delete(bullet)
 			} else {
 				// Keeps the trail from growing forever:
-				if (trail.length > Config.current.fx.bulletTrailLength) {
+				if (trail.length > config.fx.bulletTrailLength) {
 					trail.shift()
 				}
 
 				push()
 
-				bullet.color.setAlpha(Config.current.fx.bulletTrailAlpha) // Lower opacity than bullet)
+				bullet.color.setAlpha(config.fx.bulletTrailAlpha) // Lower opacity than bullet)
 				fill(bullet.color)
 				noStroke()
 

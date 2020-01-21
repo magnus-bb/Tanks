@@ -23,8 +23,8 @@ class Config {
 			}
 		},
 		this.modifiers = {
-			stealthBullets: {
-				duration: 5,
+			stealthAmmo: {
+				duration: 60 * 10,
 				alpha: 15
 			},
 		},
@@ -72,9 +72,7 @@ class Config {
 	//TODO: To be saved as local storage
 	static saved = {}
 
-	//TODO: Load last used from local storage
-	static current = new Config //? Måske bare global variabel?
-
+	
 	static saveConfig(name, configuration) {
 		if (this.saved[name]) {
 			//TODO: Do you want to overwrite? Prompt
@@ -84,9 +82,12 @@ class Config {
 			//TODO: Config saved!
 		}
 	}
-
+	
 	static loadConfig(name) {
 		config = this.saved[name]
 		//TODO: Loaded!
 	}
 }
+
+//TODO: Load last used from local storage
+let config = new Config

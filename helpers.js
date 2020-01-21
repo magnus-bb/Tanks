@@ -99,7 +99,7 @@ function getUnvisitedNeighbors(currentCell) {
 	}
 
 	// Right
-	if (col + 1 < Config.current.cell.xAmt) {
+	if (col + 1 < config.cell.xAmt) {
 		const cell = getCell(col + 1, row)
 		if (!cell.visited) {
 			unvisitedCells.push({ cell: cell, dir: 'right' })
@@ -107,7 +107,7 @@ function getUnvisitedNeighbors(currentCell) {
 	}
 
 	// Down
-	if (row + 1 < Config.current.cell.yAmt) {
+	if (row + 1 < config.cell.yAmt) {
 		const cell = getCell(col, row + 1)
 		if (!cell.visited) {
 			unvisitedCells.push({ cell: cell, dir: 'down' })
@@ -156,7 +156,7 @@ function circleIntersectsRect(circle, rect) { // Takes circle object with x, y, 
 }
 
 function circleIntersectsEdge(circle) {
-	const wallHalfWidth = Config.current.wall.strokeWidth / 2
+	const wallHalfWidth = config.wall.strokeWidth / 2
 
 	if (circle.x - circle.r <= wallHalfWidth || circle.x + circle.r >= width - wallHalfWidth || circle.y - circle.r <= wallHalfWidth || circle.y + circle.r >= height - wallHalfWidth) {
 		return true
@@ -203,7 +203,7 @@ function getWallRect(wall, circle = false) {
 }
 
 function outOfBounds(pointX, pointY) {
-	const wallHalfWidth = Config.current.wall.strokeWidth / 2
+	const wallHalfWidth = config.wall.strokeWidth / 2
 
 	const out = {
 		x: false,
@@ -224,7 +224,7 @@ function outOfBounds(pointX, pointY) {
 function pointCloseToTank(point) {
 
 	for (const tank of state.tanks) {
-		if (dist(point.x, point.y, tank.x, tank.y) <= Config.current.cell.width * Config.current.tank.spawnDistance) {
+		if (dist(point.x, point.y, tank.x, tank.y) <= config.cell.width * config.tank.spawnDistance) {
 			return true
 		}
 
@@ -234,8 +234,8 @@ function pointCloseToTank(point) {
 
 function randomSpawnCoords() {
 	// Random cell:
-	const col = floor(random(0, Config.current.cell.xAmt))
-	const row = floor(random(0, Config.current.cell.yAmt))
+	const col = floor(random(0, config.cell.xAmt))
+	const row = floor(random(0, config.cell.yAmt))
 	const cell = getCell(col, row)
 
 	// Midpoint of cell:

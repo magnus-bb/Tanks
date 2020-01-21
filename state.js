@@ -4,7 +4,7 @@ class GameState {
 		this.tanks = []
 		this.projectiles = []
 		this.pickups = []
-		this.endTimer = Config.current.game.endFrames
+		this.endTimer = config.game.endFrames
 		this.ending = false
 		this.fx = {
 			bulletTrails: new Map()

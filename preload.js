@@ -1,6 +1,7 @@
 const assets = {
 	pickups: {},
 	projectiles: {},
+	stealthProjectiles: {},
 	//fx: {}
 }
 
@@ -14,6 +15,13 @@ function preload() {
 	for (const projectile of Projectile.projectiles) {
 		assets.projectiles[projectile] = loadImage(`assets/projectiles/${projectile}.svg`)
 	}
+
+	//! Until fcking tint() works:
+	for (const projectile of Projectile.projectiles) {
+		assets.stealthProjectiles[projectile] = loadImage(`assets/projectiles/${projectile}-stealthed.svg`)
+	}
+
+
 
 	// Runs through all effects and saves them in the assets-object:
 	// for (const effect of FX.fx) {

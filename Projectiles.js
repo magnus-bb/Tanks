@@ -11,9 +11,11 @@ class Projectile { //TODO: LAV EN SAMLING AF GÆNGSE METODER OSV OG BRUG COMPOSI
 		this.owner = owner
 	}
 
-	//! MOVE HIT HANDLING ETC TO INDIVIDUAL PROJHECTILES
+	//? MOVE HIT HANDLING ETC TO INDIVIDUAL PROJECTILES - (every proj should have stealth, so maybe not)
 	tankHit(selfIndex, tankIndex, tankObj) {
-		if (this.stealthed && this.owner === tankObj) return // Stealthed projectiles cannot hit self
+		// Stealthed projectiles cannot hit self:
+		if (this.owner.stealthedAmmo && this.owner === tankObj) return 
+
 
 		if (this._checkHit(tankObj)) {
 			this._handleHit(selfIndex, tankObj)
@@ -39,18 +41,17 @@ class Projectile { //TODO: LAV EN SAMLING AF GÆNGSE METODER OSV OG BRUG COMPOSI
 
 //* BULLET
 class Bullet extends Projectile {
-	constructor(owner, stealth = false) {
+	constructor(owner) {
 		super(owner)
 
-		this.type = stealth ? 'stealthBullet' : 'bullet'
-		this.stealthed = stealth
-		this.d = Config.current.bullet.diameter // Initial size is bigger for a muzzle flash effect
+		this.type = 'bullet'
+		this.d = config.bullet.diameter
 		this.direction = owner.direction
-		this.speed = Config.current.bullet.speed
+		this.speed = config.bullet.speed
 		this.x = this.owner.cannon.x
 		this.y = this.owner.cannon.y
-		this.duration = Config.current.bullet.duration
-		this.color = stealth ? color(0, 0, 0, Config.current.equipment.stealthBullets.alpha) : color(this.owner.color) // Must convert to P5-color object to be able to set alpha dynamically (back and forth with trail fx)
+		this.duration = config.bullet.duration
+		this.color = color(this.owner.color) // Must convert to P5-color object to be able to set alpha dynamically (back and forth with trail/stealth etc)
 		const move = getOffsetPoint(this.speed, this.direction)
 		this.moveCoords = {
 			dX: move.x,
@@ -149,14 +150,18 @@ class Bullet extends Projectile {
 	_show() {
 
 		// Drawn diameter is increased in first few frames for a muzzle effect:
-		let drawDiameter = this.d * Config.current.fx.muzzleSize - (Config.current.bullet.duration - this.duration) * Config.current.fx.muzzleSpeed
+		let drawDiameter = this.d * config.fx.muzzleSize - (config.bullet.duration - this.duration) * config.fx.muzzleSpeed
 		drawDiameter = drawDiameter > this.d ? drawDiameter : this.d
 
 		push()
 
 		noStroke()
 		// Resets alpha on normal bullets, since it carries over from trail:
-		if (!this.stealthed) this.color.setAlpha(255)
+		if (this.owner.stealthedAmmo) {
+			this.color.setAlpha(config.modifiers.stealthAmmo.alpha)
+		} else {
+			this.color.setAlpha(255)
+		}
 		fill(this.color)
 		circle(this.x, this.y, drawDiameter)
 
@@ -175,13 +180,13 @@ class Bullet extends Projectile {
 
 		state.projectiles.splice(i, 1)
 
-		if (!this.stealthed) this.owner.ammo++
+		this.owner.ammo++
 	}
 
 	// Called once every frame:
 	onFrame(i) {
 		this._move()
-		if (!this.stealthed) this._makeTrailPoint()
+		if (!this.owner.stealthedAmmo) this._makeTrailPoint() // No trail on stealthed bullets
 		this._show()
 		this._updateNext()
 
@@ -201,13 +206,14 @@ class M82Bullet extends Projectile {
 
 		this.type = 'm82'
 		this.asset = assets.projectiles[this.type]
+		this.stealthAsset = assets.stealthProjectiles[this.type] //! Until fcking tint() works
 		// A circle with diameter the width of the projectile image will be good enough:
 		this.d = this.asset.height // To make p5-rotate work normally, all images must be on their side, hence: width of projectile is height of image
 		this.direction = owner.direction
-		this.speed = Config.current.equipment.m82.speed
+		this.speed = config.equipment.m82.speed
 		this.x = this.owner.cannon.x
 		this.y = this.owner.cannon.y
-		//!this.color = this.owner.color // Convert to p5-color (like Bullet) if alpha is needed
+		//?this.color = this.owner.color - svg fill editing?
 		const move = getOffsetPoint(this.speed, this.direction)
 		this.moveCoords = {
 			dX: move.x,
@@ -220,7 +226,7 @@ class M82Bullet extends Projectile {
 		this.penetratedWall = null
 	}
 
-	envCollision(i, wall = null) { // Wall is not passed when checking edge collisions //TODO: Make separate functions for edge / wall
+	envCollision(i, wall = null) { // Wall is not passed when checking edge collisions
 
 		const collision = wall ? this._checkWallCollision(wall) && !this._penetration(wall) : this._checkEdgeCollision()
 
@@ -233,7 +239,7 @@ class M82Bullet extends Projectile {
 		const wallRect = getWallRect(wall)
 
 		// Looks at "all" positions between location and (fraction of) 'next' location:
-		for (let step = 0; step <= this.speed; step += Config.current.wall.collisionCheckStepSize) {
+		for (let step = 0; step <= this.speed; step += config.wall.collisionCheckStepSize) {
 
 			// This has to be in fractions of moveCoords (and not just +- some values) to account for the direction of the movement - we don't want to ADD to a negative and vice versa:
 			const next = {
@@ -264,7 +270,7 @@ class M82Bullet extends Projectile {
 			this.penetratedWall = wall
 
 			// Reduces speed:
-			this.speed /= Config.current.equipment.m82.penetrationSpeedDivisor
+			this.speed /= config.equipment.m82.penetrationSpeedDivisor
 
 			// Recalculates moveCoords based on new speed:
 			const { x, y } = getOffsetPoint(this.speed, this.direction)
@@ -291,7 +297,7 @@ class M82Bullet extends Projectile {
 
 		translate(this.x, this.y)
 		rotate(this.direction)
-		image(this.asset, 0, 0)
+		this.owner.stealthedAmmo ? image(this.stealthAsset, 0, 0) : image(this.asset, 0, 0)
 
 		pop()
 	}
@@ -321,13 +327,14 @@ class BreakerBullet extends Projectile {
 
 		this.type = 'breaker'
 		this.asset = assets.projectiles[this.type]
+		this.stealthAsset = assets.stealthProjectiles[this.type] //! Until fcking tint() works
 		// A circle with diameter the width of the projectile image will be good enough:
 		this.d = this.asset.height // To make p5-rotate work normally, all images must be on their side, hence: width of projectile is height of image
 		this.direction = owner.direction
-		this.speed = Config.current.equipment.breaker.speed
+		this.speed = config.equipment.breaker.speed
 		this.x = this.owner.cannon.x
 		this.y = this.owner.cannon.y
-		//!this.color = this.owner.color // Convert to p5-color (like Bullet) if alpha is needed
+		//?this.color = this.owner.color - svg fill editing?
 		const move = getOffsetPoint(this.speed, this.direction)
 		this.moveCoords = {
 			dX: move.x,
@@ -358,7 +365,7 @@ class BreakerBullet extends Projectile {
 		const wallRect = getWallRect(wall)
 
 		// Looks at "all" positions between location and (fraction of) 'next' location:
-		for (let step = 0; step <= this.speed; step += Config.current.wall.collisionCheckStepSize) {
+		for (let step = 0; step <= this.speed; step += config.wall.collisionCheckStepSize) {
 
 			// This has to be in fractions of moveCoords (and not just +- some values) to account for the direction of the movement - we don't want to ADD to a negative and vice versa:
 			const next = {
@@ -395,7 +402,7 @@ class BreakerBullet extends Projectile {
 
 		translate(this.x, this.y)
 		rotate(this.direction)
-		image(this.asset, 0, 0)
+		this.owner.stealthedAmmo ? image(this.stealthAsset, 0, 0) : image(this.asset, 0, 0)
 
 		pop()
 	}

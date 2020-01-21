@@ -5,7 +5,7 @@ function draw() {
 	push()
 	background(195)
 	stroke(40)
-	strokeWeight(Config.current.wall.strokeWidth)
+	strokeWeight(config.wall.strokeWidth)
 	noFill()
 	rect(0, 0, width, height) // Outer walls
 	pop()
@@ -69,10 +69,7 @@ function draw() {
 	for (const tank of state.tanks) {
 		tank.onFrame() // Importantly done after input + collision handling
 
-		if (tank.equipment && tank.equipment.onFrame) { // Only done if equipment present and has onFrame() (instause with CD needs to keep track of time)
-			tank.equipment.onFrame()
-		}
-
+		//TODO: REMAKE TO SOMETHING OTHER THAN EQUIPMENT IF IT NEEDS instause?
 		if (tank.equipment && tank.equipment.instaUse) { // Only done if equipment present and has onFrame() (instause with CD needs to keep track of time)
 			tank.equipment.instaUse()
 		}

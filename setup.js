@@ -1,9 +1,10 @@
 function setup() {
 	noLoop()
+	noCursor()
 
-	frameRate(Config.current.fps)
-	const canvasWidth = Config.current.cell.width * Config.current.cell.xAmt
-	const canvasHeight = Config.current.cell.width * Config.current.cell.yAmt
+	frameRate(config.fps)
+	const canvasWidth = config.cell.width * config.cell.xAmt
+	const canvasHeight = config.cell.width * config.cell.yAmt
 	const canvas = createCanvas(canvasWidth, canvasHeight)
 	canvas.parent('canvasContainer')
 
