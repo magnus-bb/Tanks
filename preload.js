@@ -11,15 +11,15 @@ function preload() {
 		type.forEach(pickup => assets.pickups[pickup] = loadImage(`assets/pickups/${pickup}.svg`))
 	}
 
-	// Runs through all types of projectiles and saves them in the assets-object:
-	for (const projectile of Projectile.projectiles) {
-		assets.projectiles[projectile] = loadImage(`assets/projectiles/${projectile}.svg`)
-	}
+	// // // Runs through all types of projectiles and saves them in the assets-object:
+	// // for (const projectile of Projectile.projectiles) {
+	// // 	assets.projectiles[projectile] = loadImage(`assets/projectiles/${projectile}.svg`)
+	// // }
 
-	//! Until fcking tint() works:
-	for (const projectile of Projectile.projectiles) {
-		assets.stealthProjectiles[projectile] = loadImage(`assets/projectiles/${projectile}-stealthed.svg`)
-	}
+	// // //! Until fcking tint() works:
+	// // for (const projectile of Projectile.projectiles) {
+	// // 	assets.stealthProjectiles[projectile] = loadImage(`assets/projectiles/${projectile}-stealthed.svg`)
+	// // }
 
 
 

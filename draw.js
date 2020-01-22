@@ -102,4 +102,6 @@ function draw() {
 
 	//* Round Conditions:
 	Game.onFrame()
+
+	push()
 }

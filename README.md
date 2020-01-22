@@ -39,12 +39,10 @@ Guidelines
 
 Todos
 -----
-- Sæt max antal spillere (9 med spawndistance på 1 cell)
 - En lækker effekt når et projektil kalder `destroy()`, så det ikke bare forsvinder.
 - Finde og loade open source lydeffekter til skud (*gud forbyde, at jeg bliver nødt til at optage mundlyde*)
 - `Bullet` class skal omskrives til at extende en `Projectile` class i stedet til det mest basic gentagede
 - Brug composition (f.eks. til projektil-tank checks og projektil-wall checks)
-- Tilføjelse af tilfældige celler, der til tider "brænder" og ikke må passeres
 - Tank collisions med hinanden?
 - Find et system for helpers - static i classes vs i instances vs globale funktioner
 - Menu / status
@@ -57,7 +55,7 @@ Todos
 	- Feedback på players + controls oprettet?
 	- Statusfelter skal kun vise det mest basale, og så give udvidet info ved hover (f.eks. antal selvmord)
 	- Settings / modifiers menu til at ændre configs etc.
-- Map `player` med `tank`?
+- Map `player` med `tank`? - evt hav en `tank` prop på player, ligesom tank har en `owner` prop
 - Evt. ændr walls til at have de props, der skal bruges for at udregne collisions, så de ikke skal udregnes hver gang
 - Tilføj en counter til selvmord, sørg for at et selvmord ikke tæller almindelige kills
 - Se på om body + cannon kan tegnes som 1 p5 shape, som kan roteres ved turning
@@ -72,11 +70,7 @@ Todos
 - Evt. del tanks handleHit til handleHit og killed, så handleHit kan tjekke eventuelle skjolde etc?
 - Move static props and methods to top of classes
 - Autostørrelse (på max eller evt default) af canvas ved at tage vinduets width divideret med cellestørrelsen
-- Evt en `modifier` prop (array, hvis flere applikeres) på tanks, som kan handle timede effekter, der ikke skal være i equipment
-	- Brug et `set` til at sørge for, der ikke er duplicates. Ved pickup skal den kunne samles op, hvis settet tager imod modifieren
-- FIX STEALTHED BULLETS
-	- Modifiers skal sætte en tilstand på tanken, som altid bliver passed til projektiler, der bliver affyret - `show()` på projektilet skal have stealthed ? setAlpha(stealthNum) : setAlpha(255) etc
-- Omskriv `Pickup` til at have subclasses for modifier / equipment / powerup, så de hver kan handle deres eget pickup osv
+- Colors skal være kopier af owner, ikke den samme (hvis det ikke allerede er sådan), for at forhindre problemer med setAlpha etc
 
 
 

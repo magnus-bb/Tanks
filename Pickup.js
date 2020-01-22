@@ -1,13 +1,10 @@
-class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på banen. Det skal så kalde new XXX ved opsamling og sætte det nye objekt (baseret på selvstændig class) ind i inventory
-	//* STATIC PROPS
+class Pickup {
 
 	static pickups = {
 		powerup: ['ammo'],
 		equipment: ['m82', 'wormhole', 'breaker'],
 		modifier: ['stealthAmmo']
 	}
-
-	//* STATIC METHODS
 
 	static spawn() {
 		if (frameCount % config.pickup.spawnInterval === 0) {
@@ -35,7 +32,7 @@ class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på ba
 		}
 	}
 
-	static create(pickupName, cellIndices = null) { 
+	static create(pickupName, cellIndices = null) {
 
 		if (cellIndices) {
 			var { col, row } = cellIndices
@@ -58,15 +55,24 @@ class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på ba
 			}
 		}
 
-		const pickup = new Pickup(pickupName, pickupType, x, y, col, row)
+		if (pickupType === 'equipment') {
+			var pickup = new EquipmentPickup(pickupName, pickupType, x, y, col, row)
+
+		} else if (pickupType === 'modifier') {
+			var pickup = new ModifierPickup(pickupName, pickupType, x, y, col, row)
+
+		} else if (pickupType === 'powerup') {
+			var pickup = new PowerupPickup(pickupName, pickupType, x, y, col, row)
+		}
 
 		// Adds to maze to be rendered if maze is not full:
 		if (state.pickups.length < config.cell.xAmt * config.cell.yAmt) {
 			state.pickups.push(pickup)
 		}
 	}
-	
+
 	//* INSTANCE
+
 	constructor(name, type, x, y, col, row) {
 		this.name = name
 		this.type = type
@@ -78,8 +84,8 @@ class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på ba
 	}
 
 	pickup(i, tank) {
-		if (this._checkIntersection(tank) && this._checkPrerequisites(tank)) {
-			this._pickedUp(i, tank)
+		if (this._checkIntersection(tank) && this._checkPrerequisites(tank)) { // In subclasses
+			this._pickedUp(i, tank) // In subclasses
 		}
 	}
 
@@ -102,58 +108,13 @@ class Pickup { //* PICKUP !== WEAPON ETC. Pickup skal bare være objektet på ba
 		}
 	}
 
-	_checkPrerequisites(tank) {
-		// If the pickup is equipment type:
-		if (this.type === 'equipment') {
-			// Return true if tank has nothing equipped:
-			return !tank.equipment
-
-			// If the pickup is a timed modifier:
-		} else if (this.type === 'modifier') {
-			// Return true if no applied modifiers are dupes of this pickup:
-			for (const mod of tank.modifiers) {
-				if (mod.name === this.name.capitalize()) return false
-			}
-
-			return true
-		} else {
-			//TODO: POWERUP PREREQS?
-			return true
-		}
-	}
-
-	_pickedUp(i, tank) {
-		const className = this.name.capitalize()
-
-		if (this.type === 'equipment') {
-			tank.equipment = this._toEquipment(tank, className)
-		} else if (this.type === 'modifier') {
-			tank.modifiers.add(this._toModifier(tank, className))
-		} else {
-			tank.powerups.push(this._toPowerup(tank, className))
-		}
-
-		// Removes self from maze:
-		state.pickups.splice(i, 1)
-	}
-
-	_toEquipment(tank, className) {
-		// Returns an instantiation of the class corresponding to this pickup's name by doing a lookup in equipment:
-		return new equipment[className](tank, className)
-	}
-
-	_toModifier(tank, className) {
-		// Returns an instantiation of the class corresponding to this pickup's name by doing a lookup in modifier:
-		return new modifier[className](tank, className)
-	}
-
-	_toPowerup(tank, className) {
-		// Returns an instantiation of the class corresponding to this pickup's name by doing a lookup in modifier:
-		return new powerup[className](tank, className)
-	}
-
 	_show() {
 		image(this.asset, this.x, this.y, config.pickup.size, config.pickup.size)
+	}
+
+	_remove(i) {
+		// Removes self from maze:
+		state.pickups.splice(i, 1)
 	}
 
 	// Called every frame:
@@ -166,16 +127,75 @@ class EquipmentPickup extends Pickup {
 	constructor(name, type, x, y, col, row) {
 		super(name, type, x, y, col, row)
 	}
+
+	_checkPrerequisites(tank) {
+		return !tank.equipment
+	}
+
+	_pickedUp(i, tank) {
+		const className = this.name.capitalize()
+
+		tank.equipment = this._toEquipment(tank, className)
+
+		this._remove(i)
+	}
+
+	_toEquipment(tank, className) {
+		// Returns an instantiation of the class corresponding to this pickup's name by doing a lookup in equipment:
+		return new equipment[className](tank, className)
+	}
 }
 
 class ModifierPickup extends Pickup {
 	constructor(name, type, x, y, col, row) {
 		super(name, type, x, y, col, row)
 	}
+
+	_checkPrerequisites(tank) {
+		// Return true if no applied modifiers are dupes of this pickup:
+		for (const mod of tank.modifiers) {
+			if (mod.name === this.name.capitalize()) return false
+		}
+
+		return true
+	}
+
+	_pickedUp(i, tank) {
+		const className = this.name.capitalize()
+
+		tank.modifiers.add(this._toModifier(tank, className))
+
+		this._remove(i)
+	}
+
+	_toModifier(tank, className) {
+		// Returns an instantiation of the class corresponding to this pickup's name by doing a lookup in modifier:
+		return new modifier[className](tank, className)
+	}
 }
 
 class PowerupPickup extends Pickup {
 	constructor(name, type, x, y, col, row) {
 		super(name, type, x, y, col, row)
+	}
+
+	_checkPrerequisites(tank) {
+		//TODO: MAX NUMBER FOR EVERY POWERUP? COOLDOWN IN BETWEEN?
+		return true
+	}
+
+	_pickedUp(i, tank) {
+		const className = this.name.capitalize()
+
+
+		tank.powerups.push(this._toPowerup(tank, className))
+
+
+		this._remove(i)
+	}
+
+	_toPowerup(tank, className) {
+		// Returns an instantiation of the class corresponding to this pickup's name by doing a lookup in modifier:
+		return new powerup[className](tank, className)
 	}
 }

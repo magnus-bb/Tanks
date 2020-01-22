@@ -9,6 +9,7 @@ class Projectile { //TODO: LAV EN SAMLING AF GÆNGSE METODER OSV OG BRUG COMPOSI
 	//* INSTANCES
 	constructor(owner) {
 		this.owner = owner
+		this.color = color(this.owner.color) // Must convert to P5-color object to be able to set alpha dynamically (back and forth with trail/stealth etc)
 	}
 
 	//? MOVE HIT HANDLING ETC TO INDIVIDUAL PROJECTILES - (every proj should have stealth, so maybe not)
@@ -51,7 +52,6 @@ class Bullet extends Projectile {
 		this.x = this.owner.cannon.x
 		this.y = this.owner.cannon.y
 		this.duration = config.bullet.duration
-		this.color = color(this.owner.color) // Must convert to P5-color object to be able to set alpha dynamically (back and forth with trail/stealth etc)
 		const move = getOffsetPoint(this.speed, this.direction)
 		this.moveCoords = {
 			dX: move.x,
@@ -205,15 +205,14 @@ class M82Bullet extends Projectile {
 		super(owner)
 
 		this.type = 'm82'
-		this.asset = assets.projectiles[this.type]
-		this.stealthAsset = assets.stealthProjectiles[this.type] //! Until fcking tint() works
+		// // this.asset = assets.projectiles[this.type]
+		// // this.stealthAsset = assets.stealthProjectiles[this.type] //! Until fcking tint() works
 		// A circle with diameter the width of the projectile image will be good enough:
-		this.d = this.asset.height // To make p5-rotate work normally, all images must be on their side, hence: width of projectile is height of image
+		this.d = 3 // Max width of projectile shape
 		this.direction = owner.direction
 		this.speed = config.equipment.m82.speed
 		this.x = this.owner.cannon.x
 		this.y = this.owner.cannon.y
-		//?this.color = this.owner.color - svg fill editing?
 		const move = getOffsetPoint(this.speed, this.direction)
 		this.moveCoords = {
 			dX: move.x,
@@ -297,9 +296,31 @@ class M82Bullet extends Projectile {
 
 		translate(this.x, this.y)
 		rotate(this.direction)
-		this.owner.stealthedAmmo ? image(this.stealthAsset, 0, 0) : image(this.asset, 0, 0)
+		////this.owner.stealthedAmmo ? image(this.stealthAsset, 0, 0) : image(this.asset, 0, 0)
+		this._projectileShape(this.owner.stealthedAmmo)
 
 		pop()
+	}
+
+	_projectileShape(stealth = false) {
+		noStroke()
+		stealth ? this.color.setAlpha(config.modifiers.stealthAmmo.alpha * config.equipment.m82.stealthModifier) : this.color.setAlpha(255)
+		fill(this.color)
+	
+		// Centering based on half the width / height of the drawing (use figma):
+		translate(-3, -1.5)
+
+		// Actual vector shape:
+		beginShape()
+		vertex(1.5, 0)
+		vertex(0, 1)
+		vertex(0, 2)
+		vertex(1.5, 3)
+		vertex(3, 3)
+		vertex(6, 1.5)
+		vertex(3, 0)
+		vertex(1.5, 0)
+		endShape(CLOSE)
 	}
 
 	_updateNext() {
@@ -326,15 +347,14 @@ class BreakerBullet extends Projectile {
 		super(owner)
 
 		this.type = 'breaker'
-		this.asset = assets.projectiles[this.type]
-		this.stealthAsset = assets.stealthProjectiles[this.type] //! Until fcking tint() works
+		// // this.asset = assets.projectiles[this.type]
+		// // this.stealthAsset = assets.stealthProjectiles[this.type] //! Until fcking tint() works
 		// A circle with diameter the width of the projectile image will be good enough:
-		this.d = this.asset.height // To make p5-rotate work normally, all images must be on their side, hence: width of projectile is height of image
+		this.d = 3 // Max width of projectile shape
 		this.direction = owner.direction
 		this.speed = config.equipment.breaker.speed
 		this.x = this.owner.cannon.x
 		this.y = this.owner.cannon.y
-		//?this.color = this.owner.color - svg fill editing?
 		const move = getOffsetPoint(this.speed, this.direction)
 		this.moveCoords = {
 			dX: move.x,
@@ -402,9 +422,32 @@ class BreakerBullet extends Projectile {
 
 		translate(this.x, this.y)
 		rotate(this.direction)
-		this.owner.stealthedAmmo ? image(this.stealthAsset, 0, 0) : image(this.asset, 0, 0)
+		////this.owner.stealthedAmmo ? image(this.stealthAsset, 0, 0) : image(this.asset, 0, 0)
+		this._projectileShape(this.owner.stealthedAmmo)
 
 		pop()
+	}
+
+	_projectileShape(stealth = false) {
+		noStroke()
+		stealth ? this.color.setAlpha(config.modifiers.stealthAmmo.alpha) : this.color.setAlpha(255)
+		fill(this.color)
+	
+		// Centering based on half the width / height of the drawing (use figma):
+		translate(-5, -5)
+
+		// Actual vector shape:
+		beginShape()
+		vertex(10, 8.33333)
+		vertex(6.66667, 10)
+		vertex(1.66667, 8.33333)
+		vertex(0, 6.66667)
+		vertex(0, 3.33333)
+		vertex(1.66667, 1.66667)
+		vertex(6.66667, 0)
+		vertex(10, 1.66667)
+		vertex(10, 8.33333)
+		endShape(CLOSE)
 	}
 
 	_updateNext() {

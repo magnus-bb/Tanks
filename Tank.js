@@ -270,11 +270,10 @@ class Tank {
 		if (this.equipment) {
 
 			// If the item is usable:
-			try {
+			if (this.equipment.use) {
 				this.equipment.use()
-			}
-			// If the item is on cooldown (e.g. wormhole):
-			catch (err) {
+
+			} else {// If the item is on cooldown (e.g. wormhole) - ie the .use() method does not exist:
 				console.log("You cannot use this item at the moment.")
 			}
 

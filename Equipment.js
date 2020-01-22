@@ -10,8 +10,6 @@ class Equipment {
 	}
 }
 
-//TODO: Instause equipment to extend Equipment?
-
 class Breaker extends Equipment {
 	constructor(owner, name) {
 		super(owner, name) 

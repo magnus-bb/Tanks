@@ -16,7 +16,8 @@ class Config {
 			m82: {
 				ammo: 3,
 				speed: 12,
-				penetrationSpeedDivisor: 3
+				penetrationSpeedDivisor: 3,
+				stealthModifier: 2
 			},
 			breaker: {
 				speed: 3
