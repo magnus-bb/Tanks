@@ -3,7 +3,7 @@ function draw() {
 	//* Canvas:
 	//TODO: Canvas-class?
 	push()
-	background(195)
+	background(config.cell.color)
 	stroke(40)
 	strokeWeight(config.wall.strokeWidth)
 	noFill()

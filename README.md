@@ -41,7 +41,6 @@ Todos
 -----
 - En lækker effekt når et projektil kalder `destroy()`, så det ikke bare forsvinder.
 - Finde og loade open source lydeffekter til skud (*gud forbyde, at jeg bliver nødt til at optage mundlyde*)
-- `Bullet` class skal omskrives til at extende en `Projectile` class i stedet til det mest basic gentagede
 - Brug composition (f.eks. til projektil-tank checks og projektil-wall checks)
 - Tank collisions med hinanden?
 - Find et system for helpers - static i classes vs i instances vs globale funktioner

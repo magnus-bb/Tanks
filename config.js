@@ -53,11 +53,13 @@ class Config {
 			width: 55, // px
 			xAmt: 15,
 			yAmt: 10,
+			color: '#c4c4c4'
 		}
 		this.wall = {
 			strokeWidth: 6,
 			occurrenceRate: 0.8,
-			get collisionCheckStepSize() { return this.strokeWidth - 1 } // Will always be able to 'hit' wall
+			get collisionStepSize() { return this.strokeWidth - 1 }, // Will always be able to 'hit' wall
+			color: '#222629'
 		}
 		this.fx = {
 			muzzleSize: 2.5, // Times the size of regular bullet

@@ -238,7 +238,7 @@ class M82Bullet extends Projectile {
 		const wallRect = getWallRect(wall)
 
 		// Looks at "all" positions between location and (fraction of) 'next' location:
-		for (let step = 0; step <= this.speed; step += config.wall.collisionCheckStepSize) {
+		for (let step = 0; step <= this.speed; step += config.wall.collisionStepSize) {
 
 			// This has to be in fractions of moveCoords (and not just +- some values) to account for the direction of the movement - we don't want to ADD to a negative and vice versa:
 			const next = {
@@ -385,7 +385,7 @@ class BreakerBullet extends Projectile {
 		const wallRect = getWallRect(wall)
 
 		// Looks at "all" positions between location and (fraction of) 'next' location:
-		for (let step = 0; step <= this.speed; step += config.wall.collisionCheckStepSize) {
+		for (let step = 0; step <= this.speed; step += config.wall.collisionStepSize) {
 
 			// This has to be in fractions of moveCoords (and not just +- some values) to account for the direction of the movement - we don't want to ADD to a negative and vice versa:
 			const next = {
