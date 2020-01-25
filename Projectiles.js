@@ -38,6 +38,7 @@ function Bullet(owner) {
 
 	return {
 		...props,
+		...canMoveStandard(),
 		...canHitTank(),
 
 		envCollision(i, wall = null) { // Index is passed with all projectiles, since some need it to remove() (but not this one)
@@ -101,12 +102,6 @@ function Bullet(owner) {
 			this.direction = getDirection(this.moveCoords.dX, this.moveCoords.dY)
 		},
 
-		_move() {
-			// Moves bullet:
-			this.x += this.moveCoords.dX
-			this.y += this.moveCoords.dY
-		},
-
 		// Makes a trail point for each frame:
 		_makeTrailPoint() {
 			const trails = state.fx.bulletTrails // Trails are made in state to allow for continuous rendering when bullet is destroyed
@@ -142,13 +137,7 @@ function Bullet(owner) {
 			pop()
 		},
 
-		_updateNext() {
-			this.next = {
-				x: this.x + this.moveCoords.dX,
-				y: this.y + this.moveCoords.dY
-			}
-		},
-
+		// Trails and ammo make this _destroy() different from other projectiles
 		_destroy(i) {
 			this.dead = true // For trails effect
 
@@ -201,7 +190,9 @@ function M82Bullet(owner) {
 
 	return {
 		...props,
+		...canMoveStandard(),
 		...canHitTank(),
+		...canDestroySelf(),
 
 		envCollision(i, wall = null) { // Wall is not passed when checking edge collisions
 
@@ -264,11 +255,6 @@ function M82Bullet(owner) {
 			}
 		},
 
-		_move() {
-			this.x += this.moveCoords.dX
-			this.y += this.moveCoords.dY
-		},
-
 		_show() {
 			push()
 
@@ -298,17 +284,6 @@ function M82Bullet(owner) {
 			vertex(3, 0)
 			vertex(1.5, 0)
 			endShape(CLOSE)
-		},
-
-		_updateNext() {
-			this.next = {
-				x: this.x + this.moveCoords.dX,
-				y: this.y + this.moveCoords.dY
-			}
-		},
-
-		_destroy(i) {
-			state.projectiles.splice(i, 1)
 		},
 
 		onFrame(i) { // Duration based projectiles need to destroy(i), so every projectile gets passed their index
@@ -347,7 +322,9 @@ function BreakerBullet(owner) {
 
 	return {
 		...props,
+		...canMoveStandard(),
 		...canHitTank(),
+		...canDestroySelf(),
 
 		envCollision(i, wall = null) { // Wall is not passed when checking edge collisions //TODO: Make separate functions for edge / wall
 			if (wall && this._checkWallCollision(wall)) {
@@ -395,11 +372,6 @@ function BreakerBullet(owner) {
 			wall.destroy()
 		},
 
-		_move() {
-			this.x += this.moveCoords.dX
-			this.y += this.moveCoords.dY
-		},
-
 		_show() {
 			push()
 
@@ -430,17 +402,6 @@ function BreakerBullet(owner) {
 			vertex(10, 1.66667)
 			vertex(10, 8.33333)
 			endShape(CLOSE)
-		},
-
-		_updateNext() {
-			this.next = {
-				x: this.x + this.moveCoords.dX,
-				y: this.y + this.moveCoords.dY
-			}
-		},
-
-		_destroy(i) {
-			state.projectiles.splice(i, 1)
 		},
 
 		onFrame(i) { // Duration based projectiles need to destroy(i), so every projectile gets passed their index
@@ -481,6 +442,30 @@ function canHitTank() {
 		_handleHit(index, tank) {
 			this.owner.owner.gotKill(tank) // The player that owns the tank that spawned the bullet
 			this._destroy(index)
+		}
+	}
+}
+
+function canDestroySelf() {
+	return {
+		_destroy(i) {
+			state.projectiles.splice(i, 1)
+		}
+	}
+}
+
+function canMoveStandard() {
+	return {
+		_move() {
+			this.x += this.moveCoords.dX
+			this.y += this.moveCoords.dY
+		},
+
+		_updateNext() {
+			this.next = {
+				x: this.x + this.moveCoords.dX,
+				y: this.y + this.moveCoords.dY
+			}
 		}
 	}
 }

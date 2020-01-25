@@ -62,7 +62,7 @@ function Wormhole(owner, name) {
 
 	return {
 		...props,
-		...canRemoveSelf,
+		...canRemoveSelf(),
 		
 		_timer() { //TODO: Timed equipment might be common. If so - move to mixin (and maybe with onFrame()), and leave autoUse up to the class
 			if (this.duration <= 0) {
