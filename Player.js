@@ -16,13 +16,9 @@ class Player {
 		} else {
 			this.kills++
 		}
-
-		Status.update(this.id)
 	}
 
 	died() {
 		this.deaths++
-
-		status.update(this.id)
 	}
 }

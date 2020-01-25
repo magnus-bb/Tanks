@@ -23,27 +23,27 @@ class Config {
 				speed: 3
 			}
 		},
-		this.modifiers = {
-			stealthAmmo: {
-				duration: 60 * 10,
-				alpha: 15
+			this.modifiers = {
+				stealthAmmo: {
+					duration: 60 * 10,
+					alpha: 15
+				},
 			},
-		},
-		this.tank = {
-			diameter: 20,
-			moveSpeed: 1.5, // Has to be less than the width of walls to not pass through
-			turnSpeed: 4,
-			ammo: 5,
-			collisionMoveSlow: 2.5,
-			collisionTurnSlow: 2,
-			spawnDistance: 1,
-			defaultColor: 'ff0000', //? remove
-			cannon: {
-				length: 18,
-				width: 3,
-				midOffsetDivisor: 5
-			},
-		}
+			this.tank = {
+				diameter: 20,
+				moveSpeed: 1.5, // Has to be less than the width of walls to not pass through
+				turnSpeed: 4,
+				ammo: 5,
+				collisionMoveSlow: 2.5,
+				collisionTurnSlow: 2,
+				spawnDistance: 1,
+				defaultColor: 'ff0000', //? remove
+				cannon: {
+					length: 18,
+					width: 3,
+					midOffsetDivisor: 5
+				},
+			}
 		this.bullet = {
 			speed: 3,
 			diameter: 8,
@@ -58,7 +58,7 @@ class Config {
 		this.wall = {
 			strokeWidth: 6,
 			occurrenceRate: 0.8,
-			get collisionStepSize() { return this.strokeWidth - 1 }, // Will always be able to 'hit' wall
+			get collisionStepSize() { return this.strokeWidth - 1 }, // Projectiles will always be able to 'hit' wall
 			color: '#222629'
 		}
 		this.fx = {
@@ -70,25 +70,39 @@ class Config {
 		}
 	}
 
-	//* Config Saving
 
-	//TODO: To be saved as local storage
-	static saved = {}
+	//* Local Storage
 
-	
-	static saveConfig(name, configuration) {
-		if (this.saved[name]) {
-			//TODO: Do you want to overwrite? Prompt
-			this.saved[name] = new Config(configuration)
+	// Defaults to save "equipped" config, but can save another config:
+	static saveConfig(name, configuration = config) {
+		if (!configuration) throw "There is no configuration to save!"
+
+		// If config with name already exists:
+		if (localStorage.getItem(name)) {
+			//TODO: Are you sure you want to overwrite the already existing config with this name?
+			console.log("Config already exists")
 		} else {
-			this.saved[name] = configuration
-			//TODO: Config saved!
+			localStorage.setItem(name, JSON.stringify(configuration))
+
+			return config
 		}
 	}
-	
+
 	static loadConfig(name) {
-		config = this.saved[name]
+		if (!localStorage.getItem(name)) throw "No configuration exists with that name!"
+
+		config = JSON.parse(localStorage.getItem(name))
+
+		return config
 		//TODO: Loaded!
+	}
+
+	static removeConfig(name) {
+		localStorage.removeItem(name)
+	}
+
+	static clearConfigs() {
+		localStorage.clear()
 	}
 }
 

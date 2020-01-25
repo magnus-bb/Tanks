@@ -91,22 +91,4 @@ class Cell {
 			}
 		}
 	}
-
-	//! static fixWallOverlaps() {
-	//! 	for (let x = 0; x < state.grid.length; x++) {
-	//! 		for (let y = 0; y < state.grid[x].length; y++)!
-	//! 			if (state.grid[x][y].walls.bottom)!
-	//! 				if (state.grid[x][y].walls.right || state.grid[x][y + 1].walls.right) {
-	//! 					state.grid[x][y].walls.bottom.x2 -= config.wall.strokeWidth / 2
-	//! 			!
-	//! 				// Has to do preliminary x-1 check, to not assume it exists when trying to check the y:
-	//! 				if (state.grid[x - 1]) {
-	//! 					if (state.grid[x - 1][y].walls.right || state.grid[x - 1][y + 1].walls.right) {
-	//! 						state.grid[x][y].walls.bottom.x1 += config.wall.strokeWidth / 2
-	//! 					}
-	//! 				}
-	//! 			}
-	//! 		}
-	//! 	}
-	//! }
 }

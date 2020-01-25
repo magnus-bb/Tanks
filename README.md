@@ -70,6 +70,7 @@ Todos
 - Move static props and methods to top of classes
 - Autostørrelse (på max eller evt default) af canvas ved at tage vinduets width divideret med cellestørrelsen
 - Colors skal være kopier af owner, ikke den samme (hvis det ikke allerede er sådan), for at forhindre problemer med setAlpha etc
+- Forskellige typer pickups behøver nok ikke extende deres type (modifier, powerup etc) hvis ikke de har andet til fælles end owner og name
 
 
 

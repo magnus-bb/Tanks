@@ -187,9 +187,7 @@ class PowerupPickup extends Pickup {
 	_pickedUp(i, tank) {
 		const className = this.name.capitalize()
 
-
 		tank.powerups.push(this._toPowerup(tank, className))
-
 
 		this._remove(i)
 	}

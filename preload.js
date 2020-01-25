@@ -23,8 +23,8 @@ function preload() {
 
 
 
-	// Runs through all effects and saves them in the assets-object:
-	// for (const effect of FX.fx) {
-	// 	assets.fx[effect] = loadImage(`assets/fx/${effect}.svg`)
-	// }
+	// // Runs through all effects and saves them in the assets-object:
+	// // for (const effect of FX.fx) {
+	// // 	assets.fx[effect] = loadImage(`assets/fx/${effect}.svg`)
+	// // }
 }

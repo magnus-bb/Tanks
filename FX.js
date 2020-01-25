@@ -1,10 +1,6 @@
 class FX {
-
-	static fx = [
-
-	]
-
 	static shake(magnitude = config.fx.defaultShakeMagnitude) {
+		
 		let shakeCount = 1;
 		const numShakes = 10
 		const startX = 0
