@@ -12,12 +12,12 @@ function preload() {
 	}
 
 	// // // Runs through all types of projectiles and saves them in the assets-object:
-	// // for (const projectile of Projectile.projectiles) {
+	// // for (const projectile of Projectile.types) {
 	// // 	assets.projectiles[projectile] = loadImage(`assets/projectiles/${projectile}.svg`)
 	// // }
 
 	// // //! Until fcking tint() works:
-	// // for (const projectile of Projectile.projectiles) {
+	// // for (const projectile of Projectile.types) {
 	// // 	assets.stealthProjectiles[projectile] = loadImage(`assets/projectiles/${projectile}-stealthed.svg`)
 	// // }
 

@@ -70,7 +70,12 @@ Todos
 - Move static props and methods to top of classes
 - Autostørrelse (på max eller evt default) af canvas ved at tage vinduets width divideret med cellestørrelsen
 - Colors skal være kopier af owner, ikke den samme (hvis det ikke allerede er sådan), for at forhindre problemer med setAlpha etc
-- Forskellige typer pickups behøver nok ikke extende deres type (modifier, powerup etc) hvis ikke de har andet til fælles end owner og name
+- Sørg for at alt der kan ændres i `config` genindlæses eller slet ikke indlæses før et spil er i gang
+	- Udnyt evt forskellen på en gemt config og så variablen
+	- Dette ødelægger muligvis baggrunden inden start, hvis man ændrer størrelse af mazen?
+	- Evt brug en "this setting requires a restart"
+- Tilføj laser til sniper indtil første væg
+- Fjern classes i powerup, mods, equipment og brug comp. !!!
 
 
 

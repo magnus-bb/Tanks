@@ -69,10 +69,10 @@ function draw() {
 	for (const tank of state.tanks) {
 		tank.onFrame() // Importantly done after input + collision handling
 
-		//TODO: REMAKE TO SOMETHING OTHER THAN EQUIPMENT IF IT NEEDS instause?
-		if (tank.equipment && tank.equipment.instaUse) { // Only done if equipment present and has onFrame() (instause with CD needs to keep track of time)
-			tank.equipment.instaUse()
-		}
+		// // //TODO: REMAKE TO SOMETHING OTHER THAN EQUIPMENT IF IT NEEDS instause?
+		// // if (tank.equipment && tank.equipment.instaUse) { // Only done if equipment present and has onFrame() (instause with CD needs to keep track of time)
+		// // 	tank.equipment.instaUse()
+		// // }
 	}
 
 	//* Projectiles (& Edges):

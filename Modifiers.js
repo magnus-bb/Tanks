@@ -9,7 +9,7 @@ class StealthAmmo extends Modifier {
 	constructor(owner, name) {
 		super(owner, name)
 
-		this.duration = config.modifiers.stealthAmmo.duration
+		this.duration = config.modifier.stealthAmmo.duration
 	}
 
 	onFrame() {
@@ -31,6 +31,6 @@ class StealthAmmo extends Modifier {
 }
 
 //* Dictionary
-const modifier = {
+const Modifier = {
 	StealthAmmo
 }

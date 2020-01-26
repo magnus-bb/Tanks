@@ -9,12 +9,13 @@ class Config {
 			spawnInterval: 60 * 5, // Secs
 			spawnChance: 0.5
 		}
-		this.equipment = {
-			wormhole: {
-				chargeFrames: 60 * 2 // Seconds
+		this.projectile = { // Used / when drawn
+			bullet: {
+				speed: 3,
+				diameter: 8,
+				duration: 60 * 6, // Seconds
 			},
 			m82: {
-				ammo: 3,
 				speed: 12,
 				penetrationSpeedDivisor: 3,
 				stealthModifier: 2
@@ -22,32 +23,35 @@ class Config {
 			breaker: {
 				speed: 3
 			}
-		},
-			this.modifiers = {
-				stealthAmmo: {
-					duration: 60 * 10,
-					alpha: 15
-				},
+		}
+		this.equipment = { // Using / when equipped
+			wormhole: {
+				chargeFrames: 60 * 2 // Seconds
 			},
-			this.tank = {
-				diameter: 20,
-				moveSpeed: 1.5, // Has to be less than the width of walls to not pass through
-				turnSpeed: 4,
-				ammo: 5,
-				collisionMoveSlow: 2.5,
-				collisionTurnSlow: 2,
-				spawnDistance: 1,
-				defaultColor: 'ff0000', //? remove
-				cannon: {
-					length: 18,
-					width: 3,
-					midOffsetDivisor: 5
-				},
-			}
-		this.bullet = {
-			speed: 3,
-			diameter: 8,
-			duration: 60 * 6, // Seconds
+			m82: {
+				ammo: 3
+			},
+		}
+		this.modifier = {
+			stealthAmmo: {
+				duration: 60 * 10,
+				alpha: 15
+			},
+		}
+		this.tank = {
+			diameter: 20,
+			moveSpeed: 1.5, // Has to be less than the width of walls to not pass through
+			turnSpeed: 4,
+			ammo: 5,
+			collisionMoveSlow: 2.5,
+			collisionTurnSlow: 2,
+			spawnDistance: 1,
+			defaultColor: 'ff0000', //? remove
+			cannon: {
+				length: 18,
+				width: 3,
+				midOffsetDivisor: 5
+			},
 		}
 		this.cell = {
 			width: 55, // px

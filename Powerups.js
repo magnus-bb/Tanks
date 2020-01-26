@@ -13,6 +13,6 @@ class Ammo extends Powerup {
 	}
 }
 
-const powerup = {
+const Powerup = {
 	Ammo
 }

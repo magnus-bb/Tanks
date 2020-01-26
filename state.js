@@ -12,5 +12,5 @@ class GameState {
 	}
 }
 
-// Makes first state-object ready:
+// Makes first state-object ready: //TODO: Maybe not do until game starts, to avoid errors when changing config
 let state = new GameState
