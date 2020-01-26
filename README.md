@@ -74,8 +74,8 @@ Todos
 	- Udnyt evt forskellen på en gemt config og så variablen
 	- Dette ødelægger muligvis baggrunden inden start, hvis man ændrer størrelse af mazen?
 	- Evt brug en "this setting requires a restart"
-- Tilføj laser til sniper indtil første væg
-- Fjern classes i powerup, mods, equipment og brug comp. !!!
+- Lav tank color en p5color og brug kopier af denne med destructuring, når man bruger `owner.color`
+- Lav ALLE collisions så de har steps, så ændringer af speed ikke ødelægger collisions
 
 
 

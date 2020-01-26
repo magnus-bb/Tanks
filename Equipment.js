@@ -5,9 +5,10 @@ function Breaker(owner, name) {
 		owner,
 		name
 	}
+
 	return {
 		...props,
-		...canRemoveSelf(),
+		...Equipment.mixins.canRemoveSelf(),
 
 		use() {
 			console.log(this.name + " used by: " + this.owner.name)
@@ -23,6 +24,8 @@ function Breaker(owner, name) {
 //* M82
 
 function M82(owner, name) {
+	Equipment.mixins.addLaserSight(owner) //TODO: Make dynamic on all equipment (so it can be changed in configs) if the array [config.modifier.laserSight.onEquipment] includes the equipment name
+
 	const props = {
 		owner,
 		name
@@ -36,18 +39,12 @@ function M82(owner, name) {
 		use() {
 			console.log(this.name + " used by: " + this.owner.name)
 
-			this.ammo--
-
-			// Putting self-sufficient bullet in state with the same owner as this equip:
 			state.projectiles.push(new M82Bullet(this.owner))
 
-			// Last step:
-			if (this.ammo <= 0) {
-				this._remove()
-			}
+			// Always last - decrements ammo and removes if ammo is out:
+			this._handleAmmo()
 		}
 	}
-
 }
 
 
@@ -108,9 +105,21 @@ const Equipment = {
 	//* COMPOSITIONAL MIXINS
 
 	mixins: {
+		addLaserSight(owner) {
+			owner.modifiers.add(new LaserSight(owner, 'laserSight'))
+		},
+
 		hasAmmo(name) {
 			return {
-				ammo: config.equipment[name].ammo
+				ammo: config.equipment[name].ammo,
+
+				_handleAmmo() {
+					this.ammo--
+
+					if (this.ammo <= 0) {
+						this._remove()
+					}
+				}
 			}
 		},
 

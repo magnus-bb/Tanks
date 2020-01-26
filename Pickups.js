@@ -7,18 +7,18 @@ function EquipmentPickup(name, type, x, y, col, row) {
 		_checkPrerequisites(tank) {
 			return !tank.equipment
 		},
-	
+
 		_pickedUp(i, tank) {
-			const className = this.name.capitalize()
-	
-			tank.equipment = this._toEquipment(tank, className)
-	
+			tank.equipment = this._toEquipment(tank)
+
 			this._remove(i)
 		},
-	
-		_toEquipment(tank, className) {
+
+		_toEquipment(tank) {
+			const className = this.name.capitalize()
+
 			// Returns an instantiation of the class corresponding to this pickup's name by doing a lookup in equipment:
-			return new Equipment[className](tank, className)
+			return new Equipment[className](tank, this.name)
 		}
 	}
 }
@@ -34,23 +34,23 @@ function ModifierPickup(name, type, x, y, col, row) {
 			for (const mod of tank.modifiers) {
 				if (mod.name === this.name.capitalize()) return false
 			}
-	
+
 			return true
 		},
-	
+
 		_pickedUp(i, tank) {
-			const className = this.name.capitalize()
-	
-			tank.modifiers.add(this._toModifier(tank, className))
-	
+			tank.modifiers.add(this._toModifier(tank))
+
 			this._remove(i)
 		},
-	
-		_toModifier(tank, className) {
+
+		_toModifier(tank) {
+			const className = this.name.capitalize()
+
 			// Returns an instantiation of the class corresponding to this pickup's name by doing a lookup in modifier:
-			return new Modifier[className](tank, className)
+			return new Modifier[className](tank, this.name)
 		}
-	}	
+	}
 }
 
 function PowerupPickup(name, type, x, y, col, row) {
@@ -63,18 +63,18 @@ function PowerupPickup(name, type, x, y, col, row) {
 			//TODO: MAX NUMBER FOR EVERY POWERUP? COOLDOWN IN BETWEEN?
 			return true
 		},
-	
+
 		_pickedUp(i, tank) {
-			const className = this.name.capitalize()
-	
-			tank.powerups.push(this._toPowerup(tank, className))
-	
+			tank.powerups.push(this._toPowerup(tank))
+
 			this._remove(i)
 		},
-	
-		_toPowerup(tank, className) {
+
+		_toPowerup(tank) {
+			const className = this.name.capitalize()
+
 			// Returns an instantiation of the class corresponding to this pickup's name by doing a lookup in modifier:
-			return new Powerup[className](tank, className)
+			return new Powerup[className](tank, this.name)
 		}
 	}
 }
@@ -82,21 +82,21 @@ function PowerupPickup(name, type, x, y, col, row) {
 
 //* STATIC METHODS
 
-class Pickup {
-	static pickups = {
+const Pickup = {
+	pickups: {
 		powerup: ['ammo'],
 		equipment: ['m82', 'wormhole', 'breaker'],
 		modifier: ['stealthAmmo']
-	}
+	},
 
-	static spawn() {
+	spawn() {
 		if (frameCount % config.pickup.spawnInterval === 0 && state.pickups.length < config.cell.xAmt * config.cell.yAmt) {
 			random() < config.pickup.spawnChance ? this.create(this.random()) : false
 		}
-	}
+	},
 
 	// Returns random pickup name, optionally in a category:
-	static random(type = null) {
+	random(type = null) {
 		// Random from type:
 		if (type) {
 			if (this.pickups.hasOwnProperty(type)) {
@@ -113,10 +113,9 @@ class Pickup {
 
 			return random(allPickups)
 		}
-	}
+	},
 
-	static create(pickupName, cellIndices = null) {
-
+	create(pickupName, cellIndices = null) {
 		if (cellIndices) {
 			var { col, row } = cellIndices
 			var { x, y } = getCell(col, row).midpoint
@@ -152,12 +151,12 @@ class Pickup {
 		if (state.pickups.length < config.cell.xAmt * config.cell.yAmt) {
 			state.pickups.push(pickup)
 		}
-	}
+	},
 
 
 	//* COMPOSITIONAL MIXINS
 
-	static mixins = {
+	mixins: {
 		hasBaseProps(name, type, x, y, col, row) { //TODO: Not necessary unless non-passed values are added
 			return {
 				name,
@@ -177,21 +176,21 @@ class Pickup {
 						this._pickedUp(i, tank) // In subclasses
 					}
 				},
-			
+
 				_checkIntersection(tank) {
 					const tankBody = {
 						x: tank.x,
 						y: tank.y,
 						r: tank.r
 					}
-			
+
 					const pickupRect = {
 						x: this.x - config.pickup.size / 2,
 						y: this.y - config.pickup.size / 2,
 						h: config.pickup.size,
 						w: config.pickup.size
 					}
-			
+
 					if (circleIntersectsRect(tankBody, pickupRect)) {
 						return true
 					}
@@ -204,7 +203,7 @@ class Pickup {
 				_show() {
 					image(this.asset, this.x, this.y, config.pickup.size, config.pickup.size)
 				},
-			
+
 				_remove(i) {
 					// Removes self from maze:
 					state.pickups.splice(i, 1)
@@ -216,53 +215,4 @@ class Pickup {
 			}
 		}
 	}
-
-	// // constructor(name, type, x, y, col, row) {
-	// // 	this.name = name
-	// // 	this.type = type
-	// // 	this.x = x
-	// // 	this.y = y
-	// // 	this.col = col
-	// // 	this.row = row
-	// // 	this.asset = assets.pickups[this.name]
-	// // }
-
-	// // pickup(i, tank) {
-	// // 	if (this._checkIntersection(tank) && this._checkPrerequisites(tank)) { // In subclasses
-	// // 		this._pickedUp(i, tank) // In subclasses
-	// // 	}
-	// // }
-
-	// // _checkIntersection(tank) {
-	// // 	const tankBody = {
-	// // 		x: tank.x,
-	// // 		y: tank.y,
-	// // 		r: tank.r
-	// // 	}
-
-	// // 	const pickupRect = {
-	// // 		x: this.x - config.pickup.size / 2,
-	// // 		y: this.y - config.pickup.size / 2,
-	// // 		h: config.pickup.size,
-	// // 		w: config.pickup.size
-	// // 	}
-
-	// // 	if (circleIntersectsRect(tankBody, pickupRect)) {
-	// // 		return true
-	// // 	}
-	// // }
-
-	// // _show() {
-	// // 	image(this.asset, this.x, this.y, config.pickup.size, config.pickup.size)
-	// // }
-
-	// // _remove(i) {
-	// // 	// Removes self from maze:
-	// // 	state.pickups.splice(i, 1)
-	// // }
-
-	// Called every frame:
-	// // onFrame() {
-	// // 	this._show()
-	// // }
 }

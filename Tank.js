@@ -197,7 +197,7 @@ class Tank {
 			y: this.next.y + this.relCannon.y
 		}
 
-		const out = outOfBounds(nextCannonTip.x, nextCannonTip.y)
+		const out = outOfBounds(nextCannonTip)
 
 		if (out.x) {
 			collision.x = true
@@ -255,7 +255,7 @@ class Tank {
 			y: this.next.y + this.relCannon.y
 		}
 
-		const out = outOfBounds(nextCannonTip.x, nextCannonTip.y)
+		const out = outOfBounds(nextCannonTip)
 
 		if (out.x || out.y) {
 			return true
@@ -364,10 +364,10 @@ class Tank {
 
 	// Called every frame:
 	onFrame() {
-		this._modifiers()
-		this._equipment()
 		this._move()
 		this._turn(this.turning) // Importantly done after .move() because of collision checking being done in the same order
+		this._modifiers()
+		this._equipment()
 		this._addTrailPoint()
 		this._show()
 	}

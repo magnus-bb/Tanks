@@ -1,18 +1,22 @@
-class Powerup {
-	constructor(owner, name) {
-		this.owner = owner
-		this.name = name
+function Ammo(owner, name) {
+	owner.ammo++
+
+	return {
+		owner,
+		name
 	}
 }
 
-class Ammo extends Powerup {
-	constructor(owner, name) {
-		super(owner, name)
 
-		this.owner.ammo++
-	}
-}
+//* LOOKUP DICTIONARY
 
 const Powerup = {
-	Ammo
+	Ammo,
+
+
+	//* COMPOSITIONAL MIXINS
+
+	mixins: {
+
+	}
 }

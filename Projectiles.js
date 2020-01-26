@@ -326,7 +326,7 @@ class Projectile {
 
 				_checkEdgeCollision() {
 					// outOfBounds() always returns object (truthy) to also get an axis, even though just true/false is used here:
-					const { x, y } = outOfBounds(this.next.x, this.next.y)
+					const { x, y } = outOfBounds(this.next)
 
 					if (x || y) {
 						return true // NOTHING (not even false) may be returned if !x || !y, since this stops looping
@@ -335,6 +335,7 @@ class Projectile {
 			}
 		},
 
+		//TODO: ADD STEPS FOR COLLISION CHECKS, SO IT IS SMOOTHER AND SO CHANGES TO PROJECTILE SPEED WILL NOT BREAK COLLISIONS
 		canBounce() { //TODO: Separate checks and bounce if other handling should be added, that has to be integrated into checks
 			return {
 				_checkWallCollision(wall) {
@@ -363,7 +364,7 @@ class Projectile {
 						y: false
 					}
 
-					const out = outOfBounds(this.next.x, this.next.y)
+					const out = outOfBounds(this.next)
 
 					if (out.x) {
 						bounce.x = true

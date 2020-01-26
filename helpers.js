@@ -1,12 +1,12 @@
 // Converts a direction and speed to new coords:
-function getOffsetPoint(dist, dir, driving = 'forward') { // Defaults to 'forward' since it is used for more than just moving objects
-	if (driving === 'forward') {
+function getOffsetPoint(dist, dir, moving = 'forward') { // Defaults to 'forward' since it is used for more than just moving objects
+	if (moving === 'forward') {
 		return {
 			x: dist * cos(dir),
 			y: dist * sin(dir)
 		}
-		
-	} else if (driving === 'backward') {
+
+	} else if (moving === 'backward') {
 		return {
 			x: -dist * cos(dir),
 			y: -dist * sin(dir)
@@ -202,7 +202,7 @@ function getWallRect(wall, circle = false) {
 	return wallRect
 }
 
-function outOfBounds(pointX, pointY) {
+function outOfBounds(point) {
 	const wallHalfWidth = config.wall.strokeWidth / 2
 
 	const out = {
@@ -210,11 +210,11 @@ function outOfBounds(pointX, pointY) {
 		y: false
 	}
 
-	if (pointX <= wallHalfWidth || pointX >= width - wallHalfWidth) {
+	if (point.x <= wallHalfWidth || point.x >= width - wallHalfWidth) {
 		out.x = true
 	}
 
-	if (pointY <= wallHalfWidth || pointY >= height - wallHalfWidth) {
+	if (point.y <= wallHalfWidth || point.y >= height - wallHalfWidth) {
 		out.y = true
 	}
 

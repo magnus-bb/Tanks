@@ -33,6 +33,11 @@ class Config {
 			},
 		}
 		this.modifier = {
+			laserSight: {
+				onEquipment: ['m82'],
+				width: 1,
+				alpha: 50
+			},
 			stealthAmmo: {
 				duration: 60 * 10,
 				alpha: 15
@@ -75,7 +80,7 @@ class Config {
 	}
 
 
-	//* Local Storage
+	//* LOCAL STORAGE MANAGEMENT
 
 	// Defaults to save "equipped" config, but can save another config:
 	static saveConfig(name, configuration = config) {
