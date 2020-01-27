@@ -79,6 +79,7 @@ Todos
 - Tilføj mulighed for altid at have laser sight i config
 - P5Vector er fucking nemt med .add(), og man kan stadig bare x / y *= -1 for at omvende en akse nemt: Lav om til vektorer (så skrå vægge etc kan laves)
 - Hjørnecollisions bugger på bounce med det nye step lookaheads
+- Mange keys giver problemer
 
 
 
