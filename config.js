@@ -6,8 +6,8 @@ class Config {
 		}
 		this.pickup = {
 			size: 25, // ~25px should be default for designs
-			spawnInterval: 60 * 5, // Secs
-			spawnChance: 0.5
+			spawnInterval: 60 * 4, // Secs
+			spawnChance: 0.6
 		}
 		this.projectile = { // Used / when drawn
 			bullet: {

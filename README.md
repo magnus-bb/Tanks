@@ -75,10 +75,10 @@ Todos
 	- Dette ødelægger muligvis baggrunden inden start, hvis man ændrer størrelse af mazen?
 	- Evt brug en "this setting requires a restart"
 	- En løsning på evt problemer kunne være at kopiere værdien fra `config` ind i ALLE classes etc, og læse derfra, så man kan ændre config ligeså meget man vil
-- Lav ALLE collisions så de har steps, så ændringer af speed ikke ødelægger collisions (også tanks - hits + tank movement)
+- lav steps på tankHit() (se kommentar)
 - Tilføj mulighed for altid at have laser sight i config
 - P5Vector er fucking nemt med .add(), og man kan stadig bare x / y *= -1 for at omvende en akse nemt: Lav om til vektorer (så skrå vægge etc kan laves)
-
+- Hjørnecollisions bugger på bounce med det nye step lookaheads
 
 
 

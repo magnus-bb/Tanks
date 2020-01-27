@@ -9,7 +9,7 @@ class GameState {
 		this.fx = {
 			bulletTrails: new Map(),
 			particles: {
-				on: true,
+				on: false,
 				array: []
 			}
 		}
