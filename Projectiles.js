@@ -5,8 +5,7 @@ function Bullet(owner) {
 		type: 'bullet',
 		d: config.projectile.bullet.diameter,
 		duration: config.projectile.bullet.duration,
-		// For knowing when to stop rendering trail:
-		dead: false
+		dead: false // For knowing when to stop rendering trail
 	}
 
 	return {
@@ -18,10 +17,10 @@ function Bullet(owner) {
 
 		// Per-projectile environment collision handling (uses common wall/edge checks):
 		envCollision(i, wall = null) { // Index is passed with all projectiles, since some need it to remove() (but not this one)
-			const bounceAxis = wall ? this._checkWallCollision(wall) : this._checkEdgeCollision() // Automatically checks wall collisions when args are given
+			const bounce = wall ? this._checkWallCollision(wall) : this._checkEdgeCollision()
 
-			if (bounceAxis.x || bounceAxis.y) {
-				this._bounce(bounceAxis)
+			if (bounce) {
+				this._bounce(bounce)
 			}
 		},
 
@@ -41,19 +40,18 @@ function Bullet(owner) {
 
 		_show() {
 			// Drawn diameter is increased in first few frames for a muzzle effect:
-			let drawDiameter = this.d * config.fx.muzzleSize - (config.projectile.bullet.duration - this.duration) * config.fx.muzzleSpeed
+			let drawDiameter = this.d * config.fx.muzzle.size - (config.projectile.bullet.duration - this.duration) * config.fx.muzzle.speed
 			drawDiameter = drawDiameter > this.d ? drawDiameter : this.d
 
 			push()
 
 			noStroke()
-			// Resets alpha on normal bullets, since it carries over from trail:
-			if (this.owner.stealthedAmmo) {
-				this.color.setAlpha(config.modifier.stealthAmmo.alpha)
-			} else {
-				this.color.setAlpha(255)
-			}
+
+			// Alpha should not be permanent when creating bullet, since this should change back and forth mid-shot:
+			this.owner.stealthedAmmo ? this.color.setAlpha(config.modifier.stealthAmmo.alpha) : this.color.setAlpha(255)
+
 			fill(this.color)
+
 			circle(this.x, this.y, drawDiameter)
 
 			pop()
@@ -147,7 +145,9 @@ function M82Bullet(owner) {
 			pop()
 		},
 
-		_projectileShape(stealth = false) {
+		_projectileShape(stealth) {
+			push()
+
 			noStroke()
 			stealth ? this.color.setAlpha(config.modifier.stealthAmmo.alpha * config.projectile.m82.stealthModifier) : this.color.setAlpha(255)
 			fill(this.color)
@@ -166,6 +166,8 @@ function M82Bullet(owner) {
 			vertex(3, 0)
 			vertex(1.5, 0)
 			endShape(CLOSE)
+
+			pop()
 		},
 
 		onFrame(i) { // Duration based projectiles need to destroy(i), so every projectile gets passed their index
@@ -223,7 +225,7 @@ function BreakerBullet(owner) {
 			pop()
 		},
 
-		_projectileShape(stealth = false) {
+		_projectileShape(stealth) {
 			noStroke()
 			stealth ? this.color.setAlpha(config.modifier.stealthAmmo.alpha) : this.color.setAlpha(255)
 			fill(this.color)
@@ -257,33 +259,34 @@ function BreakerBullet(owner) {
 //* COMPOSITIONAL MIXINS
 
 class Projectile {
-	//! Not needed when not loading assets
-	//? static types = [ 
-	//? 	'm82',
-	//? 	'breaker',
-	//? ]
-
 	static mixins = {
+
 		hasBaseProps(type, owner) {
 			const speed = config.projectile[type].speed
 			const move = getOffsetPoint(speed, owner.direction)
 			const x = owner.cannon.x
 			const y = owner.cannon.y
+			const next = [] // Populates the first lookaheads:
+			for (let step = 0; step <= speed; step += (speed < config.wall.collisionStepSize ? speed : config.wall.collisionStepSize)) { // Only makes fractional lookaheads of speed if speed is more than walls' width
+
+				// This has to be in fractions of moveCoords (and not just +- some values) to account for the direction of the movement - we don't want to ADD to a negative and vice versa:
+				next.push({
+					x: x + move.x * (step / speed),
+					y: y + move.y * (step / speed)
+				})
+			}
 
 			return {
 				owner,
 				x,
 				y,
 				speed,
-				color: color(owner.color),
+				next, // Is updated every frame (since a getter would recalc every wall * frame etc)
+				color: color(owner.color.levels), // Copies owner color instead of referencing the object
 				direction: owner.direction,
 				moveCoords: {
 					dX: move.x,
 					dY: move.y
-				},
-				next: { // Is updated every frame (in canMoveStandard()) (since a getter would recalc every wall * frame etc)
-					x: x + move.x,
-					y: y + move.y
 				}
 			}
 		},
@@ -296,29 +299,31 @@ class Projectile {
 				},
 
 				_updateNext() {
-					this.next = {
-						x: this.x + this.moveCoords.dX,
-						y: this.y + this.moveCoords.dY
+					this.next = []
+
+					// Looks at "all" positions between location and (fraction of) 'next' location:
+					for (let step = 0; step <= this.speed; step += (this.speed < config.wall.collisionStepSize ? this.speed : config.wall.collisionStepSize)) { // Only makes fractional lookaheads of speed if speed is more than walls' width
+
+						// This has to be in fractions of moveCoords (and not just +- some values) to account for the direction of the movement - we don't want to ADD to a negative and vice versa:
+						this.next.push({
+							x: this.x + this.moveCoords.dX * (step / this.speed),
+							y: this.y + this.moveCoords.dY * (step / this.speed)
+						})
 					}
 				}
 			}
 		},
 
+		// Does not return axes, just true / false if wall / edge has been hit
 		canCheckEnv() {
 			return {
 				_checkWallCollision(wall) { // 'wall' can be passed as null, if we are checking edges
 					const wallRect = getWallRect(wall)
 
-					// Looks at "all" positions between location and (fraction of) 'next' location:
-					for (let step = 0; step <= this.speed; step += config.wall.collisionStepSize) {
+					// uses fractional lookaheads:
+					for (const step of this.next) {
 
-						// This has to be in fractions of moveCoords (and not just +- some values) to account for the direction of the movement - we don't want to ADD to a negative and vice versa:
-						const next = {
-							x: this.x + this.moveCoords.dX * (step / this.speed),
-							y: this.y + this.moveCoords.dY * (step / this.speed)
-						}
-
-						if (pointInRect({ x: next.x, y: next.y }, wallRect)) {
+						if (pointInRect({ x: step.x, y: step.y }, wallRect)) {
 							return true // NOTHING (not even false) may be returned if !pointInRect, since this stops looping
 						}
 					}
@@ -326,16 +331,15 @@ class Projectile {
 
 				_checkEdgeCollision() {
 					// outOfBounds() always returns object (truthy) to also get an axis, even though just true/false is used here:
-					const { x, y } = outOfBounds(this.next)
+					const out = outOfBounds(this.next[this.next.length - 1]) // Only needs to check one point, not steps
 
-					if (x || y) {
+					if (out.x || out.y) {
 						return true // NOTHING (not even false) may be returned if !x || !y, since this stops looping
 					}
 				}
 			}
 		},
 
-		//TODO: ADD STEPS FOR COLLISION CHECKS, SO IT IS SMOOTHER AND SO CHANGES TO PROJECTILE SPEED WILL NOT BREAK COLLISIONS
 		canBounce() { //TODO: Separate checks and bounce if other handling should be added, that has to be integrated into checks
 			return {
 				_checkWallCollision(wall) {
@@ -346,16 +350,22 @@ class Projectile {
 
 					const wallRect = getWallRect(wall)
 
-					if (pointInRect({ x: this.next.x, y: this.y }, wallRect)) {
-						bounce.x = true
-					}
+					// Uses fractional lookaheads:
+					for (const step of this.next) {
 
-					if (pointInRect({ x: this.x, y: this.next.y }, wallRect)) {
-						bounce.y = true
-					}
+						if (pointInRect({ x: step.x, y: this.y }, wallRect)) {
+							bounce.x = true
+						}
 
-					// If values are truthy will be checked in collision()
-					return bounce
+						if (pointInRect({ x: this.x, y: step.y }, wallRect)) {
+							bounce.y = true
+						}
+
+						// Cannot return anything if falsy! (will break further checking / looping):
+						if (bounce.x || bounce.y) {
+							return bounce
+						}
+					}
 				},
 
 				_checkEdgeCollision() {
@@ -364,7 +374,7 @@ class Projectile {
 						y: false
 					}
 
-					const out = outOfBounds(this.next)
+					const out = outOfBounds(this.next[this.next.length - 1]) // Only needs to check one point, not steps
 
 					if (out.x) {
 						bounce.x = true
@@ -410,11 +420,14 @@ class Projectile {
 				},
 
 				_checkHit(tank) {
+					//TODO: Add steps if projectile speeds can exceed tank.d (20) + this.d (~3), but make it as small as possible
 					// Distance between center of tank and proj:
 					const distance = dist(this.x, this.y, tank.x, tank.y)
 
 					// Checks if distance is smaller, when width of tank and bullet have been factored in:
-					return distance < this.d / 2 + tank.d / 2
+					if (distance < this.d / 2 + tank.d / 2) {
+						return true
+					}
 				},
 
 				_handleHit(index, tank) {

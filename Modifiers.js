@@ -25,8 +25,10 @@ function StealthAmmo(owner, name) {
 function LaserSight(owner, name) {
 	const props = {
 		owner,
-		name
+		name,
+		color: color(owner.color.levels) // Copies owner color instead of referencing the object
 	}
+	props.color.setAlpha(config.modifier.laserSight.alpha)
 
 	return {
 		...props,
@@ -74,11 +76,8 @@ function LaserSight(owner, name) {
 		_drawLaser(from, to) {
 			push()
 
-			const drawColor = color(owner.color)
-			drawColor.setAlpha(config.modifier.laserSight.alpha)
-
 			strokeWeight(config.modifier.laserSight.width)
-			stroke(drawColor)
+			stroke(this.color)
 
 			line(from.x, from.y, to.x, to.y)
 
@@ -86,7 +85,7 @@ function LaserSight(owner, name) {
 		},
 
 		_removal() {
-			if (!config.modifier.laserSight.onEquipment.includes(owner.equipment.name)) { //TODO: Cannot check owner.equipment.name if equipment removes itself on last ammo
+			if (!owner.equipment || !config.modifier.laserSight.onEquipment.includes(owner.equipment.name)) { // Order of checks are important - cannot check equipment.name if equipment is not there
 				this._remove()
 			}
 		},

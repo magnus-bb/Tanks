@@ -16,8 +16,8 @@ class Config {
 				duration: 60 * 6, // Seconds
 			},
 			m82: {
-				speed: 12,
-				penetrationSpeedDivisor: 3,
+				speed: 15,
+				penetrationSpeedDivisor: 2,
 				stealthModifier: 2
 			},
 			breaker: {
@@ -51,7 +51,7 @@ class Config {
 			collisionMoveSlow: 2.5,
 			collisionTurnSlow: 2,
 			spawnDistance: 1,
-			defaultColor: 'ff0000', //? remove
+			strokeColor: '#333333', //? remove
 			cannon: {
 				length: 18,
 				width: 3,
@@ -71,11 +71,32 @@ class Config {
 			color: '#222629'
 		}
 		this.fx = {
-			muzzleSize: 2.5, // Times the size of regular bullet
-			muzzleSpeed: 1, // Px reduction per frame
-			defaultShakeMagnitude: 2,
-			bulletTrailAlpha: 80, // Out of 255
-			bulletTrailLength: 25 // Frames / points
+			muzzle: {
+				size: 2.5, // Times the size of regular bullet
+				speed: 1, // Px reduction per frame
+			},
+			shakeMagnitude: 2,
+			bulletTrail: {
+				alpha: 80, // Out of 255
+				length: 25, // Frames / points
+			},
+			particle: {
+				diameter: 8,
+				color: [255, 255, 255, 80],
+				velocity: 1.5,
+				get amt() { return config.cell.xAmt * config.cell.yAmt / 4},
+				connection: {
+					get distance() { return config.cell.width * 2.5 },
+					get color() { 
+						let c = color(config.fx.particle.color)
+						const a = alpha(c)
+
+						c.setAlpha(a * 0.75)
+						return c 
+					},
+					width: 2,
+				}
+			}
 		}
 	}
 

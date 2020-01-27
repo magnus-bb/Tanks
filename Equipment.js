@@ -1,6 +1,8 @@
 //* BREAKER
 
 function Breaker(owner, name) {
+	Equipment.mixins.canHaveLaserSight(owner, name) // Off by default
+
 	const props = {
 		owner,
 		name
@@ -24,7 +26,7 @@ function Breaker(owner, name) {
 //* M82
 
 function M82(owner, name) {
-	Equipment.mixins.addLaserSight(owner) //TODO: Make dynamic on all equipment (so it can be changed in configs) if the array [config.modifier.laserSight.onEquipment] includes the equipment name
+	Equipment.mixins.canHaveLaserSight(owner, name) // On by default
 
 	const props = {
 		owner,
@@ -105,8 +107,10 @@ const Equipment = {
 	//* COMPOSITIONAL MIXINS
 
 	mixins: {
-		addLaserSight(owner) {
-			owner.modifiers.add(new LaserSight(owner, 'laserSight'))
+		canHaveLaserSight(owner, name) {
+			if (config.modifier.laserSight.onEquipment.includes(name)) {
+				owner.modifiers.add(new LaserSight(owner, 'laserSight'))
+			}
 		},
 
 		hasAmmo(name) {

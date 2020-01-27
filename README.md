@@ -74,12 +74,15 @@ Todos
 	- Udnyt evt forskellen på en gemt config og så variablen
 	- Dette ødelægger muligvis baggrunden inden start, hvis man ændrer størrelse af mazen?
 	- Evt brug en "this setting requires a restart"
-- Lav tank color en p5color og brug kopier af denne med destructuring, når man bruger `owner.color`
-- Lav ALLE collisions så de har steps, så ændringer af speed ikke ødelægger collisions
+	- En løsning på evt problemer kunne være at kopiere værdien fra `config` ind i ALLE classes etc, og læse derfra, så man kan ændre config ligeså meget man vil
+- Lav ALLE collisions så de har steps, så ændringer af speed ikke ødelægger collisions (også tanks - hits + tank movement)
+- Tilføj mulighed for altid at have laser sight i config
+- P5Vector er fucking nemt med .add(), og man kan stadig bare x / y *= -1 for at omvende en akse nemt: Lav om til vektorer (så skrå vægge etc kan laves)
 
 
 
-Idéer til pick ups / våben / environment
+
+Idéer til spillet
 --------------------------
 - Bruger får lov at bruge musen (lol) i 20? sekunder. Kun 1 ad gangen.
 - Laser, men med lidt vedvarende beam også, uden tracing
@@ -95,6 +98,7 @@ Idéer til pick ups / våben / environment
 - En cooldown på en slags dash som en ability alle har
 - Stealthed tank (alpha kommer nok til at influere bullets etc, der arver color)
 - Til tider skal vægge skifte / fjernes / tilføjes
+- Lav presets på `config` (realism, hyped etc)
 
 Links
 -----

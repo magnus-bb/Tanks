@@ -37,8 +37,8 @@ function getTurnDirection(collisionAxis, dir) {
 	}
 }
 
-function randomColor() {
-	return color(Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256))
+function randomColor(alpha = null) {
+	return color(floor(random(256)), floor(random(256)), floor(random(256), alpha ? alpha : 255))
 }
 
 // Every number can call .between:

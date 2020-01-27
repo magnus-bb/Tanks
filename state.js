@@ -7,7 +7,11 @@ class GameState {
 		this.endTimer = config.game.endFrames
 		this.ending = false
 		this.fx = {
-			bulletTrails: new Map()
+			bulletTrails: new Map(),
+			particles: {
+				on: true,
+				array: []
+			}
 		}
 	}
 }

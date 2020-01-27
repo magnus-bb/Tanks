@@ -1,5 +1,5 @@
 class Tank {
-	constructor(name, color, x, y, controls, owner) {
+	constructor(name, colorArray, x, y, controls, owner) {
 		this.owner = owner
 		this.name = name
 		this.x = x
@@ -9,7 +9,7 @@ class Tank {
 		this.turnSpeed = config.tank.turnSpeed
 		this.driving = false // To look ahead before actually moving
 		this.direction = random(0, 360)
-		this.color = color // Array of RGB
+		this.color = color(colorArray) // Array of RGB
 		this.ammo = config.tank.ammo
 		this.stealthedAmmo = false
 		this.equipment = null
@@ -328,7 +328,7 @@ class Tank {
 	_show() {
 		push()
 
-		stroke(51)
+		stroke(config.tank.strokeColor)
 		fill(this.color)
 
 		// Renders body:
@@ -366,9 +366,10 @@ class Tank {
 	onFrame() {
 		this._move()
 		this._turn(this.turning) // Importantly done after .move() because of collision checking being done in the same order
-		this._modifiers()
-		this._equipment()
+		
 		this._addTrailPoint()
 		this._show()
+		this._modifiers()
+		this._equipment()
 	}
 }

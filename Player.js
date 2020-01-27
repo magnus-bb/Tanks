@@ -1,8 +1,8 @@
 class Player {
-	constructor(id, name, color, controls) {
+	constructor(id, name, colorArray, controls) {
 		this.id = id // Index num in Game.players
 		this.name = name
-		this.color = color
+		this.color = colorArray
 		this.controls = controls
 		this.wins = 0
 		this.deaths = 0

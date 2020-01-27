@@ -1,5 +1,4 @@
 function draw() {
-
 	//* Canvas:
 	//TODO: Canvas-class?
 	push()
