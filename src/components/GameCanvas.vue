@@ -19,7 +19,6 @@ import GameState from '@/game/GameState.js'
 export default {
 	name: 'GameCanvas',
 	mixins: [preload, setup, draw, Pickup],
-	props: [],
 	data() {
 		return {
 			p5: this.$store.state.p5,

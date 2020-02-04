@@ -217,7 +217,7 @@ const helpers = {
 
 	pointCloseToTank(point) {
 		for (const tank of state.gameState.tanks) {
-			if (dist(point.x, point.y, tank.x, tank.y) <= config.cell.width * config.tank.spawnDistance) {
+			if (p5.dist(point.x, point.y, tank.x, tank.y) <= config.cell.width * config.tank.spawnDistance) {
 				return true
 			}
 
