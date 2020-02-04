@@ -1,5 +1,6 @@
 import store from '@/store'
-const p5 = store.state.p5
+const { state } = store
+const { p5, game } = state
 
 export default class Controls {
 	constructor(forward = p5.UP_ARROW, backward = p5.DOWN_ARROW, left = p5.LEFT_ARROW, right = p5.RIGHT_ARROW, fire = 32) {
@@ -26,31 +27,31 @@ export default class Controls {
 
 
 // Keyboard handler for firing:
-function keyPressed() { // Cannot be done in class, since we have to listen for all keypresses, and keyIsDown will spam
-	if (!Game.paused) {
-		for (const tank of state.tanks) {
-			if (keyCode === tank.controls.fire) {
+p5.keyPressed = () => { // Cannot be done in class, since we have to listen for all keypresses, and keyIsDown will spam
+	if (!game.paused) {
+		for (const tank of state.gameState.tanks) {
+			if (p5.keyCode === tank.controls.fire) {
 				tank.fire()
 			}
 		}
 	}
 
-	// For setting keybindings in the controls section:
-	if ($(':focus').hasClass('key-selector-input')) {
+	// // For setting keybindings in the controls section:
+	// if ($(':focus').hasClass('key-selector-input')) {
 
-		// Cleans up the key to show:
-		if (keyCode === UP_ARROW) key = 'UP'
-		else if (keyCode === DOWN_ARROW) key = 'DOWN'
-		else if (keyCode === LEFT_ARROW) key = 'LEFT'
-		else if (keyCode === RIGHT_ARROW) key = 'RIGHT'
-		else if (keyCode === 32) key = 'SPACE'
+	// 	// Cleans up the key to show:
+	// 	if (keyCode === UP_ARROW) key = 'UP'
+	// 	else if (keyCode === DOWN_ARROW) key = 'DOWN'
+	// 	else if (keyCode === LEFT_ARROW) key = 'LEFT'
+	// 	else if (keyCode === RIGHT_ARROW) key = 'RIGHT'
+	// 	else if (keyCode === 32) key = 'SPACE'
 
-		// Displays chosen key as value... 
-		$(':focus').val(key.toUpperCase())
+	// 	// Displays chosen key as value... 
+	// 	$(':focus').val(key.toUpperCase())
 
-		// but the key to pass as a binding is in the data-attribute:
-		$(':focus').data('keybinding', keyCode)
-	}
+	// 	// but the key to pass as a binding is in the data-attribute:
+	// 	$(':focus').data('keybinding', keyCode)
+	// }
 }
 
 // Prevents scroll issues:

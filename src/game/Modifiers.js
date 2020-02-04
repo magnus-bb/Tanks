@@ -1,3 +1,9 @@
+import store from '@/store'
+const { state } = store
+const { p5, config } = state
+
+import { getOffsetPoint, pointInRect, outOfBounds, getWallRect } from './helpers.js'
+
 function StealthAmmo(owner, name) {
 	const props = {
 		owner,
@@ -6,8 +12,8 @@ function StealthAmmo(owner, name) {
 
 	return {
 		...props,
-		...Modifier.mixins.hasTimer(name),
-		...Modifier.mixins.canRemoveSelf(),
+		...mixins.hasTimer(name),
+		...mixins.canRemoveSelf(),
 
 		_effect() {
 			if (!this.owner.stealthedAmmo) {
@@ -26,13 +32,13 @@ export function LaserSight(owner, name) {
 	const props = {
 		owner,
 		name,
-		color: color(owner.color.levels) // Copies owner color instead of referencing the object
+		color: p5.color(owner.color.levels) // Copies owner color instead of referencing the object
 	}
 	props.color.setAlpha(config.modifier.laserSight.alpha)
 
 	return {
 		...props,
-		...Modifier.mixins.canRemoveSelf(),
+		...mixins.canRemoveSelf(),
 
 		_effect() {
 			for (let dist = 0; dist < 9999; dist += config.wall.collisionStepSize) {
@@ -43,7 +49,7 @@ export function LaserSight(owner, name) {
 					y: point.y + owner.y
 				}
 
-				for (const column of state.grid) {
+				for (const column of state.gameState.grid) {
 					for (const cell of column) {
 						for (const wall in cell.walls) { // for...in does not need to loop backwards 
 							if (cell.walls[wall]) { // checks for existing walls only
@@ -74,14 +80,14 @@ export function LaserSight(owner, name) {
 		},
 
 		_drawLaser(from, to) {
-			push()
+			p5.push()
 
-			strokeWeight(config.modifier.laserSight.width)
-			stroke(this.color)
+			p5.strokeWeight(config.modifier.laserSight.width)
+			p5.stroke(this.color)
 
-			line(from.x, from.y, to.x, to.y)
+			p5.line(from.x, from.y, to.x, to.y)
 
-			pop()
+			p5.pop()
 		},
 
 		_removal() {
@@ -99,41 +105,40 @@ export function LaserSight(owner, name) {
 	}
 }
 
+//* COMPOSITIONAL MIXINS
 
-//* LOOKUP DICTIONARY
+const mixins = {
 
-export default Modifier = {
-	StealthAmmo,
+	hasTimer(name) {
+		return {
+			duration: config.modifier[name].duration,
 
+			onFrame() {
+				this._effect()
 
-	//* COMPOSITIONAL MIXINS
+				this.duration--
 
-	mixins: {
-
-		hasTimer(name) {
-			return {
-				duration: config.modifier[name].duration,
-
-				onFrame() {
-					this._effect()
-
-					this.duration--
-
-					if (this.duration <= 0) {
-						this._remove()
-					}
-				},
-			}
-		},
-
-		canRemoveSelf() {
-			return {
-				_remove() {
-					if (this._reset) this._reset() // Only for when permanent changes have been made, that need to be reset
-
-					this.owner.modifiers.delete(this)
+				if (this.duration <= 0) {
+					this._remove()
 				}
+			},
+		}
+	},
+
+	canRemoveSelf() {
+		return {
+			_remove() {
+				if (this._reset) this._reset() // Only for when permanent changes have been made, that need to be reset
+
+				this.owner.modifiers.delete(this)
 			}
 		}
 	}
+}
+
+
+//* LOOKUP DICTIONARY
+
+export default {
+	StealthAmmo,
 }

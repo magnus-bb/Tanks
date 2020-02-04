@@ -85,7 +85,10 @@ Todos
 	- Fjern alle gamle kommentarer
 	- Se om noget state kan flyttes ud af vuex
 	- Simplificér menuer / components
-
+	- Læs op på vuex mutations og se, hvilke der er nødvendige at bruge mutations til (garanteret kun dem, der skal rerender DOMen) -> i så fald, lav liste over ting som menuen / status etc skal kunne opdateres ved
+	- Sørg for der ikke er unødige imports
+	- Ny løsning til `fire` controls-listener, som enten ikke er p5 (men stadig ikke kan fyre flere pr frame), eller bare som minimum ikke er i ekstern js
+	- Ny løsning på `game` variablen i vuex ("gameStatus" evt) og `game` modulet med metoder
 
 
 Idéer til spillet

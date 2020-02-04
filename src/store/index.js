@@ -62,6 +62,10 @@ const store = new Vuex.Store({
 			state.gameState.pickups.push(pickup)
 		},
 
+		addProjectile(state, projectile) {
+			state.gameState.projectiles.push(projectile)
+		},
+
 		removePickup(state, index) {
 			state.gameState.pickups.splice(index, 1)
 		},

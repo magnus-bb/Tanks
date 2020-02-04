@@ -1,15 +1,13 @@
-// import Equipment from './Equipment.js'
-// import Modifier from './Modifiers.js'
-// import Powerup from './Powerups.js'
+import Equipment from './Equipment.js'
+import Modifier from './Modifiers.js'
+import Powerup from './Powerups.js'
 
 import store from '@/store'
 const { state } = store
 const { p5, config, assets } = state
 
 import { getCell, randomSpawnCoords, circleIntersectsRect } from './helpers.js'
-// const p5 = store.state.p5
-// const config = store.state.config
-// const state = store.state.gameState
+
 
 function EquipmentPickup(name, type, x, y, col, row) {
 	return {

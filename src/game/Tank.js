@@ -1,3 +1,6 @@
+import fx from './fx.js'
+import * as projectile from './Projectiles.js'
+import game from './game.js'
 import store from '@/store'
 const { state } = store
 const { p5, config } = state
@@ -285,9 +288,11 @@ export default class Tank {
 
 		} else if (this.ammo > 0) {
 			this.ammo--
-			state.gameState.projectiles.push(new Bullet(this))
 
-			FX.shake() // Global effect
+			store.commit('addProjectile', new projectile.Bullet(this))
+			// state.gameState.projectiles.push(new Bullet(this))
+
+			fx.shake() // Global effect
 		}
 	}
 
@@ -362,9 +367,9 @@ export default class Tank {
 
 	// Uses index number to remove tank from the game:
 	_destroy(i) {
-		state.gameState.tanks.splice(i, 1)
+		state.gameState.tanks.splice(i, 1) //TODO: Mutation
 
-		Game.tankDestroyed() //TODO: vuex actions? (this mutates gameState, right?)
+		game.tankDestroyed() //TODO: vuex actions? (this mutates gameState, right?)
 		//TODO: Msg on death or counter etc + effect
 	}
 

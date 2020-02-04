@@ -8,15 +8,14 @@ function Ammo(owner, name) {
 }
 
 
+//* COMPOSITIONAL MIXINS
+
+const mixins = {
+
+}
+
 //* LOOKUP DICTIONARY
 
-export default Powerup = {
+export default {
 	Ammo,
-
-
-	//* COMPOSITIONAL MIXINS
-
-	mixins: {
-
-	}
 }

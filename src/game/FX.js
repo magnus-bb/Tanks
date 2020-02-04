@@ -50,7 +50,7 @@ const fx = {
 
 				p5.push()
 
-				p5.blendMode(ADD)
+				p5.blendMode(p5.ADD)
 
 				const drawColor = p5.color(bullet.color.levels) // Copies owner color instead of referencing the object
 				drawColor.setAlpha(config.fx.bulletTrail.alpha) // Lower opacity than bullet
