@@ -79,7 +79,12 @@ Todos
 - Tilføj mulighed for altid at have laser sight i config
 - P5Vector er fucking nemt med .add(), og man kan stadig bare x / y *= -1 for at omvende en akse nemt: Lav om til vektorer (så skrå vægge etc kan laves)
 - Hjørnecollisions bugger på bounce med det nye step lookaheads
-- Mange keys giver problemer
+- Se om helpers kan flyttes til en enkelt class / constructor etc, hvis kun dén bruger helperen
+- Flere keys + højre pil gør højre pil uregerlig
+- EFTER VUE REWORK
+	- Fjern alle gamle kommentarer
+	- Se om noget state kan flyttes ud af vuex
+	- Simplificér menuer / components
 
 
 

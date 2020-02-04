@@ -24,48 +24,90 @@ const store = new Vuex.Store({
 			paused: true,
 			players: [] //? evt et map til at holde styr på tanks?
 		},
-		// setup: {
-		// // 	TODO: Static props from classes here
-		// 	cellStack: [] //TODO: Move out of vuex?
-		// },
-		// assets: { //TODO: Move out of vuex?
-		// 	pickups: {},
-		// 	projectiles: {},
-		// 	stealthProjectiles: {},
-		// 	//fx: {}
-		// }
+		setup: {
+		// 	TODO: Static props from classes here
+			cellStack: []
+		},
+		assets: { //TODO: Move out of vuex?
+			pickups: {},
+			projectiles: {},
+			stealthProjectiles: {},
+			//fx: {}
+		}
 	},
 	mutations: {
-		addPlayer(state, payload) {
-			state.game.players.push(payload)
+		addPlayer(state, player) {
+			state.game.players.push(player)
 		},
+
 		setupSketch(state, payload) {
 			state.p5.preload = payload.preload
 			state.p5.setup = payload.setup
 			state.p5.draw = payload.draw
 		},
-		setConfig(state, payload) {
-			state.config = payload
+
+		setConfig(state, config) {
+			state.config = config
 		},
-		// changeGame(state, payload) {
-		// 	state.game[payload.key] = payload.value
-		// }
-		// setPickupAsset(state, payload) {
-		// 	state.assets.pickups[payload.name] = payload.asset
-		// },
-		setGameState(state, payload) {
-			state.gameState = payload
+
+		pushSetupCell(state, cell) {
+			state.setup.cellStack.push(cell)
 		},
-		addGridColumn(state, payload) {
-			state.gameState.grid.push(payload)
+
+		popSetupCell(state) {
+			state.setup.cellStack.pop()
 		},
-		// test(state) {
-		// 	state.config.fps -= 10
-		// }
+
+		addPickup(state, pickup) {
+			state.gameState.pickups.push(pickup)
+		},
+
+		removePickup(state, index) {
+			state.gameState.pickups.splice(index, 1)
+		},
+
+		deleteBulletTrail(state, bullet) {
+			state.gameState.fx.bulletTrails.delete(bullet)
+		},
+
+		setStartedStatus(state, bool) {
+			state.game.started = bool
+		},
+
+		setPauseStatus(state, bool) {
+			state.game.paused = bool
+		},
+
+		setPickupAsset(state, payload) {
+			state.assets.pickups[payload.name] = payload.asset
+		},
+
+		setGameState(state, gameState) {
+			state.gameState = gameState
+		},
+
+		addGridColumn(state, col) {
+			state.gameState.grid.push(col)
+		},
+
+		addTank(state, tank) {
+			state.gameState.tanks.push(tank)
+		},
+
+		gameEnding(state) {
+			state.gameState.ending = true
+		},
+
+		endTimer(state) {
+			state.gameState.endTimer--
+		}
+
 	},
+
 	actions: {
 
 	},
+
 	getters: {
 		
 	}

@@ -12,17 +12,17 @@
 import preload from '@/game/preload.js'
 import setup from '@/game/setup.js'
 import draw from '@/game/draw.js'
-import Pickup from '@/game/Pickups.js'
-import Config from '@/game/Config.js'
-import GameState from '@/game/GameState.js'
+//import Pickup from '@/game/Pickups.js'
+//import Config from '@/game/Config.js'
+//import GameState from '@/game/GameState.js'
 
 export default {
 	name: 'GameCanvas',
-	mixins: [preload, setup, draw, Pickup],
+	mixins: [],
 	props: [],
 	data() {
 		return {
-			p5: this.$store.state.p5,
+			//p5: this.$store.state.p5,
 			//config: this.$store.state.config,
 			// state: new GameState,
 		}
@@ -32,9 +32,9 @@ export default {
 		//this.$store.commit('setConfig', new Config)
 
 		this.$store.commit('setupSketch', {
-			preload: this.preload,
-			setup: this.setup,
-			draw: this.draw
+			preload: preload,
+			setup: setup,
+			draw: draw
 		}) 
 
 	},

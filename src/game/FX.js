@@ -1,4 +1,8 @@
-export default FX = {
+import store from '@/store'
+const { state } = store
+const { p5, config } = state
+
+const fx = {
 	shake(magnitude = config.fx.shakeMagnitude) {
 		let shakeCount = 1;
 		const numShakes = 10
@@ -8,13 +12,13 @@ export default FX = {
 
 		const doShake = () => {
 			if (shakeCount < numShakes) {
-				canvas.style.transform = 'translate(' + startX + 'px, ' + startY + 'px)'
+				p5.canvas.style.transform = 'translate(' + startX + 'px, ' + startY + 'px)'
 				magnitude -= magnitudeUnit
 
-				const randomX = random(-magnitude, magnitude + 1)
-				const randomY = random(-magnitude, magnitude + 1)
+				const randomX = p5.random(-magnitude, magnitude + 1)
+				const randomY = p5.random(-magnitude, magnitude + 1)
 
-				canvas.style.transform = 'translate(' + randomX + 'px, ' + randomY + 'px)'
+				p5.canvas.style.transform = 'translate(' + randomX + 'px, ' + randomY + 'px)'
 
 				shakeCount += 1
 
@@ -22,7 +26,7 @@ export default FX = {
 			}
 
 			if (shakeCount >= numShakes) {
-				canvas.style.transform = 'translate(' + startX + ', ' + startY + ')'
+				p5.canvas.style.transform = 'translate(' + startX + ', ' + startY + ')'
 			}
 		}
 		doShake()
@@ -30,37 +34,38 @@ export default FX = {
 
 	_showBulletTrails() { // Trailpair couples bullet to trail, since bullet cannot house trail itself after it is destroyed
 
-		for (const trailPair of state.fx.bulletTrails) {
+		for (const trailPair of state.gameState.fx.bulletTrails) {
 			const bullet = trailPair[0]
 			const trail = trailPair[1]
 
 			if (trail.length <= 0 && bullet.dead) {
 				// Removes trail, when all points have run out:
-				state.fx.bulletTrails.delete(bullet)
+				store.commit('deleteBulletTrail', bullet)
+				// state.gameState.fx.bulletTrails.delete(bullet)
 			} else {
 				// Keeps the trail from growing forever:
 				if (trail.length > config.fx.bulletTrail.length) {
 					trail.shift()
 				}
 
-				push()
+				p5.push()
 
-				blendMode(ADD)
+				p5.blendMode(ADD)
 
-				const drawColor = color(bullet.color.levels) // Copies owner color instead of referencing the object
+				const drawColor = p5.color(bullet.color.levels) // Copies owner color instead of referencing the object
 				drawColor.setAlpha(config.fx.bulletTrail.alpha) // Lower opacity than bullet
 
-				fill(drawColor)
-				noStroke()
+				p5.fill(drawColor)
+				p5.noStroke()
 
 				for (let i = 0; i < trail.length; i++) {
 					// Lerp returns a diameter between 3 px and bullet diameter according to how close to the bullet the point is
-					const d = lerp(3, bullet.d, i / (trail.length - 1))
+					const d = p5.lerp(3, bullet.d, i / (trail.length - 1))
 
-					circle(trail[i].x, trail[i].y, d)
+					p5.circle(trail[i].x, trail[i].y, d)
 				}
 
-				pop()
+				p5.pop()
 
 				if (bullet.dead === true) {
 					trail.shift()
@@ -70,23 +75,23 @@ export default FX = {
 	},
 
 	_particles() {
-		if (state.fx.particles.array.length === 0) {
+		if (state.gameState.fx.particles.array.length === 0) {
 			for (let i = 0; i < config.fx.particle.amt; i++) {
-				state.fx.particles.array.push(new this.Particle())
+				state.gameState.fx.particles.array.push(new this.Particle())
 			}
 		}
 
-		for (const particle of state.fx.particles.array) {
+		for (const particle of state.gameState.fx.particles.array) {
 			particle.onFrame()
 		}
 	},
 
 	Particle: function() {
 		return {
-			pos: createVector(random(width), random(height)),
+			pos: p5.createVector(p5.random(width), p5.random(height)),
 			d: config.fx.particle.diameter,
-			vel: createVector(random(-config.fx.particle.velocity, config.fx.particle.velocity), random(-config.fx.particle.velocity, config.fx.particle.velocity)),
-			color: color(config.fx.particle.color),
+			vel: p5.createVector(p5.random(-config.fx.particle.velocity, config.fx.particle.velocity), p5.random(-config.fx.particle.velocity, config.fx.particle.velocity)),
+			color: p5.color(config.fx.particle.color),
 
 			_edges() {
 				if (this.pos.x < 0) {
@@ -101,33 +106,33 @@ export default FX = {
 			},
 
 			_connections() {
-				for (const particle of state.fx.particles.array) {
-					const distance = dist(this.pos.x, this.pos.y, particle.pos.x, particle.pos.y)
+				for (const particle of state.gameState.fx.particles.array) {
+					const distance = p5.dist(this.pos.x, this.pos.y, particle.pos.x, particle.pos.y)
 
 					if (this !== particle && distance <= config.fx.particle.connection.distance) {
 						
-						push()
+						p5.push()
 
-						blendMode(LIGHTEST)
-						strokeWeight(config.fx.particle.connection.width)
-						stroke(config.fx.particle.connection.color)
-						line(this.pos.x, this.pos.y, particle.pos.x, particle.pos.y)
+						p5.blendMode(p5.LIGHTEST)
+						p5.strokeWeight(config.fx.particle.connection.width)
+						p5.stroke(config.fx.particle.connection.color)
+						p5.line(this.pos.x, this.pos.y, particle.pos.x, particle.pos.y)
 
-						pop()
+						p5.pop()
 					}
 				}
 			},
 
 			_show() {
-				push()
+				p5.push()
 				
-				blendMode(ADD)
+				p5.blendMode(ADD)
 				
-				noStroke()
-				fill(this.color)
-				circle(this.pos.x, this.pos.y, this.d)
+				p5.noStroke()
+				p5.fill(this.color)
+				p5.circle(this.pos.x, this.pos.y, this.d)
 				
-				pop()
+				p5.pop()
 			},
 
 			onFrame() {
@@ -141,6 +146,8 @@ export default FX = {
 	
 	onFrame() {
 		this._showBulletTrails()
-		if (state.fx.particles.on) this._particles()
+		if (state.gameState.fx.particles.on) this._particles()
 	}
 }
+
+export default fx

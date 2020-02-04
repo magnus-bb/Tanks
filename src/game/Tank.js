@@ -1,8 +1,8 @@
 import store from '@/store'
 const { state } = store
-const { p5, config, game } = state
+const { p5, config } = state
 
-import { getOffsetPoint, getWallRect, pointInRect, outOfBounds } from './helpers.js'
+import { getOffsetPoint, getWallRect, pointInRect, outOfBounds, circleIntersectsEdge, circleIntersectsRect, getTurnDirection } from './helpers.js'
 
 export default class Tank {
 	constructor(name, colorArray, x, y, controls, owner) {

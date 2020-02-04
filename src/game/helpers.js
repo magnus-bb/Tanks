@@ -217,7 +217,7 @@ const helpers = {
 
 	pointCloseToTank(point) {
 		for (const tank of state.gameState.tanks) {
-			if (dist(point.x, point.y, tank.x, tank.y) <= config.cell.width * config.tank.spawnDistance) {
+			if (p5.dist(point.x, point.y, tank.x, tank.y) <= config.cell.width * config.tank.spawnDistance) {
 				return true
 			}
 
@@ -250,7 +250,7 @@ const helpers = {
 			if (typeof exclude === 'number') { // Can use both single index (faster), or array of exclusions
 				tanks.splice(exclude, 1)
 			} else {
-				for (let i = exclude.length - 1; i >= 0; i--) {
+				for (let i = exclude.length - 1; i >= 0; i--) { //! Not sure if this works as intended
 					const index = exclude[i]
 					tanks.splice(index, 1)
 				}

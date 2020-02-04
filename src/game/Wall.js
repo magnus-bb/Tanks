@@ -1,4 +1,5 @@
 import store from '@/store'
+const { p5, config } = store.state
 
 export default class Wall {
 	constructor(owner, side) {
@@ -8,7 +9,7 @@ export default class Wall {
 		this.y1 = owner.y
 		this.x2 = owner.x
 		this.y2 = owner.y
-		this.w = store.state.config.wall.strokeWidth
+		this.w = config.wall.strokeWidth
 
 		const length = owner.w
 		switch (side) {
@@ -30,14 +31,14 @@ export default class Wall {
 	}
 
 	_show() {
-		store.state.p5.push()
+		p5.push()
 
-		store.state.p5.strokeWeight(this.w)
-		store.state.p5.strokeCap(ROUND)
-		store.state.p5.stroke(config.wall.color)
-		store.state.p5.line(this.x1, this.y1, this.x2, this.y2)
+		p5.strokeWeight(this.w)
+		p5.strokeCap(p5.ROUND)
+		p5.stroke(config.wall.color)
+		p5.line(this.x1, this.y1, this.x2, this.y2)
 
-		store.state.p5.pop()
+		p5.pop()
 	}
 
 	onFrame() {
