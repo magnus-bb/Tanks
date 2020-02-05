@@ -1,8 +1,9 @@
-import store from '@/store'
-const { state } = store
-const { p5, config } = state
-
 import { getOffsetPoint, outOfBounds, pointInRect, getWallRect, getDirection } from './helpers.js'
+
+import store from '@/store'
+const { p5 } = store.state
+const { config, gameState } = store.getters
+
 
 
 //* BULLET
@@ -10,8 +11,8 @@ import { getOffsetPoint, outOfBounds, pointInRect, getWallRect, getDirection } f
 export function Bullet(owner) {
 	const props = {
 		type: 'bullet',
-		d: config.projectile.bullet.diameter,
-		duration: config.projectile.bullet.duration,
+		d: config().projectile.bullet.diameter,
+		duration: config().projectile.bullet.duration,
 		dead: false // For knowing when to stop rendering trail
 	}
 
@@ -33,21 +34,21 @@ export function Bullet(owner) {
 
 		// Makes a trail point for each frame:
 		_makeTrailPoint() { //TODO: Move to mixin, if other projectiles should do this
-			const trails = state.gameState.fx.bulletTrails // Trails are made in state to allow for continuous rendering when bullet is destroyed
+			const trails = gameState().fx.bulletTrails // Trails are made in state to allow for continuous rendering when bullet is destroyed
 
 			// When first point is made, the bullet's trail has to be initiated:
 			if (!trails.has(this)) {
 				trails.set(this, []) //TODO: Mutation
 			}
 
-			const trail = state.gameState.fx.bulletTrails.get(this)
+			const trail = gameState().fx.bulletTrails.get(this)
 
 			trail.push({ x: this.x, y: this.y }) //TODO: Mutation
 		},
 
 		_show() {
 			// Drawn diameter is increased in first few frames for a muzzle effect:
-			let drawDiameter = this.d * config.fx.muzzle.size - (config.projectile.bullet.duration - this.duration) * config.fx.muzzle.speed
+			let drawDiameter = this.d * config().fx.muzzle.size - (config().projectile.bullet.duration - this.duration) * config().fx.muzzle.speed
 			drawDiameter = drawDiameter > this.d ? drawDiameter : this.d
 
 			p5.push()
@@ -55,7 +56,7 @@ export function Bullet(owner) {
 			p5.noStroke()
 
 			// Alpha should not be permanent when creating bullet, since this should change back and forth mid-shot:
-			this.owner.stealthedAmmo ? this.color.setAlpha(config.modifier.stealthAmmo.alpha) : this.color.setAlpha(255)
+			this.owner.stealthedAmmo ? this.color.setAlpha(config().modifier.stealthAmmo.alpha) : this.color.setAlpha(255)
 
 			p5.fill(this.color)
 
@@ -68,7 +69,7 @@ export function Bullet(owner) {
 		_destroy(i) {
 			this.dead = true // For trails effect //TODO: Add to trail mixin, if other projectiles should make trails
 
-			state.gameState.projectiles.splice(i, 1) //TODO: Mutation
+			gameState().projectiles.splice(i, 1) //TODO: Mutation
 
 			this.owner.ammo++
 		},
@@ -125,7 +126,7 @@ export function M82(owner) {
 				this.penetratedWall = wall
 
 				// Reduces speed:
-				this.speed /= config.projectile.m82.penetrationSpeedDivisor
+				this.speed /= config().projectile.m82.penetrationSpeedDivisor
 
 				// Recalculates moveCoords based on new speed:
 				const { x, y } = getOffsetPoint(this.speed, this.direction)
@@ -156,7 +157,7 @@ export function M82(owner) {
 			p5.push()
 
 			p5.noStroke()
-			stealth ? this.color.setAlpha(config.modifier.stealthAmmo.alpha * config.projectile.m82.stealthModifier) : this.color.setAlpha(255)
+			stealth ? this.color.setAlpha(config().modifier.stealthAmmo.alpha * config().projectile.m82.stealthModifier) : this.color.setAlpha(255)
 			p5.fill(this.color)
 
 			// Centering based on half the width / height of the drawing (use figma):
@@ -234,7 +235,7 @@ export function Breaker(owner) {
 
 		_projectileShape(stealth) {
 			p5.noStroke()
-			stealth ? this.color.setAlpha(config.modifier.stealthAmmo.alpha) : this.color.setAlpha(255)
+			stealth ? this.color.setAlpha(config().modifier.stealthAmmo.alpha) : this.color.setAlpha(255)
 			p5.fill(this.color)
 
 			// Centering based on half the width / height of the drawing (use figma):
@@ -269,12 +270,12 @@ export function Breaker(owner) {
 const mixins = {
 
 	hasBaseProps(type, owner) {
-		const speed = config.projectile[type].speed
+		const speed = config().projectile[type].speed
 		const move = getOffsetPoint(speed, owner.direction)
 		const x = owner.cannon.x
 		const y = owner.cannon.y
 		const next = [] // Populates the first lookaheads:
-		for (let step = 0; step <= speed; step += (speed < config.wall.collisionStepSize ? speed : config.wall.collisionStepSize)) { // Only makes fractional lookaheads of speed if speed is more than walls' width
+		for (let step = 0; step <= speed; step += (speed < config().wall.collisionStepSize ? speed : config().wall.collisionStepSize)) { // Only makes fractional lookaheads of speed if speed is more than walls' width
 
 			// This has to be in fractions of moveCoords (and not just +- some values) to account for the direction of the movement - we don't want to ADD to a negative and vice versa:
 			next.push({
@@ -309,7 +310,7 @@ const mixins = {
 				this.next = []
 
 				// Looks at "all" positions between location and (fraction of) 'next' location:
-				for (let step = 0; step <= this.speed; step += (this.speed < config.wall.collisionStepSize ? this.speed : config.wall.collisionStepSize)) { // Only makes fractional lookaheads of speed if speed is more than walls' width
+				for (let step = 0; step <= this.speed; step += (this.speed < config().wall.collisionStepSize ? this.speed : config().wall.collisionStepSize)) { // Only makes fractional lookaheads of speed if speed is more than walls' width
 
 					// This has to be in fractions of moveCoords (and not just +- some values) to account for the direction of the movement - we don't want to ADD to a negative and vice versa:
 					this.next.push({
@@ -447,7 +448,7 @@ const mixins = {
 	canDestroySelf() { //TODO: Add 'dead' functionality to this mixin if trails are on more projectiles than just standard bullet
 		return {
 			_destroy(i) {
-				state.gameState.projectiles.splice(i, 1) //TODO: Mutation
+				gameState().projectiles.splice(i, 1) //TODO: Mutation
 			}
 		}
 	},

@@ -1,4 +1,5 @@
 import Pickup from './Pickups.js'
+
 import store from '@/store'
 const { p5 } = store.state
 

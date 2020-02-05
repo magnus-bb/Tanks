@@ -70,6 +70,10 @@ export default class Config {
 			get collisionStepSize() { return this.strokeWidth - 1 }, // Projectiles will always be able to 'hit' wall
 			color: '#222629'
 		}
+
+		const particleColor = [255, 255, 255, 80]
+		const particleAmt = this.cell.xAmt * this.cell.yAmt / 4
+		const connectionDistance = this.cell.width * 2.5
 		this.fx = {
 			muzzle: {
 				size: 2.5, // Times the size of regular bullet
@@ -82,17 +86,17 @@ export default class Config {
 			},
 			particle: {
 				diameter: 8,
-				color: [255, 255, 255, 80],
+				color: particleColor,
 				velocity: 1.5,
-				get amt() { return config.cell.xAmt * config.cell.yAmt / 4 },
+				amt: particleAmt,
 				connection: {
-					get distance() { return config.cell.width * 2.5 },
+					distance: connectionDistance,
 					get color() {
-						let c = color(config.fx.particle.color)
-						const a = alpha(c)
+						const color = particleColor
+						let alpha = particleColor[3]
+						alpha *= 0.75
 
-						c.setAlpha(a * 0.75)
-						return c
+						return color
 					},
 					width: 2,
 				}

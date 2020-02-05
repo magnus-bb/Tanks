@@ -1,6 +1,6 @@
 import store from '@/store'
-const { state } = store
-const { p5, game } = state
+const { p5 } = store.state
+const { gameState, gameStatus } = store.getters
 
 export default class Controls {
 	constructor(forward = p5.UP_ARROW, backward = p5.DOWN_ARROW, left = p5.LEFT_ARROW, right = p5.RIGHT_ARROW, fire = 32) {
@@ -28,8 +28,8 @@ export default class Controls {
 
 // Keyboard handler for firing:
 p5.keyPressed = () => { // Cannot be done in class, since we have to listen for all keypresses, and keyIsDown will spam
-	if (!game.paused) {
-		for (const tank of state.gameState.tanks) {
+	if (!gameStatus().paused) {
+		for (const tank of gameState().tanks) {
 			if (p5.keyCode === tank.controls.fire) {
 				tank.fire()
 			}

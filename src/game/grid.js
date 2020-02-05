@@ -1,15 +1,16 @@
 import Cell from './Cell.js'
-import store from '@/store'
-const { state } = store
-const { p5, config, setup } = state
 import { getCell, getUnvisitedNeighbors, removeWall } from './helpers.js'
+
+import store from '@/store'
+const { p5, setup } = store.state
+const { config, gameState } = store.getters
 
 const grid = {
 	generate() {
-		for (let x = 0; x < p5.width; x += config.cell.width) { // Uses width / height of canvas (based off amt of cells and cellwidth) to generate rows and columns of cells
+		for (let x = 0; x < p5.width; x += config().cell.width) { // Uses width / height of canvas (based off amt of cells and cellwidth) to generate rows and columns of cells
 			const column = []
 
-			for (let y = 0; y < p5.height; y += config.cell.width) {
+			for (let y = 0; y < p5.height; y += config().cell.width) {
 				column.push(new Cell(x, y))
 			}
 
@@ -19,13 +20,13 @@ const grid = {
 
 	// Goes through all cells and randomly populates walls
 	populateWalls() {
-		for (const col of state.gameState.grid) {
+		for (const col of gameState().grid) {
 			for (const cell of col) {
 
-				if (cell.x !== p5.width - config.cell.width) {
+				if (cell.x !== p5.width - config().cell.width) {
 					cell.walls.right = cell.randomWall('right') 
 				}
-				if (cell.y !== p5.height - config.cell.width) {
+				if (cell.y !== p5.height - config().cell.width) {
 					cell.walls.bottom = cell.randomWall('bottom') 
 				}
 			}

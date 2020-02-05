@@ -13,19 +13,20 @@ import Config from '@/game/Config.js'
 
 
 const store = new Vuex.Store({
+	// Only non-changing state values can be references by variable in imports (when config / gameState is overwritten, the variables will point to the old object)
 
 	state: {
 		p5: new P5(sketch => { }, 'canvasContainer'),
 		config: new Config, //TODO: Load instead
 		// gameState: null, //TODO: set on game start
-		game: {
+		gameStatus: {
 			// For menu manipulation, not state/round management:
 			started: false,
 			paused: true,
 			players: [] //? evt et map til at holde styr på tanks?
 		},
 		setup: {
-		// 	TODO: Static props from classes here
+			// 	TODO: Static props from classes here
 			cellStack: []
 		},
 		assets: { //TODO: Move out of vuex?
@@ -35,9 +36,11 @@ const store = new Vuex.Store({
 			//fx: {}
 		}
 	},
+
+
 	mutations: {
 		addPlayer(state, player) {
-			state.game.players.push(player)
+			state.gameStatus.players.push(player)
 		},
 
 		setupSketch(state, payload) {
@@ -75,11 +78,11 @@ const store = new Vuex.Store({
 		},
 
 		setStartedStatus(state, bool) {
-			state.game.started = bool
+			state.gameStatus.started = bool
 		},
 
 		setPauseStatus(state, bool) {
-			state.game.paused = bool
+			state.gameStatus.paused = bool
 		},
 
 		setPickupAsset(state, payload) {
@@ -113,7 +116,18 @@ const store = new Vuex.Store({
 	},
 
 	getters: {
-		
+		config: state => () => {
+			return state.config
+		},
+
+		gameState: state => () => {
+			return state.gameState
+		},
+
+		gameStatus: state => () => {
+			return state.gameStatus
+		},
+
 	}
 })
 

@@ -1,6 +1,5 @@
 import store from '@/store'
-const { state } = store
-// const config = store.state.config
+const { config } = store.getters
 
 export default class GameState {
 	constructor() {
@@ -8,7 +7,7 @@ export default class GameState {
 		this.tanks = []
 		this.projectiles = []
 		this.pickups = []
-		this.endTimer = state.config.game.endFrames
+		this.endTimer = config().game.endFrames
 		this.ending = false
 		this.fx = {
 			bulletTrails: new Map(),

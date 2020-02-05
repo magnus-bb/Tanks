@@ -1,12 +1,11 @@
 import Equipment from './Equipment.js'
 import Modifier from './Modifiers.js'
 import Powerup from './Powerups.js'
+import { getCell, randomSpawnCoords, circleIntersectsRect } from './helpers.js'
 
 import store from '@/store'
-const { state } = store
-const { p5, config, assets } = state
-
-import { getCell, randomSpawnCoords, circleIntersectsRect } from './helpers.js'
+const { p5, assets } = store.state
+const { config, gameState } = store.getters
 
 
 function EquipmentPickup(name, type, x, y, col, row) {
@@ -101,8 +100,8 @@ const Pickup = {
 	},
 
 	spawn() {
-		if (p5.frameCount % config.pickup.spawnInterval === 0 && state.gameState.pickups.length < config.cell.xAmt * config.cell.yAmt) {
-			p5.random() < config.pickup.spawnChance ? this.create(this.random()) : false
+		if (p5.frameCount % config().pickup.spawnInterval === 0 && gameState().pickups.length < config().cell.xAmt * config().cell.yAmt) {
+			p5.random() < config().pickup.spawnChance ? this.create(this.random()) : false
 		}
 	},
 
@@ -134,7 +133,7 @@ const Pickup = {
 			var { x, y, col, row } = randomSpawnCoords()
 
 			// Remake if pickup is already at this location:
-			for (const pickup of state.gameState.pickups) {
+			for (const pickup of gameState().pickups) {
 				if (col === pickup.col && row === pickup.row) {
 					return this.create(pickupName)
 				}
@@ -159,9 +158,9 @@ const Pickup = {
 		}
 
 		// Adds to maze to be rendered if maze is not full:
-		if (state.gameState.pickups.length < config.cell.xAmt * config.cell.yAmt) {
+		if (gameState().pickups.length < config().cell.xAmt * config().cell.yAmt) {
 			store.commit('addPickup', pickup)
-			//state.gameState.pickups.push(pickup)
+			//gameState().pickups.push(pickup)
 		}
 	},
 
@@ -197,10 +196,10 @@ const Pickup = {
 					}
 
 					const pickupRect = {
-						x: this.x - config.pickup.size / 2,
-						y: this.y - config.pickup.size / 2,
-						h: config.pickup.size,
-						w: config.pickup.size
+						x: this.x - config().pickup.size / 2,
+						y: this.y - config().pickup.size / 2,
+						h: config().pickup.size,
+						w: config().pickup.size
 					}
 
 					if (circleIntersectsRect(tankBody, pickupRect)) {
@@ -213,7 +212,7 @@ const Pickup = {
 		canShowAndRemoveSelf() {
 			return {
 				_show() {
-					p5.image(this.asset, this.x, this.y, config.pickup.size, config.pickup.size)
+					p5.image(this.asset, this.x, this.y, config().pickup.size, config().pickup.size)
 				},
 
 				_remove(i) {

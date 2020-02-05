@@ -1,10 +1,6 @@
-// import store from '@/store'
-// const p5 = store.state.p5
-// const config = store.state.config
-// const state = store.getters.getGameState
 import store from '@/store'
-const { state } = store
-const { p5, config, setup } = state
+const { p5 } = store.state
+const { config } = store.getters
 
 import Wall from './Wall.js'
 
@@ -13,7 +9,7 @@ class Cell {
 	constructor(x, y) {
 		this.x = x
 		this.y = y
-		this.w = config.cell.width
+		this.w = config().cell.width
 		// Makes a wall at chance, if wall is not on canvas edge
 		this.walls = {
 			right: null,
@@ -31,7 +27,7 @@ class Cell {
 	}
 
 	randomWall(side) {
-		return p5.random() < config.wall.occurrenceRate ? new Wall(this, side) : null
+		return p5.random() < config().wall.occurrenceRate ? new Wall(this, side) : null
 	}
 }
 

@@ -1,11 +1,12 @@
 import fx from './fx.js'
 import * as projectile from './Projectiles.js'
 import game from './game.js'
-import store from '@/store'
-const { state } = store
-const { p5, config } = state
-
 import { getOffsetPoint, getWallRect, pointInRect, outOfBounds, circleIntersectsEdge, circleIntersectsRect, getTurnDirection } from './helpers.js'
+
+import store from '@/store'
+const { p5 } = store.state
+const { config, gameState } = store.getters
+
 
 export default class Tank {
 	constructor(name, colorArray, x, y, controls, owner) {
@@ -13,13 +14,13 @@ export default class Tank {
 		this.name = name
 		this.x = x
 		this.y = y //TODO: Given a cell, calculate the center instead of giving a center coordinate
-		this.d = config.tank.diameter
-		this.moveSpeed = config.tank.moveSpeed
-		this.turnSpeed = config.tank.turnSpeed
+		this.d = config().tank.diameter
+		this.moveSpeed = config().tank.moveSpeed
+		this.turnSpeed = config().tank.turnSpeed
 		this.driving = false // To look ahead before actually moving
 		this.direction = p5.random(0, 360)
 		this.color = p5.color(colorArray) // Array of RGB
-		this.ammo = config.tank.ammo
+		this.ammo = config().tank.ammo
 		this.stealthedAmmo = false
 		this.equipment = null
 		this.modifiers = new Set()
@@ -32,7 +33,7 @@ export default class Tank {
 		}
 		this.turning = 0
 
-		const relCannonTip = getOffsetPoint(config.tank.cannon.length, this.direction)
+		const relCannonTip = getOffsetPoint(config().tank.cannon.length, this.direction)
 		this.relCannon = {
 			x: relCannonTip.x,
 			y: relCannonTip.y
@@ -153,11 +154,11 @@ export default class Tank {
 	_handleBodyCollision(axes) {
 		if (axes.x) {
 			this.moveCoords.dX = 0
-			this.moveCoords.dY /= config.tank.collisionMoveSlow
+			this.moveCoords.dY /= config().tank.collisionMoveSlow
 		}
 		if (axes.y) {
 			this.moveCoords.dY = 0
-			this.moveCoords.dX /= config.tank.collisionMoveSlow
+			this.moveCoords.dX /= config().tank.collisionMoveSlow
 		}
 	}
 
@@ -170,7 +171,7 @@ export default class Tank {
 
 		const wallRect = getWallRect(wall)
 
-		for (let i = this.r; i <= config.tank.cannon.length; i++) {
+		for (let i = this.r; i <= config().tank.cannon.length; i++) {
 
 			// Every point on the cannon...
 			const point = getOffsetPoint(i, this.direction)
@@ -222,10 +223,10 @@ export default class Tank {
 		// Halts / slows movement:
 		if (axes.x) {
 			this.moveCoords.dX = 0
-			this.moveCoords.dY /= config.tank.collisionMoveSlow
+			this.moveCoords.dY /= config().tank.collisionMoveSlow
 		}
 		if (axes.y) {
-			this.moveCoords.dX /= config.tank.collisionMoveSlow
+			this.moveCoords.dX /= config().tank.collisionMoveSlow
 			this.moveCoords.dY = 0
 		}
 
@@ -243,7 +244,7 @@ export default class Tank {
 		const wallRect = getWallRect(wall)
 
 		// Starts from edge of tank, not cannon root:
-		for (let i = this.r; i <= config.tank.cannon.length; i++) {
+		for (let i = this.r; i <= config().tank.cannon.length; i++) {
 
 			// Every point on the cannon...
 			const nextPoint = getOffsetPoint(i, nextDir)
@@ -290,7 +291,7 @@ export default class Tank {
 			this.ammo--
 
 			store.commit('addProjectile', new projectile.Bullet(this))
-			// state.gameState.projectiles.push(new Bullet(this))
+			// gameState().projectiles.push(new Bullet(this))
 
 			fx.shake() // Global effect
 		}
@@ -314,7 +315,7 @@ export default class Tank {
 		}
 
 		// Updates cannon coords:
-		const tip = getOffsetPoint(config.tank.cannon.length, this.direction) // Same function as with moving - gets coords based on distance from center and a direction
+		const tip = getOffsetPoint(config().tank.cannon.length, this.direction) // Same function as with moving - gets coords based on distance from center and a direction
 		this.relCannon.x = tip.x
 		this.relCannon.y = tip.y
 	}
@@ -323,7 +324,7 @@ export default class Tank {
 	_turn(turnDirection, bodyCollision = false) {
 		if (bodyCollision) {
 			// % 360 makes it so we don't have to deal with angles over 360 deg:
-			this.direction = (this.direction % 360) + this.turnSpeed / config.tank.collisionTurnSlow * turnDirection //TODO: Maybe use rotate() when we switch to sprites
+			this.direction = (this.direction % 360) + this.turnSpeed / config().tank.collisionTurnSlow * turnDirection //TODO: Maybe use rotate() when we switch to sprites
 		} else {
 			this.direction = (this.direction % 360) + this.turnSpeed * turnDirection //TODO: Maybe use rotate() when we switch to sprites
 		}
@@ -339,7 +340,7 @@ export default class Tank {
 	_show() {
 		p5.push()
 
-		p5.stroke(config.tank.strokeColor)
+		p5.stroke(config().tank.strokeColor)
 		p5.fill(this.color)
 
 		// Renders body:
@@ -350,10 +351,10 @@ export default class Tank {
 
 		// Renders cannon:
 		p5.push()
-		p5.strokeWeight(config.tank.cannon.width)
+		p5.strokeWeight(config().tank.cannon.width)
 		p5.translate(this.x, this.y)
 		p5.rotate(this.direction)
-		p5.line(this.d / config.tank.cannon.midOffsetDivisor, 0, config.tank.cannon.length, 0) // Straight line the length of the cannon
+		p5.line(this.d / config().tank.cannon.midOffsetDivisor, 0, config().tank.cannon.length, 0) // Straight line the length of the cannon
 		p5.pop()
 
 		p5.pop()
@@ -367,7 +368,7 @@ export default class Tank {
 
 	// Uses index number to remove tank from the game:
 	_destroy(i) {
-		state.gameState.tanks.splice(i, 1) //TODO: Mutation
+		gameState().tanks.splice(i, 1) //TODO: Mutation
 
 		game.tankDestroyed() //TODO: vuex actions? (this mutates gameState, right?)
 		//TODO: Msg on death or counter etc + effect

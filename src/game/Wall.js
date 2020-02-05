@@ -1,5 +1,6 @@
 import store from '@/store'
-const { p5, config } = store.state
+const { p5 } = store.state
+const { config } = store.getters
 
 export default class Wall {
 	constructor(owner, side) {
@@ -9,7 +10,7 @@ export default class Wall {
 		this.y1 = owner.y
 		this.x2 = owner.x
 		this.y2 = owner.y
-		this.w = config.wall.strokeWidth
+		this.w = config().wall.strokeWidth
 
 		const length = owner.w
 		switch (side) {
@@ -35,7 +36,7 @@ export default class Wall {
 
 		p5.strokeWeight(this.w)
 		p5.strokeCap(p5.ROUND)
-		p5.stroke(config.wall.color)
+		p5.stroke(config().wall.color)
 		p5.line(this.x1, this.y1, this.x2, this.y2)
 
 		p5.pop()

@@ -1,16 +1,16 @@
 //import Cell from './Cell.js'
 
 import store from '@/store'
-const { p5, config } = store.state
-// const config = store.state.config
+const { p5 } = store.state
+const { config } = store.getters
 
 function setup() {
 	p5.noLoop()
 	p5.noCursor()
 
-	p5.frameRate(config.fps)
-	const canvasWidth = config.cell.width * config.cell.xAmt
-	const canvasHeight = config.cell.width * config.cell.yAmt
+	p5.frameRate(config().fps)
+	const canvasWidth = config().cell.width * config().cell.xAmt
+	const canvasHeight = config().cell.width * config().cell.yAmt
 	p5.createCanvas(canvasWidth, canvasHeight)
 
 	// Is overwritten in Game.start(), but makes a nice background to the start menu:

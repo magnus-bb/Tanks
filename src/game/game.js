@@ -4,14 +4,12 @@ import grid from './grid.js'
 import { randomSpawnCoords, pointCloseToTank } from './helpers.js'
 
 import store from '@/store'
-const { state } = store
-const { p5, game } = state
-// const game = store.state.game
-// const state = store.getters.getGameState
+const { p5 } = store.state
+const { gameState, gameStatus } = store.getters
 
-const gameMethods = {
+const game = {
 	addPlayer(player) {
-		if (game.started) return console.log("Game has already started")
+		if (gameStatus().started) return console.log("Game has already started")
 
 		store.commit('addPlayer', player)
 
@@ -24,7 +22,7 @@ const gameMethods = {
 
 	new() {
 		// Cannot start twice or if there are no players:
-		if (game.started || game.players.length <= 0) return console.log("Cannot start game")
+		if (gameStatus().started || gameStatus().players.length <= 0) return console.log("Cannot start game")
 
 		// $('#startMenu').fadeOut(100)
 		store.commit('setGameState', new GameState)
@@ -42,7 +40,7 @@ const gameMethods = {
 		grid.generateMaze()
 
 		// Adds players' tanks:
-		for (const player of game.players) {
+		for (const player of gameStatus().players) {
 
 			let spawnCoords = randomSpawnCoords()
 
@@ -52,7 +50,7 @@ const gameMethods = {
 			}
 
 			store.commit('addTank', new Tank(player.name, player.color, spawnCoords.x, spawnCoords.y, player.controls, player))
-			// state.gameState.tanks.push(new Tank(player.name, player.color, spawnCoords.x, spawnCoords.y, player.controls, player))
+			// gameState().tanks.push(new Tank(player.name, player.color, spawnCoords.x, spawnCoords.y, player.controls, player))
 		}
 
 		// game.started = true
@@ -65,9 +63,9 @@ const gameMethods = {
 
 	// Checks if game should start counting towards ending:
 	tankDestroyed() {
-		if (state.gameState.tanks.length <= 1) {
+		if (gameState().tanks.length <= 1) {
 			store.commit('gameEnding')
-			// state.gameState.ending = true
+			// gameState().ending = true
 		}
 	},
 
@@ -107,17 +105,17 @@ const gameMethods = {
 
 	// Called once every frame:
 	onFrame() {
-		if (state.gameState.ending) {
+		if (gameState().ending) {
 			// Begins counting down for end:
 			store.commit('endTimer')
-			// state.gameState.endTimer--
+			// gameState().endTimer--
 		}
 
 		// Checks if game should end:
-		if (state.gameState.endTimer <= 0) {
+		if (gameState().endTimer <= 0) {
 			this.end()
 		}
 	}
 }
 
-export default gameMethods
+export default game

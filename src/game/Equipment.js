@@ -3,8 +3,7 @@ import { LaserSight } from './Modifiers.js'
 import { randomTank } from './helpers.js'
 
 import store from '@/store'
-const { state } = store
-const { config } = state
+const { config, gameState } = store.getters
 
 //* BREAKER
 
@@ -24,7 +23,7 @@ function Breaker(owner, name) {
 			console.log(this.name + " used by: " + this.owner.name)
 
 			store.commit('addProjectile', new projectile.Breaker(this.owner))
-			// state.gameState.projectiles.push(new projectile.Breaker(this.owner))
+			// gameState().projectiles.push(new projectile.Breaker(this.owner))
 
 			this._remove()
 		}
@@ -51,7 +50,7 @@ function M82(owner, name) {
 			console.log(this.name + " used by: " + this.owner.name)
 
 			store.commit('addProjectile', new projectile.M82(this.owner))
-			// state.gameState.projectiles.push(new projectile.M82(this.owner))
+			// gameState().projectiles.push(new projectile.M82(this.owner))
 
 			// Always last - decrements ammo and removes if ammo is out:
 			this._handleAmmo()
@@ -77,7 +76,7 @@ function Wormhole(owner, name) {
 		_autoUse() {
 			console.log(this.name + " used by: " + this.owner.name)
 
-			const selfIndex = state.gameState.tanks.findIndex(i => i.equipment === this)
+			const selfIndex = gameState().tanks.findIndex(i => i.equipment === this)
 			const otherTank = randomTank(selfIndex)
 
 			otherTank && this._swap(otherTank) // Has to check for undefined since this can happen during end timer with just 1 tank (random returns undefined)
@@ -109,14 +108,14 @@ function Wormhole(owner, name) {
 
 const mixins = {
 	canHaveLaserSight(owner, name) {
-		if (config.modifier.laserSight.onEquipment.includes(name)) {
+		if (config().modifier.laserSight.onEquipment.includes(name)) {
 			owner.modifiers.add(new LaserSight(owner, 'laserSight'))
 		}
 	},
 
 	hasAmmo(name) {
 		return {
-			ammo: config.equipment[name].ammo,
+			ammo: config().equipment[name].ammo,
 
 			_handleAmmo() {
 				this.ammo--
@@ -130,7 +129,7 @@ const mixins = {
 
 	hasChargeTime(name) {
 		return {
-			chargeTime: config.equipment[name].chargeFrames,
+			chargeTime: config().equipment[name].chargeFrames,
 
 			_timer() { //TODO: Timed equipment might be common. If so - move to mixin (and maybe with onFrame()), and leave autoUse up to the class
 				if (this.chargeTime <= 0) {

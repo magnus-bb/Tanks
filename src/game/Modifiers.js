@@ -1,8 +1,9 @@
-import store from '@/store'
-const { state } = store
-const { p5, config } = state
-
 import { getOffsetPoint, pointInRect, outOfBounds, getWallRect } from './helpers.js'
+
+import store from '@/store'
+const { p5 } = store.state
+const { config, gameState } = store.getters
+
 
 function StealthAmmo(owner, name) {
 	const props = {
@@ -34,14 +35,14 @@ export function LaserSight(owner, name) {
 		name,
 		color: p5.color(owner.color.levels) // Copies owner color instead of referencing the object
 	}
-	props.color.setAlpha(config.modifier.laserSight.alpha)
+	props.color.setAlpha(config().modifier.laserSight.alpha)
 
 	return {
 		...props,
 		...mixins.canRemoveSelf(),
 
 		_effect() {
-			for (let dist = 0; dist < 9999; dist += config.wall.collisionStepSize) {
+			for (let dist = 0; dist < 9999; dist += config().wall.collisionStepSize) {
 				// Potential end point:
 				const point = getOffsetPoint(dist, owner.direction)
 				const point2 = {
@@ -49,7 +50,7 @@ export function LaserSight(owner, name) {
 					y: point.y + owner.y
 				}
 
-				for (const column of state.gameState.grid) {
+				for (const column of gameState().grid) {
 					for (const cell of column) {
 						for (const wall in cell.walls) { // for...in does not need to loop backwards 
 							if (cell.walls[wall]) { // checks for existing walls only
@@ -82,7 +83,7 @@ export function LaserSight(owner, name) {
 		_drawLaser(from, to) {
 			p5.push()
 
-			p5.strokeWeight(config.modifier.laserSight.width)
+			p5.strokeWeight(config().modifier.laserSight.width)
 			p5.stroke(this.color)
 
 			p5.line(from.x, from.y, to.x, to.y)
@@ -91,7 +92,7 @@ export function LaserSight(owner, name) {
 		},
 
 		_removal() {
-			if (!owner.equipment || !config.modifier.laserSight.onEquipment.includes(owner.equipment.name)) { // Order of checks are important - cannot check equipment.name if equipment is not there
+			if (!owner.equipment || !config().modifier.laserSight.onEquipment.includes(owner.equipment.name)) { // Order of checks are important - cannot check equipment.name if equipment is not there
 				this._remove()
 			}
 		},
@@ -111,7 +112,7 @@ const mixins = {
 
 	hasTimer(name) {
 		return {
-			duration: config.modifier[name].duration,
+			duration: config().modifier[name].duration,
 
 			onFrame() {
 				this._effect()

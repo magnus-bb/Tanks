@@ -1,6 +1,6 @@
 import store from '@/store'
-const { state } = store
-const { p5, config } = state
+const { p5 } = store.state
+const { config, gameState } = store.getters
 
 const helpers = {
 	// Converts a direction and speed to new coords:
@@ -47,15 +47,15 @@ const helpers = {
 
 	// Returns reference to cell:
 	getCell(col, row) {
-		return state.gameState.grid[col][row]
+		return gameState().grid[col][row]
 	},
 
 	// Returns col and row num of cell:
 	getCellIndices(cell) {
-		for (let colNum = 0; colNum < state.gameState.grid.length; colNum++) {
-			const col = state.gameState.grid[colNum]
+		for (let colNum = 0; colNum < gameState().grid.length; colNum++) {
+			const col = gameState().grid[colNum]
 			for (let rowNum = 0; rowNum < col.length; rowNum++) {
-				if (state.gameState.grid[colNum][rowNum] === cell) return [colNum, rowNum]
+				if (gameState().grid[colNum][rowNum] === cell) return [colNum, rowNum]
 			}
 		}
 	},
@@ -89,7 +89,7 @@ const helpers = {
 		}
 
 		// Right
-		if (col + 1 < config.cell.xAmt) {
+		if (col + 1 < config().cell.xAmt) {
 			const cell = getCell(col + 1, row)
 			if (!cell.visited) {
 				unvisitedCells.push({ cell: cell, dir: 'right' })
@@ -97,7 +97,7 @@ const helpers = {
 		}
 
 		// Down
-		if (row + 1 < config.cell.yAmt) {
+		if (row + 1 < config().cell.yAmt) {
 			const cell = getCell(col, row + 1)
 			if (!cell.visited) {
 				unvisitedCells.push({ cell: cell, dir: 'down' })
@@ -148,7 +148,7 @@ const helpers = {
 	},
 
 	circleIntersectsEdge(circle) {
-		const wallHalfWidth = config.wall.strokeWidth / 2
+		const wallHalfWidth = config().wall.strokeWidth / 2
 
 		// if
 		return (circle.x - circle.r <= wallHalfWidth || circle.x + circle.r >= p5.width - wallHalfWidth || circle.y - circle.r <= wallHalfWidth || circle.y + circle.r >= p5.height - wallHalfWidth) 
@@ -197,7 +197,7 @@ const helpers = {
 	},
 
 	outOfBounds(point) {
-		const wallHalfWidth = config.wall.strokeWidth / 2
+		const wallHalfWidth = config().wall.strokeWidth / 2
 
 		const out = {
 			x: false,
@@ -216,8 +216,8 @@ const helpers = {
 	},
 
 	pointCloseToTank(point) {
-		for (const tank of state.gameState.tanks) {
-			if (p5.dist(point.x, point.y, tank.x, tank.y) <= config.cell.width * config.tank.spawnDistance) {
+		for (const tank of gameState().tanks) {
+			if (p5.dist(point.x, point.y, tank.x, tank.y) <= config().cell.width * config().tank.spawnDistance) {
 				return true
 			}
 
@@ -227,8 +227,8 @@ const helpers = {
 
 	randomSpawnCoords() {
 		// Random cell:
-		const col = p5.floor(p5.random(0, config.cell.xAmt))
-		const row = p5.floor(p5.random(0, config.cell.yAmt))
+		const col = p5.floor(p5.random(0, config().cell.xAmt))
+		const row = p5.floor(p5.random(0, config().cell.yAmt))
 		const cell = getCell(col, row)
 
 		// Midpoint of cell:
@@ -242,7 +242,7 @@ const helpers = {
 	randomTank(exclude = null) {
 
 		// Copies tanks array:
-		const tanks = [...state.gameState.tanks]
+		const tanks = [...gameState().tanks]
 
 		if (exclude !== null) { // Has to check against null, since index 0 is also falsy
 
