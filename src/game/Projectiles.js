@@ -34,16 +34,25 @@ export function Bullet(owner) {
 
 		// Makes a trail point for each frame:
 		_makeTrailPoint() { //TODO: Move to mixin, if other projectiles should do this
-			const trails = gameState().fx.bulletTrails // Trails are made in state to allow for continuous rendering when bullet is destroyed
+			// Trails are initialized in state (not on bullet) to allow for continuous rendering when bullet is destroyed
 
-			// When first point is made, the bullet's trail has to be initiated:
-			if (!trails.has(this)) {
-				trails.set(this, []) //TODO: Mutation
+			// When first point is made, the bullet's trail has to be initialized:
+			if (!gameState().fx.bulletTrails.has(this)) {
+				store.commit('createBulletTrailArray', this)
+				// trails.set(this, []) //TODO: Mutation
 			}
 
-			const trail = gameState().fx.bulletTrails.get(this)
+			// const self = this
+			// This needs to be passed as well, so Vuex knows which bullet to add the point to:
+			store.commit('addBulletTrailPoint', {
+				x: this.x,
+				y: this.y,
+				bullet: this
+			})
 
-			trail.push({ x: this.x, y: this.y }) //TODO: Mutation
+			// const trail = gameState().fx.bulletTrails.get(this)
+
+			// trail.push({ x: this.x, y: this.y }) //TODO: Mutation
 		},
 
 		_show() {
@@ -69,7 +78,9 @@ export function Bullet(owner) {
 		_destroy(i) {
 			this.dead = true // For trails effect //TODO: Add to trail mixin, if other projectiles should make trails
 
-			gameState().projectiles.splice(i, 1) //TODO: Mutation
+			store.commit('removeProjectile', i)
+
+			// gameState().projectiles.splice(i, 1) //TODO: Mutation
 
 			this.owner.ammo++
 		},
@@ -448,7 +459,8 @@ const mixins = {
 	canDestroySelf() { //TODO: Add 'dead' functionality to this mixin if trails are on more projectiles than just standard bullet
 		return {
 			_destroy(i) {
-				gameState().projectiles.splice(i, 1) //TODO: Mutation
+				store.commit('removeProjectile', i)
+				// gameState().projectiles.splice(i, 1) //TODO: Mutation
 			}
 		}
 	},

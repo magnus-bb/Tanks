@@ -41,7 +41,7 @@ const fx = {
 			if (trail.length <= 0 && bullet.dead) {
 				// Removes trail, when all points have run out:
 				store.commit('deleteBulletTrail', bullet)
-				// gameState().fx.bulletTrails.delete(bullet)
+		
 			} else {
 				// Keeps the trail from growing forever:
 				if (trail.length > config().fx.bulletTrail.length) {
@@ -77,7 +77,8 @@ const fx = {
 	_particles() {
 		if (gameState().fx.particles.array.length === 0) {
 			for (let i = 0; i < config().fx.particle.amt; i++) {
-				gameState().fx.particles.array.push(new this.Particle())
+				store.commit('addParticle', new this.Particle)
+				// gameState().fx.particles.array.push(new this.Particle/*()*/)
 			}
 		}
 

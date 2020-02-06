@@ -10,7 +10,7 @@ class Cell {
 		this.x = x
 		this.y = y
 		this.w = config().cell.width
-		// Makes a wall at chance, if wall is not on canvas edge
+		// Makes a wall at chance, if wall is not on canvas edge:
 		this.walls = {
 			right: null,
 			bottom: null

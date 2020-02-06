@@ -1,5 +1,5 @@
 <template>
-  <div class="game-container">
+  <div class="game-container" :style="cssColorVars">
     <p>Game Works</p>
 
     <game-menu />
@@ -26,20 +26,48 @@ export default {
 		GameCanvas,
 		GameStatus,
 	},
+
 	data() {
 		return {
-			
+			darkMode: true
 		}
 	},
-	computed: {},
-	methods: {
-		
+
+	computed: {
+		cssBgColor() {
+			return this.darkMode ? this.$store.state.config.wall.color : this.$store.state.config.cell.color
+		},
+
+		cssTextColor() {
+			return this.darkMode ? 'white' : 'black'
+		},
+
+		cssColorVars() {
+			return {
+				'--text-color': this.cssTextColor,
+				'--bg-color': this.cssBgColor,
+			}
+		},
 	},
-	mounted() {},
+
+	methods: {},
+	mounted() {
+	},
 }
 </script>
 
 
 
-<style scoped lang="scss">
+<style lang="scss">
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+.game-container {
+	height: 100vh;
+	color: var(--text-color);
+	background-color: var(--bg-color);
+}
 </style>

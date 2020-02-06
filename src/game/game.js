@@ -50,7 +50,6 @@ const game = {
 			}
 
 			store.commit('addTank', new Tank(player.name, player.color, spawnCoords.x, spawnCoords.y, player.controls, player))
-			// gameState().tanks.push(new Tank(player.name, player.color, spawnCoords.x, spawnCoords.y, player.controls, player))
 		}
 
 		// game.started = true
@@ -65,7 +64,6 @@ const game = {
 	tankDestroyed() {
 		if (gameState().tanks.length <= 1) {
 			store.commit('gameEnding')
-			// gameState().ending = true
 		}
 	},
 
@@ -108,7 +106,6 @@ const game = {
 		if (gameState().ending) {
 			// Begins counting down for end:
 			store.commit('endTimer')
-			// gameState().endTimer--
 		}
 
 		// Checks if game should end:

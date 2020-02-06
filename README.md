@@ -81,12 +81,11 @@ Todos
 - Hjørnecollisions bugger på bounce med det nye step lookaheads
 - Se om helpers kan flyttes til en enkelt class / constructor etc, hvis kun dén bruger helperen
 - Flere keys + højre pil gør højre pil uregerlig
-- EFTER VUE REWORK
-	- Fjern alle gamle kommentarer
-	- Se om noget state kan flyttes ud af vuex
-	- Simplificér menuer / components
-	- Læs op på vuex mutations og se, hvilke der er nødvendige at bruge mutations til (garanteret kun dem, der skal rerender DOMen) -> i så fald, lav liste over ting som menuen / status etc skal kunne opdateres ved
-	- Ny løsning til `fire` controls-listener, som enten ikke er p5 (men stadig ikke kan fyre flere pr frame), eller bare som minimum ikke er i ekstern js
+- Fjern alle gamle kommentarer
+- Se om noget state kan flyttes ud af Vuex
+- Simplificér menuer / components
+- Ny løsning til `fire` controls-listener, som enten ikke er p5 (men stadig ikke kan fyre flere pr frame), eller bare som minimum ikke er i ekstern js
+- Organisér `mutations`
 
 
 Idéer til spillet
@@ -106,6 +105,7 @@ Idéer til spillet
 - Stealthed tank (alpha kommer nok til at influere bullets etc, der arver color)
 - Til tider skal vægge skifte / fjernes / tilføjes
 - Lav presets på `config` (realism, hyped etc)
+- Skyggeeffekter på spillet?
 
 Links
 -----

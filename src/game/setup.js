@@ -13,11 +13,6 @@ export default function setup() {
 	const canvasHeight = config().cell.width * config().cell.yAmt
 	p5.createCanvas(canvasWidth, canvasHeight)
 
-	// Is overwritten in Game.start(), but makes a nice background to the start menu:
-	// Cell.generateGrid()
-	// Cell.populateWalls()
-	// Cell.generateMaze()
-
 	p5.imageMode(p5.CENTER)
 	p5.angleMode(p5.DEGREES)
 }

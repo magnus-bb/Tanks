@@ -1,17 +1,41 @@
 <template>
-	<div>
+  <div>
+    <p>Config Works</p>
 
-		<p>Config Works</p>
+    <!-- Reactivity template: -->
+		<p>Reactivity Test:</p>
+    <input v-model="bulletSpeed" type="number" />
 
-	</div>
+    {{ bulletSpeed }}
+  </div>
 </template>
 
 <script>
-	export default {
-		name: "GameMenuConfig"
-	}
+export default {
+	name: 'GameMenuConfig',
+	computed: {
+
+
+
+
+		//! Reactivity template:
+		// Only needed here (both get and set) for shortening the inline v-model:
+		// Inline does not need a computed value, and can reference $store.state... etc. directly
+		// while maintaining reactivity
+		bulletSpeed: {
+			get() {
+				return this.$store.state.config.projectile.bullet.speed
+			},
+			set(val) {
+				this.$store.state.config.projectile.bullet.speed = Number(val)
+			},
+		},
+	},
+}
 </script>
 
 <style lang="scss" scoped>
-
+input {
+	//color: black;
+}
 </style>

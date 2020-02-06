@@ -3,11 +3,10 @@ import Pickup from './Pickups.js'
 import store from '@/store'
 const { p5 } = store.state
 
-function preload() {
+export default function preload() {
 	// Runs through all types of pickups in Pickup.pickups, loads their asset, and saves it in the assets-object:
 	for (const type of Object.values(Pickup.pickups)) {
 		type.forEach(pickup => {
-			// this.assets.pickups[pickup] = p5.loadImage(`assets/pickups/${pickup}.svg`)
 
 			store.commit('setPickupAsset', {
 				name: pickup,
@@ -16,8 +15,6 @@ function preload() {
 		})
 	}
 }
-
-export default preload
 
 	// // // Runs through all types of projectiles and saves them in the assets-object:
 	// // for (const projectile of Projectile.types) {

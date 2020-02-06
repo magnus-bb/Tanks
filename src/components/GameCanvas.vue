@@ -5,8 +5,6 @@
 </template>
 
 <script>
-//* Libs:
-// import P5 from 'p5'
 
 //* Mixins / Classes:
 import preload from '@/game/preload.js'

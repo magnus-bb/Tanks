@@ -291,7 +291,6 @@ export default class Tank {
 			this.ammo--
 
 			store.commit('addProjectile', new projectile.Bullet(this))
-			// gameState().projectiles.push(new Bullet(this))
 
 			fx.shake() // Global effect
 		}
@@ -368,7 +367,8 @@ export default class Tank {
 
 	// Uses index number to remove tank from the game:
 	_destroy(i) {
-		gameState().tanks.splice(i, 1) //TODO: Mutation
+		store.commit('removeTank', i)
+		// gameState().tanks.splice(i, 1) //TODO: Mutation
 
 		game.tankDestroyed() //TODO: vuex actions? (this mutates gameState, right?)
 		//TODO: Msg on death or counter etc + effect

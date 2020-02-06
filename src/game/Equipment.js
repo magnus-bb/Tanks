@@ -23,7 +23,6 @@ function Breaker(owner, name) {
 			console.log(this.name + " used by: " + this.owner.name)
 
 			store.commit('addProjectile', new projectile.Breaker(this.owner))
-			// gameState().projectiles.push(new projectile.Breaker(this.owner))
 
 			this._remove()
 		}
@@ -50,7 +49,6 @@ function M82(owner, name) {
 			console.log(this.name + " used by: " + this.owner.name)
 
 			store.commit('addProjectile', new projectile.M82(this.owner))
-			// gameState().projectiles.push(new projectile.M82(this.owner))
 
 			// Always last - decrements ammo and removes if ammo is out:
 			this._handleAmmo()

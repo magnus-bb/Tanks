@@ -160,7 +160,6 @@ const Pickup = {
 		// Adds to maze to be rendered if maze is not full:
 		if (gameState().pickups.length < config().cell.xAmt * config().cell.yAmt) {
 			store.commit('addPickup', pickup)
-			//gameState().pickups.push(pickup)
 		}
 	},
 
