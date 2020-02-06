@@ -1,6 +1,7 @@
 <template>
   <div id="startMenu" class="start-menu">
-    <p>Start Works</p>
+
+
     
   </div>
 </template>
@@ -29,4 +30,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.start-menu {
+	background: red;
+	position: absolute;
+}
 </style>

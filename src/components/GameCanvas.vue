@@ -1,6 +1,8 @@
 <template>
-  <div id="canvasContainer">
-    <p>Canvas Works</p>
+  <div id="canvasContainer" class="canvas-container">
+
+
+
   </div>
 </template>
 

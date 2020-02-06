@@ -1,7 +1,6 @@
 <template>
-	<div id="nextRoundMenu" class="next-round-menu">
+	<div id="nextRoundMenu" class="round-menu">
 
-		<p>Round Works</p>
 
 	</div>
 </template>
@@ -13,5 +12,8 @@
 </script>
 
 <style lang="scss" scoped>
-
+.round-menu {
+	background: green;
+	position: absolute;
+}
 </style>

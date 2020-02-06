@@ -1,6 +1,6 @@
 <template>
-  <div id="gameMenu" class="game-menu">
-    <p>Menu Works</p>
+  <div id="gameMenu" class="menu">
+
     <game-menu-start />
     <game-menu-config />
     <game-menu-round />
@@ -62,8 +62,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-button {
-	//color: black;
+.menu {
+	background: blue;
+	position: absolute;
 }
 </style>

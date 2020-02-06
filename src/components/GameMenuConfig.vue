@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <p>Config Works</p>
+  <div class="config-menu">
 
     <!-- Reactivity template: -->
 		<p>Reactivity Test:</p>
@@ -35,7 +34,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-input {
-	//color: black;
+.config-menu {
+	background: white;
+	position: absolute;
 }
 </style>

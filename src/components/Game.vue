@@ -1,7 +1,5 @@
 <template>
   <div class="game-container" :style="cssColorVars">
-    <p>Game Works</p>
-
     <game-menu />
 
     <game-canvas />
@@ -69,5 +67,10 @@ export default {
 	height: 100vh;
 	color: var(--text-color);
 	background-color: var(--bg-color);
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 </style>

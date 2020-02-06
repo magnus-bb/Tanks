@@ -1,6 +1,7 @@
 <template>
-	<div>
-		<p>Status Works</p>
+	<div class="status">
+
+
 	</div>
 </template>
 
