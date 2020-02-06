@@ -12,9 +12,6 @@
 import preload from '@/game/preload.js'
 import setup from '@/game/setup.js'
 import draw from '@/game/draw.js'
-//import Pickup from '@/game/Pickups.js'
-//import Config from '@/game/Config.js'
-//import GameState from '@/game/GameState.js'
 
 export default {
 	name: 'GameCanvas',
@@ -36,6 +33,7 @@ export default {
 			setup: setup,
 			draw: draw
 		}) 
+
 
 	},
 }

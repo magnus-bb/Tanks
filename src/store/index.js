@@ -16,7 +16,7 @@ const store = new Vuex.Store({
 	// Only non-changing state values can be references by variable in imports (when config / gameState is overwritten, the variables will point to the old object)
 
 	state: {
-		p5: new P5(sketch => { }, 'canvasContainer'),
+		p5: new P5(sketch => {}, 'canvasContainer'),
 		config: new Config, //TODO: Load instead
 		// gameState: null, //TODO: set on game start
 		gameStatus: {

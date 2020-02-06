@@ -7,10 +7,9 @@
     <button @click="createPickup('breaker')">Breaker</button>
     <button @click="createPickup('ammo')">Ammo</button>
     <button @click="createPickup('stealthAmmo')">Stealth Ammo</button>
-		<input v-model="test" type="number" />
-		<button @click="setFps">FPS</button>
-		<button @click="setConfig">Config</button>
-		<button @click="logFps">Log</button>
+		<!-- Reactivity template: -->
+		<input v-model="bulletSpeed" type="number" />
+		{{ bulletSpeed }}
   </div>
 </template>
 
@@ -25,23 +24,23 @@ export default {
 	name: 'GameMenuStart',
 	mixins: [],
 	computed: {
-		test: {
+		// Reactivity template:
+		bulletSpeed: {
 			get() {
-				return this.$store.state.config.fps
+				return this.$store.state.config.projectile.bullet.speed
 			},
 			set(val) {
-				this.$store.state.config.fps = Number(val)
+				this.$store.state.config.projectile.bullet.speed = Number(val)
 			}
 		} 
 	},
 	data() {
 		return {
-			// test: this.$store.getters.config().fps
 			
-			//p5: this.$store.state.p5
 		}
 	},
 	methods: {
+		// For game logic testing:
 		testStart() {
 			game.addPlayer(
 				new Player(1, 'One', [255, 0, 0], new Controls(69, 68, 83, 70, 86))
@@ -54,26 +53,8 @@ export default {
 		createPickup(name) {
 			Pickup.create(name)
 		},
-
-		setFps() {
-			const config = this.$store.getters.config
-
-			config().fps = 10
-			console.log(config().fps)
-		},
-
-		setConfig() {
-			const config = this.$store.getters.config
-
-			this.$store.commit('setConfig', new Config)
-
-			console.log(config().fps)
-		},
-
-		logFps() {
-			console.log(this.$store.getters.config().fps)
-		},
 	},
+	
 	mounted() {
 		
 	}

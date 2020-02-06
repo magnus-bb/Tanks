@@ -4,7 +4,7 @@ import store from '@/store'
 const { p5 } = store.state
 const { config } = store.getters
 
-function setup() {
+export default function setup() {
 	p5.noLoop()
 	p5.noCursor()
 
@@ -21,5 +21,3 @@ function setup() {
 	p5.imageMode(p5.CENTER)
 	p5.angleMode(p5.DEGREES)
 }
-
-export default setup
