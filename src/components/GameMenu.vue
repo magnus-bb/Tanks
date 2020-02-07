@@ -1,5 +1,5 @@
 <template>
-  <div id="gameMenu" class="menu" v-show="">
+  <div id="gameMenu" class="menu" >
 
     <game-menu-start />
     <game-menu-config />

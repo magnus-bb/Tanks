@@ -32,6 +32,6 @@ export default {
 <style lang="scss" scoped>
 .start-menu {
 	background: red;
-	position: absolute;
+	// position: absolute;
 }
 </style>

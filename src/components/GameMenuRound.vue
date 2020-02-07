@@ -14,6 +14,6 @@
 <style lang="scss" scoped>
 .round-menu {
 	background: green;
-	position: absolute;
+	// position: absolute;
 }
 </style>
