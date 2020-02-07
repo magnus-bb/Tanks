@@ -1,13 +1,20 @@
 <template>
   <div class="create-menu">
-    <!-- Game logic testing: -->
+		<section class="add-player-container">
+			<input type="text">
+			<button></button>
+			
+		</section>
+
     <section>
-      <button @click="openConfig">Settings</button>
+      <button class="settings-button" @click="openConfig">
+        <img src="@/assets/icons/settings.svg" />Settings
+      </button>
       <div class="title-container">
         <h1 class="title">Tanks</h1>
         <h2 class="subtitle">Try Not To Kill Yourself</h2>
       </div>
-      <button @click="testStart" class="start-button">Start Game</button>
+      <button class="start-button" @click="testStart">Start Game</button>
     </section>
   </div>
 </template>
@@ -47,6 +54,37 @@ export default {
 .create-menu {
 	height: 100%;
 	display: flex;
+	justify-content: space-evenly;
+}
+
+.addPlayerContainer {
+	margin: 20px;
+	background: blue;
+}
+
+.settings-button {
+	display: flex;
+	align-items: center;
+	justify-content: space-evenly; //! Måske hellere margin-right på img?
+
+	width: 89px;
+	height: 27px;
+	border-radius: 47px;
+	/* Medium Outset Neumorphic */
+	box-shadow: 10px 10px 20px #a6abbd, -10px -10px 20px #fafbff;
+	background: linear-gradient(
+			344.57deg,
+			rgba(0, 0, 0, 0.4) 0%,
+			rgba(255, 255, 255, 0.4) 105.18%
+		),
+		#ebecf0;
+	background-blend-mode: soft-light, normal;
+
+	font-family: Montserrat;
+	font-weight: normal;
+	font-size: 0.75rem;
+	color: #6d7587;
+	
 }
 
 //! MAKE INTO COMMON CLASSES, NOT JUST ONE FOR EVERY ELEMENT
@@ -89,7 +127,6 @@ export default {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	text-align: center;
 
 	color: #ebecf0;
 }
