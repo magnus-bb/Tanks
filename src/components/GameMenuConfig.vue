@@ -35,7 +35,7 @@ export default {
 
 <style lang="scss" scoped>
 .config-menu {
-	background: white;
+	background: blue;
 	position: absolute;
 }
 </style>

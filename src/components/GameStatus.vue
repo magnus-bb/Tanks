@@ -15,5 +15,7 @@
 </script>
 
 <style lang="scss" scoped>
-
+.status {
+	background: black;
+}
 </style>

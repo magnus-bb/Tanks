@@ -1,5 +1,5 @@
 <template>
-  <div id="gameMenu" class="menu">
+  <div id="gameMenu" class="menu" v-show="">
 
     <game-menu-start />
     <game-menu-config />
@@ -63,7 +63,8 @@ export default {
 
 <style lang="scss" scoped>
 .menu {
-	background: blue;
 	position: absolute;
+	height: 300px;
+	width: 500px;
 }
 </style>
