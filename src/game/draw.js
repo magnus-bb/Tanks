@@ -10,8 +10,8 @@ function draw() {
 	//* Canvas:
 	//TODO: Canvas-class?
 	p5.push()
-	p5.background(config().cell.color)
-	p5.stroke(config().wall.color)
+	p5.background(config().bgColor)
+	p5.stroke(config().strokeColor)
 	p5.strokeWeight(config().wall.strokeWidth)
 	p5.noFill()
 	p5.rect(0, 0, p5.width, p5.height) // Outer walls

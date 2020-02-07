@@ -6,9 +6,10 @@ export const state = {
 	config: new Config, //TODO: Load instead
 	// gameState: null, //TODO: set on game start
 	gameStatus: {
-		// For menu manipulation, not state/round management:
-		started: false,
+		// For menu manipulation, not ingame management:
 		paused: true,
+		started: false,
+		created: false,
 		players: [] //? evt et map til at holde styr på tanks?
 	},
 	setup: {

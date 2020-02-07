@@ -6,6 +6,7 @@ const { p5, setup } = store.state
 const { config, gameState } = store.getters
 
 const grid = {
+
 	generate() {
 		for (let x = 0; x < p5.width; x += config().cell.width) { // Uses width / height of canvas (based off amt of cells and cellwidth) to generate rows and columns of cells
 			const column = []

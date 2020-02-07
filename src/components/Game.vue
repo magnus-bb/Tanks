@@ -1,8 +1,10 @@
 <template>
   <div class="game-container" :style="cssColorVars">
-    <game-menu />
+    <main>
+      <game-menu :style="menuSize" />
 
-    <game-canvas />
+      <game-canvas />
+    </main>
 
     <game-status />
   </div>
@@ -27,13 +29,15 @@ export default {
 
 	data() {
 		return {
-			darkMode: true
+			darkMode: true,
 		}
 	},
 
 	computed: {
 		cssBgColor() {
-			return this.darkMode ? this.$store.state.config.wall.color : this.$store.state.config.cell.color
+			return this.darkMode
+				? '#020817'
+				: '#394359'
 		},
 
 		cssTextColor() {
@@ -46,21 +50,40 @@ export default {
 				'--bg-color': this.cssBgColor,
 			}
 		},
+
+		menuSize() {
+			return {
+				'--width':
+					this.$store.state.config.cell.xAmt *
+						this.$store.state.config.cell.width +
+					'px',
+				'--height':
+					this.$store.state.config.cell.yAmt *
+						this.$store.state.config.cell.width +
+					'px',
+			}
+		},
 	},
 
 	methods: {},
-	mounted() {
-	},
+	mounted() {},
 }
 </script>
 
 
 
 <style lang="scss">
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,500|Raleway:300i&display=swap');
+
 * {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+}
+
+button {
+	border: none;
+	outline: none;
 }
 
 .game-container {

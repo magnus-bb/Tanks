@@ -86,6 +86,7 @@ Todos
 - Simplificér menuer / components
 - Ny løsning til `fire` controls-listener, som enten ikke er p5 (men stadig ikke kan fyre flere pr frame), eller bare som minimum ikke er i ekstern js
 - Organisér `mutations`
+- Separér `darkMode` fra spillets farver, men sæt default farver til at være det samme
 
 
 Idéer til spillet

@@ -19,14 +19,12 @@ export default {
 	props: [],
 	data() {
 		return {
-			//p5: this.$store.state.p5,
-			//config: this.$store.state.config,
-			// state: new GameState,
+
 		}
 	},
 	methods: {},
 	mounted() {
-		//this.$store.commit('setConfig', new Config)
+
 
 		this.$store.commit('setupSketch', {
 			preload: preload,

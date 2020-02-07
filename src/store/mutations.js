@@ -37,12 +37,16 @@ export const mutations = {
 		state.gameState.fx.bulletTrails.delete(bullet)
 	},
 
+	setPauseStatus(state, bool) {
+		state.gameStatus.paused = bool
+	},
+
 	setStartedStatus(state, bool) {
 		state.gameStatus.started = bool
 	},
 
-	setPauseStatus(state, bool) {
-		state.gameStatus.paused = bool
+	setCreatedStatus(state, bool) {
+		state.gameStatus.created = bool
 	},
 
 	setPickupAsset(state, payload) {

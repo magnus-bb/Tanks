@@ -339,7 +339,7 @@ export default class Tank {
 	_show() {
 		p5.push()
 
-		p5.stroke(config().tank.strokeColor)
+		p5.stroke(config().strokeColor)
 		p5.fill(this.color)
 
 		// Renders body:

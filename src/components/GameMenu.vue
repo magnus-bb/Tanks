@@ -1,62 +1,72 @@
 <template>
-  <div id="gameMenu" class="menu" >
-
-    <game-menu-start />
-    <game-menu-config />
-    <game-menu-round />
-
-    <!-- Game logic testing: -->
-    <button @click="testStart">2P Start</button>
-    <button @click="createPickup('m82')">M82</button>
-    <button @click="createPickup('wormhole')">Wormhole</button>
-    <button @click="createPickup('breaker')">Breaker</button>
-    <button @click="createPickup('ammo')">Ammo</button>
-    <button @click="createPickup('stealthAmmo')">Stealth Ammo</button>
-    
+  <div id="gameMenu" class="menu" v-show="this.showMenu">
+    <game-menu-create v-show="showCreateMenu" v-model="configMenuOpen" />
+    <game-menu-config v-show="showConfigMenu" v-model="configMenuOpen" />
+    <game-menu-round v-show="showRoundMenu" />
+    <!-- <game-menu-pause /> -->
   </div>
 </template>
 
 <script>
-import GameMenuStart from './GameMenuStart.vue'
+import GameMenuCreate from './GameMenuCreate.vue'
 import GameMenuConfig from './GameMenuConfig.vue'
 import GameMenuRound from './GameMenuRound.vue'
-
-//! TEST
-import game from '@/game/game.js'
-import Player from '@/game/Player.js'
-import Controls from '@/game/Controls.js'
-import Pickup from '@/game/Pickups.js' 
 
 export default {
 	name: 'GameMenu',
 	components: {
-		GameMenuStart,
+		GameMenuCreate,
 		GameMenuConfig,
 		GameMenuRound,
 	},
+	data() {
+		return {
+			configMenuOpen: false,
+		}
+	},
+
 	computed: {
+		// paused === some menu is showing:
+		showMenu() {
+			return this.$store.state.gameStatus.paused
+		},
+
+		// not created && config not open === create menu is showing:
+		showCreateMenu() {
+			return !this.$store.state.gameStatus.created && !this.configMenuOpen
+		},
+
+		// configMenu is clicked && game is not created yet === config menu is showing:
+		showConfigMenu() {
+			return !this.$store.state.gameStatus.created && this.configMenuOpen
+		},
+
+		// game is created && round has !started === between rounds menu is showing:
+		showRoundMenu() {
+			return (
+				this.$store.state.gameStatus.created &&
+				!this.$store.state.gameStatus.started
+			)
+		},
+
+		// game is started && also paused === pause menu is showing:
+		showPauseMenu() {
+			return (
+				this.$store.state.gameStatus.paused &&
+				this.$store.state.gameStatus.started
+			)
+		},
 	},
 
 	methods: {
-
-
-
-
-
-
-		//! For game logic testing:
-		testStart() {
-			game.addPlayer(
-				new Player(1, 'One', [255, 0, 0], new Controls(69, 68, 83, 70, 86))
-			)
-			
-			game.addPlayer(new Player(2, 'Other', [0, 255, 0], new Controls))
-			game.new()
-		},
-
-		createPickup(name) {
-			Pickup.create(name)
-		},
+		//! Move to wherever pause it to be:
+		// import game from '@/game/game.js'
+		// pauseGame() {
+		// 	game.pause()
+		// },
+		// unpauseGame() {
+		// 	game.unpause()
+		// }
 	},
 }
 </script>
@@ -64,7 +74,19 @@ export default {
 <style lang="scss" scoped>
 .menu {
 	position: absolute;
-	height: 300px;
-	width: 500px;
+	z-index: 10;
+	width: var(--width);
+	height: var(--height);
+
+	background: linear-gradient(
+			160.52deg,
+			rgba(255, 255, 255, 0),
+			rgba(0, 0, 0, 0.15)
+		),
+		#ebecf0;
+	border: 1px solid rgba(255, 255, 255, 0.4);
+	box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.25),
+		-10px 10px 15px rgba(0, 0, 0, 0.25);
+	border-radius: 5px;
 }
 </style>

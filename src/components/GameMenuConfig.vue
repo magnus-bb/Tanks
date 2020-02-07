@@ -1,5 +1,7 @@
 <template>
   <div class="config-menu">
+		<p>config</p>
+		<button @click="closeConfig">Close Config</button>
 
     <!-- Reactivity template: -->
 		<p>Reactivity Test:</p>
@@ -30,12 +32,17 @@ export default {
 			},
 		},
 	},
+
+	methods: {
+		closeConfig() {
+			this.$emit('input', false) // Menu wrapper handles opening config
+		},
+	}
 }
 </script>
 
 <style lang="scss" scoped>
 .config-menu {
 	background: blue;
-	// position: absolute;
 }
 </style>

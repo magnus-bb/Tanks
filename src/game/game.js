@@ -12,27 +12,26 @@ const game = {
 		if (gameStatus().started) return console.log("Game has already started")
 
 		store.commit('addPlayer', player)
-
-		// Uses index to ID the status-DIV:
-		//const index = store.state.game.players.length - 1
-
-		// Shows div in status bar:
-		// Status.initPlayer(player, index) 
 	},
 
 	new() {
 		// Cannot start twice or if there are no players:
 		if (gameStatus().started || gameStatus().players.length <= 0) return console.log("Cannot start game")
 
-		// $('#startMenu').fadeOut(100)
-		store.commit('setGameState', new GameState)
+		// Makes sure start-menu does not appear again (until game is recreated):
+		store.commit('setCreatedStatus', true)
+
+
 		this.start()
 	},
 
 	start() { // Uses arrow func to use 'this'
 		console.log('Game started')
 
-		// Wipes all cells and remakes them:
+		// Sets up the ingame state (and resets everything):
+		store.commit('setGameState', new GameState)
+
+		// Makes all cells:
 		grid.generate()
 		// Sets random walls:
 		grid.populateWalls()
@@ -52,10 +51,8 @@ const game = {
 			store.commit('addTank', new Tank(player.name, player.color, spawnCoords.x, spawnCoords.y, player.controls, player))
 		}
 
-		// game.started = true
 		store.commit('setStartedStatus', true)
 
-		//$('#nextRoundMenu').fadeOut(100)
 		// Hides menu:
 		this.unpause()
 	},
@@ -70,35 +67,24 @@ const game = {
 	end() { //TODO: Handle winner by checking who is left (if (state.tanks[0]) state.tanks[0].owner.wins++?)
 		console.log('Game ended')
 
-		// game.started = false
 		store.commit('setStartedStatus', false)
 
-		//$('#nextRoundMenu').fadeIn(100)
 		this.pause()
-
-		// Resets all ingame state:
-		//state = new GameState
 	},
 
 	pause() {
 		console.log('Game paused')
 
-		// game.paused = true
 		store.commit('setPauseStatus', true)
 		p5.noLoop()
-
-		//$('#gameMenu').slideDown()
 	},
 
 	unpause() {
 		console.log('Game unpaused')
 
 		// Restarts when menu is gone:
-		//$('#gameMenu').slideUp(() => {
-		// game.paused = false
 		store.commit('setPauseStatus', false)
 		p5.loop()
-		//	})
 	},
 
 	// Called once every frame:
