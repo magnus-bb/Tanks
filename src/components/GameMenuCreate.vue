@@ -9,7 +9,10 @@
         <input type="text" placeholder="Turn Left" disabled />
         <input type="text" placeholder="Turn Right" disabled />
       </div>
-      <div class="select-color-container"></div>
+			<button class="select-color-button">
+				<img src="@/assets/icons/color-tank.svg">
+			</button>
+      <!-- <div class="select-color-container"></div> -->
       <button class="add-player-button">
         <img src="@/assets/icons/add-player.svg" /> Add Player
       </button>
@@ -139,6 +142,14 @@ input {
 		/* Shallow Inset Neumorphic */
 		box-shadow: inset 2px 2px 4px #a6abbd, inset -2px -2px 4px #fafbff;
 		border-radius: 47px; //! Reactive
+	}
+}
+
+.select-color-button {
+	cursor: default;
+
+	path {
+		cursor: pointer;
 	}
 }
 
