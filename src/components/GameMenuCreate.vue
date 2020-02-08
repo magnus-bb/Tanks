@@ -1,14 +1,15 @@
 <template>
   <div class="create-menu">
-		<section class="add-player-container">
-			<input type="text">
-			<button></button>
-			
-		</section>
+    <section class="add-player-container">
+      <input type="text" />
+      <div class="controls-container"></div>
+      <div class="select-color-container"></div>
+      <button class="add-player-button"><img src="@/assets/icons/add-player.svg"> Add Player</button>
+    </section>
 
     <section>
       <button class="settings-button" @click="openConfig">
-        <img src="@/assets/icons/settings.svg" />Settings
+        <img src="@/assets/icons/settings.svg">Settings
       </button>
       <div class="title-container">
         <h1 class="title">Tanks</h1>
@@ -57,9 +58,44 @@ export default {
 	justify-content: space-evenly;
 }
 
-.addPlayerContainer {
-	margin: 20px;
-	background: blue;
+.add-player-container {
+	margin: 20px; //! Reactive
+
+	border: 1px solid rgba(255, 255, 255, 0.4);
+	border-radius: 40px; //! Reactive
+	background: linear-gradient(
+			311.44deg,
+			rgba(0, 0, 0, 0.4) 0%,
+			rgba(255, 255, 255, 0.4) 105.18%
+		),
+		#ebecf0;
+	background-blend-mode: soft-light, normal;
+	box-shadow: 5px 5px 10px #a6abbd, -5px -5px 10px #fafbff;
+}
+
+.add-player-button {
+	display: flex;
+	align-items: center;
+	justify-content: space-evenly; //! Anderledes?
+
+	width: 190px; //! Reactive
+	height: 50px; //! Reactive
+
+	background: linear-gradient(
+			346.61deg,
+			rgba(0, 0, 0, 0.4) 0%,
+			rgba(255, 255, 255, 0.4) 105.18%
+		),
+		#ebecf0;
+	background-blend-mode: soft-light, normal;
+
+	/* Medium Outset Neumorphic */
+	box-shadow: 10px 10px 20px #a6abbd, -10px -10px 20px #fafbff;
+	border-radius: 47px; //! Reactive
+
+	font-family: Montserrat;
+	font-size: 1.125rem;
+	color: #6D7587;
 }
 
 .settings-button {
@@ -67,9 +103,9 @@ export default {
 	align-items: center;
 	justify-content: space-evenly; //! Måske hellere margin-right på img?
 
-	width: 89px;
-	height: 27px;
-	border-radius: 47px;
+	width: 89px; //! Reactive
+	height: 27px; //! Reactive
+	border-radius: 47px; //! Reactive
 	/* Medium Outset Neumorphic */
 	box-shadow: 10px 10px 20px #a6abbd, -10px -10px 20px #fafbff;
 	background: linear-gradient(
@@ -81,10 +117,8 @@ export default {
 	background-blend-mode: soft-light, normal;
 
 	font-family: Montserrat;
-	font-weight: normal;
 	font-size: 0.75rem;
 	color: #6d7587;
-	
 }
 
 //! MAKE INTO COMMON CLASSES, NOT JUST ONE FOR EVERY ELEMENT
@@ -104,30 +138,31 @@ export default {
 
 .subtitle {
 	font-family: Raleway;
-	font-size: 18px;
+	font-size: 1.125rem;
 	font-weight: 300;
 	color: #6d7587;
 	font-style: italic;
 }
 
 .start-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	background: #1654f0;
+	color: #ebecf0;
 
 	/* Large Outset Neumorphic */
 	box-shadow: 10px 10px 20px #9497a6, -10px -10px 20px #fafbff;
-	border-radius: 47px; //! Edit
+	border-radius: 47px; //! Reactive
 
-	width: 213px; //! Edit
-	height: 61px; //! Edit
+	width: 213px; //! Reactive
+	height: 61px; //! Reactive
 	padding: 1rem;
 
 	font-family: Montserrat;
 	font-size: 1.5rem;
-	//line-height: 29px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+	font-weight: 500;
+	
 
-	color: #ebecf0;
 }
 </style>
