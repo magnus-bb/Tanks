@@ -87,6 +87,12 @@ Todos
 - Ny løsning til `fire` controls-listener, som enten ikke er p5 (men stadig ikke kan fyre flere pr frame), eller bare som minimum ikke er i ekstern js
 - Organisér `mutations`
 - Separér `darkMode` fra spillets farver, men sæt default farver til at være det samme
+- CSS
+	- Omskriv classes til BEM
+	- Brug mixins og variabler (standardisér skygger, farver, gradients etc)
+- <kbd> til at vise keybindings?
+	- Brug styling fra: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/kbd
+
 
 
 Idéer til spillet
@@ -113,3 +119,5 @@ Links
 - **Collisions**: https://happycoding.io/tutorials/processing/collision-detection
 - **P5 reference**: https://p5js.org/reference/
 - **Labyrinter**: https://en.wikipedia.org/wiki/Maze_generation_algorithm - Recursive Backtracker
+- **Hotkeys / Keybindings**: https://wangchujiang.com/hotkeys/
+	- *SPECIELT* isPressed i stedet for P5!

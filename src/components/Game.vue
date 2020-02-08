@@ -84,6 +84,7 @@ export default {
 button {
 	border: none;
 	outline: none;
+	cursor: pointer;
 }
 
 .game-container {

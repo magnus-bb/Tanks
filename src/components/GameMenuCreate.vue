@@ -1,15 +1,23 @@
 <template>
   <div class="create-menu">
     <section class="add-player-container">
-      <input type="text" />
-      <div class="controls-container"></div>
+      <input class="player-name-input" type="text" placeholder="Player Name" />
+      <div class="controls-container">
+        <input type="text" placeholder="Fire" disabled />
+        <input type="text" placeholder="Forward" disabled />
+        <input type="text" placeholder="Backward" disabled />
+        <input type="text" placeholder="Turn Left" disabled />
+        <input type="text" placeholder="Turn Right" disabled />
+      </div>
       <div class="select-color-container"></div>
-      <button class="add-player-button"><img src="@/assets/icons/add-player.svg"> Add Player</button>
+      <button class="add-player-button">
+        <img src="@/assets/icons/add-player.svg" /> Add Player
+      </button>
     </section>
 
     <section>
       <button class="settings-button" @click="openConfig">
-        <img src="@/assets/icons/settings.svg">Settings
+        <img src="@/assets/icons/settings.svg" />Settings
       </button>
       <div class="title-container">
         <h1 class="title">Tanks</h1>
@@ -51,6 +59,12 @@ export default {
 }
 </script>
 
+
+
+
+
+
+
 <style lang="scss" scoped>
 .create-menu {
 	height: 100%;
@@ -71,6 +85,61 @@ export default {
 		#ebecf0;
 	background-blend-mode: soft-light, normal;
 	box-shadow: 5px 5px 10px #a6abbd, -5px -5px 10px #fafbff;
+}
+
+input {
+	color: #222629;
+	font-family: Montserrat;
+
+	&::placeholder {
+		opacity: 0.6;
+		color: #6d7587;
+	}
+}
+
+.player-name-input {
+	font-size: 1.125rem;
+	text-align: center;
+	background: linear-gradient(
+			353.9deg,
+			rgba(0, 0, 0, 0.4) 0%,
+			rgba(255, 255, 255, 0.4) 105.18%
+		),
+		#ebecf0;
+	background-blend-mode: soft-light, normal;
+	border: 1px solid rgba(255, 255, 255, 0.4);
+
+	/* Shallow Inset Neumorphic */
+	box-shadow: inset 2px 2px 4px #a6abbd, inset -2px -2px 4px #fafbff;
+	border-radius: 47px; //! Reactive
+}
+
+.controls-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	input {
+		height: 22px; //! Reactive
+		width: 102px; //! Reactive
+		text-align: center;
+		cursor: pointer;
+
+		font-size: 0.875rem;
+
+		background: linear-gradient(
+				348.9deg,
+				rgba(0, 0, 0, 0.4) 0%,
+				rgba(255, 255, 255, 0.4) 105.18%
+			),
+			#ebecf0;
+		background-blend-mode: soft-light, normal;
+		border: 1px solid rgba(255, 255, 255, 0.4);
+
+		/* Shallow Inset Neumorphic */
+		box-shadow: inset 2px 2px 4px #a6abbd, inset -2px -2px 4px #fafbff;
+		border-radius: 47px; //! Reactive
+	}
 }
 
 .add-player-button {
@@ -95,7 +164,7 @@ export default {
 
 	font-family: Montserrat;
 	font-size: 1.125rem;
-	color: #6D7587;
+	color: #6d7587;
 }
 
 .settings-button {
@@ -106,6 +175,7 @@ export default {
 	width: 89px; //! Reactive
 	height: 27px; //! Reactive
 	border-radius: 47px; //! Reactive
+
 	/* Medium Outset Neumorphic */
 	box-shadow: 10px 10px 20px #a6abbd, -10px -10px 20px #fafbff;
 	background: linear-gradient(
@@ -148,7 +218,12 @@ export default {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: #1654f0;
+	background: linear-gradient(
+			344.57deg,
+			rgba(0, 0, 0, 0.4) 0%,
+			rgba(255, 255, 255, 0.4) 105.18%
+		),
+		#1654f0;
 	color: #ebecf0;
 
 	/* Large Outset Neumorphic */
@@ -162,7 +237,5 @@ export default {
 	font-family: Montserrat;
 	font-size: 1.5rem;
 	font-weight: 500;
-	
-
 }
 </style>
