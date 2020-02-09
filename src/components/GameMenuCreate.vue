@@ -9,9 +9,9 @@
         <input type="text" placeholder="Turn Left" disabled />
         <input type="text" placeholder="Turn Right" disabled />
       </div>
-			<button class="select-color-button">
-				<img src="@/assets/icons/color-tank.svg">
-			</button>
+			<!-- <button class="select-color-button"> -->
+				<inline-svg @click="test($event)" :src="require('@/assets/icons/color-tank.svg')"></inline-svg>
+			<!-- </button> -->
       <!-- <div class="select-color-container"></div> -->
       <button class="add-player-button">
         <img src="@/assets/icons/add-player.svg" /> Add Player
@@ -32,21 +32,33 @@
 </template>
 
 <script>
+import InlineSvg from 'vue-inline-svg'
 import game from '@/game/game.js'
 import Player from '@/game/Player.js'
 import Controls from '@/game/Controls.js'
 
 export default {
 	name: 'GameMenuCreate',
+	components: {
+		InlineSvg
+	},
 	mixins: [],
 	computed: {},
 	data() {
-		return {}
+		return {
+			selectedColor: '#BA0606'
+		}
 	},
 	methods: {
+		test(event) {
+			event.target.style.fill = '#FFFFFF'
+			console.log(event.target)
+		},
+
 		openConfig() {
 			this.$emit('input', true) // Menu wrapper handles opening config
 		},
+
 		//! For game logic testing:
 		testStart() {
 			game.addPlayer(
@@ -58,7 +70,9 @@ export default {
 		},
 	},
 
-	mounted() {},
+	mounted() {
+
+	},
 }
 </script>
 
@@ -145,13 +159,16 @@ input {
 	}
 }
 
-.select-color-button {
-	cursor: default;
-
-	path {
-		cursor: pointer;
-	}
+#select-color-input {
+	cursor: pointer;
 }
+// .select-color-button {
+// 	cursor: default;
+
+// 	svg {
+// 		cursor: pointer;
+// 	}
+// }
 
 .add-player-button {
 	display: flex;
