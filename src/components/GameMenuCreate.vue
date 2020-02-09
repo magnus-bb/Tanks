@@ -30,11 +30,14 @@
       </div>
       <button class="start-button" @click="testStart">Start Game</button>
     </section>
+
+		<color-picker/>
   </div>
 </template>
 
 <script>
 import InlineSvg from 'vue-inline-svg'
+import ColorPicker from './ColorPicker.vue'
 
 import game from '@/game/game.js'
 import Player from '@/game/Player.js'
@@ -44,6 +47,7 @@ export default {
 	name: 'GameMenuCreate',
 	components: {
 		InlineSvg,
+		ColorPicker
 	},
 	mixins: [],
 	computed: {},

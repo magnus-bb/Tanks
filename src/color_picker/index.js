@@ -1,4 +1,4 @@
-import P5 from 'p5'
+import p5 from 'p5'
 // Takes an element to place the listener on
 // Optionally if anything with the class is clicked (otherwise it will be the element)
 export default function ColorPicker(element, className = null) {
@@ -16,14 +16,15 @@ export default function ColorPicker(element, className = null) {
 	}
 }
 
-const picker = new P5((sketch) => {
+const picker = new p5((sketch) => {
 	let colors
 
 	sketch.preload = function() {
-		colors = sketch.loadImage('./colors.png')
+		colors = sketch.loadImage('@/color_picker/colors.png')
 	}
 
 	sketch.setup = function() {
-
+		sketch.createCanvas(256, 256)
+		sketch.image(colors, 0, 0)
 	}
 })
