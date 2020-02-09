@@ -9,9 +9,10 @@
         <input type="text" placeholder="Turn Left" disabled />
         <input type="text" placeholder="Turn Right" disabled />
       </div>
-			<!-- <button class="select-color-button"> -->
-				<inline-svg @click="test($event)" :src="require('@/assets/icons/color-tank.svg')"></inline-svg>
-			<!-- </button> -->
+      <button @click="selectColor($event)" class="select-color-button">
+        <!-- <img src="@/assets/color-tank.svg"> -->
+        <inline-svg :src="require('@/assets/color-tank.svg')"></inline-svg>
+      </button>
       <!-- <div class="select-color-container"></div> -->
       <button class="add-player-button">
         <img src="@/assets/icons/add-player.svg" /> Add Player
@@ -40,20 +41,27 @@ import Controls from '@/game/Controls.js'
 export default {
 	name: 'GameMenuCreate',
 	components: {
-		InlineSvg
+		InlineSvg,
 	},
 	mixins: [],
 	computed: {},
 	data() {
 		return {
-			selectedColor: '#BA0606'
+			selectedTankColor: '#BA0606',
 		}
 	},
 	methods: {
-		test(event) {
-			event.target.style.fill = '#FFFFFF'
-			console.log(event.target)
+		selectColor(event) {
+			// Open color selector
+			console.log(event.target.classList.contains('select-color-input'))
 		},
+		colorSelected() {
+			// Set this.selectedTankColor and #tankColor
+		},
+		// test(event) {
+		// 	event.target.style.fill = '#FFFFFF'
+		// 	console.log(event.target)
+		// },
 
 		openConfig() {
 			this.$emit('input', true) // Menu wrapper handles opening config
@@ -70,9 +78,7 @@ export default {
 		},
 	},
 
-	mounted() {
-
-	},
+	mounted() {},
 }
 </script>
 
@@ -159,16 +165,13 @@ input {
 	}
 }
 
-#select-color-input {
-	cursor: pointer;
+.select-color-button {
+	width: 152px; //! Reactivity
+	height: 177px; //! Reactivity
+	// Resets:
+	background: none;
+	cursor: default;
 }
-// .select-color-button {
-// 	cursor: default;
-
-// 	svg {
-// 		cursor: pointer;
-// 	}
-// }
 
 .add-player-button {
 	display: flex;
