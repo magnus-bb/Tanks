@@ -92,6 +92,7 @@ Todos
 	- Brug mixins og variabler (standardisér skygger, farver, gradients etc)
 - <kbd> til at vise keybindings?
 	- Brug styling fra: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/kbd
+- Flyt loading af assets ind i Vue, så en sti til game/assets kan resolves (frem for public/assets), da dette kun sker når webpack transpiler .vue, og ikke inde i den eksterne .js
 
 
 
