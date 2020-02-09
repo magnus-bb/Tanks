@@ -114,6 +114,7 @@ Idéer til spillet
 - Til tider skal vægge skifte / fjernes / tilføjes
 - Lav presets på `config` (realism, hyped etc)
 - Skyggeeffekter på spillet?
+- Custom cursor á la: https://www.youtube.com/watch?v=TpwpAYi-p2w 
 
 Links
 -----
