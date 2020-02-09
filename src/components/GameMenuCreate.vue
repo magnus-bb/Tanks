@@ -9,6 +9,7 @@
         <input type="text" placeholder="Turn Left" disabled />
         <input type="text" placeholder="Turn Right" disabled />
       </div>
+
       <button @click="selectColor($event)" class="select-color-button">
         <!-- <img src="@/assets/color-tank.svg"> -->
         <inline-svg :src="require('@/assets/color-tank.svg')"></inline-svg>
@@ -34,6 +35,7 @@
 
 <script>
 import InlineSvg from 'vue-inline-svg'
+
 import game from '@/game/game.js'
 import Player from '@/game/Player.js'
 import Controls from '@/game/Controls.js'
