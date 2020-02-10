@@ -85,6 +85,7 @@ button {
 	border: none;
 	outline: none;
 	cursor: pointer;
+	user-select: none;
 }
 
 .game-container {

@@ -31,13 +31,14 @@
       <button class="start-button" @click="testStart">Start Game</button>
     </section>
 
-		<color-picker/>
+		<color-input :selectedColor="selectedColor" @color="setColor($event)" @hide="colorInputShow='none'" :style="colorInputRendering"/>
+		 <!-- @color="setColor($event)" -->
   </div>
 </template>
 
 <script>
 import InlineSvg from 'vue-inline-svg'
-import ColorPicker from './ColorPicker.vue'
+import ColorInput from './ColorInput.vue'
 
 import game from '@/game/game.js'
 import Player from '@/game/Player.js'
@@ -47,27 +48,48 @@ export default {
 	name: 'GameMenuCreate',
 	components: {
 		InlineSvg,
-		ColorPicker
+		ColorInput
 	},
 	mixins: [],
 	computed: {},
 	data() {
 		return {
-			selectedTankColor: '#BA0606',
+			selectedColor: [73, 2, 2, 255],
+			colorInputShow: 'none',
+			colorInputCoords: {
+				x: 0,
+				y: 0
+			}
+		}
+	},
+	computed: {
+		colorInputRendering() {
+			return {
+				'--top': this.colorInputCoords.y + 'px',
+				'--left': this.colorInputCoords.x + 'px',
+				'--show': this.colorInputShow
+			}
 		}
 	},
 	methods: {
 		selectColor(event) {
-			// Open color selector
-			console.log(event.target.classList.contains('select-color-input'))
+			// Only clicks on relevant parts of svg:
+			if (!event.target.classList.contains('select-color-input')) return
+
+			this.colorInputCoords = {
+				x: event.layerX, // Uses layer, not page, since colorInput is absolutely positioned
+				y: event.layerY
+			}
+
+			this.colorInputShow = 'flex'
 		},
-		colorSelected() {
-			// Set this.selectedTankColor and #tankColor
+
+		setColor(event) {
+			this.selectedColor = event
+
+			const fill = `rgba(${event})`
+			document.querySelector('#tankColor').style.fill = fill
 		},
-		// test(event) {
-		// 	event.target.style.fill = '#FFFFFF'
-		// 	console.log(event.target)
-		// },
 
 		openConfig() {
 			this.$emit('input', true) // Menu wrapper handles opening config
@@ -98,10 +120,10 @@ export default {
 .create-menu {
 	height: 100%;
 	display: flex;
-	justify-content: space-evenly;
 }
 
 .add-player-container {
+	width: 50%;
 	margin: 20px; //! Reactive
 
 	border: 1px solid rgba(255, 255, 255, 0.4);
@@ -144,6 +166,7 @@ input {
 }
 
 .controls-container {
+	width: 50%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -176,13 +199,13 @@ input {
 	height: 177px; //! Reactivity
 	// Resets:
 	background: none;
-	cursor: default;
+	cursor: pointer;
 }
 
 .add-player-button {
 	display: flex;
 	align-items: center;
-	justify-content: space-evenly; //! Anderledes?
+	justify-content: space-evenly; //! margin left på tekst?
 
 	width: 190px; //! Reactive
 	height: 50px; //! Reactive
@@ -207,7 +230,7 @@ input {
 .settings-button {
 	display: flex;
 	align-items: center;
-	justify-content: space-evenly; //! Måske hellere margin-right på img?
+	justify-content: space-evenly; //! Måske hellere margin-left på tekst?
 
 	width: 89px; //! Reactive
 	height: 27px; //! Reactive
