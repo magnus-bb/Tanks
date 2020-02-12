@@ -94,7 +94,7 @@ Todos
 	- Brug styling fra: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/kbd
 - Flyt loading af assets ind i Vue, så en sti til game/assets kan resolves (frem for public/assets), da dette kun sker når webpack transpiler .vue, og ikke inde i den eksterne .js
 - Hele spillet skal skaleres op, så menu + alle assets er større, men holder et default-grid på 15 * 10 celler
-
+- Fix colorpicker location
 
 
 Idéer til spillet

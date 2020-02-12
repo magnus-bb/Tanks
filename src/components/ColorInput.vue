@@ -61,7 +61,7 @@ export default {
 	padding: 0.5rem;
 
 	border: 1px solid rgba(255, 255, 255, 0.4);
-	border-radius: 5px; //! Reactive
+	border-radius: 5px;
 	background: linear-gradient(
 			311.44deg,
 			rgba(0, 0, 0, 0.4) 0%,

@@ -12,7 +12,7 @@
 
       <button @click="selectColor($event)" class="select-color-button">
         <!-- <img src="@/assets/color-tank.svg"> -->
-        <inline-svg :src="require('@/assets/color-tank.svg')"></inline-svg>
+        <inline-svg class="tank" :src="require('@/assets/color-tank.svg')"></inline-svg>
       </button>
       <!-- <div class="select-color-container"></div> -->
       <button class="add-player-button">
@@ -31,8 +31,12 @@
       <button class="start-button" @click="testStart">Start Game</button>
     </section>
 
-		<color-input :selectedColor="selectedColor" @color="setColor($event)" @hide="colorInputShow='none'" :style="colorInputRendering"/>
-		 <!-- @color="setColor($event)" -->
+    <color-input
+      :selectedColor="selectedColor"
+      @color="setColor($event)"
+      @hide="colorInputShow='none'"
+      :style="colorInputRendering"
+    />
   </div>
 </template>
 
@@ -48,7 +52,7 @@ export default {
 	name: 'GameMenuCreate',
 	components: {
 		InlineSvg,
-		ColorInput
+		ColorInput,
 	},
 	mixins: [],
 	computed: {},
@@ -58,8 +62,8 @@ export default {
 			colorInputShow: 'none',
 			colorInputCoords: {
 				x: 0,
-				y: 0
-			}
+				y: 0,
+			},
 		}
 	},
 	computed: {
@@ -67,18 +71,19 @@ export default {
 			return {
 				'--top': this.colorInputCoords.y + 'px',
 				'--left': this.colorInputCoords.x + 'px',
-				'--show': this.colorInputShow
+				'--show': this.colorInputShow,
 			}
-		}
+		},
 	},
 	methods: {
 		selectColor(event) {
 			// Only clicks on relevant parts of svg:
 			if (!event.target.classList.contains('select-color-input')) return
 
-			this.colorInputCoords = {
+console.log(event)
+			this.colorInputCoords = { //! VIRKER IKKE
 				x: event.layerX, // Uses layer, not page, since colorInput is absolutely positioned
-				y: event.layerY
+				y: event.layerY,
 			}
 
 			this.colorInputShow = 'flex'
@@ -115,7 +120,7 @@ export default {
 
 
 
-
+// Buttons scale with the font-size:
 <style lang="scss" scoped>
 .create-menu {
 	height: 100%;
@@ -124,10 +129,10 @@ export default {
 
 .add-player-section {
 	width: 50%;
-	margin: 3% 0 3% 3%; 
+	margin: 3% 0 3% 3%;
 
 	border: 1px solid rgba(255, 255, 255, 0.4);
-	border-radius: 40px; //! Reactive
+	border-radius: 40px;
 	background: linear-gradient(
 			311.44deg,
 			rgba(0, 0, 0, 0.4) 0%,
@@ -136,6 +141,20 @@ export default {
 		#ebecf0;
 	background-blend-mode: soft-light, normal;
 	box-shadow: 5px 5px 10px #a6abbd, -5px -5px 10px #fafbff;
+
+	display: grid;
+	grid-template-rows: repeat(7, 1fr);
+	grid-template-columns: 1fr 1fr;
+	grid-template-areas:
+		'name-input name-input'
+		'controls select-color'
+		'controls	select-color'
+		'controls	select-color'
+		'controls	select-color'
+		'add-button	add-button'
+		'add-button	add-button';
+	align-items: center;
+	justify-items: center;
 }
 
 input {
@@ -149,8 +168,8 @@ input {
 }
 
 .player-name-input {
-	font-size: 1.125rem;
-	text-align: center;
+	grid-area: name-input;
+
 	background: linear-gradient(
 			353.9deg,
 			rgba(0, 0, 0, 0.4) 0%,
@@ -159,26 +178,24 @@ input {
 		#ebecf0;
 	background-blend-mode: soft-light, normal;
 	border: 1px solid rgba(255, 255, 255, 0.4);
-
 	/* Shallow Inset Neumorphic */
 	box-shadow: inset 2px 2px 4px #a6abbd, inset -2px -2px 4px #fafbff;
-	border-radius: 47px; //! Reactive
+	border-radius: 10em; // Completely rounded
+
+	text-align: center;
+	font-size: 1.5rem;
 }
 
 .controls-container {
-	width: 50%;
+	grid-area: controls;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	justify-content: space-evenly;
+	height: 80%;
 
 	input {
-		height: 22px; //! Reactive
-		width: 102px; //! Reactive
-		text-align: center;
-		cursor: pointer;
-
-		font-size: 0.875rem;
-
+		width: 85%;
 		background: linear-gradient(
 				348.9deg,
 				rgba(0, 0, 0, 0.4) 0%,
@@ -187,28 +204,37 @@ input {
 			#ebecf0;
 		background-blend-mode: soft-light, normal;
 		border: 1px solid rgba(255, 255, 255, 0.4);
-
 		/* Shallow Inset Neumorphic */
 		box-shadow: inset 2px 2px 4px #a6abbd, inset -2px -2px 4px #fafbff;
-		border-radius: 47px; //! Reactive
+		border-radius: 10em; // Completely rounded
+
+		text-align: center;
+		font-size: 1.2rem;
+
+		cursor: pointer;
 	}
 }
 
+
 .select-color-button {
-	width: 152px; //! Reactivity
-	height: 177px; //! Reactivity
+	grid-area: select-color;
+	width: 75%;
 	// Resets:
 	background: none;
 	cursor: pointer;
+
+	.tank {
+		height: 100%;
+		filter: drop-shadow(5px 5px 15px rgb(129, 131, 145))
+						drop-shadow(-5px -5px 15px #fafbff);
+	}
 }
 
+
 .add-player-button {
+	grid-area: add-button;
 	display: flex;
 	align-items: center;
-	justify-content: space-evenly; //! margin left på tekst?
-
-	width: 190px; //! Reactive
-	height: 50px; //! Reactive
 
 	background: linear-gradient(
 			346.61deg,
@@ -220,11 +246,17 @@ input {
 
 	/* Medium Outset Neumorphic */
 	box-shadow: 10px 10px 20px #a6abbd, -10px -10px 20px #fafbff;
-	border-radius: 47px; //! Reactive
+	border-radius: 10em; // Completely rounded
+	padding: 0.5em 1.5em;
 
 	font-family: Montserrat;
-	font-size: 1.125rem;
+	font-size: 1.4rem;
 	color: #6d7587;
+
+	img {
+		height: 1.5em;
+		margin-right: 0.5em;
+	}
 }
 
 .start-section {
@@ -240,10 +272,9 @@ input {
 	align-self: flex-end;
 	display: flex;
 	align-items: center;
-	// justify-content: space-between; //! Måske hellere margin-left på tekst?
 
 	padding: 0.5em 1em;
-	border-radius: 47px; //! Reactive
+	border-radius: 10em; // Completely rounded
 	/* Medium Outset Neumorphic */
 	box-shadow: 10px 10px 20px #a6abbd, -10px -10px 20px #fafbff;
 	background: linear-gradient(
@@ -255,7 +286,7 @@ input {
 	background-blend-mode: soft-light, normal;
 
 	font-family: Montserrat;
-	font-size: 1em;
+	font-size: 1rem;
 	color: #6d7587;
 
 	img {
@@ -274,14 +305,14 @@ input {
 
 .title {
 	font-family: Montserrat;
-	font-size: 4em;
+	font-size: 4rem;
 	color: #222629;
 	font-weight: normal;
 }
 
 .subtitle {
 	font-family: Raleway;
-	font-size: 1.75em;
+	font-size: 1.75rem;
 	font-weight: 300;
 	color: #6d7587;
 	font-style: italic;
@@ -302,11 +333,9 @@ input {
 
 	/* Large Outset Neumorphic */
 	box-shadow: 10px 10px 20px #9497a6, -10px -10px 20px #fafbff;
-	border-radius: 47px; //! Reactive
+	border-radius: 10em; // Completely rounded
 
-	// width: 213px; //! Reactive
-	// height: 61px; //! Reactive
-	padding: 1rem 2.5rem;
+	padding: 0.5em 1.5em;
 
 	font-family: Montserrat;
 	font-size: 2rem;
