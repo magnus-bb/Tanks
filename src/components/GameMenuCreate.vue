@@ -240,7 +240,7 @@ input {
 	align-self: flex-end;
 	display: flex;
 	align-items: center;
-	justify-content: space-between; //! Måske hellere margin-left på tekst?
+	// justify-content: space-between; //! Måske hellere margin-left på tekst?
 
 	padding: 0.5em 1em;
 	border-radius: 47px; //! Reactive
