@@ -1,6 +1,6 @@
 <template>
   <div class="create-menu">
-    <section class="add-player-container">
+    <section class="add-player-section">
       <input class="player-name-input" type="text" placeholder="Player Name" />
       <div class="controls-container">
         <input type="text" placeholder="Fire" disabled />
@@ -20,7 +20,7 @@
       </button>
     </section>
 
-    <section>
+    <section class="start-section">
       <button class="settings-button" @click="openConfig">
         <img src="@/assets/icons/settings.svg" />Settings
       </button>
@@ -122,9 +122,9 @@ export default {
 	display: flex;
 }
 
-.add-player-container {
+.add-player-section {
 	width: 50%;
-	margin: 20px; //! Reactive
+	margin: 3% 0 3% 3%; 
 
 	border: 1px solid rgba(255, 255, 255, 0.4);
 	border-radius: 40px; //! Reactive
@@ -227,15 +227,23 @@ input {
 	color: #6d7587;
 }
 
+.start-section {
+	width: 50%;
+	margin: 3% 3% 3% 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+}
+
 .settings-button {
+	align-self: flex-end;
 	display: flex;
 	align-items: center;
-	justify-content: space-evenly; //! Måske hellere margin-left på tekst?
+	justify-content: space-between; //! Måske hellere margin-left på tekst?
 
-	width: 89px; //! Reactive
-	height: 27px; //! Reactive
+	padding: 0.5em 1em;
 	border-radius: 47px; //! Reactive
-
 	/* Medium Outset Neumorphic */
 	box-shadow: 10px 10px 20px #a6abbd, -10px -10px 20px #fafbff;
 	background: linear-gradient(
@@ -247,8 +255,13 @@ input {
 	background-blend-mode: soft-light, normal;
 
 	font-family: Montserrat;
-	font-size: 0.75rem;
+	font-size: 1em;
 	color: #6d7587;
+
+	img {
+		width: 1.5em;
+		margin-right: 0.5em;
+	}
 }
 
 //! MAKE INTO COMMON CLASSES, NOT JUST ONE FOR EVERY ELEMENT
@@ -261,20 +274,21 @@ input {
 
 .title {
 	font-family: Montserrat;
-	font-size: 3rem;
+	font-size: 4em;
 	color: #222629;
 	font-weight: normal;
 }
 
 .subtitle {
 	font-family: Raleway;
-	font-size: 1.125rem;
+	font-size: 1.75em;
 	font-weight: 300;
 	color: #6d7587;
 	font-style: italic;
 }
 
 .start-button {
+	margin-bottom: 5%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -290,12 +304,12 @@ input {
 	box-shadow: 10px 10px 20px #9497a6, -10px -10px 20px #fafbff;
 	border-radius: 47px; //! Reactive
 
-	width: 213px; //! Reactive
-	height: 61px; //! Reactive
-	padding: 1rem;
+	// width: 213px; //! Reactive
+	// height: 61px; //! Reactive
+	padding: 1rem 2.5rem;
 
 	font-family: Montserrat;
-	font-size: 1.5rem;
+	font-size: 2rem;
 	font-weight: 500;
 }
 </style>

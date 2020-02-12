@@ -10,6 +10,7 @@
 
 <script>
 import P5 from 'p5'
+import col from '@/assets/colors.png'
 
 export default {
 	name: 'ColorInput',
@@ -21,7 +22,7 @@ export default {
 			let colors
 
 			sketch.preload = () => {
-				colors = sketch.loadImage('assets/colors.png')
+				colors = sketch.loadImage(col)
 			}
 
 			sketch.setup = () => {
