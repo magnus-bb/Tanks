@@ -1,6 +1,8 @@
+import store from '@/store'
+
 export default class Player {
-	constructor(id, name, colorArray, controls) {
-		this.id = id // Index num in Game.players
+	constructor(name, colorArray, controls) {
+		this.id = store.state.gameStatus.players.length //! Players might not need unique ID, now that we can keep track of them with vue
 		this.name = name
 		this.color = colorArray
 		this.controls = controls

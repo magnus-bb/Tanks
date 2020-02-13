@@ -88,11 +88,11 @@ Todos
 - Organisér `mutations`
 - Separér `darkMode` fra spillets farver, men sæt default farver til at være det samme
 - CSS
-	- Omskriv classes til BEM
+	- Omskriv classes til BEM (ish)
 	- Brug mixins og variabler (standardisér skygger, farver, gradients etc)
+		- Sæt det i ekstern SCSS og importér + globale variabler i GameMenu
 - <kbd> til at vise keybindings?
 	- Brug styling fra: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/kbd
-- Flyt loading af assets ind i Vue, så en sti til game/assets kan resolves (frem for public/assets), da dette kun sker når webpack transpiler .vue, og ikke inde i den eksterne .js
 - Hele spillet skal skaleres op, så menu + alle assets er større, men holder et default-grid på 15 * 10 celler
 - Fix colorpicker location
 
