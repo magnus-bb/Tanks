@@ -95,6 +95,7 @@ Todos
 	- Brug styling fra: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/kbd
 - Hele spillet skal skaleres op, så menu + alle assets er større, men holder et default-grid på 15 * 10 celler
 - Fix colorpicker location
+- Se på at loade CSS først i webpack, så menuen ikke bevæger sig fra højre bund ved hver load (tut fra freecodecamp dækkede det)
 
 
 Idéer til spillet
