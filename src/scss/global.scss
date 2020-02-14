@@ -1,0 +1,70 @@
+@mixin bg($col) {
+	background: linear-gradient(
+			350deg,
+			rgba(0, 0, 0, 0.4) 0%,
+			rgba(255, 255, 255, 0.4) 100%
+		),
+		$col;
+
+	@if $col != var(--cta-col) {
+		background-blend-mode: soft-light, normal;
+	}
+}
+
+@mixin bg-focus {
+	background: linear-gradient(
+			350deg,
+			rgba(0, 0, 0, 0.4) 0%,
+			rgba(255, 255, 255, 0.4) 100%
+		),
+		#dfe6ff;
+
+	background-blend-mode: soft-light, normal;
+}
+
+@mixin standard-input {
+	color: #222629;
+	font-family: Montserrat;
+	border: none;
+
+	&:focus {
+		@include bg-focus;
+		outline: none;
+	}
+
+	&::placeholder {
+		opacity: 0.6;
+		color: var(--dark-text);
+	}
+}
+
+@mixin shallow-inset {
+	box-shadow: inset 3px 3px 5px #a6abbd, inset -3px -3px 5px #fafbff,
+		5px 5px 10px #cfd5eb, -5px -5px 10px #ffffff;
+}
+
+@mixin medium-inset {
+	box-shadow: inset 7px 7px 15px #a6abbd, inset -7px -7px 15px #fafbff;
+}
+
+@mixin small-outset {
+	box-shadow: 5px 5px 10px #aeb4c7, -5px -5px 10px #fafbff;
+}
+
+@mixin medium-outset {
+	box-shadow: 10px 10px 20px #b7bccf, -10px -10px 20px #fff;
+}
+
+@mixin medium-outset-active {
+	box-shadow: 10px 10px 20px #b7bccf, -10px -10px 20px #fff,
+		inset 7px 7px 15px #a6abbd, inset -7px -7px 15px #fafbff;
+}
+
+@mixin medium-darker-outset {
+	box-shadow: 10px 10px 20px #9497a6, -10px -10px 20px #fafbff;
+}
+
+@mixin medium-darker-outset-active {
+	box-shadow: 10px 10px 20px #9497a6, -10px -10px 20px #fafbff,
+		inset 7px 7px 15px #a6abbd, inset -7px -7px 15px #fafbff;
+}

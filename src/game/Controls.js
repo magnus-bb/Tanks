@@ -14,7 +14,7 @@ p5.keyPressed = () => { // Cannot be done in class, since we have to listen for 
 }
 
 // Prevents scroll issues:
-window.addEventListener('keydown', e => { // Cannot use jQuery without blocking all defaults, for som reason
+window.addEventListener('keydown', e => {
 	// Space and arrow keys:
 	if ([32, 37, 38, 39, 40].includes(e.keyCode)) {
 		e.preventDefault();

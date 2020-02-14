@@ -2,26 +2,31 @@
   <div class="menu">
     <section class="add-player">
       <input
-        class="add-player__name-input input--base"
+        class="add-player__name-input"
         v-model="selectedName"
         type="text"
         placeholder="Player Name"
-        min="2"
-        max="10"
+        minlength="1"
+        maxlength="10"
+				spellcheck="false"
       />
       <div class="controls">
-        <input class="controls__input input--base" type="text" placeholder="Fire" disabled />
+				<keybinding-input :placeholder="'Fire'"></keybinding-input>
+				<keybinding-input :placeholder="'Forward'"></keybinding-input>
+				<keybinding-input :placeholder="'Backward'"></keybinding-input>
+				<keybinding-input :placeholder="'Turn Left'"></keybinding-input>
+				<keybinding-input :placeholder="'Turn Right'"></keybinding-input>
+        <!-- <input class="controls__input input--base" type="text" placeholder="Fire" disabled />
         <input class="controls__input input--base" type="text" placeholder="Forward" disabled />
         <input class="controls__input input--base" type="text" placeholder="Backward" disabled />
         <input class="controls__input input--base" type="text" placeholder="Turn Left" disabled />
-        <input class="controls__input input--base" type="text" placeholder="Turn Right" disabled />
+        <input class="controls__input input--base" type="text" placeholder="Turn Right" disabled /> -->
       </div>
 
       <button class="add-player__color-input" @click="selectColor($event)">
-        <!-- <img src="@/assets/color-tank.svg"> -->
         <inline-svg :src="require('@/assets/color-tank.svg')"></inline-svg>
       </button>
-      <!-- <div class="select-color-container"></div> -->
+
       <button class="add-player__add-button" @click="addPlayer">
         <img src="@/assets/icons/add-player.svg" /> Add Player
       </button>
@@ -41,15 +46,17 @@
     <color-input
       :selectedColor="selectedColor"
       @color="setColor($event)"
-      @hide="colorInputShow='none'"
+      @hide="hideColorInput"
       :style="colorInputRendering"
+      :pointerEvents="colorInputPointerEvents"
     />
   </div>
 </template>
 
 <script>
 import InlineSvg from 'vue-inline-svg'
-import ColorInput from './ColorInput.vue'
+import ColorInput from './GameMenuCreateColorInput.vue'
+import KeybindingInput from './GameMenuCreateKeybindingInput.vue'
 
 import game from '@/game/game.js'
 import Player from '@/game/Player.js'
@@ -60,6 +67,7 @@ export default {
 	components: {
 		InlineSvg,
 		ColorInput,
+		KeybindingInput
 	},
 	mixins: [],
 	computed: {},
@@ -68,6 +76,7 @@ export default {
 			selectedName: '',
 			selectedColor: [73, 2, 2, 255],
 			colorInputShow: 'none',
+			colorInputPointerEvents: false,
 			colorInputCoords: {
 				x: 0,
 				y: 0,
@@ -100,6 +109,7 @@ export default {
 			}
 
 			this.colorInputShow = 'flex'
+			this.colorInputPointerEvents = true
 		},
 
 		setColor(event) {
@@ -107,6 +117,11 @@ export default {
 
 			const fill = `rgba(${event})`
 			document.querySelector('#tankColor').style.fill = fill
+		},
+
+		hideColorInput() {
+			this.colorInputShow = 'none'
+			this.colorInputPointerEvents = false
 		},
 
 		openConfig() {
@@ -135,68 +150,16 @@ export default {
 
 // Buttons scale with the font-size:
 <style lang="scss" scoped>
+@import '@/scss/global';
+
 .menu {
 	//! Global?
 	height: 100%;
 	display: flex;
-
-	--cta-color: #1654f0;
-	--light-text: #ebecf0;
-	--dark-text: #6d7587;
-	--darkest-text: #222629;
-}
-
-@mixin standard-input {
-	color: #222629;
-	font-family: Montserrat;
-	border: none;
-
-	&::placeholder {
-		opacity: 0.6;
-		color: var(--dark-text);
-	}
-}
-
-@mixin standard-bg {
-	background: linear-gradient(
-			350deg,
-			rgba(0, 0, 0, 0.4) 0%,
-			rgba(255, 255, 255, 0.4) 100%
-		),
-		var(--light-text);
-	background-blend-mode: soft-light, normal;
-}
-
-@mixin shallow-inset {
-	box-shadow: inset 3px 3px 5px #a6abbd, inset -3px -3px 5px #fafbff, 5px 5px 10px #cfd5eb, -5px -5px 10px #ffffff;
-}
-
-@mixin medium-inset {
-	box-shadow: inset 7px 7px 15px #a6abbd, inset -7px -7px 15px #fafbff;
-}
-
-@mixin small-outset {
-	box-shadow: 5px 5px 10px #aeb4c7, -5px -5px 10px #fafbff;
-}
-
-@mixin medium-outset {
-	box-shadow: 10px 10px 20px #b7bccf, -10px -10px 20px #fff;
-}
-
-@mixin medium-outset-active {
-		box-shadow: 10px 10px 20px #b7bccf, -10px -10px 20px #fff, inset 7px 7px 15px #a6abbd, inset -7px -7px 15px #fafbff;
-}
-
-@mixin medium-darker-outset {
-	box-shadow: 10px 10px 20px #9497a6, -10px -10px 20px #fafbff;
-}
-
-@mixin medium-darker-outset-active {
-	box-shadow: 10px 10px 20px #9497a6, -10px -10px 20px #fafbff, inset 7px 7px 15px #a6abbd, inset -7px -7px 15px #fafbff;
 }
 
 .add-player {
-	@include standard-bg;
+	@include bg(var(--light-text));
 	@include small-outset;
 
 	margin: 3% 0 3% 3%;
@@ -219,7 +182,7 @@ export default {
 	justify-items: center;
 
 	.add-player__name-input {
-		@include standard-bg;
+		@include bg(var(--light-text));
 		@include shallow-inset;
 		@include standard-input;
 
@@ -239,21 +202,6 @@ export default {
 		flex-direction: column;
 		align-items: center;
 		justify-content: space-evenly;
-
-		.controls__input {
-			@include standard-bg;
-			@include shallow-inset;
-			@include standard-input;
-
-			width: 85%;
-
-			border-radius: 10em; // Completely rounded
-
-			text-align: center;
-			font-size: 1.2rem;
-
-			cursor: pointer;
-		}
 	}
 
 	.add-player__color-input {
@@ -270,7 +218,7 @@ export default {
 	}
 
 	.add-player__add-button {
-		@include standard-bg;
+		@include bg(var(--light-text));
 		@include medium-outset;
 
 		grid-area: add-button;
@@ -306,7 +254,7 @@ export default {
 	align-items: center;
 
 	.start__settings-button {
-		@include standard-bg;
+		@include bg(var(--light-text));
 		@include medium-outset;
 
 		align-self: flex-end;
@@ -354,6 +302,7 @@ export default {
 	}
 
 	.start__start-button {
+		// @include bg(var(--cta-color));
 		@include medium-darker-outset;
 		margin-bottom: 5%;
 
@@ -378,7 +327,8 @@ export default {
 		justify-content: center;
 
 		&:active {
-			box-shadow: 10px 10px 20px #9497a6, -10px -10px 20px #fafbff, inset 7px 7px 15px #0f39a1, inset -7px -7px 15px #4f81ff;
+			box-shadow: 10px 10px 20px #9497a6, -10px -10px 20px #fafbff,
+				inset 7px 7px 15px #0f39a1, inset -7px -7px 15px #4f81ff;
 		}
 	}
 }

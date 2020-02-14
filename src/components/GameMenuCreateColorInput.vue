@@ -15,7 +15,7 @@ import col from '@/assets/colors.png'
 export default {
 	name: 'ColorInput',
 
-	props: ['selectedColor'],
+	props: ['selectedColor', 'pointerEvents'],
 
 	created() {
 		const picker = new P5(sketch => {
@@ -34,7 +34,8 @@ export default {
 				if (
 					sketch.mouseIsPressed &&
 					sketch.mouseX.between(0, sketch.width) &&
-					sketch.mouseY.between(0, sketch.height)
+					sketch.mouseY.between(0, sketch.height) &&
+					this.pointerEvents // So colors cannot be selected when display: none
 				) {
 					const color = sketch.get(sketch.mouseX, sketch.mouseY)
 					this.$emit('color', color)

@@ -4,7 +4,6 @@
     <game-menu-config v-show="showConfigMenu" v-model="configMenuOpen" />
     <game-menu-round v-show="showRoundMenu" />
     <!-- <game-menu-pause /> -->
-		
   </div>
 </template>
 
@@ -13,14 +12,12 @@ import GameMenuCreate from './GameMenuCreate.vue'
 import GameMenuConfig from './GameMenuConfig.vue'
 import GameMenuRound from './GameMenuRound.vue'
 
-
 export default {
 	name: 'GameMenu',
 	components: {
 		GameMenuCreate,
 		GameMenuConfig,
 		GameMenuRound,
-		
 	},
 	data() {
 		return {
@@ -91,6 +88,11 @@ export default {
 	box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.25),
 		-10px 10px 15px rgba(0, 0, 0, 0.25);
 	border-radius: 5px;
-}
 
+	// Global variables:
+	--cta-color: #1654f0;
+	--light-text: #ebecf0;
+	--dark-text: #6d7587;
+	--darkest-text: #222629;
+}
 </style>

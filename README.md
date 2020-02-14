@@ -96,6 +96,7 @@ Todos
 - Hele spillet skal skaleres op, så menu + alle assets er større, men holder et default-grid på 15 * 10 celler
 - Fix colorpicker location
 - Se på at loade CSS først i webpack, så menuen ikke bevæger sig fra højre bund ved hver load (tut fra freecodecamp dækkede det)
+- Se om Fire kan flyttes ind i tanken, (evt med keyIsDown()) selvom hvert frame så tjekker om man skyder, og man bare kan holde den inde
 
 
 Idéer til spillet
