@@ -1,5 +1,5 @@
 <template>
-  <div class="menu">
+  <div class="create-menu">
     <section class="add-player">
       <input
         class="add-player__name-input"
@@ -10,7 +10,9 @@
         maxlength="10"
 				spellcheck="false"
       />
+
       <div class="controls">
+				<p class="controls__warning" v-if="controlsWarning" ><kbd>CTRL</kbd> + <kbd>W</kbd> cannot be used!</p>
 				<keybinding-input v-model="selectedControls.fire" :placeholder="'Fire'"></keybinding-input>
 				<keybinding-input v-model="selectedControls.forward" :placeholder="'Forward'"></keybinding-input>
 				<keybinding-input v-model="selectedControls.backward" :placeholder="'Backward'"></keybinding-input>
@@ -97,6 +99,12 @@ export default {
 				'--show': this.colorInputShow,
 			}
 		},
+
+		controlsWarning() {
+			const vals = Object.values(this.selectedControls)
+			return vals.includes(17) && vals.includes(87) // True if CTRL & W are chosen
+		}
+
 	},
 
 	methods: {
@@ -180,8 +188,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/scss/global';
 
-.menu {
-	//! Global?
+.create-menu {
 	height: 100%;
 	display: flex;
 }
@@ -222,7 +229,9 @@ export default {
 
 		text-align: center;
 	}
+
 	.controls {
+		position: relative; // Necessary for the warning-positioning
 		grid-area: controls;
 		height: 80%;
 
@@ -230,6 +239,15 @@ export default {
 		flex-direction: column;
 		align-items: center;
 		justify-content: space-evenly;
+
+		.controls__warning {
+			position: absolute;
+			top: -1rem;
+
+			font-size: 0.7rem;
+			font-weight: 500;
+			color: var(--warning-color)
+		}
 	}
 
 	.add-player__color-input {

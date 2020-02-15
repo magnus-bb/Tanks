@@ -99,10 +99,25 @@ button {
 	height: 100vh;
 	color: var(--text-color);
 	background-color: var(--bg-color);
+	font-family: Montserrat;
 
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+}
+
+kbd {
+	// margin: 0px 0.1em;
+	padding: 0.1em 0.6em;
+	border-radius: 3px;
+	border: 1px solid rgb(204, 204, 204);
+	line-height: 1.4;
+	font-family: Arial, Helvetica, sans-serif;
+	// font-size: 10px;
+	// display: inline-block;
+	box-shadow: 0px 1px 0px rgba(0,0,0,0.2), inset 0px 0px 0px 2px #ffffff;
+	background-color: rgb(247, 247, 247);
+	// text-shadow: 0 1px 0 #fff;
 }
 </style>

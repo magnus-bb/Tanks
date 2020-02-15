@@ -10,12 +10,19 @@
 
 <script>
 import P5 from 'p5'
-import col from '@/assets/colors.png'
+import col from '@/assets/all-colors.png'
 
 export default {
 	name: 'ColorInput',
 
 	props: ['selectedColor', 'pointerEvents'],
+
+	data() {
+		return {
+			// pickerType: 0
+
+		}
+	},
 
 	created() {
 		const picker = new P5(sketch => {

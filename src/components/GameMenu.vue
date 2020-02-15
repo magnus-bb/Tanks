@@ -72,6 +72,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .menu {
 	position: absolute;
 	z-index: 10;
@@ -79,9 +80,9 @@ export default {
 	height: var(--height);
 
 	background: linear-gradient(
-			160.52deg,
-			rgba(255, 255, 255, 0),
-			rgba(0, 0, 0, 0.15)
+			350deg,
+			rgba(0, 0, 0, 0.15) 0%,
+			rgba(255, 255, 255, 0.4) 100%
 		),
 		#ebecf0;
 	border: 1px solid rgba(255, 255, 255, 0.4);
@@ -91,6 +92,7 @@ export default {
 
 	// Global variables:
 	--cta-color: #1654f0;
+	--warning-color: #730F0F;
 	--light-text: #ebecf0;
 	--dark-text: #6d7587;
 	--darkest-text: #222629;
