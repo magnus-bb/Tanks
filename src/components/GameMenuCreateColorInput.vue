@@ -37,7 +37,7 @@ export default {
 					sketch.mouseY.between(0, sketch.height) &&
 					this.pointerEvents // So colors cannot be selected when display: none
 				) {
-					const color = sketch.get(sketch.mouseX, sketch.mouseY)
+					const color = sketch.get(sketch.mouseX, sketch.mouseY).slice(0, 3) // Last alpha value is not needed
 					this.$emit('color', color)
 				}
 			}
@@ -64,9 +64,9 @@ export default {
 	border: 1px solid rgba(255, 255, 255, 0.4);
 	border-radius: 5px;
 	background: linear-gradient(
-			311.44deg,
+			350deg,
 			rgba(0, 0, 0, 0.4) 0%,
-			rgba(255, 255, 255, 0.4) 105.18%
+			rgba(255, 255, 255, 0.4) 100%
 		),
 		#ebecf0;
 	background-blend-mode: soft-light, normal;
@@ -93,25 +93,25 @@ export default {
 
 	.red {
 		background: linear-gradient(
-			311.44deg,
+			350deg,
 			rgba(0, 0, 0, 0.4) 0%,
-			rgba(255, 255, 255, 0.4) 105.18%
+			rgba(255, 255, 255, 0.4) 100%
 		), rgb(115,15,15);
 	}
 
 	.green {
 		background: linear-gradient(
-			311.44deg,
+			350deg,
 			rgba(0, 0, 0, 0.4) 0%,
-			rgba(255, 255, 255, 0.4) 105.18%
+			rgba(255, 255, 255, 0.4) 100%
 		), rgb(15,115,15);
 	}
 
 	.blue {
 		background: linear-gradient(
-			311.44deg,
+			350deg,
 			rgba(0, 0, 0, 0.4) 0%,
-			rgba(255, 255, 255, 0.4) 105.18%
+			rgba(255, 255, 255, 0.4) 100%
 		), rgb(15,15,115);
 	}
 }

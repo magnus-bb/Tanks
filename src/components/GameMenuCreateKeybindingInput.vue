@@ -9,16 +9,26 @@ export default {
 
 	data() {
 		return {
-			value: '',
+			// value: '',
 			displayValue: ''
 		}
 	},
 
 	methods: {
 		handleKey(event) {
-			this.value = event.keyCode
-			//! FIX SPACE
-			this.displayValue = event.key.length > 1 ? event.key : event.key.toUpperCase()
+			this.$emit('input', event.keyCode)
+			// this.value = event.keyCode // What is read by the game
+
+			const key = event.key
+			if (key === ' ') { 
+				this.displayValue = 'Space' // Shows spacebar with text
+			} else if (key.match('Arrow')) {
+				this.displayValue = key.replace('Arrow', '') // Removes prefixed 'arrow' on arrow key names
+			} else if (key.length === 1) {
+				this.displayValue = key.toUpperCase() // Single letters become uppercase
+			} else {
+				this.displayValue = key // Special keys remain unchanged
+			}
 		}
 	}
 }

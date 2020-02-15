@@ -97,6 +97,8 @@ Todos
 - Fix colorpicker location
 - Se på at loade CSS først i webpack, så menuen ikke bevæger sig fra højre bund ved hver load (tut fra freecodecamp dækkede det)
 - Se om Fire kan flyttes ind i tanken, (evt med keyIsDown()) selvom hvert frame så tjekker om man skyder, og man bare kan holde den inde
+- Lav en pop-up, hvis en bruger (eller flere brugere) har CTRL + W som bindings
+	- Sørg for at det er muligt at slette en spiller nede i status, så længe spillet ikke er startet
 
 
 Idéer til spillet

@@ -11,20 +11,15 @@
 				spellcheck="false"
       />
       <div class="controls">
-				<keybinding-input :placeholder="'Fire'"></keybinding-input>
-				<keybinding-input :placeholder="'Forward'"></keybinding-input>
-				<keybinding-input :placeholder="'Backward'"></keybinding-input>
-				<keybinding-input :placeholder="'Turn Left'"></keybinding-input>
-				<keybinding-input :placeholder="'Turn Right'"></keybinding-input>
-        <!-- <input class="controls__input input--base" type="text" placeholder="Fire" disabled />
-        <input class="controls__input input--base" type="text" placeholder="Forward" disabled />
-        <input class="controls__input input--base" type="text" placeholder="Backward" disabled />
-        <input class="controls__input input--base" type="text" placeholder="Turn Left" disabled />
-        <input class="controls__input input--base" type="text" placeholder="Turn Right" disabled /> -->
+				<keybinding-input v-model="selectedControls.fire" :placeholder="'Fire'"></keybinding-input>
+				<keybinding-input v-model="selectedControls.forward" :placeholder="'Forward'"></keybinding-input>
+				<keybinding-input v-model="selectedControls.backward" :placeholder="'Backward'"></keybinding-input>
+				<keybinding-input v-model="selectedControls.left" :placeholder="'Turn Left'"></keybinding-input>
+				<keybinding-input v-model="selectedControls.right" :placeholder="'Turn Right'"></keybinding-input>
       </div>
 
       <button class="add-player__color-input" @click="selectColor($event)">
-        <inline-svg :src="require('@/assets/color-tank.svg')"></inline-svg>
+        <inline-svg :src="require('@/assets/color-tank.svg')" :transformSource="setInitialColor"></inline-svg> <!-- require-syntax is required to use inline-svg -->
       </button>
 
       <button class="add-player__add-button" @click="addPlayer">
@@ -70,11 +65,21 @@ export default {
 		KeybindingInput
 	},
 	mixins: [],
-	computed: {},
+	computed: {
+	},
+
 	data() {
 		return {
 			selectedName: '',
-			selectedColor: [73, 2, 2, 255],
+			selectedColor: this.randomizeColor(), // Jumble?
+			selectedControls: {
+				fire: '',
+				forward: '',
+				backward: '',
+				left: '',
+				right: ''
+			},
+
 			colorInputShow: 'none',
 			colorInputPointerEvents: false,
 			colorInputCoords: {
@@ -83,6 +88,7 @@ export default {
 			},
 		}
 	},
+
 	computed: {
 		colorInputRendering() {
 			return {
@@ -92,11 +98,25 @@ export default {
 			}
 		},
 	},
+
 	methods: {
+		
 		addPlayer() {
-			// game.addPlayer(
-			// 	new Player(1, 'One', [255, 0, 0], new Controls(69, 68, 83, 70, 86))
-			// )
+			const name = this.selectedName
+			const color = this.selectedColor
+			const fire = this.selectedControls.fire
+			const forward = this.selectedControls.forward
+			const backward = this.selectedControls.backward
+			const left = this.selectedControls.left
+			const right = this.selectedControls.right
+
+			// Everything must be filled out:
+			if (!(name && color && fire && forward && backward && left && right)) return console.log('Fill out everything')
+			//TODO: Add message to fill out everything
+
+			game.addPlayer(
+				new Player(name, color, new Controls(forward, backward, left, right, fire))
+			)
 		},
 
 		selectColor(event) {
@@ -112,11 +132,21 @@ export default {
 			this.colorInputPointerEvents = true
 		},
 
+		randomizeColor() {
+			return [Math.random() * 256, Math.random() * 256, Math.random() * 256]
+		},
+
+		// Used by inline-svg:
+		setInitialColor(svg) {
+			svg.children[0].firstElementChild.setAttribute('fill', `rgb(${this.selectedColor})`)
+			return svg
+		},
+
 		setColor(event) {
 			this.selectedColor = event
 
-			const fill = `rgba(${event})`
-			document.querySelector('#tankColor').style.fill = fill
+			const fill = `rgb(${event})`
+			document.getElementById('tankColor').style.fill = fill
 		},
 
 		hideColorInput() {
@@ -138,8 +168,6 @@ export default {
 			game.new()
 		},
 	},
-
-	mounted() {},
 }
 </script>
 
