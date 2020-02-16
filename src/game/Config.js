@@ -4,7 +4,7 @@ export default class Config {
 		this.bgColor = '#c4c4c4'
 		this.strokeColor = '#020817'
 		this.game = {
-			endFrames: 60 * 3 // Seconds
+			endFrames: 60 * 4 // Seconds
 		}
 		this.pickup = {
 			size: 25, // ~25px should be default for designs
@@ -74,8 +74,9 @@ export default class Config {
 		}
 
 		const particleColor = [255, 255, 255, 80]
+		const connectionColor = [255, 255, 255, particleColor[3] * 0.5]
 		const particleAmt = this.cell.xAmt * this.cell.yAmt / 4
-		const connectionDistance = this.cell.width * 2.5
+		const connectionDistance = this.cell.width * 3
 		this.fx = {
 			muzzle: {
 				size: 2.5, // Times the size of regular bullet
@@ -93,13 +94,7 @@ export default class Config {
 				amt: particleAmt,
 				connection: {
 					distance: connectionDistance,
-					get color() {
-						const color = particleColor
-						let alpha = particleColor[3]
-						alpha *= 0.75
-
-						return color
-					},
+					color: connectionColor,
 					width: 2,
 				}
 			}

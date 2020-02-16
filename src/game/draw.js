@@ -19,6 +19,9 @@ function draw() {
 	// Does not loop over game logic in very first frame, as it normally would:
 	if (p5.frameCount === 1) return
 
+	//* Effects:
+	fx.onFrame()
+
 	//* Pickups:
 	Pickup.spawn()
 
@@ -101,8 +104,7 @@ function draw() {
 		}
 	}
 
-	//* Effects:
-	fx.onFrame()
+	
 
 	//* Round Conditions:
 	game.onFrame()

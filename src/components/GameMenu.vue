@@ -1,8 +1,8 @@
 <template>
   <div id="gameMenu" class="menu" v-show="showMenu">
-    <game-menu-create v-show="showCreateMenu" v-model="configMenuOpen" />
-    <game-menu-config v-show="showConfigMenu" v-model="configMenuOpen" />
-    <game-menu-round v-show="showRoundMenu" />
+    <game-menu-create v-if="showCreateMenu" v-model="configMenuOpen" />
+    <game-menu-config v-if="showConfigMenu" v-model="configMenuOpen" />
+    <game-menu-round v-if="showRoundMenu" />
     <!-- <game-menu-pause /> -->
   </div>
 </template>
@@ -79,20 +79,16 @@ export default {
 	width: var(--width);
 	height: var(--height);
 
-	background: linear-gradient(
-			350deg,
-			rgba(0, 0, 0, 0.15) 0%,
-			rgba(255, 255, 255, 0.4) 100%
-		),
-		#ebecf0;
-	border: 1px solid rgba(255, 255, 255, 0.4);
-	box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.25),
-		-10px 10px 15px rgba(0, 0, 0, 0.25);
-	border-radius: 5px;
+	
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
 
 	// Global variables:
 	--cta-color: #1654f0;
 	--warning-color: #730F0F;
+	--focus-color: #dfe6ff;
 	--light-text: #ebecf0;
 	--dark-text: #6d7587;
 	--darkest-text: #222629;

@@ -12,12 +12,12 @@
       />
 
       <div class="controls">
-				<p class="controls__warning" v-if="controlsWarning" ><kbd>CTRL</kbd> + <kbd>W</kbd> cannot be used!</p>
-				<keybinding-input v-model="selectedControls.fire" :placeholder="'Fire'"></keybinding-input>
-				<keybinding-input v-model="selectedControls.forward" :placeholder="'Forward'"></keybinding-input>
-				<keybinding-input v-model="selectedControls.backward" :placeholder="'Backward'"></keybinding-input>
-				<keybinding-input v-model="selectedControls.left" :placeholder="'Turn Left'"></keybinding-input>
-				<keybinding-input v-model="selectedControls.right" :placeholder="'Turn Right'"></keybinding-input>
+				<p class="controls__p--warning" v-if="controlsWarning" ><kbd>CTRL</kbd> + <kbd>W</kbd> cannot be used!</p>
+				<keybinding-input ref="fireInput" v-model="selectedControls.fire" :placeholder="'Fire'"></keybinding-input>
+				<keybinding-input ref="forwardInput" v-model="selectedControls.forward" :placeholder="'Forward'"></keybinding-input>
+				<keybinding-input ref="backwardInput" v-model="selectedControls.backward" :placeholder="'Backward'"></keybinding-input>
+				<keybinding-input ref="leftInput" v-model="selectedControls.left" :placeholder="'Turn Left'"></keybinding-input>
+				<keybinding-input ref="rightInput" v-model="selectedControls.right" :placeholder="'Turn Right'"></keybinding-input>
       </div>
 
       <button class="add-player__color-input" @click="selectColor($event)">
@@ -37,7 +37,7 @@
         <h1 class="titles__title">Tanks</h1>
         <h2 class="titles__subtitle">Try Not To Kill Yourself</h2>
       </div>
-      <button class="start__start-button" @click="testStart">Start Game</button>
+      <button class="start__start-button" @click="startGame">Start Game</button>
     </section>
 
     <color-input
@@ -125,6 +125,12 @@ export default {
 			game.addPlayer(
 				new Player(name, color, new Controls(forward, backward, left, right, fire))
 			)
+
+			this.resetInputs()
+		},
+
+		startGame() {
+			game.new()
 		},
 
 		selectColor(event) {
@@ -141,7 +147,7 @@ export default {
 		},
 
 		randomizeColor() {
-			return [Math.random() * 256, Math.random() * 256, Math.random() * 256]
+			return [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)]
 		},
 
 		// Used by inline-svg:
@@ -162,18 +168,22 @@ export default {
 			this.colorInputPointerEvents = false
 		},
 
-		openConfig() {
-			this.$emit('input', true) // Menu wrapper handles opening config
+		resetInputs() {
+			this.selectedName = ''
+			this.selectedColor = this.randomizeColor()
+			this.selectedControls.fire = ''
+			this.selectedControls.forward = ''
+			this.selectedControls.backward = ''
+			this.selectedControls.left = ''
+			this.selectedControls.right = ''
+
+			for (const ref of Object.values(this.$refs)) {
+				ref.displayValue = ''
+			}
 		},
 
-		//! For game logic testing:
-		testStart() {
-			game.addPlayer(
-				new Player('One', [255, 0, 0], new Controls(69, 68, 83, 70, 86))
-			)
-
-			game.addPlayer(new Player('Other', [0, 255, 0], new Controls()))
-			game.new()
+		openConfig() {
+			this.$emit('input', true) // Menu wrapper handles opening config
 		},
 	},
 }
@@ -189,7 +199,11 @@ export default {
 @import '@/scss/global';
 
 .create-menu {
-	height: 100%;
+	width: var(--width);
+	height: var(--height);
+
+	@include window;
+
 	display: flex;
 }
 
@@ -240,7 +254,7 @@ export default {
 		align-items: center;
 		justify-content: space-evenly;
 
-		.controls__warning {
+		.controls__p--warning {
 			position: absolute;
 			top: -1rem;
 
@@ -257,7 +271,6 @@ export default {
 		background: none;
 		cursor: pointer;
 
-		//! Shadows
 		filter: drop-shadow(5px 5px 10px #8b91a0)
 			//! Filter fucker med x, y mousecoords
 			drop-shadow(-5px -5px 10px #ffffff);
@@ -332,32 +345,19 @@ export default {
 		align-items: center;
 
 		.titles__title {
-			font-family: Montserrat;
-			font-size: 4rem;
-			color: var(--darkest-text);
-			font-weight: normal;
+			@include h1;
 		}
 
 		.titles__subtitle {
-			font-family: Raleway;
-			font-size: 1.75rem;
-			font-weight: 300;
-			color: var(--dark-text);
-			font-style: italic;
+			@include h2;
 		}
 	}
 
 	.start__start-button {
-		// @include bg(var(--cta-color));
-		@include medium-darker-outset;
 		margin-bottom: 5%;
+		@include bg(var(--cta-color));
+		@include medium-darker-outset;
 
-		background: linear-gradient(
-				350deg,
-				rgba(0, 0, 0, 0.4) 0%,
-				rgba(255, 255, 255, 0.4) 100%
-			),
-			var(--cta-color);
 		color: var(--light-text);
 
 		border-radius: 10em; // Completely rounded

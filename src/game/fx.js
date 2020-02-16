@@ -75,13 +75,6 @@ const fx = {
 	},
 
 	_particles() {
-		if (gameState().fx.particles.array.length === 0) {
-			for (let i = 0; i < config().fx.particle.amt; i++) {
-				store.commit('addParticle', new this.Particle)
-				// gameState().fx.particles.array.push(new this.Particle/*()*/)
-			}
-		}
-
 		for (const particle of gameState().fx.particles.array) {
 			particle.onFrame()
 		}
@@ -89,20 +82,20 @@ const fx = {
 
 	Particle: function() {
 		return {
-			pos: p5.createVector(p5.random(width), p5.random(height)),
+			pos: p5.createVector(p5.random(p5.width), p5.random(p5.height)),
 			d: config().fx.particle.diameter,
 			vel: p5.createVector(p5.random(-config().fx.particle.velocity, config().fx.particle.velocity), p5.random(-config().fx.particle.velocity, config().fx.particle.velocity)),
 			color: p5.color(config().fx.particle.color),
 
 			_edges() {
 				if (this.pos.x < 0) {
-					this.pos.x += width
-				} else if (this.pos.x > width) {
-					this.pos.x -= width
+					this.pos.x += p5.width
+				} else if (this.pos.x > p5.width) {
+					this.pos.x -= p5.width
 				} else if (this.pos.y < 0) {
-					this.pos.y += height
-				} else if (this.pos.y > height) {
-					this.pos.y -= height
+					this.pos.y += p5.height
+				} else if (this.pos.y > p5.height) {
+					this.pos.y -= p5.height
 				}
 			},
 
@@ -127,7 +120,7 @@ const fx = {
 			_show() {
 				p5.push()
 				
-				p5.blendMode(ADD)
+				p5.blendMode(p5.ADD)
 				
 				p5.noStroke()
 				p5.fill(this.color)
@@ -147,7 +140,14 @@ const fx = {
 	
 	onFrame() {
 		this._showBulletTrails()
-		if (gameState().fx.particles.on) this._particles()
+
+		if (gameState().fx.particles.array.length === 0) {
+			for (let i = 0; i < config().fx.particle.amt; i++) {
+				store.commit('addParticle', new this.Particle)
+			}
+		}
+		
+		if (gameState().ending) this._particles()
 	}
 }
 

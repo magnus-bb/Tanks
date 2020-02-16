@@ -1,25 +1,31 @@
-@mixin bg($col) {
-	background: linear-gradient(
-			350deg,
-			rgba(0, 0, 0, 0.4) 0%,
-			rgba(255, 255, 255, 0.4) 100%
-		),
-		$col;
-
-	@if $col != var(--cta-col) {
-		background-blend-mode: soft-light, normal;
-	}
+@mixin window {
+	background: linear-gradient(350deg, rgba(0, 0, 0, 0.15) 0%, rgba(255, 255, 255, 0.4) 100%), #ebecf0;
+	border: 1px solid rgba(255, 255, 255, 0.4);
+	box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.25), -10px 10px 15px rgba(0, 0, 0, 0.25);
+	border-radius: 5px;
 }
 
-@mixin bg-focus {
-	background: linear-gradient(
-			350deg,
-			rgba(0, 0, 0, 0.4) 0%,
-			rgba(255, 255, 255, 0.4) 100%
-		),
-		#dfe6ff;
+@mixin h1 {
+	font-family: Montserrat;
+	font-size: 4rem;
+	color: var(--darkest-text);
+	font-weight: normal;
+}
 
-	background-blend-mode: soft-light, normal;
+@mixin h2 {
+	font-family: Raleway;
+	font-size: 1.75rem;
+	font-weight: 300;
+	color: var(--dark-text);
+	font-style: italic;
+}
+
+@mixin bg($col) {
+	background: linear-gradient(350deg, rgba(0, 0, 0, 0.4) 0%, rgba(255, 255, 255, 0.4) 100%), $col;
+
+	@if $col != var(--cta-color) {
+		background-blend-mode: soft-light, normal;
+	}
 }
 
 @mixin standard-input {
@@ -28,7 +34,7 @@
 	border: none;
 
 	&:focus {
-		@include bg-focus;
+		@include bg(var(--focus-color));
 		outline: none;
 	}
 
@@ -39,8 +45,7 @@
 }
 
 @mixin shallow-inset {
-	box-shadow: inset 3px 3px 5px #a6abbd, inset -3px -3px 5px #fafbff,
-		5px 5px 10px #cfd5eb, -5px -5px 10px #ffffff;
+	box-shadow: inset 3px 3px 5px #a6abbd, inset -3px -3px 5px #fafbff, 5px 5px 10px #cfd5eb, -5px -5px 10px #ffffff;
 }
 
 @mixin medium-inset {
@@ -56,8 +61,7 @@
 }
 
 @mixin medium-outset-active {
-	box-shadow: 10px 10px 20px #b7bccf, -10px -10px 20px #fff,
-		inset 7px 7px 15px #a6abbd, inset -7px -7px 15px #fafbff;
+	box-shadow: 10px 10px 20px #b7bccf, -10px -10px 20px #fff, inset 7px 7px 15px #a6abbd, inset -7px -7px 15px #fafbff;
 }
 
 @mixin medium-darker-outset {
@@ -65,6 +69,5 @@
 }
 
 @mixin medium-darker-outset-active {
-	box-shadow: 10px 10px 20px #9497a6, -10px -10px 20px #fafbff,
-		inset 7px 7px 15px #a6abbd, inset -7px -7px 15px #fafbff;
+	box-shadow: 10px 10px 20px #9497a6, -10px -10px 20px #fafbff, inset 7px 7px 15px #a6abbd, inset -7px -7px 15px #fafbff;
 }

@@ -69,7 +69,7 @@ export default {
 		// Disables some hotkeys, so ctrl can be used in-game:
 		document.addEventListener('keydown', event => {
 			if (event.ctrlKey && 'cvxsrpuaz'.indexOf(event.key) !== -1) {
-				console.log('prevented')
+				console.log("Hotkey prevented")
 				event.preventDefault()
 			}
 		})

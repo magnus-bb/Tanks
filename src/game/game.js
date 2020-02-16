@@ -16,7 +16,7 @@ const game = {
 
 	new() {
 		// Cannot start twice or if there are no players:
-		if (gameStatus().started || gameStatus().players.length <= 0) return console.log("Cannot start game")
+		if (gameStatus().started || gameStatus().players.length <= 1) return console.log("Cannot start game")
 
 		// Makes sure start-menu does not appear again (until game is recreated):
 		store.commit('setCreatedStatus', true)
@@ -67,9 +67,9 @@ const game = {
 	end() { //TODO: Handle winner by checking who is left (if (state.tanks[0]) state.tanks[0].owner.wins++?)
 		console.log('Game ended')
 
+		this.pause()
 		store.commit('setStartedStatus', false)
 
-		this.pause()
 	},
 
 	pause() {
