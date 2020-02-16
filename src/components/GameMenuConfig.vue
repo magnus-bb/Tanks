@@ -6,7 +6,17 @@
     </header>
 
 		<section class="configs">
-
+			<div class="configs__game"></div>
+			<div class="configs__pickups"></div>
+			<div class="configs__bullet"></div>
+			<div class="configs__m82"></div>
+			<div class="configs__breaker"></div>
+			<div class="configs__wormhole"></div>
+			<div class="configs__laser-sight"></div>
+			<div class="configs__stealth-ammo"></div>
+			<div class="configs__tank"></div>
+			<div class="configs__grid"></div>
+			<div class="configs__fx"></div>
 		</section>
     <!-- Reactivity template: -->
     <p>Reactivity Test:</p>
@@ -78,7 +88,7 @@ export default {
 	justify-content: center;
 	align-items: center;
 
-	padding: 0.5em;
+	padding: 0.7em;
 
 	&:active {
 		@include medium-outset-active;
@@ -86,10 +96,6 @@ export default {
 }
 
 .header__title {
-	// position: absolute;
-	// left: 50%;
-	// transform: translateX(-50%);
-
 	@include small-outset;
 	@include bg(var(--light-text));
 	@include h1;
@@ -97,8 +103,21 @@ export default {
 
 	border-radius: 5px;
 }
-
+//! test
 .configs {
+	margin-top: 3%;
+	@include shallow-inset;
+	height: 100%;
+
+	display: grid;
+	flex-wrap: wrap;
+
 	
+	& > div {
+		height: 50px;
+		width: 100px;
+		background: blue;
+	}
+
 }
 </style>

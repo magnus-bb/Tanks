@@ -99,6 +99,7 @@ Todos
 - Se om Fire kan flyttes ind i tanken, (evt med keyIsDown()) selvom hvert frame så tjekker om man skyder, og man bare kan holde den inde
 - Lav en pop-up, hvis flere brugere (til sammen) i state har CTRL + W som bindings
 	- Sørg for at det er muligt at slette en spiller nede i status, så længe spillet ikke er startet
+- Se på at bruge @use (partials) igen, hvis filen starter med `_`
 
 
 Idéer til spillet
