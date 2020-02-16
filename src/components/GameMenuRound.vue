@@ -2,8 +2,8 @@
   <div id="nextRoundMenu" class="round-menu">
     <h2 class="round-menu__message">{{ message }}</h2>
     <div class="choices">
-      <button class="choices__button" @click="nextRound">Next Round</button>
-      <button class="choices__button">Main Menu</button>
+      <button class="choices__button" @click="nextRound" >Next Round</button>
+      <button class="choices__button" @click="mainMenu" >Main Menu</button>
     </div>
   </div>
 </template>
@@ -17,7 +17,7 @@ export default {
 		message() {
 			return this.$store.state.gameState.tanks.length > 0
 				? `${this.$store.state.gameState.tanks[0].name} won this game!`
-				: 'The game was a draw.\nTry not to kill yourself!'
+				: 'The game was a draw. Try not to kill yourself!'
 		},
 	},
 
@@ -25,6 +25,10 @@ export default {
 		nextRound() {
 			game.start()
 		},
+
+		mainMenu() {
+			game.reset()
+		}
 	},
 }
 </script>
@@ -46,6 +50,7 @@ export default {
 
 .round-menu__message {
 	@include h2;
+	text-align: center;
 }
 
 .choices {

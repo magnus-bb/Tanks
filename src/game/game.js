@@ -8,6 +8,11 @@ const { p5 } = store.state
 const { gameState, gameStatus } = store.getters
 
 const game = {
+	
+	reset() { // Menus automatically update to match (create menu)
+		store.commit('resetGameStatus')
+	},
+
 	addPlayer(player) {
 		if (gameStatus().started) return console.log("Game has already started")
 

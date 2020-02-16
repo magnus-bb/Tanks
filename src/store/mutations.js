@@ -57,6 +57,15 @@ export const mutations = {
 		state.gameState = gameState
 	},
 
+	resetGameStatus(state) {
+		state.gameStatus = {
+			paused: true,
+			started: false,
+			created: false,
+			players: []
+		}
+	},
+
 	addGridColumn(state, col) {
 		state.gameState.grid.push(col)
 	},

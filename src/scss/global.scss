@@ -7,7 +7,7 @@
 
 @mixin h1 {
 	font-family: Montserrat;
-	font-size: 4rem;
+	font-size: 2rem;
 	color: var(--darkest-text);
 	font-weight: normal;
 }
@@ -53,7 +53,7 @@
 }
 
 @mixin small-outset {
-	box-shadow: 5px 5px 10px #aeb4c7, -5px -5px 10px #fafbff;
+	box-shadow: 5px 5px 10px #b9becc, -5px -5px 10px #fafbff;
 }
 
 @mixin medium-outset {

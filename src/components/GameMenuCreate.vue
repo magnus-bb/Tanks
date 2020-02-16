@@ -8,20 +8,40 @@
         placeholder="Player Name"
         minlength="1"
         maxlength="10"
-				spellcheck="false"
+        spellcheck="false"
       />
 
       <div class="controls">
-				<p class="controls__p--warning" v-if="controlsWarning" ><kbd>CTRL</kbd> + <kbd>W</kbd> cannot be used!</p>
-				<keybinding-input ref="fireInput" v-model="selectedControls.fire" :placeholder="'Fire'"></keybinding-input>
-				<keybinding-input ref="forwardInput" v-model="selectedControls.forward" :placeholder="'Forward'"></keybinding-input>
-				<keybinding-input ref="backwardInput" v-model="selectedControls.backward" :placeholder="'Backward'"></keybinding-input>
-				<keybinding-input ref="leftInput" v-model="selectedControls.left" :placeholder="'Turn Left'"></keybinding-input>
-				<keybinding-input ref="rightInput" v-model="selectedControls.right" :placeholder="'Turn Right'"></keybinding-input>
+        <p class="controls__p--warning" v-if="controlsWarning">
+          <kbd>CTRL</kbd> +
+          <kbd>W</kbd> cannot be used!
+        </p>
+        <keybinding-input ref="fireInput" v-model="selectedControls.fire" :placeholder="'Fire'"></keybinding-input>
+        <keybinding-input
+          ref="forwardInput"
+          v-model="selectedControls.forward"
+          :placeholder="'Forward'"
+        ></keybinding-input>
+        <keybinding-input
+          ref="backwardInput"
+          v-model="selectedControls.backward"
+          :placeholder="'Backward'"
+        ></keybinding-input>
+        <keybinding-input
+          ref="leftInput"
+          v-model="selectedControls.left"
+          :placeholder="'Turn Left'"
+        ></keybinding-input>
+        <keybinding-input
+          ref="rightInput"
+          v-model="selectedControls.right"
+          :placeholder="'Turn Right'"
+        ></keybinding-input>
       </div>
 
       <button class="add-player__color-input" @click="selectColor($event)">
-        <inline-svg :src="require('@/assets/color-tank.svg')" :transformSource="setInitialColor"></inline-svg> <!-- require-syntax is required to use inline-svg -->
+        <inline-svg :src="require('@/assets/color-tank.svg')" :transformSource="setInitialColor"></inline-svg>
+        <!-- require-syntax is required to use inline-svg -->
       </button>
 
       <button class="add-player__add-button" @click="addPlayer">
@@ -64,11 +84,10 @@ export default {
 	components: {
 		InlineSvg,
 		ColorInput,
-		KeybindingInput
+		KeybindingInput,
 	},
 	mixins: [],
-	computed: {
-	},
+	computed: {},
 
 	data() {
 		return {
@@ -79,7 +98,7 @@ export default {
 				forward: '',
 				backward: '',
 				left: '',
-				right: ''
+				right: '',
 			},
 
 			colorInputShow: 'none',
@@ -103,12 +122,10 @@ export default {
 		controlsWarning() {
 			const vals = Object.values(this.selectedControls)
 			return vals.includes(17) && vals.includes(87) // True if CTRL & W are chosen
-		}
-
+		},
 	},
 
 	methods: {
-		
 		addPlayer() {
 			const name = this.selectedName
 			const color = this.selectedColor
@@ -119,11 +136,16 @@ export default {
 			const right = this.selectedControls.right
 
 			// Everything must be filled out:
-			if (!(name && color && fire && forward && backward && left && right)) return console.log('Fill out everything')
+			if (!(name && color && fire && forward && backward && left && right))
+				return console.log('Fill out everything')
 			//TODO: Add message to fill out everything
 
 			game.addPlayer(
-				new Player(name, color, new Controls(forward, backward, left, right, fire))
+				new Player(
+					name,
+					color,
+					new Controls(forward, backward, left, right, fire)
+				)
 			)
 
 			this.resetInputs()
@@ -147,12 +169,19 @@ export default {
 		},
 
 		randomizeColor() {
-			return [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)]
+			return [
+				Math.floor(Math.random() * 256),
+				Math.floor(Math.random() * 256),
+				Math.floor(Math.random() * 256),
+			]
 		},
 
 		// Used by inline-svg:
 		setInitialColor(svg) {
-			svg.children[0].firstElementChild.setAttribute('fill', `rgb(${this.selectedColor})`)
+			svg.children[0].firstElementChild.setAttribute(
+				'fill',
+				`rgb(${this.selectedColor})`
+			)
 			return svg
 		},
 
@@ -199,11 +228,12 @@ export default {
 @import '@/scss/global';
 
 .create-menu {
-	width: var(--width);
-	height: var(--height);
+	width: 100%;
+	height: 100%;
 
 	@include window;
 
+	padding: 3%;
 	display: flex;
 }
 
@@ -211,7 +241,6 @@ export default {
 	@include bg(var(--light-text));
 	@include small-outset;
 
-	margin: 3% 0 3% 3%;
 	width: 50%;
 
 	border-radius: 40px;
@@ -260,7 +289,7 @@ export default {
 
 			font-size: 0.7rem;
 			font-weight: 500;
-			color: var(--warning-color)
+			color: var(--warning-color);
 		}
 	}
 
@@ -304,7 +333,6 @@ export default {
 }
 
 .start {
-	margin: 3% 3% 3% 0;
 	width: 50%;
 
 	display: flex;
@@ -345,7 +373,10 @@ export default {
 		align-items: center;
 
 		.titles__title {
-			@include h1;
+			font-family: Montserrat;
+			font-size: 4rem;
+			color: var(--darkest-text);
+			font-weight: normal;
 		}
 
 		.titles__subtitle {

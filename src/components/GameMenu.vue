@@ -1,8 +1,8 @@
 <template>
   <div id="gameMenu" class="menu" v-show="showMenu">
-    <game-menu-create v-if="showCreateMenu" v-model="configMenuOpen" />
-    <game-menu-config v-if="showConfigMenu" v-model="configMenuOpen" />
-    <game-menu-round v-if="showRoundMenu" />
+    <game-menu-create v-show="showCreateMenu" v-model="configMenuOpen" />
+    <game-menu-config v-show="showConfigMenu" v-model="configMenuOpen" />
+    <game-menu-round v-if="showRoundMenu" /> <!-- v-if, because the winner-message is dynamically generated when the component is mounted -->
     <!-- <game-menu-pause /> -->
   </div>
 </template>
