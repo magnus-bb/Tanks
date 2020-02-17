@@ -1,9 +1,9 @@
 <template>
   <div :id="id" class="color-picker">
     <div class="color-vals-container">
-      <span class="red">{{selectedColor[0]}}</span>
-      <span class="green">{{selectedColor[1]}}</span>
-      <span class="blue">{{selectedColor[2]}}</span>
+      <span class="red">{{ color[0] }}</span>
+      <span class="green">{{ color[1] }}</span>
+      <span class="blue">{{ color[2] }}</span>
     </div>
   </div>
 </template>
@@ -17,11 +17,32 @@ export default {
 
 	props: ['id', 'selectedColor', 'pointerEvents'], // Pointer events are not css, but js. Id is important to make several color pickers
 
-	data() {
-		return {
-			// pickerType: 0
+	computed: {
+		color() {
+			if (this.selectedColor[0] === '#') return this.hexToRgb(this.selectedColor) // Check if we are passed a hex-value
 
+			return this.selectedColor
 		}
+	},
+
+	methods: {
+		hexToRgb(hex) {
+			// Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF"):
+			const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i
+
+			hex = hex.replace(shorthandRegex, (m, r, g, b) => {
+				return r + r + g + g + b + b
+			})
+
+			const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+			return result
+				? [
+						parseInt(result[1], 16),
+						parseInt(result[2], 16),
+						parseInt(result[3], 16),
+				  ]
+				: null
+		},
 	},
 
 	created() {

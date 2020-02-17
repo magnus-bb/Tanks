@@ -10,7 +10,7 @@
     <div class="config-menu__scroll-wrapper">
       <section class="configs">
         <div class="configs__game">
-          <color-config-button :colorValues="'#0606ba'"/>
+          <color-config-button :target="config" prop="bgColor" @selectColor="selectColor($event)" />
         </div>
         <div class="configs__pickups"></div>
         <div class="configs__bullet"></div>
@@ -28,12 +28,11 @@
     <!-- Reactivity template: -->
     <p>Reactivity Test:</p>
     <input v-model="bulletSpeed" type="number" />
-
     {{ bulletSpeed }}
 
     <color-input
-		id="configMenuColorPicker"
-      :selectedColor="selectedColor"
+      id="configMenuColorPicker"
+      :selectedColor="colorTarget.target[colorTarget.prop]"
       @color="setColor($event)"
       @hide="hideColorInput"
       :style="colorInputRendering"
@@ -55,7 +54,7 @@ export default {
 
 	data() {
 		return {
-			selectedColor: [255, 0, 0],
+			colorTarget: { target: this.$store.state.config, prop: 'bgColor' }, // Initial value doesn't matter, just has to be valid (to avoid error on mount)
 			colorInputShow: 'none',
 			colorInputPointerEvents: false,
 			colorInputCoords: {
@@ -93,10 +92,15 @@ export default {
 
 	methods: {
 		closeConfig() {
-			this.$emit('input', false) // Menu wrapper handles opening config
+			this.$emit('input', false) // Menu wrapper handles opening config-menu
 		},
 
-		selectColor(event) {
+		selectColor({ target, prop, event }) {
+			this.colorTarget = {
+				target,
+				prop,
+			}
+
 			this.colorInputCoords = {
 				x: event.layerX, // Uses layer, not page, since colorInput is absolutely positioned
 				y: event.layerY,
@@ -107,7 +111,7 @@ export default {
 		},
 
 		setColor(event) {
-			this.selectedColor = event
+			this.colorTarget.target[this.colorTarget.prop] = event
 		},
 
 		hideColorInput() {
@@ -198,5 +202,4 @@ export default {
 	// 	background: blue;
 	// }
 }
-
 </style>
