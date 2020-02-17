@@ -23,7 +23,7 @@
 @mixin bg($col) {
 	background: linear-gradient(350deg, rgba(0, 0, 0, 0.4) 0%, rgba(255, 255, 255, 0.4) 100%), $col;
 
-	@if $col != var(--cta-color) {
+	@if $col == var(--light-text) {
 		background-blend-mode: soft-light, normal;
 	}
 }

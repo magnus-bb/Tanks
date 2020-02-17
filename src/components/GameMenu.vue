@@ -59,7 +59,7 @@ export default {
 	},
 
 	methods: {
-		//! Move to wherever pause it to be:
+		//! Move to wherever pause is to be:
 		// import game from '@/game/game.js'
 		// pauseGame() {
 		// 	game.pause()

@@ -1,5 +1,5 @@
 <template>
-  <div id="colorPicker" class="color-picker">
+  <div :id="id" class="color-picker">
     <div class="color-vals-container">
       <span class="red">{{selectedColor[0]}}</span>
       <span class="green">{{selectedColor[1]}}</span>
@@ -15,7 +15,7 @@ import col from '@/assets/all-colors.png'
 export default {
 	name: 'ColorInput',
 
-	props: ['selectedColor', 'pointerEvents'],
+	props: ['id', 'selectedColor', 'pointerEvents'], // Pointer events are not css, but js. Id is important to make several color pickers
 
 	data() {
 		return {
@@ -52,7 +52,7 @@ export default {
 			sketch.mouseReleased = () => {
 				this.$emit('hide')
 			}
-		}, 'colorPicker')
+		}, this.id)
 	},
 }
 </script>

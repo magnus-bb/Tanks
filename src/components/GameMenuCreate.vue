@@ -61,18 +61,19 @@
     </section>
 
     <color-input
-      :selectedColor="selectedColor"
+		id="createMenuColorPicker"
+      :selected-color="selectedColor"
       @color="setColor($event)"
       @hide="hideColorInput"
       :style="colorInputRendering"
-      :pointerEvents="colorInputPointerEvents"
+      :pointer-events="colorInputPointerEvents"
     />
   </div>
 </template>
 
 <script>
 import InlineSvg from 'vue-inline-svg'
-import ColorInput from './GameMenuCreateColorInput.vue'
+import ColorInput from './GameMenuColorInput.vue'
 import KeybindingInput from './GameMenuCreateKeybindingInput.vue'
 
 import game from '@/game/game.js'

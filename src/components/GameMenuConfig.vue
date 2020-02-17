@@ -1,35 +1,82 @@
 <template>
   <div class="config-menu">
     <header class="header">
-      <button class="header__back-button" @click="closeConfig"><img src="@/assets/icons/back.svg" /></button>
-			<h1 class="header__title">Game Configuration</h1>
+      <button class="header__back-button" @click="closeConfig">
+        <img src="@/assets/icons/back.svg" />
+      </button>
+      <h1 class="header__title">Game Configuration</h1>
     </header>
 
-		<section class="configs">
-			<div class="configs__game"></div>
-			<div class="configs__pickups"></div>
-			<div class="configs__bullet"></div>
-			<div class="configs__m82"></div>
-			<div class="configs__breaker"></div>
-			<div class="configs__wormhole"></div>
-			<div class="configs__laser-sight"></div>
-			<div class="configs__stealth-ammo"></div>
-			<div class="configs__tank"></div>
-			<div class="configs__grid"></div>
-			<div class="configs__fx"></div>
-		</section>
+    <div class="config-menu__scroll-wrapper">
+      <section class="configs">
+        <div class="configs__game">
+          <color-config-button :colorValues="'#0606ba'"/>
+        </div>
+        <div class="configs__pickups"></div>
+        <div class="configs__bullet"></div>
+        <div class="configs__m82"></div>
+        <div class="configs__breaker"></div>
+        <div class="configs__wormhole"></div>
+        <div class="configs__laser-sight"></div>
+        <div class="configs__stealth-ammo"></div>
+        <div class="configs__tank"></div>
+        <div class="configs__grid"></div>
+        <div class="configs__fx"></div>
+      </section>
+    </div>
+
     <!-- Reactivity template: -->
     <p>Reactivity Test:</p>
     <input v-model="bulletSpeed" type="number" />
+
     {{ bulletSpeed }}
 
+    <color-input
+		id="configMenuColorPicker"
+      :selectedColor="selectedColor"
+      @color="setColor($event)"
+      @hide="hideColorInput"
+      :style="colorInputRendering"
+      :pointerEvents="colorInputPointerEvents"
+    />
   </div>
 </template>
 
 <script>
+import ColorInput from './GameMenuColorInput.vue'
+import ColorConfigButton from './GameMenuColorConfigButton.vue'
+
 export default {
 	name: 'GameMenuConfig',
+	components: {
+		ColorInput,
+		ColorConfigButton,
+	},
+
+	data() {
+		return {
+			selectedColor: [255, 0, 0],
+			colorInputShow: 'none',
+			colorInputPointerEvents: false,
+			colorInputCoords: {
+				x: 0,
+				y: 0,
+			},
+		}
+	},
+
 	computed: {
+		config() {
+			return this.$store.state.config
+		},
+
+		colorInputRendering() {
+			return {
+				'--top': this.colorInputCoords.y + 'px',
+				'--left': this.colorInputCoords.x + 'px',
+				'--show': this.colorInputShow,
+			}
+		},
 		//! Reactivity template:
 		// Only needed here (both get and set) for shortening the inline v-model:
 		// Inline does not need a computed value, and can reference $store.state... etc. directly
@@ -48,6 +95,25 @@ export default {
 		closeConfig() {
 			this.$emit('input', false) // Menu wrapper handles opening config
 		},
+
+		selectColor(event) {
+			this.colorInputCoords = {
+				x: event.layerX, // Uses layer, not page, since colorInput is absolutely positioned
+				y: event.layerY,
+			}
+
+			this.colorInputShow = 'flex'
+			this.colorInputPointerEvents = true
+		},
+
+		setColor(event) {
+			this.selectedColor = event
+		},
+
+		hideColorInput() {
+			this.colorInputShow = 'none'
+			this.colorInputPointerEvents = false
+		},
 	},
 }
 </script>
@@ -56,6 +122,7 @@ export default {
 @import '@/scss/global';
 
 .config-menu {
+	display: relative;
 	height: 100%;
 	width: 100%;
 
@@ -103,21 +170,33 @@ export default {
 
 	border-radius: 5px;
 }
-//! test
-.configs {
+
+.config-menu__scroll-wrapper {
+	overflow: hidden;
+
 	margin-top: 3%;
+
 	@include shallow-inset;
-	height: 100%;
+}
+
+.configs {
+	// Margin-padding to hide scrollbar, while still making it usable
+	// Height to make sure it uses scroll
+	margin-right: -25px;
+	padding-right: 25px;
+	max-height: 100%;
+
+	overflow-y: auto;
 
 	display: grid;
 	flex-wrap: wrap;
+	grid-row-gap: 10px;
 
-	
-	& > div {
-		height: 50px;
-		width: 100px;
-		background: blue;
-	}
-
+	// & > div {
+	// 	height: 50px;
+	// 	width: 100px;
+	// 	background: blue;
+	// }
 }
+
 </style>
