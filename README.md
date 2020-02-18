@@ -100,6 +100,7 @@ Todos
 - Lav en pop-up, hvis flere brugere (til sammen) i state har CTRL + W som bindings
 	- Sørg for at det er muligt at slette en spiller nede i status, så længe spillet ikke er startet
 - Se på at bruge @use (partials) igen, hvis filen starter med `_`
+- Gennemgå css. Er BEM godt?
 
 
 Idéer til spillet
