@@ -10,15 +10,20 @@
     <div class="config-menu__scroll-wrapper">
       <section class="configs">
         <div class="configs__game">
-          <color-config-button :target="config" prop="bgColor" @selectColor="selectColor($event)" />
-        </div>
-        <div class="configs__pickups">
           <color-config-button
+            class="configs__color-button"
+            :target="config"
+            prop="bgColor"
+            @selectColor="selectColor($event)"
+          />
+          <color-config-button
+            class="configs__color-button"
             :target="config"
             prop="strokeColor"
             @selectColor="selectColor($event)"
           />
         </div>
+        <div class="configs__pickups"></div>
         <div class="configs__bullet"></div>
         <div class="configs__m82"></div>
         <div class="configs__breaker"></div>
@@ -34,7 +39,6 @@
     <!-- Reactivity template: -->
     <p>Reactivity Test:</p>
     <input v-model="bulletSpeed" type="number" />
-
     {{ bulletSpeed }}
     <color-input
       id="configMenuColorPicker"
@@ -208,5 +212,10 @@ export default {
 	// 	width: 100px;
 	// 	background: blue;
 	// }
+}
+
+.configs__color-button {
+	height: 4rem;
+	width: 4rem;
 }
 </style>
