@@ -9,21 +9,77 @@
 
     <div class="config-menu__scroll-wrapper">
       <section class="configs">
-        <div class="configs__game">
-          <color-config-button
-            class="configs__color-button"
-            :target="config"
-            prop="bgColor"
-            @selectColor="selectColor($event)"
-          />
-          <color-config-button
-            class="configs__color-button"
-            :target="config"
-            prop="strokeColor"
-            @selectColor="selectColor($event)"
-          />
+        <div class="configs__group">
+          <h2 class="configs__h2">General</h2>
+
+          <!-- requires restart? -->
+          <div class="configs__group-item">
+            <h3 class="configs__h3">Frames Per Second:</h3>
+            <input v-model="config.fps" type="number" min="1" max="60" />
+          </div>
+
+          <div class="configs__group-item">
+            <h3 class="configs__h3">Background Colour:</h3>
+            <color-config-button
+              class="configs__color-button"
+              :target="config"
+              prop="bgColor"
+              @selectColor="selectColor($event)"
+            />
+          </div>
+
+          <div class="configs__group-item">
+            <h3 class="configs__h3">Wall Colour:</h3>
+            <color-config-button
+              class="configs__color-button"
+              :target="config"
+              prop="strokeColor"
+              @selectColor="selectColor($event)"
+            />
+          </div>
+
+          <div class="configs__group-item">
+            <h3 class="configs__h3">Stay-alive Time:</h3>
+            <input v-model="config.game.endFrames" type="number" min="1" max="1000" />
+          </div>
         </div>
-        <div class="configs__pickups"></div>
+
+        <div class="configs__group">
+					<h2 class="configs__h2">Pickups</h2>
+
+					<div class="configs__group-item">
+            <h3 class="configs__h3">Spawn Interval:</h3>
+            <input v-model="config.pickup.spawnInterval" type="number" min="50" max="1000" />
+          </div>
+
+					<div class="configs__group-item">
+            <h3 class="configs__h3">Spawn Chance:</h3>
+            <input v-model="config.pickup.spawnChance" type="range" min="0.05" max="1.0" step="0.05" />
+						<p>{{config.pickup.spawnChance}}</p>
+          </div>
+				</div>
+
+				<div class="configs__group">
+					<h2 class="configs__h2">Bullets</h2>
+
+					<div class="configs__group-item">
+            <h3 class="configs__h3">Speed:</h3>
+            <input v-model="config.projectile.bullet.speed" type="range" min="1" max="10" />
+						<p>{{config.projectile.bullet.speed}}</p>
+          </div>
+
+					<div class="configs__group-item">
+            <h3 class="configs__h3">Diameter:</h3>
+            <input v-model="config.projectile.bullet.diameter" type="range" min="1" max="12" />
+						<p>{{config.projectile.bullet.diameter}}</p>
+          </div>
+
+					<div class="configs__group-item">
+            <h3 class="configs__h3">Duration:</h3>
+            <input v-model="config.projectile.bullet.duration" type="number" min="30" max="1200" />
+          </div>
+				</div>
+
         <div class="configs__bullet"></div>
         <div class="configs__m82"></div>
         <div class="configs__breaker"></div>
@@ -101,6 +157,10 @@ export default {
 	},
 
 	methods: {
+		decimals(num, numOfDecimals) {
+			return num.toFixed(numOfDecimals)
+		},
+
 		closeConfig() {
 			this.$emit('input', false) // Menu wrapper handles opening config-menu
 		},
@@ -205,7 +265,7 @@ export default {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	justify-content: center; //? Check om dette skal være -items
-	grid-row-gap: 10px;
+	grid-auto-flow: row dense;
 
 	// & > div {
 	// 	height: 50px;
@@ -214,8 +274,42 @@ export default {
 	// }
 }
 
+.configs__group {
+	margin: 1.5em;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	// justify-content: center;
+}
+
+.configs__group-item {
+	margin-bottom: 1em;
+
+	width: 90%;
+
+	display: flex;
+	// flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.configs__h2 {
+	margin-bottom: 1em;
+	color: var(--darkest-text);
+	font-size: 1.5rem;
+}
+
+.configs__h3 {
+	// margin-right: 1em;
+
+	font-family: Raleway;
+	font-size: 1rem;
+	color: var(--dark-text);
+	font-style: italic;
+}
+
 .configs__color-button {
-	height: 4rem;
-	width: 4rem;
+	height: 3rem;
+	width: 3rem;
 }
 </style>

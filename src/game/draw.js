@@ -7,6 +7,8 @@ const { p5 } = store.state
 const { config, gameState } = store.getters
 
 function draw() {
+	console.clear()
+	console.time('Canvas')
 	//* Canvas:
 	//TODO: Canvas-class?
 	p5.push()
@@ -18,17 +20,23 @@ function draw() {
 	p5.pop()
 	// Does not loop over game logic in very first frame, as it normally would:
 	if (p5.frameCount === 1) return
+	console.timeEnd('Canvas')
 
+	console.time('FX')
 	//* Effects:
 	fx.onFrame()
+	console.timeEnd('FX')
 
+	console.time('Pickups')
 	//* Pickups:
 	Pickup.spawn()
-
+	
 	for (const pickup of gameState().pickups) {
 		pickup.onFrame()
 	}
+	console.timeEnd('Pickups')
 
+	console.time('TanksPickups')
 	//* Tanks (& Edges) - input and collision only:
 	// Must happen before collisions, so a collision can overwrite player input
 	for (const tank of gameState().tanks) {
@@ -43,7 +51,9 @@ function draw() {
 			pickup.pickup(i, tank)
 		}
 	}
+	console.timeEnd('TanksPickups')
 
+	console.time('WallsTanksProjectiles')
 	//* Walls:
 	for (const column of gameState().grid) {
 		for (const cell of column) {
@@ -76,12 +86,16 @@ function draw() {
 			}
 		}
 	}
+	console.timeEnd('WallsTanksProjectiles')
 
+	console.time('Tanks')
 	//* Tanks - updating:
 	for (const tank of gameState().tanks) {
 		tank.onFrame() // Importantly done after input + collision handling
 	}
+	console.timeEnd('Tanks')
 
+	console.time('ProjsTanks')
 	//* Projectiles (& Edges):
 	for (let i = gameState().projectiles.length - 1; i >= 0; i--) { // We have to go backwards when removing projectiles
 		const projectile = gameState().projectiles[i]
@@ -103,11 +117,14 @@ function draw() {
 			}
 		}
 	}
+	console.timeEnd('ProjsTanks')
 
 	
-
+	console.time('Game')
 	//* Round Conditions:
 	game.onFrame()
+	console.timeEnd('Game')
 }
+
 
 export default draw

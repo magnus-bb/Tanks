@@ -75,6 +75,9 @@ Todos
 - Sørg for at det er muligt at slette en spiller nede i status, så længe spillet ikke er startet
 - Se på at bruge @use (partials) igen, hvis filen starter med `_`, så ikke al scss fra global duplikeres ved hver import
 - Gennemgå CSS. Er BEM godt til spil?
+- Tilpasning af range-sliders i config til altid at vise med samme antal decimaler
+- et `?` til at se enheder på configs (px, frames etc)
+- Besked om restartnødvendighed på nogle configs (fps f.eks.)
 
 
 Idéer til spillet
