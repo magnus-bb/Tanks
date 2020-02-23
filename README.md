@@ -78,6 +78,9 @@ Todos
 - Tilpasning af range-sliders i config til altid at vise med samme antal decimaler
 - et `?` til at se enheder på configs (px, frames etc)
 - Besked om restartnødvendighed på nogle configs (fps f.eks.)
+- Fix performance på TanksProjectilesWalls-loopet, hvis dette kan lade sig gøre
+	- Se time på de forskellige underprocesser i dette loop
+- Lav menu en fixed størrelse, så denne ikke bliver åndssvag, hvis man vælger en mindre / større bane
 
 
 Idéer til spillet

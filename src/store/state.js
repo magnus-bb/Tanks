@@ -4,7 +4,7 @@ import Config from '@/game/Config.js'
 export const state = {
 	p5: new P5(sketch => {}, 'canvasContainer'),
 	config: new Config, //TODO: Load instead
-	// gameState: null, // gameState is set on game start
+	gameState: {}, // gameState is set on game start
 	gameStatus: {
 		// For menu manipulation, not ingame management:
 		paused: true,

@@ -141,13 +141,13 @@ const fx = {
 	onFrame() {
 		this._showBulletTrails()
 
-		if (gameState().fx.particles.array.length === 0) {
-			for (let i = 0; i < config().fx.particle.amt; i++) {
-				store.commit('addParticle', new this.Particle)
-			}
-		}
+		// if (gameState().fx.particles.array.length === 0) {
+		// 	for (let i = 0; i < config().fx.particle.amt; i++) {
+		// 		store.commit('addParticle', new this.Particle)
+		// 	}
+		// }
 		
-		if (gameState().ending) this._particles()
+		// if (gameState().ending) this._particles()
 	}
 }
 
