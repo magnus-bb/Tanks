@@ -55,7 +55,7 @@
 					<div class="configs__group-item">
             <h3 class="configs__h3">Spawn Chance:</h3>
             <input v-model="config.pickup.spawnChance" type="range" min="0.05" max="1.0" step="0.05" />
-						<p>{{config.pickup.spawnChance}}</p>
+						<p>{{ config.pickup.spawnChance }}</p>
           </div>
 				</div>
 
@@ -64,14 +64,8 @@
 
 					<div class="configs__group-item">
             <h3 class="configs__h3">Speed:</h3>
-            <input v-model="config.projectile.bullet.speed" type="range" min="1" max="10" />
-						<p>{{config.projectile.bullet.speed}}</p>
-          </div>
-
-					<div class="configs__group-item">
-            <h3 class="configs__h3">Diameter:</h3>
-            <input v-model="config.projectile.bullet.diameter" type="range" min="1" max="12" />
-						<p>{{config.projectile.bullet.diameter}}</p>
+            <input v-model="config.projectile.bullet.speed" type="range" min="3" max="10" />
+						<p>{{ config.projectile.bullet.speed }}</p>
           </div>
 
 					<div class="configs__group-item">
@@ -80,15 +74,49 @@
           </div>
 				</div>
 
-        <div class="configs__bullet"></div>
-        <div class="configs__m82"></div>
-        <div class="configs__breaker"></div>
-        <div class="configs__wormhole"></div>
-        <div class="configs__laser-sight"></div>
-        <div class="configs__stealth-ammo"></div>
-        <div class="configs__tank"></div>
-        <div class="configs__grid"></div>
-        <div class="configs__fx"></div>
+				<div class="configs__group">
+					<h2 class="configs__h2">M82</h2>
+
+					<div class="configs__group-item">
+            <h3 class="configs__h3">Speed:</h3>
+            <input v-model="config.projectile.m82.speed" type="range" min="5" max="40" />
+						<p>{{ config.projectile.m82.speed }}</p>
+          </div>
+
+					<!-- Does not change collisions, since diameter is not used -->
+					<div class="configs__group-item">
+            <h3 class="configs__h3">Penetration Speed Divisor:</h3>
+            <input v-model="config.projectile.m82.penetrationSpeedDivisor" type="range" min="1" max="8" step="0.5" />
+						<p>{{ config.projectile.m82.penetrationSpeedDivisor }}</p>
+          </div>
+
+					<div class="configs__group-item">
+            <h3 class="configs__h3">Ammo:</h3>
+            <input v-model="config.equipment.m82.ammo" type="range" min="1" max="10" />
+						<p>{{ config.equipment.m82.ammo }}</p>
+          </div>
+				</div>
+
+				<div class="configs__group">
+					<h2 class="configs__h2">Breaker</h2>
+
+					<div class="configs__group-item">
+            <h3 class="configs__h3">Speed:</h3>
+            <input v-model="config.projectile.breaker.speed" type="range" min="3" max="15" />
+						<p>{{ config.projectile.breaker.speed }}</p>
+          </div>
+				</div>
+
+				<div class="configs__group">
+					<h2 class="configs__h2">Wormhole</h2>
+
+					<div class="configs__group-item">
+            <h3 class="configs__h3">Charge Time:</h3>
+            <input v-model="config.equipment.wormhole.chargeFrames" type="number" min="1" max="300" />
+          </div>
+				</div>
+
+        
       </section>
     </div>
 

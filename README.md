@@ -81,6 +81,8 @@ Todos
 - Fix performance på TanksProjectilesWalls-loopet, hvis dette kan lade sig gøre
 	- Se time på de forskellige underprocesser i dette loop
 - Lav menu en fixed størrelse, så denne ikke bliver åndssvag, hvis man vælger en mindre / større bane
+- Projektil-speed under 3 virker ikke!
+- Tilføj ammo til alle våben, så det kan ændres, men brug defaults på 1 også.
 
 
 Idéer til spillet
