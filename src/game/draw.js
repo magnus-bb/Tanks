@@ -7,9 +7,9 @@ const { p5 } = store.state
 const { config, gameState } = store.getters
 
 function draw() {
-	// console.clear()
+	console.clear()
 	// console.log('FPS: ', p5.frameRate())
-	// console.time('Draw')
+	console.time('Draw')
 	// console.time('Canvas')
 	//* Canvas:
 	//TODO: Canvas-class?
@@ -55,7 +55,7 @@ function draw() {
 	}
 	// console.timeEnd('TanksPickups')
 
-	// console.time('WallsTanksProjectiles')
+	console.time('WallsTanksProjectiles')
 	//* Walls:
 	for (const column of gameState().grid) {
 		for (const cell of column) {
@@ -88,7 +88,7 @@ function draw() {
 			}
 		}
 	}
-	// console.timeEnd('WallsTanksProjectiles')
+	console.timeEnd('WallsTanksProjectiles')
 
 	// console.time('Tanks')
 	//* Tanks - updating:
@@ -126,7 +126,7 @@ function draw() {
 	//* Round Conditions:
 	game.onFrame()
 	// console.timeEnd('Game')
-	// console.timeEnd('Draw')
+	console.timeEnd('Draw')
 }
 
 
