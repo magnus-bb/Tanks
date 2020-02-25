@@ -1,6 +1,6 @@
 <template>
   <div class="game-container" :style="cssColorVars">
-    <main>
+    <main class="main" :style="menuSize">
       <game-menu :style="menuSize" />
 
       <game-canvas />
@@ -93,6 +93,11 @@ button {
 	outline: none;
 	cursor: pointer;
 	user-select: none;
+}
+
+.main {
+	width: var(--width);
+	height: var(--height);
 }
 
 .game-container {

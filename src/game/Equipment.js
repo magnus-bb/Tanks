@@ -106,6 +106,7 @@ function Wormhole(owner, name) {
 
 const mixins = {
 	canHaveLaserSight(owner, name) {
+		// LS is added to equipment if the equipment is in the onEquipment array in LS config:
 		if (config().modifier.laserSight.onEquipment.includes(name)) {
 			owner.modifiers.add(new LaserSight(owner, 'laserSight'))
 		}

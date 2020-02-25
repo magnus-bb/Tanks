@@ -121,7 +121,7 @@
 
 					<div class="configs__group-item">
             <h3 class="configs__h3">Equipped on:</h3>
-            <!-- <input v-model="config.equipment.wormhole.chargeFrames" type="number" min="1" max="300" /> -->
+						<!-- make a div, use a v-for to generate input type="checkbox" for every element in LS-config onEquipment with id equal to the value and the label = capitalized value -->
           </div>
 				</div>
         

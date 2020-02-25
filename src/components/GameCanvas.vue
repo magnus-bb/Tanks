@@ -15,23 +15,13 @@ import draw from '@/game/draw.js'
 
 export default {
 	name: 'GameCanvas',
-	mixins: [],
-	props: [],
-	data() {
-		return {
-
-		}
-	},
-	methods: {},
 	mounted() {
-
 
 		this.$store.commit('setupSketch', {
 			preload: preload,
 			setup: setup,
 			draw: draw
 		}) 
-
 
 	},
 }

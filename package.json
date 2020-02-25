@@ -5,7 +5,7 @@
 	"scripts": {
 		"serve": "vue-cli-service serve --open",
 		"build": "vue-cli-service build",
-		"prodserve": "serve -s dist --open"
+		"prodserve": "serve -s dist"
 	},
 	"dependencies": {
 		"p5": "^0.10.2",
