@@ -29,7 +29,7 @@
           </div>
 
           <div class="configs__group-item">
-            <h3 class="configs__h3">Wall Colour:</h3>
+            <h3 class="configs__h3">Line Colour:</h3>
             <color-config-button
               class="configs__color-button"
               :target="config"
@@ -116,12 +116,20 @@
           </div>
 				</div>
 
+				<div class="configs__group">
+					<h2 class="configs__h2">Laser Sight</h2>
+
+					<div class="configs__group-item">
+            <h3 class="configs__h3">Equipped on:</h3>
+            <!-- <input v-model="config.equipment.wormhole.chargeFrames" type="number" min="1" max="300" /> -->
+          </div>
+				</div>
         
       </section>
     </div>
 
     <!-- Reactivity template: -->
-    <p>Reactivity Test:</p>
+    <!-- <p>Reactivity Test:</p>
     <input v-model="bulletSpeed" type="number" />
     {{ bulletSpeed }}
     <color-input
@@ -131,7 +139,7 @@
       @hide="hideColorInput"
       :style="colorInputRendering"
       :pointerEvents="colorInputPointerEvents"
-    />
+    /> -->
   </div>
 </template>
 
