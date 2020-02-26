@@ -54,7 +54,6 @@ export default class Config {
 			collisionMoveSlow: 2.5,
 			collisionTurnSlow: 2,
 			spawnDistance: 1,
-			//strokeColor: '#333333',
 			cannon: {
 				length: 18,
 				width: 3,
@@ -65,13 +64,11 @@ export default class Config {
 			width: 55, // px
 			xAmt: 15,
 			yAmt: 10,
-			//color: '#c4c4c4'
 		}
 		this.wall = {
 			strokeWidth: 6,
 			occurrenceRate: 0.8,
 			get collisionStepSize() { return this.strokeWidth - 1 }, // Projectiles will always be able to 'hit' wall
-			//color: '#222629'
 		}
 
 		const particleColor = [255, 255, 255, 80]
@@ -85,6 +82,7 @@ export default class Config {
 			},
 			shakeMagnitude: 2,
 			bulletTrail: {
+				on: true,
 				alpha: 80, // Out of 255
 				length: 25, // Frames / points
 			},

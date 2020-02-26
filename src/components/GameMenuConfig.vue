@@ -12,10 +12,32 @@
         <div class="configs__group">
           <h2 class="configs__h2">General</h2>
 
-          <!-- requires restart? -->
+          <!-- requires restart?
+					<div class="configs__group-item">
+            <h3 class="configs__h3">Cell Width:</h3>
+            <input v-model="config.cell.width" type="number" min="35" max="100" />
+          </div> 
+
+					<div class="configs__group-item">
+            <h3 class="configs__h3">Cell Amount X:</h3>
+            <input v-model="config.cell.xAmt" type="number" min="5" max="25" />
+          </div>
+
+					<div class="configs__group-item">
+            <h3 class="configs__h3">Cell Amount Y:</h3>
+            <input v-model="config.cell.yAmt" type="number" min="5" max="25" />
+          </div>
+
           <div class="configs__group-item">
             <h3 class="configs__h3">Frames Per Second:</h3>
             <input v-model="config.fps" type="number" min="1" max="60" />
+          </div>
+					-->
+
+					<div class="configs__group-item">
+            <h3 class="configs__h3">Wall Occurrence Rate:</h3>
+            <input v-model="config.wall.occurrenceRate" type="range" min="0" max="1" step="0.05" />
+						<p>{{ config.wall.occurrenceRate }}</p>
           </div>
 
           <div class="configs__group-item">
@@ -77,6 +99,23 @@
           <div class="configs__group-item">
             <h3 class="configs__h3">Duration:</h3>
             <input v-model="config.projectile.bullet.duration" type="number" min="30" max="1200" />
+          </div>
+
+					<div class="configs__group-item">
+            <h3 class="configs__h3">Ammo:</h3>
+            <input v-model="config.tank.ammo" type="range" min="0" max="10" />
+						<p>{{ config.tank.ammo }}</p>
+          </div>
+
+					<div class="configs__group-item">
+            <h3 class="configs__h3">Bullet Trail:</h3>
+            <input v-model="config.fx.bulletTrail.on" type="checkbox"/>
+          </div>
+
+					<div class="configs__group-item">
+            <h3 class="configs__h3">Bullet Trail Length:</h3>
+            <input v-model="config.fx.bulletTrail.length" type="range" min="5" max="100"/>
+						<p>{{ config.fx.bulletTrail.length }}</p>
           </div>
         </div>
 
@@ -188,6 +227,14 @@
 						<input v-model="config.tank.turnSpeed" type="range" min="1" max="15" step="0.5"/>
 						<p>{{ config.tank.turnSpeed }}</p>
           </div>
+
+					<div class="configs__group-item">
+            <h3 class="configs__h3">Collision Slow:</h3>
+						<input v-model="config.tank.collisionMoveSlow" type="range" min="1" max="10" step="0.5"/>
+						<p>{{ config.tank.collisionMoveSlow }}</p>
+          </div>
+
+
         </div>
 
       </section>

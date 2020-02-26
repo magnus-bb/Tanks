@@ -65,11 +65,10 @@ export default {
 
 	methods: {},
 	created() {
-
 		// Disables some hotkeys, so ctrl can be used in-game:
 		document.addEventListener('keydown', event => {
 			if (event.ctrlKey && 'cvxsrpuaz'.indexOf(event.key) !== -1) {
-				console.log("Hotkey prevented")
+				console.log('Hotkey prevented')
 				event.preventDefault()
 			}
 		})
@@ -81,6 +80,7 @@ export default {
 
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,500|Raleway:300i&display=swap');
+@import '@/scss/global';
 
 * {
 	margin: 0;
@@ -121,8 +121,82 @@ kbd {
 	font-family: Arial, Helvetica, sans-serif;
 	// font-size: 10px;
 	// display: inline-block;
-	box-shadow: 0px 1px 0px rgba(0,0,0,0.2), inset 0px 0px 0px 2px #ffffff;
+	box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.2), inset 0px 0px 0px 2px #ffffff;
 	background-color: rgb(247, 247, 247);
 	// text-shadow: 0 1px 0 #fff;
+}
+
+//* Resets:
+input[type='range'] {
+	appearance: none; /* Hides the slider so that custom slider can be made */
+	width: 100%; /* Specific width is required for Firefox. */
+	background: transparent; /* Otherwise white in Chrome */
+	overflow: hidden;
+
+	&::-webkit-slider-thumb {
+		appearance: none;
+	}
+
+	&::-webkit-slider-runnable-track {
+		
+	}
+
+	&::-moz-range-thumb {
+		background: transparent;
+		border: none;
+	}
+
+	&:focus {
+		outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+	}
+
+	&::-ms-track {
+		width: 100%;
+		cursor: pointer;
+
+		/* Hides the slider so custom styles can be added */
+		background: transparent;
+		border-color: transparent;
+		color: transparent;
+	}
+}
+
+//* Styling:
+input[type=range] {
+	border-radius: 10px;
+	height: 15px;
+
+		&::-webkit-slider-thumb {
+			width: 15px;
+			height: 15px;
+			border-radius: 50%;
+			border: 1px solid #DEE1EB;
+			@include bg(var(--light-text));
+			// background: linear-gradient(180deg, #FFFFFF 0%, #F6F8FD 100%);
+			box-shadow: 1px 2px 2px rgba(89, 98, 120, 0.24),
+									-100px 0 0 100px var(--cta-color);
+
+		}
+		&::-webkit-slider-runnable-track {
+			@include shallow-inset;
+			// background: linear-gradient(160.52deg, rgba(255, 255, 255, 0) 0.48%, rgba(0, 0, 0, 0.15) 100%), #EBECF0;
+			border-radius: 10px;
+			height: 10px;
+			border: 1px solid rgba(255, 255, 255, 0.4);
+		}
+
+		&::-moz-range-thumb {
+			// border: 1px solid black;
+		}
+		&::-moz-range-track {
+
+		}
+		
+		&::-ms-thumb {
+			// border: 1px solid black;
+		}	
+		&::-ms-track {
+
+		}
 }
 </style>

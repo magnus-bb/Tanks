@@ -39,20 +39,14 @@ export function Bullet(owner) {
 			// When first point is made, the bullet's trail has to be initialized:
 			if (!gameState().fx.bulletTrails.has(this)) {
 				store.commit('createBulletTrailArray', this)
-				// trails.set(this, []) //TODO: Mutation
 			}
 
-			// const self = this
 			// This needs to be passed as well, so Vuex knows which bullet to add the point to:
 			store.commit('addBulletTrailPoint', {
 				x: this.x,
 				y: this.y,
 				bullet: this
 			})
-
-			// const trail = gameState().fx.bulletTrails.get(this)
-
-			// trail.push({ x: this.x, y: this.y }) //TODO: Mutation
 		},
 
 		_show() {
@@ -88,7 +82,7 @@ export function Bullet(owner) {
 		// Called once every frame:
 		onFrame(i) {
 			this._move()
-			if (!this.owner.stealthedAmmo) this._makeTrailPoint() // No trail on stealthed bullets
+			if (!this.owner.stealthedAmmo && config().fx.bulletTrail.on) this._makeTrailPoint() // No trail on stealthed bullets
 			this._show()
 			this._updateNext()
 
