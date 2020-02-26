@@ -79,6 +79,7 @@ Todos
 - Lav menu en fixed størrelse, så denne ikke bliver åndssvag, hvis man vælger en mindre / større bane
 - Projektil-speed under 3 virker ikke!
 - Tilføj ammo til alle våben, så det kan ændres, men brug defaults på 1 også.
+- Sørg for steps på ALT der kan ændres i config, dvs også movespeed evt (hvis det bliver muligt at gøre denne stor nok til at gå igennem vægge etc)
 
 
 Idéer til spillet

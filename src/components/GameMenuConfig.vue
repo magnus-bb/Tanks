@@ -133,12 +133,63 @@
 
           <div class="configs__group-item">
             <h3 class="configs__h3">Equipped on:</h3>
-            <div v-for="equip of config.modifier.laserSight.possibleOn">
-              <input type="checkbox" v-model="equip" />
+            <div v-for="equip of config.modifier.laserSight.possibleOn" :key="equip">
+              <input
+                type="checkbox"
+                :id="equip"
+                :value="equip"
+                v-model="config.modifier.laserSight.onEquipment"
+              />
+              <label :for="equip">{{ equip.capitalize() }}</label>
             </div>
-            <!-- make a div, use a v-for to generate input type="checkbox" for every element in LS-config onEquipment with id equal to the value and the label = capitalized value -->
           </div>
         </div>
+
+				<div class="configs__group">
+          <h2 class="configs__h2">Stealth Ammo</h2>
+
+          <div class="configs__group-item">
+            <h3 class="configs__h3">Duration:</h3>
+						<input v-model="config.modifier.stealthAmmo.duration" type="number" min="30" max="1200" />
+          </div>
+
+					<div class="configs__group-item">
+            <h3 class="configs__h3">Opacity:</h3>
+						<input v-model="config.modifier.stealthAmmo.alpha" type="range" min="0" max="255" />
+						<p>{{ config.modifier.stealthAmmo.alpha }}</p>
+          </div>
+        </div>
+
+				<div class="configs__group">
+          <h2 class="configs__h2">Tank</h2>
+
+					<!-- Warn that cannon-length cannot be shorter than radius! (pop-up when this is set?) -->
+
+          <div class="configs__group-item">
+            <h3 class="configs__h3">Diameter:</h3>
+						<input v-model="config.tank.diameter" type="range" min="5" max="45" />
+						<p>{{ config.tank.diameter }}</p>
+          </div>
+
+					<div class="configs__group-item">
+            <h3 class="configs__h3">Cannon length:</h3>
+						<input v-model="config.tank.cannon.length" type="range" min="5" max="40" />
+						<p>{{ config.tank.cannon.length }}</p>
+          </div>
+
+					<div class="configs__group-item">
+            <h3 class="configs__h3">Move Speed:</h3>
+						<input v-model="config.tank.moveSpeed" type="range" min="0.5" max="4" step="0.5"/>
+						<p>{{ config.tank.moveSpeed }}</p>
+          </div>
+
+					<div class="configs__group-item">
+            <h3 class="configs__h3">Turn Speed:</h3>
+						<input v-model="config.tank.turnSpeed" type="range" min="1" max="15" step="0.5"/>
+						<p>{{ config.tank.turnSpeed }}</p>
+          </div>
+        </div>
+
       </section>
     </div>
 
@@ -160,6 +211,7 @@
 <script>
 import ColorInput from './GameMenuColorInput.vue'
 import ColorConfigButton from './GameMenuColorConfigButton.vue'
+import helpers from '@/game/helpers.js'
 
 export default {
 	name: 'GameMenuConfig',
