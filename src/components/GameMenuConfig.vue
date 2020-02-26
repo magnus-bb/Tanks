@@ -45,87 +45,100 @@
         </div>
 
         <div class="configs__group">
-					<h2 class="configs__h2">Pickups</h2>
+          <h2 class="configs__h2">Pickups</h2>
 
-					<div class="configs__group-item">
+          <div class="configs__group-item">
             <h3 class="configs__h3">Spawn Interval:</h3>
             <input v-model="config.pickup.spawnInterval" type="number" min="50" max="1000" />
           </div>
 
-					<div class="configs__group-item">
+          <div class="configs__group-item">
             <h3 class="configs__h3">Spawn Chance:</h3>
-            <input v-model="config.pickup.spawnChance" type="range" min="0.05" max="1.0" step="0.05" />
-						<p>{{ config.pickup.spawnChance }}</p>
+            <input
+              v-model="config.pickup.spawnChance"
+              type="range"
+              min="0.05"
+              max="1.0"
+              step="0.05"
+            />
+            <p>{{ config.pickup.spawnChance }}</p>
           </div>
-				</div>
+        </div>
 
-				<div class="configs__group">
-					<h2 class="configs__h2">Bullets</h2>
+        <div class="configs__group">
+          <h2 class="configs__h2">Bullets</h2>
 
-					<div class="configs__group-item">
+          <div class="configs__group-item">
             <h3 class="configs__h3">Speed:</h3>
             <input v-model="config.projectile.bullet.speed" type="range" min="3" max="10" />
-						<p>{{ config.projectile.bullet.speed }}</p>
+            <p>{{ config.projectile.bullet.speed }}</p>
           </div>
 
-					<div class="configs__group-item">
+          <div class="configs__group-item">
             <h3 class="configs__h3">Duration:</h3>
             <input v-model="config.projectile.bullet.duration" type="number" min="30" max="1200" />
           </div>
-				</div>
+        </div>
 
-				<div class="configs__group">
-					<h2 class="configs__h2">M82</h2>
+        <div class="configs__group">
+          <h2 class="configs__h2">M82</h2>
 
-					<div class="configs__group-item">
+          <div class="configs__group-item">
             <h3 class="configs__h3">Speed:</h3>
             <input v-model="config.projectile.m82.speed" type="range" min="5" max="40" />
-						<p>{{ config.projectile.m82.speed }}</p>
+            <p>{{ config.projectile.m82.speed }}</p>
           </div>
 
-					<!-- Does not change collisions, since diameter is not used -->
-					<div class="configs__group-item">
+          <!-- Does not change collisions, since diameter is not used -->
+          <div class="configs__group-item">
             <h3 class="configs__h3">Penetration Speed Divisor:</h3>
-            <input v-model="config.projectile.m82.penetrationSpeedDivisor" type="range" min="1" max="8" step="0.5" />
-						<p>{{ config.projectile.m82.penetrationSpeedDivisor }}</p>
+            <input
+              v-model="config.projectile.m82.penetrationSpeedDivisor"
+              type="range"
+              min="1"
+              max="8"
+              step="0.5"
+            />
+            <p>{{ config.projectile.m82.penetrationSpeedDivisor }}</p>
           </div>
 
-					<div class="configs__group-item">
+          <div class="configs__group-item">
             <h3 class="configs__h3">Ammo:</h3>
             <input v-model="config.equipment.m82.ammo" type="range" min="1" max="10" />
-						<p>{{ config.equipment.m82.ammo }}</p>
+            <p>{{ config.equipment.m82.ammo }}</p>
           </div>
-				</div>
+        </div>
 
-				<div class="configs__group">
-					<h2 class="configs__h2">Breaker</h2>
+        <div class="configs__group">
+          <h2 class="configs__h2">Breaker</h2>
 
-					<div class="configs__group-item">
+          <div class="configs__group-item">
             <h3 class="configs__h3">Speed:</h3>
             <input v-model="config.projectile.breaker.speed" type="range" min="3" max="15" />
-						<p>{{ config.projectile.breaker.speed }}</p>
+            <p>{{ config.projectile.breaker.speed }}</p>
           </div>
-				</div>
+        </div>
 
-				<div class="configs__group">
-					<h2 class="configs__h2">Wormhole</h2>
+        <div class="configs__group">
+          <h2 class="configs__h2">Wormhole</h2>
 
-					<div class="configs__group-item">
+          <div class="configs__group-item">
             <h3 class="configs__h3">Charge Time:</h3>
             <input v-model="config.equipment.wormhole.chargeFrames" type="number" min="1" max="300" />
           </div>
-				</div>
+        </div>
 
-				<div class="configs__group">
-					<h2 class="configs__h2">Laser Sight</h2>
+        <div class="configs__group">
+          <h2 class="configs__h2">Laser Sight</h2>
 
-					<div class="configs__group-item">
+          <div class="configs__group-item">
             <h3 class="configs__h3">Equipped on:</h3>
-						<input type="checkbox" v-for="equip of config.modifier.laserSight.possibleOn" :value="equip" />
-						<!-- make a div, use a v-for to generate input type="checkbox" for every element in LS-config onEquipment with id equal to the value and the label = capitalized value -->
+            <div v-for="equip of config.modifier.laserSight.possibleOn">
+              <input type="checkbox" v-model="equip" />
+            </div>
+            <!-- make a div, use a v-for to generate input type="checkbox" for every element in LS-config onEquipment with id equal to the value and the label = capitalized value -->
           </div>
-				</div>
-        
+        </div>
       </section>
     </div>
 
@@ -140,7 +153,7 @@
       @hide="hideColorInput"
       :style="colorInputRendering"
       :pointerEvents="colorInputPointerEvents"
-    /> -->
+    />-->
   </div>
 </template>
 
