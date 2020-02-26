@@ -121,6 +121,7 @@
 
 					<div class="configs__group-item">
             <h3 class="configs__h3">Equipped on:</h3>
+						<input type="checkbox" v-for="equip of config.modifier.laserSight.possibleOn" :value="equip" />
 						<!-- make a div, use a v-for to generate input type="checkbox" for every element in LS-config onEquipment with id equal to the value and the label = capitalized value -->
           </div>
 				</div>

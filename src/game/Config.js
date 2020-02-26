@@ -37,6 +37,7 @@ export default class Config {
 		this.modifier = {
 			laserSight: {
 				onEquipment: ['m82'],
+				possibleOn: ['m82', 'breaker'], // For config
 				width: 1,
 				alpha: 50
 			},

@@ -79,7 +79,6 @@ Todos
 - Lav menu en fixed størrelse, så denne ikke bliver åndssvag, hvis man vælger en mindre / større bane
 - Projektil-speed under 3 virker ikke!
 - Tilføj ammo til alle våben, så det kan ændres, men brug defaults på 1 også.
-- Laser Sight equipped on skal være en liste af true / false, frem for en liste af dem den er på, så dette kan toggles med en `select` i config (dette skal også omskrives i game-kode)
 
 
 Idéer til spillet
