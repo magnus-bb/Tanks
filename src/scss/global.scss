@@ -1,5 +1,5 @@
 @mixin window {
-	background: linear-gradient(350deg, rgba(0, 0, 0, 0.15) 0%, rgba(255, 255, 255, 0.4) 100%), #ebecf0;
+	background: linear-gradient(350deg, rgba(0, 0, 0, 0.10) 0%, rgba(255, 255, 255, 0.4) 100%), #ebecf0;
 	border: 1px solid rgba(255, 255, 255, 0.4);
 	box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.25), -10px 10px 15px rgba(0, 0, 0, 0.25);
 	border-radius: 5px;
@@ -29,7 +29,8 @@
 }
 
 @mixin standard-input {
-	color: #222629;
+	// color: #222629;
+	color: var(--darkest-text);
 	font-family: Montserrat;
 	border: none;
 

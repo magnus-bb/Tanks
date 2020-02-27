@@ -37,7 +37,7 @@
 					<div class="configs__group-item">
             <h3 class="configs__h3">Wall Occurrence Rate:</h3>
             <input v-model="config.wall.occurrenceRate" type="range" min="0" max="1" step="0.05" />
-						<p>{{ config.wall.occurrenceRate }}</p>
+						<p class="configs__range-value">{{ config.wall.occurrenceRate }}</p>
           </div>
 
           <div class="configs__group-item">
@@ -71,7 +71,7 @@
 
           <div class="configs__group-item">
             <h3 class="configs__h3">Spawn Interval:</h3>
-            <input v-model="config.pickup.spawnInterval" type="number" min="50" max="1000" />
+            <input v-model="config.pickup.spawnInterval" type="number" min="50" max="1000" @blur="validateNumber($event.target)"/>
           </div>
 
           <div class="configs__group-item">
@@ -83,7 +83,7 @@
               max="1.0"
               step="0.05"
             />
-            <p>{{ config.pickup.spawnChance }}</p>
+            <p class="configs__range-value">{{ config.pickup.spawnChance }}</p>
           </div>
         </div>
 
@@ -93,7 +93,7 @@
           <div class="configs__group-item">
             <h3 class="configs__h3">Speed:</h3>
             <input v-model="config.projectile.bullet.speed" type="range" min="3" max="10" />
-            <p>{{ config.projectile.bullet.speed }}</p>
+            <p class="configs__range-value">{{ config.projectile.bullet.speed }}</p>
           </div>
 
           <div class="configs__group-item">
@@ -104,7 +104,7 @@
 					<div class="configs__group-item">
             <h3 class="configs__h3">Ammo:</h3>
             <input v-model="config.tank.ammo" type="range" min="0" max="10" />
-						<p>{{ config.tank.ammo }}</p>
+						<p class="configs__range-value">{{ config.tank.ammo }}</p>
           </div>
 
 					<div class="configs__group-item">
@@ -115,7 +115,7 @@
 					<div class="configs__group-item">
             <h3 class="configs__h3">Bullet Trail Length:</h3>
             <input v-model="config.fx.bulletTrail.length" type="range" min="5" max="100"/>
-						<p>{{ config.fx.bulletTrail.length }}</p>
+						<p class="configs__range-value">{{ config.fx.bulletTrail.length }}</p>
           </div>
         </div>
 
@@ -125,7 +125,7 @@
           <div class="configs__group-item">
             <h3 class="configs__h3">Speed:</h3>
             <input v-model="config.projectile.m82.speed" type="range" min="5" max="40" />
-            <p>{{ config.projectile.m82.speed }}</p>
+            <p class="configs__range-value">{{ config.projectile.m82.speed }}</p>
           </div>
 
           <!-- Does not change collisions, since diameter is not used -->
@@ -138,13 +138,13 @@
               max="8"
               step="0.5"
             />
-            <p>{{ config.projectile.m82.penetrationSpeedDivisor }}</p>
+            <p class="configs__range-value">{{ config.projectile.m82.penetrationSpeedDivisor }}</p>
           </div>
 
           <div class="configs__group-item">
             <h3 class="configs__h3">Ammo:</h3>
             <input v-model="config.equipment.m82.ammo" type="range" min="1" max="10" />
-            <p>{{ config.equipment.m82.ammo }}</p>
+            <p class="configs__range-value">{{ config.equipment.m82.ammo }}</p>
           </div>
         </div>
 
@@ -154,7 +154,7 @@
           <div class="configs__group-item">
             <h3 class="configs__h3">Speed:</h3>
             <input v-model="config.projectile.breaker.speed" type="range" min="3" max="15" />
-            <p>{{ config.projectile.breaker.speed }}</p>
+            <p class="configs__range-value">{{ config.projectile.breaker.speed }}</p>
           </div>
         </div>
 
@@ -195,7 +195,7 @@
 					<div class="configs__group-item">
             <h3 class="configs__h3">Opacity:</h3>
 						<input v-model="config.modifier.stealthAmmo.alpha" type="range" min="0" max="255" />
-						<p>{{ config.modifier.stealthAmmo.alpha }}</p>
+						<p class="configs__range-value">{{ config.modifier.stealthAmmo.alpha }}</p>
           </div>
         </div>
 
@@ -207,31 +207,31 @@
           <div class="configs__group-item">
             <h3 class="configs__h3">Diameter:</h3>
 						<input v-model="config.tank.diameter" type="range" min="5" max="45" />
-						<p>{{ config.tank.diameter }}</p>
+						<p class="configs__range-value">{{ config.tank.diameter }}</p>
           </div>
 
 					<div class="configs__group-item">
             <h3 class="configs__h3">Cannon length:</h3>
 						<input v-model="config.tank.cannon.length" type="range" min="5" max="40" />
-						<p>{{ config.tank.cannon.length }}</p>
+						<p class="configs__range-value">{{ config.tank.cannon.length }}</p>
           </div>
 
 					<div class="configs__group-item">
             <h3 class="configs__h3">Move Speed:</h3>
 						<input v-model="config.tank.moveSpeed" type="range" min="0.5" max="4" step="0.5"/>
-						<p>{{ config.tank.moveSpeed }}</p>
+						<p class="configs__range-value">{{ config.tank.moveSpeed }}</p>
           </div>
 
 					<div class="configs__group-item">
             <h3 class="configs__h3">Turn Speed:</h3>
 						<input v-model="config.tank.turnSpeed" type="range" min="1" max="15" step="0.5"/>
-						<p>{{ config.tank.turnSpeed }}</p>
+						<p class="configs__range-value">{{ config.tank.turnSpeed }}</p>
           </div>
 
 					<div class="configs__group-item">
             <h3 class="configs__h3">Collision Slow:</h3>
 						<input v-model="config.tank.collisionMoveSlow" type="range" min="1" max="10" step="0.5"/>
-						<p>{{ config.tank.collisionMoveSlow }}</p>
+						<p class="configs__range-value">{{ config.tank.collisionMoveSlow }}</p>
           </div>
 
 
@@ -240,10 +240,6 @@
       </section>
     </div>
 
-    <!-- Reactivity template: -->
-    <!-- <p>Reactivity Test:</p>
-    <input v-model="bulletSpeed" type="number" />
-    {{ bulletSpeed }}
     <color-input
       id="configMenuColorPicker"
       :selectedColor="colorTarget.target[colorTarget.prop]"
@@ -251,7 +247,12 @@
       @hide="hideColorInput"
       :style="colorInputRendering"
       :pointerEvents="colorInputPointerEvents"
-    />-->
+    />
+
+    <!-- Reactivity template: -->
+    <!-- <p>Reactivity Test:</p>
+    <input v-model="bulletSpeed" type="number" />
+    {{ bulletSpeed }} -->
   </div>
 </template>
 
@@ -306,6 +307,21 @@ export default {
 	},
 
 	methods: {
+		validateNumber(element) {
+			console.log(element.min, element.value, element.max)
+			let { min, value, max } = Number(element)
+			min = Number(min)
+			value = Number(value)
+			max = Number(max)
+			console.log(typeof value)
+
+			if (value < min) {
+				element.value = min
+			} else if (value > max) {
+				element.value = max
+			}
+		},
+
 		decimals(num, numOfDecimals) {
 			return num.toFixed(numOfDecimals)
 		},
@@ -440,6 +456,10 @@ export default {
 	// flex-direction: column;
 	justify-content: space-between;
 	align-items: center;
+
+	p {
+		color: var(--dark-text);
+	}
 }
 
 .configs__h2 {

@@ -137,9 +137,6 @@ input[type='range'] {
 		appearance: none;
 	}
 
-	&::-webkit-slider-runnable-track {
-	}
-
 	&::-moz-range-thumb {
 		background: transparent;
 		border: none;
@@ -166,24 +163,17 @@ input[type='range'] {
 	overflow: visible;
 
 	&::-webkit-slider-thumb {
-		width: 15px;
-		height: 15px;
+		width: 18px;
+		height: 18px;
 		border-radius: 50%;
 		border: 1px solid #dee1eb;
-		@include bg(var(--light-text));
 		background: linear-gradient(180deg, #ffffff 0%, #f6f8fd 100%);
 		box-shadow: 1px 2px 2px rgba(89, 98, 120, 0.24);
 	}
 	&::-webkit-slider-runnable-track {
 		@include shallow-inset;
-		background: linear-gradient(
-				160.52deg,
-				rgba(255, 255, 255, 0) 0.48%,
-				rgba(0, 0, 0, 0.15) 100%
-			),
-			#ebecf0;
+
 		border-radius: 10px;
-		border: 1px solid rgba(255, 255, 255, 0.4);
 		height: 10px;
 		overflow: visible;
 		display: flex;
@@ -191,15 +181,74 @@ input[type='range'] {
 	}
 
 	&::-moz-range-thumb {
-		// border: 1px solid black;
+		width: 18px;
+		height: 18px;
+		border-radius: 50%;
+		border: 1px solid #dee1eb;
+		background: linear-gradient(180deg, #ffffff 0%, #f6f8fd 100%);
+		box-shadow: 1px 2px 2px rgba(89, 98, 120, 0.24);
 	}
 	&::-moz-range-track {
+		@include shallow-inset;
+
+		border-radius: 10px;
+		height: 10px;
+		overflow: visible;
+		display: flex;
+		align-items: center;
+	}
+	&::-moz-range-progress {
+		height: 10px;
+		border-radius: 5px 0 0 5px;
+		@include bg(var(--cta-color));
 	}
 
 	&::-ms-thumb {
-		// border: 1px solid black;
+		width: 18px;
+		height: 18px;
+		border-radius: 50%;
+		border: 1px solid #dee1eb;
+		background: linear-gradient(180deg, #ffffff 0%, #f6f8fd 100%);
+		box-shadow: 1px 2px 2px rgba(89, 98, 120, 0.24);
 	}
 	&::-ms-track {
+		@include shallow-inset;
+
+		border-radius: 10px;
+		height: 10px;
+		overflow: visible;
+		display: flex;
+		align-items: center;
 	}
+	&::-ms-fill-lower {
+		height: 10px;
+		border-radius: 5px 0 0 5px;
+		@include bg(var(--cta-color));
+	}
+}
+
+input[type='number'] {
+	// Resets:
+	box-sizing: content-box;
+	appearance: textfield;
+	outline: none;
+	background: none;
+	border: none;
+	&::-webkit-inner-spin-button,
+	&::-webkit-outer-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+
+	@include standard-input;
+
+	@include shallow-inset;
+	@include bg(var(--light-text));
+	text-align: center;
+
+	border-radius: 15px;
+	font-size: 1rem;
+	padding: 0.2ch 0.5ch;
+	width: 4ch;
 }
 </style>
