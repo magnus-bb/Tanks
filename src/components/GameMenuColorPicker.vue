@@ -1,6 +1,6 @@
 <template>
   <div :id="id" class="color-picker">
-    <div class="color-vals-container">
+    <div class="color-picker__color-vals">
       <span class="red">{{ color[0] }}</span>
       <span class="green">{{ color[1] }}</span>
       <span class="blue">{{ color[2] }}</span>
@@ -13,7 +13,7 @@ import P5 from 'p5'
 import col from '@/assets/all-colors.png'
 
 export default {
-	name: 'ColorInput',
+	name: 'ColorPicker',
 
 	props: ['id', 'selectedColor', 'pointerEvents'], // Pointer events are not css, but js. Id is important to make several color pickers
 
@@ -101,7 +101,7 @@ export default {
 	box-shadow: 5px 5px 10px #a6abbd;
 }
 
-.color-vals-container {
+.color-picker__color-vals {
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
 	justify-items: center;

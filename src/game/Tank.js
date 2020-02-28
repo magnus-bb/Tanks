@@ -233,8 +233,20 @@ export default class Tank {
 		// Turns slowly, if driving forward:
 		for (const axis in axes) {
 			if (axes[axis] && this.driving === 'forward') {
-				this._turn(getTurnDirection(axis, this.direction), true) // true lowers the turnspeed for collisions
+				this._turn(this._getTurnDirection(axis, this.direction), true) // true lowers the turnspeed for collisions
 			}
+		}
+	}
+
+	// Returns left (-1) or right (1) based on the axis of collision and pointing direction of tank
+	_getTurnDirection(collisionAxis, dir) {
+		// Lower right and top left quadrant:
+		if (dir.between(0, 90, false) || dir < -270 || dir.between(180, 270, false) || dir.between(-180, -90, false)) {
+			return collisionAxis === 'x' ? 1 : -1
+
+			// Lower left and top right quadrant:
+		} else if (dir.between(90, 180, false) || dir.between(-270, -180, false) || dir > 270 || dir.between(-90, 0, false)) {
+			return collisionAxis === 'x' ? -1 : 1
 		}
 	}
 

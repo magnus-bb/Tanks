@@ -1,11 +1,11 @@
 import GameState from './GameState.js'
 import Tank from './Tank.js'
 import grid from './grid.js'
-import { randomSpawnCoords, pointCloseToTank } from './helpers.js'
+import { randomCoords } from './helpers.js'
 
 import store from '@/store'
 const { p5 } = store.state
-const { gameState, gameStatus } = store.getters
+const { gameState, gameStatus, config } = store.getters
 
 const game = {
 	
@@ -46,11 +46,11 @@ const game = {
 		// Adds players' tanks:
 		for (const player of gameStatus().players) {
 
-			let spawnCoords = randomSpawnCoords()
+			let spawnCoords = randomCoords()
 
 			// Makes new point if prior was too close to a tank:
-			while (pointCloseToTank(spawnCoords)) {
-				spawnCoords = randomSpawnCoords()
+			while (this._closeToTank(spawnCoords)) {
+				spawnCoords = randomCoords()
 			}
 
 			store.commit('addTank', new Tank(player.name, player.color, spawnCoords.x, spawnCoords.y, player.controls, player))
@@ -60,6 +60,16 @@ const game = {
 
 		// Hides menu:
 		this.unpause()
+	},
+
+	_closeToTank(point) {
+		for (const tank of gameState().tanks) {
+			if (p5.dist(point.x, point.y, tank.x, tank.y) <= config().cell.width * config().tank.spawnDistance) {
+				return true
+			}
+	
+			continue
+		}
 	},
 
 	// Checks if game should start counting towards ending:

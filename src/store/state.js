@@ -2,7 +2,7 @@ import P5 from 'p5'
 import Config from '@/game/Config.js'
 
 export const state = {
-	p5: new P5(sketch => {}, 'canvasContainer'),
+	p5: new P5(() => {}, 'canvasContainer'),
 	config: new Config, //TODO: Load instead
 	gameState: {}, // gameState is set on game start
 	gameStatus: {
@@ -20,6 +20,5 @@ export const state = {
 		pickups: {},
 		projectiles: {},
 		stealthProjectiles: {},
-		//fx: {}
 	}
 }

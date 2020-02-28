@@ -367,35 +367,35 @@
       </section>
     </div>
 
-    <color-input
+    <color-picker
       id="configMenuColorPicker"
       :selectedColor="colorTarget.target[colorTarget.prop]"
       @color="setColor($event)"
-      @hide="hideColorInput"
-      :style="colorInputRendering"
-      :pointerEvents="colorInputPointerEvents"
+      @hide="hideColorPicker"
+      :style="colorPickerRendering"
+      :pointerEvents="colorPickerPointerEvents"
     />
   </div>
 </template>
 
 <script>
-import ColorInput from './GameMenuColorInput.vue'
+import ColorPicker from './GameMenuColorPicker.vue'
 import ColorConfigButton from './GameMenuColorConfigButton.vue'
 import helpers from '@/game/helpers.js'
 
 export default {
 	name: 'GameMenuConfig',
 	components: {
-		ColorInput,
+		ColorPicker,
 		ColorConfigButton,
 	},
 
 	data() {
 		return {
 			colorTarget: { target: this.$store.state.config, prop: 'bgColor' }, // Initial value doesn't matter, just has to be valid (to avoid error on mount)
-			colorInputShow: 'none',
-			colorInputPointerEvents: false,
-			colorInputCoords: {
+			colorPickerShow: 'none',
+			colorPickerPointerEvents: false,
+			colorPickerCoords: {
 				x: 0,
 				y: 0,
 			},
@@ -407,11 +407,11 @@ export default {
 			return this.$store.state.config
 		},
 
-		colorInputRendering() {
+		colorPickerRendering() {
 			return {
-				'--top': this.colorInputCoords.y + 'px',
-				'--left': this.colorInputCoords.x + 'px',
-				'--show': this.colorInputShow,
+				'--top': this.colorPickerCoords.y + 'px',
+				'--left': this.colorPickerCoords.x + 'px',
+				'--show': this.colorPickerShow,
 			}
 		},
 	},
@@ -441,22 +441,22 @@ export default {
 				prop,
 			}
 
-			this.colorInputCoords = {
-				x: event.layerX, // Uses layer, not page, since colorInput is absolutely positioned
+			this.colorPickerCoords = {
+				x: event.layerX, // Uses layer, not page, since colorPicker is absolutely positioned
 				y: event.layerY,
 			}
 
-			this.colorInputShow = 'flex'
-			this.colorInputPointerEvents = true
+			this.colorPickerShow = 'flex'
+			this.colorPickerPointerEvents = true
 		},
 
 		setColor(event) {
 			this.colorTarget.target[this.colorTarget.prop] = event
 		},
 
-		hideColorInput() {
-			this.colorInputShow = 'none'
-			this.colorInputPointerEvents = false
+		hideColorPicker() {
+			this.colorPickerShow = 'none'
+			this.colorPickerPointerEvents = false
 		},
 	},
 }

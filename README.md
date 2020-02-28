@@ -27,59 +27,53 @@ Guidelines
 
 Todos
 -----
+### Tilføj
 - En lækker effekt når et projektil kalder `destroy()`, så det ikke bare forsvinder.
 - Finde og loade open source lydeffekter til skud (*gud forbyde, at jeg bliver nødt til at optage mundlyde*)
-- Brug composition (f.eks. til projektil-tank checks og projektil-wall checks)
 - Tank collisions med hinanden?
-- Find et system for helpers - static i classes vs i instances vs globale funktioner
-- Menu / status
-	- Tilføj fejlmeddelelse, hvis ikke alle controls er valgt
-	- Graying af brugte controls + besked hvis CTRL + W er valgt som controls på tværs af spillere også
-	- Feedback på player created
-	- Statusfelter skal kun vise det mest basale, og så give udvidet info ved hover (f.eks. antal selvmord)
-- Evt. ændr walls til at have de props, der skal bruges for at udregne collisions, så de ikke skal udregnes hver gang
+- Feedback på player created
+- Statusfelter skal kun vise det mest basale, og så give udvidet info ved hover (f.eks. antal selvmord)
+- Tilføj fejlmeddelelse, hvis ikke alle controls er valgt
+- Graying af brugte controls + besked hvis CTRL + W er valgt som controls på tværs af spillere også
 - Tilføj en counter til selvmord, sørg for at et selvmord ikke tæller almindelige kills
+- Tildeling af point i `Game.end()` eller i en funktion, den kalder
+- Lav muzzle-effekt om til noget nyt grafisk i stedet for at manipulere størrelsen af projektilet
+- Autostørrelse (på max eller evt default) af canvas ved at tage vinduets width divideret med cellestørrelsen?
+- Tilføj mulighed for altid at have laser sight i config
+- P5Vector er fucking nemt med .add(), og man kan stadig bare x / y *= -1 for at omvende en akse nemt: Lav om til vektorer (så skrå vægge etc kan laves)
+- Opfordr til at bruge ALT, SHIFT, CONTROL etc, da disse oftes kan bruges med flere taster
+- Sørg for at det er muligt at slette en spiller nede i status, så længe spillet ikke er startet
+- et `?` til at se enheder på configs (px, frames etc)
+- Besked om restartnødvendighed på nogle configs (fps f.eks.)
+- Collisionchecking skal loope igennem det, der flytter sig (tanks, projektiler etc), og så bruge sin egen x, y til kun at finde sin egen celle, og så kun checke collisions på de walls, der er rundt om (bliver stadig nødt til at gennemløbe alle andre ting, der flytter sig, for at se deres position)
+- Animationer i menuer
+
+### Fix
+- Evt. ændr walls til at have de props, der skal bruges for at udregne collisions, så de ikke skal udregnes hver gang
 - Se på om body + cannon kan tegnes som 1 p5 shape, som kan roteres ved turning
 - Rename helpers navne til at give bedre mening
-- Tildeling af point i `Game.end()` eller i en funktion, den kalder
 - Loops i `draw.js` kan slås sammen. F.eks. kan tanks + projectiles vist lægges ind i projectiles (bare tjek om rækkefølgen tillader det først)
 - Random selections, der skal ekskludere noget bestemt (f.eks de steder, der allerede er en pickup eller tanks, der ikke skal vælge sig selv) skal omskrives så de tager arrayet, kloner det og fjerner sig selv/de ekskluderede fra klonen og bare vælger en random. På denne måde skal funtionen ikke kalde sig selv igen, hvis den rammer noget ekskluderet.
-- Lav muzzle-effekt om til noget nyt grafisk i stedet for at manipulere størrelsen af projektilet
 - Omskriv metoder, der *kun* kaldes af et objekt selv til private (med underscores) - `.show()`, `.move()` etc som kaldes af `onFrame()`
 - Evt. del tanks' `handleHit` til `handleHit` og `killed`, så `handleHit` kan tjekke eventuelle skjolde først etc?
 - Flyt static props og metoder til toppen af classes
-- Autostørrelse (på max eller evt default) af canvas ved at tage vinduets width divideret med cellestørrelsen?
 - Colors skal være kopier af owner, ikke den samme (hvis det ikke allerede er sådan), for at forhindre problemer med setAlpha etc
-- Sørg for at alt der kan ændres i `config` genindlæses eller slet ikke indlæses før et spil er i gang
-	- Udnyt evt forskellen på en gemt config og så variablen
-	- Dette ødelægger muligvis baggrunden inden start, hvis man ændrer størrelse af mazen?
-	- Evt brug en "this setting requires a restart"
-	- En løsning på evt problemer kunne være at kopiere værdien fra `config` ind i ALLE classes etc, og læse derfra, så man kan ændre config ligeså meget man vil
 - lav steps på `tankHit()` (se kommentar ved tankHit())
-- Tilføj mulighed for altid at have laser sight i config
-- P5Vector er fucking nemt med .add(), og man kan stadig bare x / y *= -1 for at omvende en akse nemt: Lav om til vektorer (så skrå vægge etc kan laves)
+- Sørg for steps på ALT der kan ændres i config, dvs også movespeed evt (hvis det bliver muligt at gøre denne stor nok til at gå igennem vægge etc)
 - Hjørnecollisions bugger på bounce med det nye step lookaheads (den når vist at procce flere gange per frame nogle gange?)
-- Se om helpers kan flyttes til en enkelt class / constructor etc, hvis kun dén bruger helperen
+- Se om nogle helpers kan flyttes til en enkelt class / constructor etc, hvis kun dén bruger helperen
 - Fjern alle gamle kommentarer
 - Se om noget state kan flyttes ud af Vuex
-- Simplificér menuer / components
 - Ny løsning til `fire` controls-listener, som enten ikke er p5 (men stadig ikke kan fyre flere pr frame), eller bare som minimum ikke er i ekstern js
+	- Se om Fire kan flyttes ind i tanken, (evt med `keyIsDown()`) selvom hvert frame så tjekker om man skyder, og man bare kan holde den inde
 - Organisér `mutations`
 - Separér `darkMode` fra spillets farver, men sæt default farver til at være det samme
-- Hele spillet skal skaleres op, så menu + alle assets er større, men holder et default-grid på 15 * 10 celler
 - Fix colorpicker location (se kommentar i component om problemet)
-- Se om Fire kan flyttes ind i tanken, (evt med `keyIsDown()`) selvom hvert frame så tjekker om man skyder, og man bare kan holde den inde
-- Lav en pop-up, hvis flere brugere (til sammen) i state har CTRL + W som bindings
-- Opfordr til at bruge ALT, SHIFT, CONTROL etc, da disse oftes kan bruges med flere
-- Sørg for at det er muligt at slette en spiller nede i status, så længe spillet ikke er startet
-- Tilpasning af range-sliders i config til altid at vise med samme antal decimaler
-- et `?` til at se enheder på configs (px, frames etc)
-- Besked om restartnødvendighed på nogle configs (fps f.eks.)
 - Lav menu en fixed størrelse, så denne ikke bliver åndssvag, hvis man vælger en mindre / større bane
 - Projektil-speed under 3 virker ikke!
 - Tilføj ammo til alle våben, så det kan ændres, men brug defaults på 1 også.
-- Sørg for steps på ALT der kan ændres i config, dvs også movespeed evt (hvis det bliver muligt at gøre denne stor nok til at gå igennem vægge etc)
-- Collisionchecking skal loope igennem det, der flytter sig (tanks, projektiler etc), og så bruge sin egen x, y til kun at finde sin egen celle, og så kun checke collisions på de walls, der er rundt om (bliver stadig nødt til at gennemløbe alle andre ting, der flytter sig, for at se deres position)
+- Color tank skal være ligeså lækker som color-input-buttons i config
+- Bullet skal bruge circle-intersections frem for midtpunkt, så man kan ændre størrelse på projektil
 
 
 Idéer til spillet

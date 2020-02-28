@@ -1,8 +1,8 @@
 import * as projectile from './Projectiles.js'
 import { LaserSight } from './Modifiers.js'
-import { randomTank } from './helpers.js'
 
 import store from '@/store'
+const { p5 } = store.state
 const { config, gameState } = store.getters
 
 //* BREAKER
@@ -75,11 +75,34 @@ function Wormhole(owner, name) {
 			console.log(this.name + " used by: " + this.owner.name)
 
 			const selfIndex = gameState().tanks.findIndex(i => i.equipment === this)
-			const otherTank = randomTank(selfIndex)
+			const otherTank = this._randomTank(selfIndex)
 
 			otherTank && this._swap(otherTank) // Has to check for undefined since this can happen during end timer with just 1 tank (random returns undefined)
 
 			this._remove()
+		},
+
+		// Returns a random tank from state.tanks, an array (or single number) of excluded indices being optional:
+		_randomTank(exclude = null) {
+
+			// Copies tanks array:
+			const tanks = [...gameState().tanks]
+
+			if (exclude !== null) { // Has to check against null, since index 0 is also falsy
+
+				// Removes any exclusions from clone:
+				if (typeof exclude === 'number') { // Can use both single index (faster), or array of exclusions
+					tanks.splice(exclude, 1)
+				} else {
+					for (let i = exclude.length - 1; i >= 0; i--) { //! Not sure if this works as intended
+						const index = exclude[i]
+						tanks.splice(index, 1)
+					}
+				}
+			}
+
+			// Returns random tank from remainder (or undefined if none are left):
+			return p5.random(tanks)
 		},
 
 		// Swaps x, y, and direction with other tank:

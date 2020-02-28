@@ -60,20 +60,20 @@
       <button class="start__start-button" @click="startGame">Start Game</button>
     </section>
 
-    <color-input
+    <color-picker
 		id="createMenuColorPicker"
       :selected-color="selectedColor"
       @color="setColor($event)"
-      @hide="hideColorInput"
-      :style="colorInputRendering"
-      :pointer-events="colorInputPointerEvents"
+      @hide="hideColorPicker"
+      :style="colorPickerRendering"
+      :pointer-events="colorPickerPointerEvents"
     />
   </div>
 </template>
 
 <script>
 import InlineSvg from 'vue-inline-svg'
-import ColorInput from './GameMenuColorInput.vue'
+import ColorPicker from './GameMenuColorPicker.vue'
 import KeybindingInput from './GameMenuCreateKeybindingInput.vue'
 
 import game from '@/game/game.js'
@@ -84,7 +84,7 @@ export default {
 	name: 'GameMenuCreate',
 	components: {
 		InlineSvg,
-		ColorInput,
+		ColorPicker,
 		KeybindingInput,
 	},
 
@@ -100,9 +100,9 @@ export default {
 				right: '',
 			},
 
-			colorInputShow: 'none',
-			colorInputPointerEvents: false,
-			colorInputCoords: {
+			colorPickerShow: 'none',
+			colorPickerPointerEvents: false,
+			colorPickerCoords: {
 				x: 0,
 				y: 0,
 			},
@@ -110,11 +110,11 @@ export default {
 	},
 
 	computed: {
-		colorInputRendering() {
+		colorPickerRendering() {
 			return {
-				'--top': this.colorInputCoords.y + 'px',
-				'--left': this.colorInputCoords.x + 'px',
-				'--show': this.colorInputShow,
+				'--top': this.colorPickerCoords.y + 'px',
+				'--left': this.colorPickerCoords.x + 'px',
+				'--show': this.colorPickerShow,
 			}
 		},
 
@@ -158,13 +158,13 @@ export default {
 			// Only clicks on relevant parts of svg:
 			if (!event.target.classList.contains('select-color-input')) return
 
-			this.colorInputCoords = {
-				x: event.layerX, // Uses layer, not page, since colorInput is absolutely positioned
+			this.colorPickerCoords = {
+				x: event.layerX, // Uses layer, not page, since colorPicker is absolutely positioned
 				y: event.layerY,
 			}
 
-			this.colorInputShow = 'flex'
-			this.colorInputPointerEvents = true
+			this.colorPickerShow = 'flex'
+			this.colorPickerPointerEvents = true
 		},
 
 		randomizeColor() {
@@ -191,9 +191,9 @@ export default {
 			document.getElementById('tankColor').style.fill = fill
 		},
 
-		hideColorInput() {
-			this.colorInputShow = 'none'
-			this.colorInputPointerEvents = false
+		hideColorPicker() {
+			this.colorPickerShow = 'none'
+			this.colorPickerPointerEvents = false
 		},
 
 		resetInputs() {

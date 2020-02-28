@@ -1,7 +1,7 @@
 import Equipment from './Equipment.js'
 import Modifier from './Modifiers.js'
 import Powerup from './Powerups.js'
-import { getCell, randomSpawnCoords, circleIntersectsRect } from './helpers.js'
+import { getCell, randomCoords, circleIntersectsRect } from './helpers.js'
 
 import store from '@/store'
 const { p5, assets } = store.state
@@ -130,7 +130,7 @@ const Pickup = {
 			var { col, row } = cellIndices
 			var { x, y } = getCell(col, row).midpoint
 		} else {
-			var { x, y, col, row } = randomSpawnCoords()
+			var { x, y, col, row } = randomCoords()
 
 			// Remake if pickup is already at this location:
 			for (const pickup of gameState().pickups) {

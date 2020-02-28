@@ -1,4 +1,4 @@
-import { getOffsetPoint, outOfBounds, pointInRect, getWallRect, getDirection } from './helpers.js'
+import { getOffsetPoint, outOfBounds, pointInRect, getWallRect } from './helpers.js'
 
 import store from '@/store'
 const { p5 } = store.state
@@ -411,7 +411,12 @@ const mixins = {
 				}
 
 				// Updates direction to match the new moveCoords:
-				this.direction = getDirection(this.moveCoords.dX, this.moveCoords.dY)
+				this.direction = this._getDirection(this.moveCoords.dX, this.moveCoords.dY)
+			},
+
+			// Converts difference in x and y coords to a direction in degrees:
+			_getDirection(dX, dY) {
+				return p5.atan2(dY, dX) // x & y are reversed because of the atan2 function, don't change
 			}
 		}
 	},
