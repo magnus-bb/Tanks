@@ -72,7 +72,6 @@ Todos
 - Lav en pop-up, hvis flere brugere (til sammen) i state har CTRL + W som bindings
 - Opfordr til at bruge ALT, SHIFT, CONTROL etc, da disse oftes kan bruges med flere
 - Sørg for at det er muligt at slette en spiller nede i status, så længe spillet ikke er startet
-- Gennemgå CSS. Er BEM godt til spil?
 - Tilpasning af range-sliders i config til altid at vise med samme antal decimaler
 - et `?` til at se enheder på configs (px, frames etc)
 - Besked om restartnødvendighed på nogle configs (fps f.eks.)
@@ -80,7 +79,7 @@ Todos
 - Projektil-speed under 3 virker ikke!
 - Tilføj ammo til alle våben, så det kan ændres, men brug defaults på 1 også.
 - Sørg for steps på ALT der kan ændres i config, dvs også movespeed evt (hvis det bliver muligt at gøre denne stor nok til at gå igennem vægge etc)
-- Omskriv input type=number til at være en komponent, der har number validation
+- Collisionchecking skal loope igennem det, der flytter sig (tanks, projektiler etc), og så bruge sin egen x, y til kun at finde sin egen celle, og så kun checke collisions på de walls, der er rundt om (bliver stadig nødt til at gennemløbe alle andre ting, der flytter sig, for at se deres position)
 
 
 Idéer til spillet
