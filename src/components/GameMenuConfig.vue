@@ -32,12 +32,12 @@
             <h3 class="configs__h3">Frames Per Second:</h3>
             <input v-model="config.fps" type="number" min="1" max="60" />
           </div>
-					-->
+          -->
 
-					<div class="configs__group-item">
+          <div class="configs__group-item">
             <h3 class="configs__h3">Wall Occurrence Rate:</h3>
             <input v-model="config.wall.occurrenceRate" type="range" min="0" max="1" step="0.05" />
-						<p class="configs__range-value">{{ config.wall.occurrenceRate }}</p>
+            <p class="configs__range-value">{{ config.wall.occurrenceRate }}</p>
           </div>
 
           <div class="configs__group-item">
@@ -62,7 +62,13 @@
 
           <div class="configs__group-item">
             <h3 class="configs__h3">Stay-alive Time:</h3>
-            <input v-model="config.game.endFrames" type="number" min="1" max="1000" />
+            <input
+              v-model="config.game.endFrames"
+              type="number"
+              min="1"
+              max="1000"
+              @blur="validateNumber($event.target)"
+            />
           </div>
         </div>
 
@@ -71,7 +77,13 @@
 
           <div class="configs__group-item">
             <h3 class="configs__h3">Spawn Interval:</h3>
-            <input v-model="config.pickup.spawnInterval" type="number" min="50" max="1000" @blur="validateNumber($event.target)"/>
+            <input
+              v-model="config.pickup.spawnInterval"
+              type="number"
+              min="50"
+              max="1000"
+              @blur="validateNumber($event.target)"
+            />
           </div>
 
           <div class="configs__group-item">
@@ -98,24 +110,30 @@
 
           <div class="configs__group-item">
             <h3 class="configs__h3">Duration:</h3>
-            <input v-model="config.projectile.bullet.duration" type="number" min="30" max="1200" />
+            <input
+              v-model="config.projectile.bullet.duration"
+              type="number"
+              min="30"
+              max="1200"
+              @blur="validateNumber($event.target)"
+            />
           </div>
 
-					<div class="configs__group-item">
+          <div class="configs__group-item">
             <h3 class="configs__h3">Ammo:</h3>
             <input v-model="config.tank.ammo" type="range" min="0" max="10" />
-						<p class="configs__range-value">{{ config.tank.ammo }}</p>
+            <p class="configs__range-value">{{ config.tank.ammo }}</p>
           </div>
 
-					<div class="configs__group-item">
+          <div class="configs__group-item">
             <h3 class="configs__h3">Bullet Trail:</h3>
-            <input v-model="config.fx.bulletTrail.on" type="checkbox"/>
+            <input v-model="config.fx.bulletTrail.on" type="checkbox" />
           </div>
 
-					<div class="configs__group-item">
+          <div class="configs__group-item">
             <h3 class="configs__h3">Bullet Trail Length:</h3>
-            <input v-model="config.fx.bulletTrail.length" type="range" min="5" max="100"/>
-						<p class="configs__range-value">{{ config.fx.bulletTrail.length }}</p>
+            <input v-model="config.fx.bulletTrail.length" type="range" min="5" max="100" />
+            <p class="configs__range-value">{{ config.fx.bulletTrail.length }}</p>
           </div>
         </div>
 
@@ -163,7 +181,13 @@
 
           <div class="configs__group-item">
             <h3 class="configs__h3">Charge Time:</h3>
-            <input v-model="config.equipment.wormhole.chargeFrames" type="number" min="1" max="300" />
+            <input
+              v-model="config.equipment.wormhole.chargeFrames"
+              type="number"
+              min="1"
+              max="300"
+              @blur="validateNumber($event.target)"
+            />
           </div>
         </div>
 
@@ -173,70 +197,79 @@
           <div class="configs__group-item">
             <h3 class="configs__h3">Equipped on:</h3>
             <div v-for="equip of config.modifier.laserSight.possibleOn" :key="equip">
-              <input
-                type="checkbox"
-                :id="equip"
-                :value="equip"
-                v-model="config.modifier.laserSight.onEquipment"
-              />
-              <label :for="equip">{{ equip.capitalize() }}</label>
+              <div class="configs__checkbox">
+                <input
+                  type="checkbox"
+									:id="equip"
+                  :value="equip"
+                  v-model="config.modifier.laserSight.onEquipment"
+									@change="test($event)"
+                />
+                <label :for="equip">
+									<div class="configs__checkbox-box"></div>
+									{{ equip.capitalize() }}
+								</label>
+              </div>
             </div>
           </div>
         </div>
 
-				<div class="configs__group">
+        <div class="configs__group">
           <h2 class="configs__h2">Stealth Ammo</h2>
 
           <div class="configs__group-item">
             <h3 class="configs__h3">Duration:</h3>
-						<input v-model="config.modifier.stealthAmmo.duration" type="number" min="30" max="1200" />
+            <input
+              v-model="config.modifier.stealthAmmo.duration"
+              type="number"
+              min="30"
+              max="1200"
+              @blur="validateNumber($event.target)"
+            />
           </div>
 
-					<div class="configs__group-item">
+          <div class="configs__group-item">
             <h3 class="configs__h3">Opacity:</h3>
-						<input v-model="config.modifier.stealthAmmo.alpha" type="range" min="0" max="255" />
-						<p class="configs__range-value">{{ config.modifier.stealthAmmo.alpha }}</p>
+            <input v-model="config.modifier.stealthAmmo.alpha" type="range" min="0" max="255" />
+            <p class="configs__range-value">{{ config.modifier.stealthAmmo.alpha }}</p>
           </div>
         </div>
 
-				<div class="configs__group">
+        <div class="configs__group">
           <h2 class="configs__h2">Tank</h2>
 
-					<!-- Warn that cannon-length cannot be shorter than radius! (pop-up when this is set?) -->
+          <!-- Warn that cannon-length cannot be shorter than radius! (pop-up when this is set?) -->
 
           <div class="configs__group-item">
             <h3 class="configs__h3">Diameter:</h3>
-						<input v-model="config.tank.diameter" type="range" min="5" max="45" />
-						<p class="configs__range-value">{{ config.tank.diameter }}</p>
+            <input v-model="config.tank.diameter" type="range" min="5" max="45" />
+            <p class="configs__range-value">{{ config.tank.diameter }}</p>
           </div>
 
-					<div class="configs__group-item">
+          <div class="configs__group-item">
             <h3 class="configs__h3">Cannon length:</h3>
-						<input v-model="config.tank.cannon.length" type="range" min="5" max="40" />
-						<p class="configs__range-value">{{ config.tank.cannon.length }}</p>
+            <input v-model="config.tank.cannon.length" type="range" min="5" max="40" />
+            <p class="configs__range-value">{{ config.tank.cannon.length }}</p>
           </div>
 
-					<div class="configs__group-item">
+          <div class="configs__group-item">
             <h3 class="configs__h3">Move Speed:</h3>
-						<input v-model="config.tank.moveSpeed" type="range" min="0.5" max="4" step="0.5"/>
-						<p class="configs__range-value">{{ config.tank.moveSpeed }}</p>
+            <input v-model="config.tank.moveSpeed" type="range" min="0.5" max="4" step="0.5" />
+            <p class="configs__range-value">{{ config.tank.moveSpeed }}</p>
           </div>
 
-					<div class="configs__group-item">
+          <div class="configs__group-item">
             <h3 class="configs__h3">Turn Speed:</h3>
-						<input v-model="config.tank.turnSpeed" type="range" min="1" max="15" step="0.5"/>
-						<p class="configs__range-value">{{ config.tank.turnSpeed }}</p>
+            <input v-model="config.tank.turnSpeed" type="range" min="1" max="15" step="0.5" />
+            <p class="configs__range-value">{{ config.tank.turnSpeed }}</p>
           </div>
 
-					<div class="configs__group-item">
+          <div class="configs__group-item">
             <h3 class="configs__h3">Collision Slow:</h3>
-						<input v-model="config.tank.collisionMoveSlow" type="range" min="1" max="10" step="0.5"/>
-						<p class="configs__range-value">{{ config.tank.collisionMoveSlow }}</p>
+            <input v-model="config.tank.collisionMoveSlow" type="range" min="1" max="10" step="0.5" />
+            <p class="configs__range-value">{{ config.tank.collisionMoveSlow }}</p>
           </div>
-
-
         </div>
-
       </section>
     </div>
 
@@ -252,7 +285,7 @@
     <!-- Reactivity template: -->
     <!-- <p>Reactivity Test:</p>
     <input v-model="bulletSpeed" type="number" />
-    {{ bulletSpeed }} -->
+    {{ bulletSpeed }}-->
   </div>
 </template>
 
@@ -307,20 +340,18 @@ export default {
 	},
 
 	methods: {
-		validateNumber(element) {
-			console.log(element.min, element.value, element.max)
-			console.log(typeof element.min, typeof element.value, typeof element.max)
-			// let { min, value, max } = Number(element)
-			// min = Number(min)
-			// value = Number(value)
-			// max = Number(max)
-			// console.log(typeof value)
+		test(e) {
+			console.log(event)
+		},
 
-			// if (value < min) {
-			// 	element.value = min
-			// } else if (value > max) {
-			// 	element.value = max
-			// }
+		validateNumber(e) {
+			if (e.valueAsNumber < Number(e.min)) {
+				e.value = e.min
+			} else if (e.valueAsNumber > Number(e.max)) {
+				e.value = e.max
+			}
+
+			console.log(e.min, e.value, e.max)
 		},
 
 		decimals(num, numOfDecimals) {

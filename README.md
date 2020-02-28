@@ -80,6 +80,7 @@ Todos
 - Projektil-speed under 3 virker ikke!
 - Tilføj ammo til alle våben, så det kan ændres, men brug defaults på 1 også.
 - Sørg for steps på ALT der kan ændres i config, dvs også movespeed evt (hvis det bliver muligt at gøre denne stor nok til at gå igennem vægge etc)
+- Omskriv input type=number til at være en komponent, der har number validation
 
 
 Idéer til spillet

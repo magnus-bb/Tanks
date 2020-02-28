@@ -251,4 +251,27 @@ input[type='number'] {
 	padding: 0.2ch 0.5ch;
 	width: 4ch;
 }
+
+.configs__checkbox {
+	.configs__checkbox-box {
+		cursor: pointer;
+		display: inline-block;
+		height: 15px;
+		width: 15px;
+		border-radius: 3px;
+		@include small-outset;
+		@include bg(var(--focus-color));
+	}
+
+	input {
+		appearance: none;
+
+		&:checked + label .configs__checkbox-box {
+			// @include shallow-inset;
+			@include bg(var(--cta-color));
+		}
+	}
+
+	
+}
 </style>
