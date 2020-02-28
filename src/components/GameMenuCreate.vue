@@ -91,7 +91,7 @@ export default {
 	data() {
 		return {
 			selectedName: '',
-			selectedColor: this.randomizeColor(), // Jumble?
+			selectedColor: this.randomizeColor(),
 			selectedControls: {
 				fire: '',
 				forward: '',
