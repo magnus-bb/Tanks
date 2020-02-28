@@ -309,17 +309,18 @@ export default {
 	methods: {
 		validateNumber(element) {
 			console.log(element.min, element.value, element.max)
-			let { min, value, max } = Number(element)
-			min = Number(min)
-			value = Number(value)
-			max = Number(max)
-			console.log(typeof value)
+			console.log(typeof element.min, typeof element.value, typeof element.max)
+			// let { min, value, max } = Number(element)
+			// min = Number(min)
+			// value = Number(value)
+			// max = Number(max)
+			// console.log(typeof value)
 
-			if (value < min) {
-				element.value = min
-			} else if (value > max) {
-				element.value = max
-			}
+			// if (value < min) {
+			// 	element.value = min
+			// } else if (value > max) {
+			// 	element.value = max
+			// }
 		},
 
 		decimals(num, numOfDecimals) {

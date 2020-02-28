@@ -87,8 +87,6 @@ export default {
 		ColorInput,
 		KeybindingInput,
 	},
-	mixins: [],
-	computed: {},
 
 	data() {
 		return {
