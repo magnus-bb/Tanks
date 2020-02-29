@@ -1,44 +1,47 @@
 <template>
-  <div class="status">
-    <button @click="testStart">Test Start</button>
-    <button @click="createPickup('m82')">M82</button>
-    <button @click="createPickup('wormhole')">Wormhole</button>
-    <button @click="createPickup('breaker')">Breaker</button>
-    <button @click="createPickup('ammo')">Ammo</button>
-    <button @click="createPickup('stealthAmmo')">Stealth Ammo</button>
+  <div class="status-bar">
+		<div class="status-bar__player-item" v-for="player of gameStatus.players" :key="player.id" :style="{ backgroundColor: player.color }">
+			<h2>{{ player.name }}</h2>
+			<p>{{player.color}}</p>
+			
+		</div>
   </div>
 </template>
+			<!-- this.id = store.state.gameStatus.players.length //! Players might not need unique ID, now that we can keep track of them with vue
+						this.name = name
+						this.color = colorArray
+						this.controls = controls
+						this.wins = 0
+						this.deaths = 0
+						this.kills = 0 -->
 
 <script>
-import Pickup from '@/game/Pickups.js'
-import game from '@/game/game.js'
-import Player from '@/game/Player.js'
-import Controls from '@/game/Controls.js'
 
 export default {
 	name: 'GameStatus',
 	components: {},
-
-	methods: {
-		//! For game logic testing:
-		testStart() {
-			game.addPlayer(
-				new Player('One', [255, 0, 0], new Controls(69, 68, 83, 70, 86))
-			)
-
-			game.addPlayer(new Player('Other', [0, 255, 0], new Controls()))
-			game.new()
-		},
-
-		createPickup(name) {
-			Pickup.create(name)
+	computed: {
+		gameStatus() {
+			return this.$store.state.gameStatus
 		},
 	},
+
+	methods: {
+		colorToCss(array) {
+			return `rgb(${...array})`
+		}
+	}
 }
 </script>
 
 <style lang="scss" scoped>
-.status {
-	background: black;
+.status-bar {
+	padding: 1em;
+	display: flex;
+
+	.status-bar__player-item {
+		background: red;
+		margin: 0 0.5em;
+	}
 }
 </style>
