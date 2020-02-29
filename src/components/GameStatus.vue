@@ -28,7 +28,7 @@ export default {
 
 	methods: {
 		colorToCss(array) {
-			// return `rgb(${...array})`
+			return `rgb(${array[0][1][2]})` //! Fix babel? so we can use spread operator
 		}
 	}
 }
