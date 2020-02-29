@@ -1,14 +1,5 @@
 <template>
-  <div class="game-container">
-    <div class="test">
-      <button @click="testStart">Test Start</button>
-      <button @click="createPickup('m82')">M82</button>
-      <button @click="createPickup('wormhole')">Wormhole</button>
-      <button @click="createPickup('breaker')">Breaker</button>
-      <button @click="createPickup('ammo')">Ammo</button>
-      <button @click="createPickup('stealthAmmo')">Stealth Ammo</button>
-    </div>
-
+  <div class="game-container" :style="cssColorVars">
     <main class="main" :style="menuSize">
       <game-menu :style="menuSize" />
 
@@ -22,11 +13,6 @@
 
 
 <script>
-import Pickup from '@/game/Pickups.js'
-import game from '@/game/game.js'
-import Player from '@/game/Player.js'
-import Controls from '@/game/Controls.js'
-
 //* Components:
 import GameMenu from './GameMenu.vue'
 import GameCanvas from './GameCanvas.vue'
@@ -41,27 +27,27 @@ export default {
 		GameStatus,
 	},
 
-	// data() {
-	// 	return {
-	// 		darkMode: true,
-	// 	}
-	// },
+	data() {
+		return {
+			darkMode: true,
+		}
+	},
 
 	computed: {
-	// 	cssBgColor() {
-	// 		return this.darkMode ? '#020817' : '#394359'
-	// 	},
+		cssBgColor() {
+			return this.darkMode ? '#020817' : '#394359'
+		},
 
-	// 	cssTextColor() {
-	// 		return this.darkMode ? 'white' : 'black'
-	// 	},
+		cssTextColor() {
+			return this.darkMode ? 'white' : 'black'
+		},
 
-	// 	cssColorVars() {
-	// 		return {
-	// 			'--text-color': this.cssTextColor,
-	// 			'--bg-color': this.cssBgColor,
-	// 		}
-	// 	},
+		cssColorVars() {
+			return {
+				'--text-color': this.cssTextColor,
+				'--bg-color': this.cssBgColor,
+			}
+		},
 
 		menuSize() {
 			return {
@@ -77,22 +63,7 @@ export default {
 		},
 	},
 
-	methods: {
-		//! For game logic testing:
-		testStart() {
-			game.addPlayer(
-				new Player('One', [255, 0, 0], new Controls(69, 68, 83, 70, 86))
-			)
-
-			game.addPlayer(new Player('Other', [0, 255, 0], new Controls()))
-			game.new()
-		},
-
-		createPickup(name) {
-			Pickup.create(name)
-		},
-	},
-
+	methods: {},
 	created() {
 		// Disables some hotkeys, so ctrl can be used in-game:
 		document.addEventListener('keydown', event => {
@@ -111,40 +82,11 @@ export default {
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,500|Raleway:300i&display=swap');
 @import '@/scss/global';
 
-:root {
-	// Global variables:
-	--cta-color: #1654f0;
-	--warning-color: #730f0f;
-	--focus-color: #dfe6ff;
-	--light-text: #ebecf0;
-	--dark-text: #6d7587;
-	--darkest-text: #222629;
-
-	// --bg-dark: #020817;
-	// --bg-light: #394359;
-}
-
 * {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
 }
-
-body {
-	background: var(--darkest-text);
-}
-
-.game-container {
-	height: 100vh;
-	color: var(--text-color);
-	font-family: Montserrat;
-
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-}
-
 
 button {
 	border: none;
@@ -156,6 +98,18 @@ button {
 .main {
 	width: var(--width);
 	height: var(--height);
+}
+
+.game-container {
+	height: 100vh;
+	color: var(--text-color);
+	background-color: var(--bg-color);
+	font-family: Montserrat;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 kbd {
@@ -172,11 +126,5 @@ kbd {
 	// text-shadow: 0 1px 0 #fff;
 }
 
-.test {
-	display: flex;
 
-	button {
-		margin: 0 15px 5px;
-	}
-}
 </style>
