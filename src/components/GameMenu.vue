@@ -84,13 +84,5 @@ export default {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-
-	// Global variables:
-	--cta-color: #1654f0;
-	--warning-color: #730F0F;
-	--focus-color: #dfe6ff;
-	--light-text: #ebecf0;
-	--dark-text: #6d7587;
-	--darkest-text: #222629;
 }
 </style>
