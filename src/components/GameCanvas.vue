@@ -1,8 +1,5 @@
 <template>
   <div id="canvasContainer" class="canvas-container">
-
-
-
   </div>
 </template>
 

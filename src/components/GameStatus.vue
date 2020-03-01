@@ -1,9 +1,16 @@
 <template>
   <div class="status-bar">
-		<div class="status-bar__player-item" v-for="player of gameStatus.players" :key="player.id" :style="{ backgroundColor: player.color }">
-			<h2>{{ player.name }}</h2>
-			<p>{{player.color}}</p>
-			
+		<div class="status-bar__player-item" v-for="player of gameStatus.players" :key="player.id" :style="{ '--player-color': colorToCss(player.color) }">
+			<h2 class="player-item__name">{{ player.name }}</h2>
+			<!-- name
+			kills,
+			deaths
+			wins
+			suicides
+			ammo
+			equipment
+			modifiers
+			 -->
 		</div>
   </div>
 </template>
@@ -28,7 +35,7 @@ export default {
 
 	methods: {
 		colorToCss(array) {
-			return `rgb(${array[0][1][2]})` //! Fix babel? so we can use spread operator
+			return `rgb(${array[0]}, ${array[1]}, ${array[2]})` //! Fix babel? so we can use spread operator
 		}
 	}
 }
@@ -40,8 +47,12 @@ export default {
 	display: flex;
 
 	.status-bar__player-item {
-		background: red;
+		background: var(--player-color);
 		margin: 0 0.5em;
+
+		.player-item__name {
+			
+		}
 	}
 }
 </style>

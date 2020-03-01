@@ -74,6 +74,8 @@ Todos
 - Tilføj ammo til alle våben, så det kan ændres, men brug defaults på 1 også.
 - Color tank skal være ligeså lækker som color-input-buttons i config
 - Bullet skal bruge circle-intersections frem for midtpunkt, så man kan ændre størrelse på projektil
+	- Tilføj projektilstørrelse til config igen
+- fix babel eller loaders til at kunne bruge spread operators etc
 
 
 Idéer til spillet

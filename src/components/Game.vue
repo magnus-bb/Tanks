@@ -172,11 +172,16 @@ kbd {
 	// text-shadow: 0 1px 0 #fff;
 }
 
+//! Fjern ved prod
 .test {
 	display: flex;
 
 	button {
 		margin: 0 15px 5px;
+		padding: 0.2em 0.5em;
+		border-radius: 3px;
+		font-family: inherit;
+		@include bg(var(--dark-text));
 	}
 }
 </style>
