@@ -9,6 +9,7 @@ export default class Player {
 		this.wins = 0
 		this.deaths = 0
 		this.kills = 0
+		this.suicides = 0
 	}
 
 	gotKill(tank) {

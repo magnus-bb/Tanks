@@ -13,7 +13,7 @@
       <game-menu :style="menuSize" />
 
       <game-canvas />
-    </main>
+    </main> 
 
     <game-status />
   </div>
