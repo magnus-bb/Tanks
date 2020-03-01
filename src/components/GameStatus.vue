@@ -2,6 +2,7 @@
   <div class="status-bar">
 		<div class="status-bar__player-item" v-for="player of gameStatus.players" :key="player.id" :style="{ '--player-color': colorToCss(player.color) }">
 			<h2 class="player-item__name">{{ player.name }}</h2>
+			<p>{{player.kills}}</p>
 			<!-- name
 			kills,
 			deaths
