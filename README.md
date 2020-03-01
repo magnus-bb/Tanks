@@ -76,7 +76,9 @@ Todos
 - Bullet skal bruge circle-intersections frem for midtpunkt, så man kan ændre størrelse på projektil
 	- Tilføj projektilstørrelse til config igen
 - fix babel eller loaders til at kunne bruge spread operators etc
-
+	- https://forum.vuejs.org/t/vue-loader-unexpected-token-error-for-using-spread-operator-on-my-vue-component/10241/6 (nederst)
+- Fjern passed names til equipment? De ved vel selv, hvad de hedder
+- Props på tanks (såsom equipment), der er initialiseret med null bliver ikke watched i vue, når der bliver tilføjet et objekt til equipment-proppen. Se om dette kan passe (med null), ellers skal de enten være tomme objekter eller bruge Vue.set eller sådan noget.
 
 Idéer til spillet
 --------------------------

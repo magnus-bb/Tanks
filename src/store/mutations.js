@@ -1,4 +1,6 @@
+
 export const mutations = {
+
 	addPlayer(state, player) {
 		state.gameStatus.players.push(player)
 	},

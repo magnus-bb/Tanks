@@ -81,6 +81,9 @@ const game = {
 
 	end() { //TODO: Handle winner by checking who is left (if (state.tanks[0]) state.tanks[0].owner.wins++?)
 		console.log('Game ended')
+		if (gameState().tanks[0]) {
+			gameState().tanks[0].owner.wins++
+		}
 
 		this.pause()
 		store.commit('setStartedStatus', false)

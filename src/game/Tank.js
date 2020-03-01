@@ -1,15 +1,15 @@
 import fx from './fx.js'
 import * as projectile from './Projectiles.js'
 import game from './game.js'
-import { getOffsetPoint, getWallRect, pointInRect, outOfBounds, circleIntersectsEdge, circleIntersectsRect, getTurnDirection } from './helpers.js'
+import { hasContent, getOffsetPoint, getWallRect, pointInRect, outOfBounds, circleIntersectsEdge, circleIntersectsRect, getTurnDirection } from './helpers.js'
 
 import store from '@/store'
 const { p5 } = store.state
-const { config, gameState } = store.getters
-
+const { config } = store.getters
 
 export default class Tank {
 	constructor(name, colorArray, x, y, controls, owner) {
+		owner.tank = this // Sets player.tank to be this object
 		this.owner = owner
 		this.name = name
 		this.x = x
