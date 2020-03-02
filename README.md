@@ -78,8 +78,10 @@ Todos
 - fix babel eller loaders til at kunne bruge spread operators etc
 	- https://forum.vuejs.org/t/vue-loader-unexpected-token-error-for-using-spread-operator-on-my-vue-component/10241/6 (nederst)
 - Fjern passed names til equipment? De ved vel selv, hvad de hedder
-- Props på tanks (såsom equipment), der er initialiseret med null bliver ikke watched i vue, når der bliver tilføjet et objekt til equipment-proppen. Se om dette kan passe (med null), ellers skal de enten være tomme objekter eller bruge Vue.set eller sådan noget.
-	- Måske skal Vue.set bruges, når tanken addes til player? - Eller også skal .tank som udgangspunkt være et tomt objekt
+- Status reactivity dur ikke
+	- lav om på `player.name` er reactive
+	- At fjerne player / tank fra gameStatus fjerner ikke fra statusbar
+	- Den tager initielle værdi af det man beder om ellers, men er ikke reactive, når det ikke er direkte props af `player`
 
 Idéer til spillet
 --------------------------

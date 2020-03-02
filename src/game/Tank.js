@@ -9,7 +9,8 @@ const { config } = store.getters
 
 export default class Tank {
 	constructor(name, colorArray, x, y, controls, owner) {
-		owner.tank = this // Sets player.tank to be this object
+		// owner.tank = this // Sets player.tank to be this object
+		store.commit('set', { target: owner.id, prop: 'tank', val: this })
 		this.owner = owner
 		this.name = name
 		this.x = x
@@ -32,7 +33,7 @@ export default class Tank {
 			dY: 0
 		}
 		this.turning = 0
-
+		
 		const relCannonTip = getOffsetPoint(config().tank.cannon.length, this.direction)
 		this.relCannon = {
 			x: relCannonTip.x,

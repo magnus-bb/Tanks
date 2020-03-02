@@ -1,5 +1,9 @@
+import Vue from 'vue'
 
 export const mutations = {
+	set(state, { target, prop, val }) {
+		Vue.set(state.gameStatus.players[target], prop, val)
+	}, 
 
 	addPlayer(state, player) {
 		state.gameStatus.players.push(player)
