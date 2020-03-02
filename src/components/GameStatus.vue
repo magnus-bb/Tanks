@@ -7,9 +7,12 @@
       :style="{ '--player-color': colorToCss(player.color) }"
     >
       <h2 class="player-item__name">{{ player.name }}</h2>
-      <div class="player-item__primary">
-        <div class="player-item__equipment" v-if="player.tank.equipment"></div>
-      </div>
+      <!-- <div class="player-item__primary"> -->
+				
+				<div class="test" v-if="player.tank.equipment"></div>
+				<!-- <div v-for="ammo of player.tank.ammo">o</div> -->
+        <!-- <div class="player-item__equipment">{{ player.tank.equipment }}</div> -->
+      <!-- </div> -->
 
       <div class="player-item__hover">
         <p>{{ player.kills }}</p>
@@ -40,6 +43,8 @@
 						this.suicides = 0 -->
 
 <script>
+// import { hasContent } from '@/game/helpers.js'
+
 export default {
 	name: 'GameStatus',
 	components: {},
@@ -47,9 +52,15 @@ export default {
 		gameStatus() {
 			return this.$store.state.gameStatus
 		},
+
+		gameState() {
+			return this.$store.state.gameState
+		}
 	},
 
 	methods: {
+		// hasContent,
+
 		colorToCss(array) {
 			return `rgb(${array[0]}, ${array[1]}, ${array[2]})` //! Fix babel? so we can use spread operator
 		},
@@ -69,11 +80,27 @@ export default {
 		.player-item__name {
 		}
 
-		.player-item__equipment {
-			width: 100px;
-			height: 100px;
-			background: blue;
+		.ammo {
+
+		}
+
+		.player-item__primary {
+			.player-item__equipment {
+				width: 100px;
+				height: 100px;
+				background: blue;
+			}
+		}
+
+		.player-item__hover {
+			display: none;
 		}
 	}
+}
+
+.test {
+	height: 20px;
+	width: 50px;
+	background: blue;
 }
 </style>

@@ -3,7 +3,7 @@ import store from '@/store'
 export default class Player {
 	constructor(name, colorArray, controls) {
 		this.id = store.state.gameStatus.players.length //! Players might not need unique ID, now that we can keep track of them with vue
-		this.tank = null // Gets set in Tank constructor (every round)
+		this.tank = {} // Gets set in Tank constructor (every round)
 		this.name = name
 		this.color = colorArray
 		this.controls = controls
