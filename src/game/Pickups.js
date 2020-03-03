@@ -42,14 +42,14 @@ function ModifierPickup(name, type, x, y, col, row) {
 		_checkPrerequisites(tank) {
 			// Return true if no applied modifiers are dupes of this pickup:
 			for (const mod of tank.modifiers) {
-				if (mod.name === this.name.capitalize()) return false
+				if (mod.name === this.name) return false
 			}
 
 			return true
 		},
 
 		_pickedUp(i, tank) {
-			tank.modifiers.add(this._toModifier(tank))
+			tank.modifiers.push(this._toModifier(tank))
 
 			this._remove(i)
 		},
@@ -109,7 +109,7 @@ const Pickup = {
 	random(type = null) {
 		// Random from type:
 		if (type) {
-			if (this.pickups.hasOwnProperty(type)) {
+			if (this.pickups[type]) {
 
 				return p5.random(this.pickups[type])
 			}
@@ -217,7 +217,6 @@ const Pickup = {
 				_remove(i) {
 					// Removes self from maze:
 					store.commit('removePickup', i)
-					// state.pickups.splice(i, 1)
 				},
 
 				onFrame() {

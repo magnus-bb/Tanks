@@ -1,5 +1,6 @@
 <template>
   <div class="status-bar">
+		<!-- <button @click="test">Test</button> -->
     <div
       class="status-bar__player-item"
       v-for="player of gameStatus.players"
@@ -7,12 +8,20 @@
       :style="{ '--player-color': colorToCss(player.color) }"
     >
       <h2 class="player-item__name">{{ player.name }}</h2>
-      <!-- <div class="player-item__primary"> -->
+      <div class="player-item__primary">
 				
-				<div class="test" v-if="player.tank.equipment"></div>
+				<!-- <div class="test" v-if="player.tank.equipment"></div> -->
 				<!-- <div v-for="ammo of player.tank.ammo">o</div> -->
-        <!-- <div class="player-item__equipment">{{ player.tank.equipment }}</div> -->
-      <!-- </div> -->
+        <div class="player-item__equipment" v-if="player.tank.equipment">
+					<img :src="require(`@/assets/pickups/${player.tank.equipment.name}.svg`)">
+				</div>
+				<div class="player-item__ammo" v-else v-for="ammo in player.tank.ammo">o</div>
+
+				<div class="player-item__modifiers">
+					<img v-for="mod of player.tank.modifiers" :src="require(`@/assets/pickups/${mod.name}.svg`)">
+				</div>
+
+      </div>
 
       <div class="player-item__hover">
         <p>{{ player.kills }}</p>
@@ -33,7 +42,7 @@
     </div>
   </div>
 </template>
-			<!-- this.id = store.state.gameStatus.players.length //! Players might not need unique ID, now that we can keep track of them with vue
+			<!-- this.id = store.state.gameStatus.players.length //! Players might not need unique ID, now that we can keep track of them with index of v-for
 						this.name = name
 						this.color = colorArray
 						this.controls = controls
@@ -43,12 +52,12 @@
 						this.suicides = 0 -->
 
 <script>
-// import { hasContent } from '@/game/helpers.js'
 
 export default {
 	name: 'GameStatus',
 	components: {},
 	computed: {
+
 		gameStatus() {
 			return this.$store.state.gameStatus
 		},
@@ -59,10 +68,9 @@ export default {
 	},
 
 	methods: {
-		// hasContent,
 
 		colorToCss(array) {
-			return `rgb(${array[0]}, ${array[1]}, ${array[2]})` //! Fix babel? so we can use spread operator
+			return `rgb(${array[0]}, ${array[1]}, ${array[2]})`
 		},
 	},
 }

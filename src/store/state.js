@@ -10,7 +10,7 @@ export const state = {
 		paused: true,
 		started: false,
 		created: false,
-		players: [] //? evt et map til at holde styr på tanks?
+		players: [] // Not null, since player.id is set to be length of this array
 	},
 	setup: {
 		// 	TODO: Static props from classes here

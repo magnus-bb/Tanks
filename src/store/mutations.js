@@ -30,9 +30,13 @@ export const mutations = {
 	addPickup(state, pickup) {
 		state.gameState.pickups.push(pickup)
 	},
-
+	
 	addProjectile(state, projectile) {
 		state.gameState.projectiles.push(projectile)
+	},
+	
+	removeProjectile(state, index) {
+		state.gameState.projectiles.splice(index, 1)
 	},
 
 	removePickup(state, index) {
@@ -100,10 +104,6 @@ export const mutations = {
 		const trail = state.gameState.fx.bulletTrails.get(payload.bullet)
 
 		trail.push({ x: payload.x, y: payload.y }) //TODO: Mutation
-	},
-
-	removeProjectile(state, index) {
-		state.gameState.projectiles.splice(index, 1)
 	},
 
 	removeTank(state, index) {

@@ -9,9 +9,7 @@ const { config } = store.getters
 
 export default class Tank {
 	constructor(name, colorArray, x, y, controls, owner) {
-		// owner.tank = this // Sets player.tank to be this object
-		store.commit('set', { target: owner.id, prop: 'tank', val: this })
-		this.owner = owner
+		this.owner = owner //owner.tank = this is set in game.js to ensure reactivity
 		this.name = name
 		this.x = x
 		this.y = y //TODO: Given a cell, calculate the center instead of giving a center coordinate
@@ -24,7 +22,7 @@ export default class Tank {
 		this.ammo = config().tank.ammo
 		this.stealthedAmmo = false
 		this.equipment = null
-		this.modifiers = new Set()
+		this.modifiers = [] // Not a set, since Vue cannot do reactivity with sets and maps easily
 		this.powerups = []
 		this.trail = [{ x: this.x, y: this.y }] //? For death recap - maybe
 		this.controls = controls
@@ -40,20 +38,27 @@ export default class Tank {
 			y: relCannonTip.y
 		}
 	}
+
 	get cannon() {
 		return {
 			x: this.relCannon.x + this.x,
 			y: this.relCannon.y + this.y
 		}
 	}
+
 	get next() { // Next tank (center) position (if no collision is observed):
 		return {
 			x: this.x + this.moveCoords.dX,
 			y: this.y + this.moveCoords.dY
 		}
 	}
+
 	get r() {
 		return this.d / 2
+	}
+
+	get modVals() {
+		return this.modifiers.values()
 	}
 
 	input() {
@@ -310,9 +315,12 @@ export default class Tank {
 	}
 
 	_modifiers() {
-		for (const modifier of this.modifiers) {
-			modifier.onFrame()
-		}
+		this.modifiers.forEach((modifier, index) => {
+			modifier.onFrame(index)
+		})
+
+		// for (const modifier of this.modifiers) {
+		// }
 	}
 
 	_equipment() {

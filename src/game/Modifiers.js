@@ -91,15 +91,15 @@ export function LaserSight(owner, name) {
 			p5.pop()
 		},
 
-		_removal() {
+		_removal(i) {
 			if (!owner.equipment || !config().modifier.laserSight.onEquipment.includes(owner.equipment.name)) { // Order of checks are important - cannot check equipment.name if equipment is not there
-				this._remove()
+				this._remove(i)
 			}
 		},
 
 		// Has own version of onFrame(), since this is not timed (etc) like a pickup
-		onFrame() {
-			this._removal()
+		onFrame(i) {
+			this._removal(i)
 
 			this._effect()
 		}
@@ -114,13 +114,13 @@ const mixins = {
 		return {
 			duration: config().modifier[name].duration,
 
-			onFrame() {
+			onFrame(i) {
 				this._effect()
 
 				this.duration--
 
 				if (this.duration <= 0) {
-					this._remove()
+					this._remove(i)
 				}
 			},
 		}
@@ -128,10 +128,11 @@ const mixins = {
 
 	canRemoveSelf() {
 		return {
-			_remove() {
-				if (this._reset) this._reset() // Only for when permanent changes have been made, that need to be reset
+			_remove(index) {
+				if (this._reset) this._reset() // Some powerups change (permanent) state in tank (etc), that need to be reset individually by the mod (since it will not just disappear when mod disappears)
 
-				this.owner.modifiers.delete(this)
+				// this.owner.modifiers.delete(this)
+				this.owner.modifiers.splice(index, 1)
 			}
 		}
 	}

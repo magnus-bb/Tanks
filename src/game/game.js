@@ -8,6 +8,7 @@ const { p5 } = store.state
 const { gameState, gameStatus, config } = store.getters
 
 const game = {
+	players: [],
 	
 	reset() { // Menus automatically update to match (create menu)
 		store.commit('resetGameStatus')
@@ -15,6 +16,9 @@ const game = {
 
 	addPlayer(player) {
 		if (gameStatus().started) return console.log("Game has already started")
+
+		// Players are initially put into a local array, and that array is committed to Vuex gameStatus to ensure reactivity:
+		this.players.push(player)
 
 		store.commit('addPlayer', player)
 	},
@@ -53,7 +57,10 @@ const game = {
 				spawnCoords = randomCoords()
 			}
 
-			store.commit('addTank', new Tank(player.name, player.color, spawnCoords.x, spawnCoords.y, player.controls, player))
+			const tank = new Tank(player.name, player.color, spawnCoords.x, spawnCoords.y, player.controls, player)
+			tank.owner.tank = tank // lol
+
+			store.commit('addTank', tank/*new Tank(player.name, player.color, spawnCoords.x, spawnCoords.y, player.controls, player)*/)
 		}
 
 		store.commit('setStartedStatus', true)

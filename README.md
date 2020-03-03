@@ -47,6 +47,7 @@ Todos
 - Besked om restartnødvendighed på nogle configs (fps f.eks.)
 - Collisionchecking skal loope igennem det, der flytter sig (tanks, projektiler etc), og så bruge sin egen x, y til kun at finde sin egen celle, og så kun checke collisions på de walls, der er rundt om (bliver stadig nødt til at gennemløbe alle andre ting, der flytter sig, for at se deres position)
 - Animationer i menuer
+- Ikon til alm bullets til at vise ammo i statusbar og laserSight af samme årsag
 
 ### Fix
 - Evt. ændr walls til at have de props, der skal bruges for at udregne collisions, så de ikke skal udregnes hver gang
@@ -82,6 +83,8 @@ Todos
 	- lav om på `player.name` er reactive
 	- At fjerne player / tank fra gameStatus fjerner ikke fra statusbar
 	- Den tager initielle værdi af det man beder om ellers, men er ikke reactive, når det ikke er direkte props af `player`
+- Fjern partikeleffekt
+- Se om alle `tank.modifiers` referencer er omskrevet til array frem for set
 
 Idéer til spillet
 --------------------------

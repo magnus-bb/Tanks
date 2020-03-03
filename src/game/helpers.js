@@ -2,15 +2,6 @@ import store from '@/store'
 const { p5 } = store.state
 const { config, gameState } = store.getters
 
-// Checks if object has content:
-export function hasContent(obj) { 
-	for (const key in obj) {
-		if (obj.hasOwnProperty(key))
-			return true;
-	}
-	return false;
-}
-
 // Converts a direction and speed to new coords:
 export function getOffsetPoint(dist, dir, moving = 'forward') { // Defaults to 'forward' since it is used for more than just moving objects
 	if (moving === 'forward') {
