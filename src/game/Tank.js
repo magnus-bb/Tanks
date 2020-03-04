@@ -1,7 +1,7 @@
 import fx from './fx.js'
 import * as projectile from './Projectiles.js'
 import game from './game.js'
-import { hasContent, getOffsetPoint, getWallRect, pointInRect, outOfBounds, circleIntersectsEdge, circleIntersectsRect, getTurnDirection } from './helpers.js'
+import { getOffsetPoint, getWallRect, pointInRect, outOfBounds, circleIntersectsEdge, circleIntersectsRect } from './helpers.js'
 
 import store from '@/store'
 const { p5 } = store.state
