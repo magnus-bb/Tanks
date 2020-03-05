@@ -190,7 +190,9 @@
           <!-- Does not change collisions, since diameter is not used -->
           <div class="configs__group-item">
             <h3 class="configs__h3">Penetration Speed Divisor:</h3>
-            <p class="configs__range-value">{{ Number(config.projectile.m82.penetrationSpeedDivisor).toFixed(1) }}</p>
+            <p
+              class="configs__range-value"
+            >{{ Number(config.projectile.m82.penetrationSpeedDivisor).toFixed(1) }}</p>
             <input
               class="configs__range-input"
               v-model="config.projectile.m82.penetrationSpeedDivisor"
@@ -557,16 +559,12 @@ export default {
 }
 
 .configs__h2 {
+	@include h2;
 	margin-bottom: 1em;
-	color: var(--darkest-text);
-	font-size: 1.5rem;
 }
 
 .configs__h3 {
-	font-family: Raleway;
-	font-size: 1rem;
-	color: var(--dark-text);
-	font-style: italic;
+	@include h3;
 }
 
 .configs__color-button {

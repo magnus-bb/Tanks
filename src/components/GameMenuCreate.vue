@@ -61,7 +61,7 @@
     </section>
 
     <color-picker
-		id="createMenuColorPicker"
+      id="createMenuColorPicker"
       :selected-color="selectedColor"
       @color="setColor($event)"
       @hide="hideColorPicker"
@@ -379,7 +379,12 @@ export default {
 		}
 
 		.titles__subtitle {
-			@include h2;
+			// @include h2;
+			font-family: Raleway;
+			font-size: 1.75rem;
+			font-weight: 300;
+			color: var(--dark-text);
+			font-style: italic;
 		}
 	}
 

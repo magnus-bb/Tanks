@@ -11,14 +11,19 @@
 
       <div class="player-item__primary">
         <div class="player-item__equipment" v-if="player.tank.equipment">
+          <h3 class="player-item__h3">Equipment</h3>
           <img :src="require(`@/assets/pickups/${ player.tank.equipment.name }.svg`)" />
         </div>
 
         <div class="player-item__ammo" v-else>
-          <div v-for="ammo in player.tank.ammo">o</div>
+          <h3 class="player-item__h3">Ammo</h3>
+          <div>
+            <div v-for="ammo in player.tank.ammo">o</div>
+          </div>
         </div>
 
         <div class="player-item__modifiers">
+          <h3 class="player-item__h3">Modifiers</h3>
           <img
             v-for="mod of player.tank.modifiers"
             :src="require(`@/assets/pickups/${ mod.name }.svg`)"
@@ -29,20 +34,20 @@
 
       <div class="player-item__hover">
         <div>
-          <h5>Wins</h5>
-          <p>{{ player.wins }}</p>
+          <h3 class="player-item__h3">Wins</h3>
+          <p class="player-item__stat">{{ player.wins }}</p>
         </div>
         <div>
-          <h5>Kills</h5>
-          <p>{{ player.kills }}</p>
+          <h3 class="player-item__h3">Kills</h3>
+          <p class="player-item__stat">{{ player.kills }}</p>
         </div>
         <div>
-          <h5>Deaths</h5>
-          <p>{{ player.deaths }}</p>
+          <h3 class="player-item__h3">Deaths</h3>
+          <p class="player-item__stat">{{ player.deaths }}</p>
         </div>
         <div>
-          <h5>Suicides</h5>
-          <p>{{ player.suicides }}</p>
+          <h3 class="player-item__h3">Suicides</h3>
+          <p class="player-item__stat">{{ player.suicides }}</p>
         </div>
       </div>
     </div>
@@ -68,24 +73,26 @@ export default {
 
 	methods: {
 		colorToCss(array) {
-			return `rgb(${array[0]}, ${array[1]}, ${array[2]})`
+			return `rgba(${array[0]}, ${array[1]}, ${array[2]})`
 		},
 	},
 }
 </script>
 
 <style lang="scss" scoped>
+@import '@/scss/global';
+
 .status-bar {
 	padding: 1em;
 	display: flex;
 
 	.status-bar__player-item {
-		background: var(--player-color);
+		@include bg(var(--player-color));
 		margin: 0 0.5em;
 		padding: 1rem;
-		border-radius: 5px;
-		width: 10em;
-		height: 8em;
+		border-radius: 35px;
+		width: 12rem;
+		height: 10rem;
 
 		display: flex;
 		flex-direction: column;
@@ -99,7 +106,6 @@ export default {
 			.player-item__hover {
 				display: grid;
 				grid-template: repeat(2, 1fr) / repeat(2, 1fr);
-				background: blue;
 				height: 100%;
 				width: 100%;
 				justify-items: center;
@@ -108,6 +114,7 @@ export default {
 		}
 
 		.player-item__name {
+			@include h2;
 			grid-area: 1 / 1 / 2 / 5;
 		}
 
@@ -126,6 +133,7 @@ export default {
 				grid-area: 1 / 1 / 2 / 3;
 
 				display: flex;
+				flex-direction: column;
 				justify-content: center;
 				flex-wrap: wrap;
 
@@ -138,12 +146,28 @@ export default {
 				grid-area: 2 / 1 / 3 / 3;
 
 				display: flex;
+				flex-direction: column;
 				justify-content: space-evenly;
 			}
 		}
 
 		.player-item__hover {
 			display: none;
+
+			div {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+			}
+		}
+
+		.player-item__h3 {
+			@include h3;
+		}
+
+		.player-item__stat {
+			@include h2;
 		}
 	}
 }
