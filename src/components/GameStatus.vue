@@ -8,6 +8,7 @@
       :style="{ '--player-color': colorToCss(player.color) }"
     >
       <h2 class="player-item__name">{{ player.name }}</h2>
+
       <div class="player-item__primary">
         <div class="player-item__equipment" v-if="player.tank.equipment">
           <img :src="require(`@/assets/pickups/${ player.tank.equipment.name }.svg`)" />
@@ -21,43 +22,40 @@
           <img
             v-for="mod of player.tank.modifiers"
             :src="require(`@/assets/pickups/${ mod.name }.svg`)"
-						:key="mod.name"
+            :key="mod.name"
           />
         </div>
       </div>
 
       <div class="player-item__hover">
-        <p>{{ player.kills }}</p>
-        <p>{{ player.deaths }}</p>
-        <p>{{ player.wins }}</p>
-        <p>{{ player.suicides }}</p>
+        <div>
+          <h5>Wins</h5>
+          <p>{{ player.wins }}</p>
+        </div>
+        <div>
+          <h5>Kills</h5>
+          <p>{{ player.kills }}</p>
+        </div>
+        <div>
+          <h5>Deaths</h5>
+          <p>{{ player.deaths }}</p>
+        </div>
+        <div>
+          <h5>Suicides</h5>
+          <p>{{ player.suicides }}</p>
+        </div>
       </div>
-
-      <!-- name
-			kills,
-			deaths
-			wins
-			suicides
-			ammo
-			equipment
-			modifiers
-      -->
     </div>
   </div>
 </template>
-			<!-- this.id = store.state.gameStatus.players.length //! Players might not need unique ID, now that we can keep track of them with index of v-for
-						this.name = name
-						this.color = colorArray
-						this.controls = controls
-						this.wins = 0
-						this.deaths = 0
-						this.kills = 0
-						this.suicides = 0 -->
 
 <script>
 export default {
 	name: 'GameStatus',
-	components: {},
+	data() {
+		return {}
+	},
+
 	computed: {
 		gameStatus() {
 			return this.$store.state.gameStatus
@@ -92,6 +90,22 @@ export default {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+
+		&:hover {
+			.player-item__primary {
+				display: none;
+			}
+
+			.player-item__hover {
+				display: grid;
+				grid-template: repeat(2, 1fr) / repeat(2, 1fr);
+				background: blue;
+				height: 100%;
+				width: 100%;
+				justify-items: center;
+				align-items: center;
+			}
+		}
 
 		.player-item__name {
 			grid-area: 1 / 1 / 2 / 5;
