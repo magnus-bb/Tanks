@@ -10,9 +10,10 @@
       <h2 class="player-item__name">{{ player.name }}</h2>
 
       <div class="player-item__primary">
+
         <div class="player-item__equipment" v-if="player.tank.equipment">
           <h3 class="player-item__h3">Equipment</h3>
-          <img :src="require(`@/assets/pickups/${ player.tank.equipment.name }.svg`)" />
+          <img class="player-item__equipment-img" :src="require(`@/assets/pickups/${ player.tank.equipment.name }.svg`)" />
         </div>
 
         <div class="player-item__ammo" v-else>
@@ -24,11 +25,13 @@
 
         <div class="player-item__modifiers">
           <h3 class="player-item__h3">Modifiers</h3>
-          <img
-            v-for="mod of player.tank.modifiers"
-            :src="require(`@/assets/pickups/${ mod.name }.svg`)"
-            :key="mod.name"
-          />
+          <div class="player-item__modifiers-box">
+            <img
+              v-for="mod of player.tank.modifiers"
+              :src="require(`@/assets/pickups/${ mod.name }.svg`)"
+              :key="mod.name"
+            />
+          </div>
         </div>
       </div>
 
@@ -115,7 +118,6 @@ export default {
 
 		.player-item__name {
 			@include h2;
-			grid-area: 1 / 1 / 2 / 5;
 		}
 
 		.player-item__primary {
@@ -123,18 +125,17 @@ export default {
 			height: 100%;
 
 			display: grid;
-			grid-template-columns: repeat(2, 1fr);
 			grid-template-rows: repeat(2, 1fr);
-			justify-items: center;
-			align-items: center;
+			justify-content: space-evenly;
+			align-items: start;
 
 			.player-item__equipment,
 			.player-item__ammo {
-				grid-area: 1 / 1 / 2 / 3;
 
 				display: flex;
 				flex-direction: column;
 				justify-content: center;
+				align-items: center;
 				flex-wrap: wrap;
 
 				.player-item__ammo-box {
@@ -145,11 +146,11 @@ export default {
 			}
 
 			.player-item__modifiers {
-				grid-area: 2 / 1 / 3 / 3;
 
 				display: flex;
 				flex-direction: column;
-				justify-content: space-evenly;
+				justify-content: center;
+				align-items: center;
 			}
 		}
 
