@@ -17,7 +17,7 @@
 
         <div class="player-item__ammo" v-else>
           <h3 class="player-item__h3">Ammo</h3>
-          <div>
+          <div class="player-item__ammo-box">
             <div v-for="ammo in player.tank.ammo">o</div>
           </div>
         </div>
@@ -137,8 +137,10 @@ export default {
 				justify-content: center;
 				flex-wrap: wrap;
 
-				* {
-					margin: 0 0.2rem;
+				.player-item__ammo-box {
+					display: flex;
+					justify-content: center;
+					align-items: center;
 				}
 			}
 
