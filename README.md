@@ -85,6 +85,7 @@ Todos
 	- Den tager initielle værdi af det man beder om ellers, men er ikke reactive, når det ikke er direkte props af `player`
 - Fjern partikeleffekt
 - Se om alle `tank.modifiers` referencer er omskrevet til array frem for set
+- Lav pickups om til at være farvedelt i powerup, equipment, modifier og med border delt i self-use, auto-use og evt non-use
 
 Idéer til spillet
 --------------------------
