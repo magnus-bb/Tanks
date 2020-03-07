@@ -11,13 +11,10 @@ export default class GameState {
 		this.ending = false
 		this.fx = {
 			bulletTrails: new Map(),
-			particles: {
-				on: false,
-				array: []
-			}
+			// particles: {
+			// 	on: false,
+			// 	array: []
+			// }
 		}
 	}
 }
-
-// Makes first state-object ready: //TODO: Maybe not do until game starts, to avoid errors when changing config
-// let state = new GameState

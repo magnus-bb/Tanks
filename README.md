@@ -78,14 +78,19 @@ Todos
 	- Tilføj projektilstørrelse til config igen
 - fix babel eller loaders til at kunne bruge spread operators etc
 	- https://forum.vuejs.org/t/vue-loader-unexpected-token-error-for-using-spread-operator-on-my-vue-component/10241/6 (nederst)
+	- Tror faktisk spread virker, og babel er unødvendigt
 - Fjern passed names til equipment? De ved vel selv, hvad de hedder
-- Status reactivity dur ikke
-	- lav om på `player.name` er reactive
-	- At fjerne player / tank fra gameStatus fjerner ikke fra statusbar
-	- Den tager initielle værdi af det man beder om ellers, men er ikke reactive, når det ikke er direkte props af `player`
-- Fjern partikeleffekt
 - Se om alle `tank.modifiers` referencer er omskrevet til array frem for set
 - Lav pickups om til at være farvedelt i powerup, equipment, modifier og med border delt i self-use, auto-use og evt non-use
+- Flyt `getCell()` ind i grid? Nu hvor celler har adgang til egne naboer
+	- Find steder `getCell()` bruges og fjern check om cellen findes - `getCell()` checker selv om den findes og ellers returner null
+- Find ud af, om det er hurtigst:
+	-	At udregne containing cell med:
+		- Koordinater på punkt
+		- width / height divideret med cell.w (for at få index)
+		- getCell(i1, i2)
+	- Eller at løbe igennem alle walls og spørge om pointInRect
+- Skriv `unvisitedNeighbors` om til at bruge cell.neighborhood
 
 Idéer til spillet
 --------------------------
@@ -106,6 +111,7 @@ Idéer til spillet
 - Lav presets på `config` (realism, hyped etc)
 - Skyggeeffekter på spillet?
 - Custom cursor á la: https://www.youtube.com/watch?v=TpwpAYi-p2w 
+- Shotgun med små pellets og 1x bounce?
 
 Links
 -----

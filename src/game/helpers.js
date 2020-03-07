@@ -29,7 +29,15 @@ export function getOffsetPoint(dist, dir, moving = 'forward') { // Defaults to '
 
 // Returns reference to cell:
 export function getCell(col, row) {
-	return gameState().grid[col][row]
+	if (gameState().grid[col] && gameState().grid[col][row]) {
+		return gameState().grid[col][row]
+	}
+}
+
+// Returns the cell that a given point is inside:
+export function getContainingCell(point) {
+	// Lav en performance-test:
+	// Er det hurtigst at løbe alle celler igennem og se pointInRect, eller at regne den ud med cell.w og accesse direkte?
 }
 
 // Takes a point and a rect-object and returns true if the point exists inside the four points that make up a rectangle:

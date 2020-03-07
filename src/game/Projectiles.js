@@ -29,6 +29,7 @@ export function Bullet(owner) {
 
 			if (bounce) {
 				this._bounce(bounce)
+				return 'nextProj' //* Solves infinity corner bounce glitch - can this be moved to common bounce behaviour?
 			}
 		},
 
@@ -216,11 +217,11 @@ export function Breaker(owner) {
 				//TODO: Blast zone behind wall
 
 				this._destroy(i)
-				return 'continue'
+				return 'nextWall'
 
 			} else if (this._checkEdgeCollision()) {
 				this._destroy(i)
-				return 'continue'
+				// return 'continue'
 			}
 		},
 
@@ -315,7 +316,7 @@ const mixins = {
 				this.next = []
 
 				// Looks at "all" positions between location and (fraction of) 'next' location:
-				for (let step = 0; step <= this.speed; step += (this.speed < config().wall.collisionStepSize ? this.speed : config().wall.collisionStepSize)) { // Only makes fractional lookaheads of speed if speed is more than walls' width
+				for (let step = 0; step <= this.speed; step += (this.speed < config().wall.collisionStepSize ? this.speed : config().wall.collisionStepSize)) { // Only does lookaheads if speed is more than walls' width
 
 					// This has to be in fractions of moveCoords (and not just +- some values) to account for the direction of the movement - we don't want to ADD to a negative and vice versa:
 					this.next.push({
@@ -330,7 +331,7 @@ const mixins = {
 	// Does not return axes, just true / false if wall / edge has been hit
 	canCheckEnv() {
 		return {
-			_checkWallCollision(wall) { // 'wall' can be passed as null, if we are checking edges
+			_checkWallCollision(wall) {
 				const wallRect = getWallRect(wall)
 
 				// uses fractional lookaheads:
@@ -368,9 +369,9 @@ const mixins = {
 
 					if (pointInRect({ x: step.x, y: this.y }, wallRect)) {
 						bounce.x = true
-					}
-
-					if (pointInRect({ x: this.x, y: step.y }, wallRect)) {
+					} 
+					
+					if (pointInRect({ x: this.x, y: step.y }, wallRect)) { 
 						bounce.y = true
 					}
 
@@ -459,7 +460,6 @@ const mixins = {
 		return {
 			_destroy(i) {
 				store.commit('removeProjectile', i)
-				// gameState().projectiles.splice(i, 1) //TODO: Mutation
 			}
 		}
 	},

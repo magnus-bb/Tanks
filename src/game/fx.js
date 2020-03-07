@@ -74,69 +74,69 @@ const fx = {
 		}
 	},
 
-	_particles() {
-		for (const particle of gameState().fx.particles.array) {
-			particle.onFrame()
-		}
-	},
+	// _particles() {
+	// 	for (const particle of gameState().fx.particles.array) {
+	// 		particle.onFrame()
+	// 	}
+	// },
 
-	Particle: function() {
-		return {
-			pos: p5.createVector(p5.random(p5.width), p5.random(p5.height)),
-			d: config().fx.particle.diameter,
-			vel: p5.createVector(p5.random(-config().fx.particle.velocity, config().fx.particle.velocity), p5.random(-config().fx.particle.velocity, config().fx.particle.velocity)),
-			color: p5.color(config().fx.particle.color),
+	// Particle: function() {
+	// 	return {
+	// 		pos: p5.createVector(p5.random(p5.width), p5.random(p5.height)),
+	// 		d: config().fx.particle.diameter,
+	// 		vel: p5.createVector(p5.random(-config().fx.particle.velocity, config().fx.particle.velocity), p5.random(-config().fx.particle.velocity, config().fx.particle.velocity)),
+	// 		color: p5.color(config().fx.particle.color),
 
-			_edges() {
-				if (this.pos.x < 0) {
-					this.pos.x += p5.width
-				} else if (this.pos.x > p5.width) {
-					this.pos.x -= p5.width
-				} else if (this.pos.y < 0) {
-					this.pos.y += p5.height
-				} else if (this.pos.y > p5.height) {
-					this.pos.y -= p5.height
-				}
-			},
+	// 		_edges() {
+	// 			if (this.pos.x < 0) {
+	// 				this.pos.x += p5.width
+	// 			} else if (this.pos.x > p5.width) {
+	// 				this.pos.x -= p5.width
+	// 			} else if (this.pos.y < 0) {
+	// 				this.pos.y += p5.height
+	// 			} else if (this.pos.y > p5.height) {
+	// 				this.pos.y -= p5.height
+	// 			}
+	// 		},
 
-			_connections() {
-				for (const particle of gameState().fx.particles.array) {
-					const distance = p5.dist(this.pos.x, this.pos.y, particle.pos.x, particle.pos.y)
+	// 		_connections() {
+	// 			for (const particle of gameState().fx.particles.array) {
+	// 				const distance = p5.dist(this.pos.x, this.pos.y, particle.pos.x, particle.pos.y)
 
-					if (this !== particle && distance <= config().fx.particle.connection.distance) {
+	// 				if (this !== particle && distance <= config().fx.particle.connection.distance) {
 						
-						p5.push()
+	// 					p5.push()
 
-						p5.blendMode(p5.LIGHTEST)
-						p5.strokeWeight(config().fx.particle.connection.width)
-						p5.stroke(config().fx.particle.connection.color)
-						p5.line(this.pos.x, this.pos.y, particle.pos.x, particle.pos.y)
+	// 					p5.blendMode(p5.LIGHTEST)
+	// 					p5.strokeWeight(config().fx.particle.connection.width)
+	// 					p5.stroke(config().fx.particle.connection.color)
+	// 					p5.line(this.pos.x, this.pos.y, particle.pos.x, particle.pos.y)
 
-						p5.pop()
-					}
-				}
-			},
+	// 					p5.pop()
+	// 				}
+	// 			}
+	// 		},
 
-			_show() {
-				p5.push()
+	// 		_show() {
+	// 			p5.push()
 				
-				p5.blendMode(p5.ADD)
+	// 			p5.blendMode(p5.ADD)
 				
-				p5.noStroke()
-				p5.fill(this.color)
-				p5.circle(this.pos.x, this.pos.y, this.d)
+	// 			p5.noStroke()
+	// 			p5.fill(this.color)
+	// 			p5.circle(this.pos.x, this.pos.y, this.d)
 				
-				p5.pop()
-			},
+	// 			p5.pop()
+	// 		},
 
-			onFrame() {
-				this.pos.add(this.vel)
-				this._edges()
-				this._connections()
-				this._show()
-			},
-		}
-	},
+	// 		onFrame() {
+	// 			this.pos.add(this.vel)
+	// 			this._edges()
+	// 			this._connections()
+	// 			this._show()
+	// 		},
+	// 	}
+	// },
 	
 	onFrame() {
 		this._showBulletTrails()

@@ -42,8 +42,9 @@ const game = {
 
 		// Makes all cells:
 		grid.generate()
-		// Sets random walls:
-		grid.populateWalls()
+		// Sets random walls and references neighbors to cells:
+		grid.setWallsAndNeighbors()
+		// grid.populateWalls()
 		// Removes specific walls to make sure every part is traversible:
 		grid.generateMaze()
 

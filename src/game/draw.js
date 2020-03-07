@@ -24,7 +24,7 @@ function draw() {
 	fx.onFrame()
 
 	//* Pickups:
-	Pickup.spawn()
+	//! removed for testing: Pickup.spawn()
 	
 	for (const pickup of gameState().pickups) {
 		pickup.onFrame()
@@ -45,7 +45,9 @@ function draw() {
 		}
 	}
 
+
 	//* Walls:
+	//! Tager mellem 5 og 14 ms på bærbare efter at skyde alle skud fra 1 tank
 	for (const column of gameState().grid) {
 		for (const cell of column) {
 
@@ -66,10 +68,14 @@ function draw() {
 						const projectile = gameState().projectiles[i]
 
 						if (projectile.envCollision) {
-							// 'Breaker' removes a wall, and then needs to continue wall-loop to not try to read same wall:
 							const action = projectile.envCollision(i, wallObj)
-							if (action === 'continue') {
+							// 'Breaker' removes a wall, and then needs to continue wall-loop to not try to read same wall:
+							if (action === 'nextWall') {
 								continue wallLoop
+
+								// Bouncing can make infinite loop between two walls, so we need to stop checking the same proj after the first bounce until next frame
+							} else if (action === 'nextProj') {
+								continue
 							}
 						}
 					}
