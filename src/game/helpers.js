@@ -36,8 +36,27 @@ export function getCell(col, row) {
 
 // Returns the cell that a given point is inside:
 export function getContainingCell(point) {
-	// Lav en performance-test:
-	// Er det hurtigst at løbe alle celler igennem og se pointInRect, eller at regne den ud med cell.w og accesse direkte?
+	// // By running through: SLOWER
+	// for (const col of gameState().grid) {
+	// 	for (const cell of col) {
+	// 		const rect = {
+	// 			x1: cell.x,
+	// 			x2: cell.x + cell.w,
+	// 			y1: cell.y,
+	// 			y2: cell.y + cell.w
+	// 		}
+
+	// 		if (pointInRect(point, rect)) {
+	// 			return cell
+	// 		}
+	// 	}
+	// }
+
+	// By calculating:
+	const col = Math.floor(point.x / p5.width * config().cell.xAmt)
+	const row = Math.floor(point.y / p5.height * config().cell.yAmt)
+
+	return gameState().grid[col][row]
 }
 
 // Takes a point and a rect-object and returns true if the point exists inside the four points that make up a rectangle:

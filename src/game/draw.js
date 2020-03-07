@@ -1,12 +1,15 @@
-import Pickup from './Pickups.js'
 import fx from './fx.js'
 import game from './game.js'
+import { getContainingCell } from './helpers.js'
 
 import store from '@/store'
 const { p5 } = store.state
 const { config, gameState } = store.getters
 
+
 function draw() {
+	console.clear()
+	console.time('draw')
 
 	//* Canvas:
 	//TODO: Canvas-class?
@@ -33,6 +36,7 @@ function draw() {
 	//* Tanks (& Edges) - input and collision only:
 	// Must happen before collisions, so a collision can overwrite player input
 	for (const tank of gameState().tanks) {
+
 		tank.input()
 
 		tank.collision()
@@ -43,11 +47,29 @@ function draw() {
 
 			pickup.pickup(i, tank)
 		}
+
+		//* Tanks & Walls:
+		const pos = {
+			x: tank.x,
+			y: tank.y
+		}
+
+		// Only collision-checks with walls around tank:
+		const cells = getContainingCell(pos).neighborhood
+
+		for (const cell of cells) {
+			for (const wall in cell.walls) {
+				// Skips when no wall:
+				if (!cell.walls[wall]) continue
+				
+				tank.collision(cell.walls[wall])
+			}
+		}
 	}
 
 
 	//* Walls:
-	//! Tager mellem 5 og 14 ms på bærbare efter at skyde alle skud fra 1 tank
+	// console.time('walls')
 	for (const column of gameState().grid) {
 		for (const cell of column) {
 
@@ -58,31 +80,32 @@ function draw() {
 					const wallObj = cell.walls[wall] // binds wall to the object, not the prop name //TODO: bare kald for wall?
 					wallObj.onFrame()
 
-					//* Walls & Tanks:
-					for (const tank of gameState().tanks) {
-						tank.collision(wallObj)
-					}
+					// // //* Walls & Tanks:
+					// // for (const tank of gameState().tanks) {
+					// // 	tank.collision(wallObj)
+					// // }
 
-					//* Walls & Projectiles:
-					for (let i = gameState().projectiles.length - 1; i >= 0; i--) { // We have to go backwards when removing projectiles
-						const projectile = gameState().projectiles[i]
+					// // //* Walls & Projectiles:
+					// // for (let i = gameState().projectiles.length - 1; i >= 0; i--) { // We have to go backwards when removing projectiles
+					// // 	const projectile = gameState().projectiles[i]
 
-						if (projectile.envCollision) {
-							const action = projectile.envCollision(i, wallObj)
-							// 'Breaker' removes a wall, and then needs to continue wall-loop to not try to read same wall:
-							if (action === 'nextWall') {
-								continue wallLoop
+					// // 	if (projectile.envCollision) {
+					// // 		const action = projectile.envCollision(i, wallObj)
+					// // 		// 'Breaker' removes a wall, and then needs to continue wall-loop to not try to read same wall:
+					// // 		if (action === 'nextWall') {
+					// // 			continue wallLoop
 
-								// Bouncing can make infinite loop between two walls, so we need to stop checking the same proj after the first bounce until next frame
-							} else if (action === 'nextProj') {
-								continue
-							}
-						}
-					}
+					// // 			// Bouncing can make infinite loop between two walls, so we need to stop checking the same proj after the first bounce until next frame
+					// // 		} else if (action === 'nextProj') {
+					// // 			continue
+					// // 		}
+					// // 	}
+					// // }
 				}
 			}
 		}
 	}
+	// console.timeEnd('walls')
 
 	//* Tanks - updating:
 	for (const tank of gameState().tanks) {
@@ -90,6 +113,7 @@ function draw() {
 	}
 
 	//* Projectiles (& Edges):
+	projectileLoop:
 	for (let i = gameState().projectiles.length - 1; i >= 0; i--) { // We have to go backwards when removing projectiles
 		const projectile = gameState().projectiles[i]
 
@@ -109,12 +133,42 @@ function draw() {
 				if (projectile.tankHit(i, j, tank)) break // i, j is for removing proj, tank
 			}
 		}
+
+		//* Projectiles & Walls:
+		const pos = {
+			x: projectile.x,
+			y: projectile.y
+		}
+
+		// Only collision-checks with walls around proj:
+		const cells = getContainingCell(pos).neighborhood
+
+		for (const cell of cells) {
+			for (const wall in cell.walls) {
+				const wallObj = cell.walls[wall]
+
+				if (!wallObj) continue
+				
+				if (projectile.envCollision) {
+					const action = projectile.envCollision(i, wallObj)
+
+					// 'Breaker' removes a wall, and then needs to continue wall-loop to not try to read same wall:
+					if (action === 'nextWall') {
+						continue
+
+						// Bouncing can make infinite loop between two walls, so we need to stop checking the same proj after the first bounce until next frame
+					} else if (action === 'nextProj') {
+						continue projectileLoop // Has to be done last in this loop
+					}
+				}
+			}
+		}
 	}
 
 
 	//* Round Conditions:
 	game.onFrame()
-
+	console.timeEnd('draw')
 }
 
 

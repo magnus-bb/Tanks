@@ -84,13 +84,9 @@ Todos
 - Lav pickups om til at være farvedelt i powerup, equipment, modifier og med border delt i self-use, auto-use og evt non-use
 - Flyt `getCell()` ind i grid? Nu hvor celler har adgang til egne naboer
 	- Find steder `getCell()` bruges og fjern check om cellen findes - `getCell()` checker selv om den findes og ellers returner null
-- Find ud af, om det er hurtigst:
-	-	At udregne containing cell med:
-		- Koordinater på punkt
-		- width / height divideret med cell.w (for at få index)
-		- getCell(i1, i2)
-	- Eller at løbe igennem alle walls og spørge om pointInRect
 - Skriv `unvisitedNeighbors` om til at bruge cell.neighborhood
+- Opdel collision checks i wall og edge, så det ikke er samme funktion, der bruges (der er mere logik per gang den bliver kaldt, end der bør være)
+- Fix h2? i round-menu til at være --dark-text og italic etc
 
 Idéer til spillet
 --------------------------

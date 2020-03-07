@@ -57,9 +57,9 @@ export default class Tank {
 		return this.d / 2
 	}
 
-	get modVals() {
-		return this.modifiers.values()
-	}
+	// get modVals() {
+	// 	return this.modifiers.values()
+	// }
 
 	input() {
 		// Forwards / backwards mobility:

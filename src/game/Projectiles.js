@@ -399,7 +399,9 @@ const mixins = {
 				}
 
 				// If values are truthy will be checked in collision()
-				return bounce
+				if (bounce.x || bounce.y) {
+					return bounce
+				}
 			},
 
 			_bounce(axis) {
