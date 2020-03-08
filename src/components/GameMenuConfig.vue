@@ -159,7 +159,7 @@
             </div>
           </div>
 
-          <div class="configs__group-item">
+          <div class="configs__group-item" v-show="config.fx.bulletTrail.on">
             <h3 class="configs__h3">Bullet Trail Length:</h3>
             <p class="configs__range-value">{{ config.fx.bulletTrail.length }}</p>
             <input

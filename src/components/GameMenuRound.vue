@@ -51,7 +51,7 @@ export default {
 .round-menu__message {
 	@include h3;
 	font-size: 1.75rem;
-	font-size: 300;
+	font-weight: 300;
 	text-align: center;
 }
 

@@ -1,6 +1,7 @@
 import fx from './fx.js'
+import Pickup from './Pickups.js'
 import game from './game.js'
-import { getContainingCell, outOfBounds } from './helpers.js'
+import { getContainingCell } from './helpers.js'
 
 import store from '@/store'
 const { p5 } = store.state
@@ -8,8 +9,8 @@ const { config, gameState } = store.getters
 
 
 function draw() {
-	// console.clear()
-	// console.time('draw')
+	console.clear()
+	console.time('draw')
 
 	//* Canvas:
 	//TODO: Canvas-class?
@@ -169,7 +170,7 @@ function draw() {
 
 	//* Round Conditions:
 	game.onFrame()
-	// console.timeEnd('draw')
+	console.timeEnd('draw')
 }
 
 
