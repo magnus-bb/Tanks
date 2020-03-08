@@ -7,6 +7,7 @@
       <button @click="createPickup('breaker')">Breaker</button>
       <button @click="createPickup('ammo')">Ammo</button>
       <button @click="createPickup('stealthAmmo')">Stealth Ammo</button>
+      <button @click="createPickup('shrinkRay')">Shrink Ray</button>
     </div>
 
     <main class="main" :style="menuSize">

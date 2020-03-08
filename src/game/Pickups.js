@@ -94,7 +94,7 @@ function PowerupPickup(name, type, x, y, col, row) {
 
 const Pickup = {
 	pickups: {
-		powerup: ['ammo'],
+		powerup: ['ammo', 'shrinkRay'],
 		equipment: ['m82', 'wormhole', 'breaker'],
 		modifier: ['stealthAmmo']
 	},

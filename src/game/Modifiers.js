@@ -1,4 +1,4 @@
-import { getOffsetPoint, pointInRect, outOfBounds, getWallRect } from './helpers.js'
+import { getOffsetPoint, pointInRect, outOfBounds } from './helpers.js'
 
 import store from '@/store'
 const { p5 } = store.state
@@ -53,26 +53,26 @@ export function LaserSight(owner, name) {
 				for (const column of gameState().grid) {
 					for (const cell of column) {
 						for (const wall in cell.walls) { // for...in does not need to loop backwards 
-							if (cell.walls[wall]) { // checks for existing walls only
+							if (!cell.walls[wall]) continue  // checks for existing walls only
 
-								// Takes wall reference and calculates the rectangle:
-								const wallRect = getWallRect(cell.walls[wall])
+							// Takes ref to wall and calculates the rectangle:
+							const wallRect = cell.walls[wall].pointRect
 
-								// If point intersects the wall or if it is out of canvas:
-								const out = outOfBounds(point2)
-								if (pointInRect(point2, wallRect) || out.x || out.y) {
+							// If point intersects the wall or if it is out of canvas:
+							const out = outOfBounds(point2)
+							if (out.x || out.y || pointInRect(point2, wallRect)) {
 
-									const point1 = {
-										x: owner.cannon.x,
-										y: owner.cannon.y
-									}
-
-									// Actually shows effect:
-									this._drawLaser(point1, point2)
-
-									// Stops all further looping, since line has been drawn:
-									return
+								const point1 = {
+									x: owner.cannon.x,
+									y: owner.cannon.y
 								}
+
+								// Actually shows effect:
+								this._drawLaser(point1, point2)
+
+								// Stops all further looping, since line has been drawn:
+								return
+
 							}
 						}
 					}

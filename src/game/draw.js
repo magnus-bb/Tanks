@@ -1,6 +1,6 @@
 import fx from './fx.js'
 import game from './game.js'
-import { getContainingCell } from './helpers.js'
+import { getContainingCell, outOfBounds } from './helpers.js'
 
 import store from '@/store'
 const { p5 } = store.state
@@ -8,8 +8,8 @@ const { config, gameState } = store.getters
 
 
 function draw() {
-	console.clear()
-	console.time('draw')
+	// console.clear()
+	// console.time('draw')
 
 	//* Canvas:
 	//TODO: Canvas-class?
@@ -27,16 +27,16 @@ function draw() {
 	fx.onFrame()
 
 	//* Pickups:
-	//! removed for testing: Pickup.spawn()
+	Pickup.spawn()
 	
 	for (const pickup of gameState().pickups) {
 		pickup.onFrame()
 	}
 
 	//* Tanks (& Edges) - input and collision only:
-	// Must happen before collisions, so a collision can overwrite player input
 	for (const tank of gameState().tanks) {
-
+		
+		// Must happen before collisions, so a collision can overwrite player input
 		tank.input()
 
 		tank.collision()
@@ -105,7 +105,6 @@ function draw() {
 			}
 		}
 	}
-	// console.timeEnd('walls')
 
 	//* Tanks - updating:
 	for (const tank of gameState().tanks) {
@@ -117,11 +116,11 @@ function draw() {
 	for (let i = gameState().projectiles.length - 1; i >= 0; i--) { // We have to go backwards when removing projectiles
 		const projectile = gameState().projectiles[i]
 
+		projectile.onFrame(i) // Before all collision-checks is important
+
 		if (projectile.envCollision) {
 			projectile.envCollision(i)
 		}
-
-		projectile.onFrame(i)
 
 		//* Projectiles & Tanks:
 		for (let j = gameState().tanks.length - 1; j >= 0; j--) {
@@ -163,12 +162,14 @@ function draw() {
 				}
 			}
 		}
+
+		// // projectile.onFrame(i)
 	}
 
 
 	//* Round Conditions:
 	game.onFrame()
-	console.timeEnd('draw')
+	// console.timeEnd('draw')
 }
 
 

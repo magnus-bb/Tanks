@@ -1,8 +1,8 @@
 export default class Config {
 	constructor(configuration = null) { // If configuration is null (first time) everything should be defaults
 		this.fps = 60
-		this.bgColor = '#c4c4c4'
-		this.strokeColor = '#020817'
+		this.bgColor = '#ebecf0'//'#c4c4c4'
+		this.strokeColor = '#222629'//'#020817'
 		this.game = {
 			endFrames: 60 * 4 // Seconds
 		}

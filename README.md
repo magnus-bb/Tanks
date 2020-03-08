@@ -50,7 +50,8 @@ Todos
 - Ikon til alm bullets til at vise ammo i statusbar og laserSight af samme årsag
 
 ### Fix
-- Evt. ændr walls til at have de props, der skal bruges for at udregne collisions, så de ikke skal udregnes hver gang
+- Se om walls (og andet) ofte får udregnet props, som bare kan være på objektet statisk
+	- Walls repræsenteret som rektangler er done
 - Se på om body + cannon kan tegnes som 1 p5 shape, som kan roteres ved turning
 - Rename helpers navne til at give bedre mening
 - Loops i `draw.js` kan slås sammen. F.eks. kan tanks + projectiles vist lægges ind i projectiles (bare tjek om rækkefølgen tillader det først)
@@ -81,12 +82,12 @@ Todos
 	- Tror faktisk spread virker, og babel er unødvendigt
 - Fjern passed names til equipment? De ved vel selv, hvad de hedder
 - Se om alle `tank.modifiers` referencer er omskrevet til array frem for set
-- Lav pickups om til at være farvedelt i powerup, equipment, modifier og med border delt i self-use, auto-use og evt non-use
+- Lav pickups om til at være farvedelt i powerup (grøn), equipment (rød), modifier (blå) og med border delt i usable (sort) , auto-use (hvid) og evt non-use (grå?)
 - Flyt `getCell()` ind i grid? Nu hvor celler har adgang til egne naboer
 	- Find steder `getCell()` bruges og fjern check om cellen findes - `getCell()` checker selv om den findes og ellers returner null
 - Skriv `unvisitedNeighbors` om til at bruge cell.neighborhood
 - Opdel collision checks i wall og edge, så det ikke er samme funktion, der bruges (der er mere logik per gang den bliver kaldt, end der bør være)
-- Fix h2? i round-menu til at være --dark-text og italic etc
+- Redesign pickups til at være mere ligesom status-item / color-picker med farve og gradient, men uden hul igennem
 
 Idéer til spillet
 --------------------------

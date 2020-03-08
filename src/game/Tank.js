@@ -1,7 +1,7 @@
 import fx from './fx.js'
 import * as projectile from './Projectiles.js'
 import game from './game.js'
-import { getOffsetPoint, getWallRect, pointInRect, outOfBounds, circleIntersectsEdge, circleIntersectsRect } from './helpers.js'
+import { getOffsetPoint, pointInRect, outOfBounds, circleIntersectsEdge, circleIntersectsRect } from './helpers.js'
 
 import store from '@/store'
 const { p5 } = store.state
@@ -9,7 +9,7 @@ const { config } = store.getters
 
 export default class Tank {
 	constructor(name, colorArray, x, y, controls, owner) {
-		this.owner = owner //owner.tank = this is set in game.js to ensure reactivity
+		this.owner = owner
 		this.name = name
 		this.x = x
 		this.y = y //TODO: Given a cell, calculate the center instead of giving a center coordinate
@@ -122,7 +122,7 @@ export default class Tank {
 			y: false
 		}
 
-		const wallRect = getWallRect(wall, true)
+		const wallRect = wall.circleRect
 
 		// Checks with a lookahead on x:
 		if (circleIntersectsRect(lookAheads.x, wallRect)) {
@@ -175,7 +175,7 @@ export default class Tank {
 			y: false
 		}
 
-		const wallRect = getWallRect(wall)
+		const wallRect = wall.pointRect
 
 		for (let i = this.r; i <= config().tank.cannon.length; i++) {
 
@@ -259,7 +259,7 @@ export default class Tank {
 	_checkTurnWallCollision(wall) {
 		const nextDir = (this.direction % 360) + this.turnSpeed * this.turning
 
-		const wallRect = getWallRect(wall)
+		const wallRect = wall.pointRect
 
 		// Starts from edge of tank, not cannon root:
 		for (let i = this.r; i <= config().tank.cannon.length; i++) {

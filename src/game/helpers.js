@@ -87,43 +87,6 @@ export function circleIntersectsEdge(circle) { //TODO: Brug til Bullet
 	return (circle.x - circle.r <= wallHalfWidth || circle.x + circle.r >= p5.width - wallHalfWidth || circle.y - circle.r <= wallHalfWidth || circle.y + circle.r >= p5.height - wallHalfWidth)
 }
 
-// Returns a rectangle representation of a wall-object for different types of intersection checks:
-export function getWallRect(wall, circle = false) {
-	const wallRect = {}
-
-	if (circle) { //* For circle intersections:
-		if (wall.x1 === wall.x2) {
-			// Y is long axis:
-			wallRect.x = wall.x1 - wall.w / 2
-			wallRect.y = wall.y1
-			wallRect.w = wall.w
-			wallRect.h = wall.y2 - wall.y1
-		} else {
-			// X is long axis:
-			wallRect.x = wall.x1
-			wallRect.y = wall.y1 - wall.w / 2
-			wallRect.w = wall.x2 - wall.x1
-			wallRect.h = wall.w
-		}
-	} else { //* For single point intersections:
-		if (wall.x1 === wall.x2) {
-			// Y is long axis:
-			wallRect.x1 = wall.x1 - wall.w / 2
-			wallRect.x2 = wall.x2 + wall.w / 2
-			wallRect.y1 = wall.y1
-			wallRect.y2 = wall.y2
-		} else {
-			// X is long axis:
-			wallRect.x1 = wall.x1
-			wallRect.x2 = wall.x2
-			wallRect.y1 = wall.y1 - wall.w / 2
-			wallRect.y2 = wall.y2 + wall.w / 2
-		}
-	}
-
-	return wallRect
-}
-
 export function outOfBounds(point) {
 	const wallHalfWidth = config().wall.strokeWidth / 2
 

@@ -7,15 +7,27 @@ function Ammo(owner, name) {
 	}
 }
 
+function ShrinkRay(owner, name) {
+	if (owner.d > 10) {
+		owner.d -= 2
+	}
 
-//* COMPOSITIONAL MIXINS
-
-const mixins = {
-
+	return {
+		owner,
+		name
+	}
 }
+
+
+// //* COMPOSITIONAL MIXINS
+
+// const mixins = {
+
+// }
 
 //* LOOKUP DICTIONARY
 
 export default {
 	Ammo,
+	ShrinkRay
 }

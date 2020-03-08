@@ -1,5 +1,3 @@
-//import Cell from './Cell.js'
-
 import store from '@/store'
 const { p5 } = store.state
 const { config } = store.getters

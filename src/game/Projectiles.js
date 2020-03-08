@@ -1,4 +1,4 @@
-import { getOffsetPoint, outOfBounds, pointInRect, getWallRect } from './helpers.js'
+import { getOffsetPoint, outOfBounds, pointInRect } from './helpers.js'
 
 import store from '@/store'
 const { p5 } = store.state
@@ -221,7 +221,6 @@ export function Breaker(owner) {
 
 			} else if (this._checkEdgeCollision()) {
 				this._destroy(i)
-				// return 'continue'
 			}
 		},
 
@@ -271,7 +270,6 @@ export function Breaker(owner) {
 
 
 //* COMPOSITIONAL MIXINS
-
 
 const mixins = {
 
@@ -332,7 +330,7 @@ const mixins = {
 	canCheckEnv() {
 		return {
 			_checkWallCollision(wall) {
-				const wallRect = getWallRect(wall)
+				const wallRect = wall.pointRect
 
 				// uses fractional lookaheads:
 				for (const step of this.next) {
@@ -362,7 +360,7 @@ const mixins = {
 					y: false
 				}
 
-				const wallRect = getWallRect(wall)
+				const wallRect = wall.pointRect
 
 				// Uses fractional lookaheads:
 				for (const step of this.next) {
