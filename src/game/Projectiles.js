@@ -24,7 +24,7 @@ export function Bullet(owner) {
 		...mixins.canHitTank(),
 
 		// Per-projectile environment collision handling (uses common wall/edge checks):
-		envCollision(i, wall = null) { // Index is passed with all projectiles, since some need it to remove() (but not this one)
+		envCollision(_, wall = null) { // Index (_) is passed with all projectiles, since some need it to remove() (but not this one)
 			const bounce = wall ? this._checkWallCollision(wall) : this._checkEdgeCollision()
 
 			if (bounce) {

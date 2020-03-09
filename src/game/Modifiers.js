@@ -53,7 +53,6 @@ export function LaserSight(owner, name) {
 				for (const column of gameState().grid) {
 					for (const cell of column) {
 						for (const wall in cell.walls) { // for...in does not need to loop backwards 
-							if (!cell.walls[wall]) continue  // checks for existing walls only
 
 							// Takes ref to wall and calculates the rectangle:
 							const wallRect = cell.walls[wall].pointRect

@@ -11,6 +11,7 @@ export default class Wall {
 		this.x2 = owner.x // Potentially changes
 		this.y2 = owner.y // Potentially changes
 		this.w = config().wall.strokeWidth
+		// this.halfWidth = this.w / 2  -  only used in places where wall-obj is not accessed
 
 		const length = owner.w
 		switch (side) {
@@ -32,7 +33,7 @@ export default class Wall {
 	}
 
 	destroy() {
-		this.owner.walls[this.side] = null
+		delete this.owner.walls[this.side]// = null
 	}
 
 	_show() {

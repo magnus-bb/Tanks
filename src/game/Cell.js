@@ -13,10 +13,10 @@ class Cell {
 		this.iy = iy
 		this.w = config().cell.width
 		// Makes a wall at chance, if wall is not on canvas edge:
-		this.walls = {
-			right: null,
-			bottom: null
-		}
+		this.walls = {} // Walls are set randomly
+			// right: null,
+			// bottom: null
+		
 		// For creating the maze:
 		this.visited = false
 		// For accessing neighbors fast (is set after all cells are made, since "future" cells will be referenced):

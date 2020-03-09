@@ -37,10 +37,11 @@ function draw() {
 	//* Tanks (& Edges) - input and collision only:
 	for (const tank of gameState().tanks) {
 		
-		// Must happen before collisions, so a collision can overwrite player input
+		// Must happen before collisions, so a collision can overwrite player input:
 		tank.input()
 
 		tank.collision()
+
 
 		//* Tanks & Pickups:
 		for (let i = gameState().pickups.length - 1; i >= 0; i--) {
@@ -60,12 +61,11 @@ function draw() {
 
 		for (const cell of cells) {
 			for (const wall in cell.walls) {
-				// Skips when no wall:
-				if (!cell.walls[wall]) continue
-				
 				tank.collision(cell.walls[wall])
 			}
 		}
+
+		tank.onFrame() // Importantly done after input + collision handling
 	}
 
 
@@ -74,43 +74,19 @@ function draw() {
 	for (const column of gameState().grid) {
 		for (const cell of column) {
 
-			wallLoop:
 			for (const wall in cell.walls) { // for...in does not need to loop backwards 
-				if (cell.walls[wall]) { // checks for existing walls only
 
 					const wallObj = cell.walls[wall] // binds wall to the object, not the prop name //TODO: bare kald for wall?
 					wallObj.onFrame()
-
-					// // //* Walls & Tanks:
-					// // for (const tank of gameState().tanks) {
-					// // 	tank.collision(wallObj)
-					// // }
-
-					// // //* Walls & Projectiles:
-					// // for (let i = gameState().projectiles.length - 1; i >= 0; i--) { // We have to go backwards when removing projectiles
-					// // 	const projectile = gameState().projectiles[i]
-
-					// // 	if (projectile.envCollision) {
-					// // 		const action = projectile.envCollision(i, wallObj)
-					// // 		// 'Breaker' removes a wall, and then needs to continue wall-loop to not try to read same wall:
-					// // 		if (action === 'nextWall') {
-					// // 			continue wallLoop
-
-					// // 			// Bouncing can make infinite loop between two walls, so we need to stop checking the same proj after the first bounce until next frame
-					// // 		} else if (action === 'nextProj') {
-					// // 			continue
-					// // 		}
-					// // 	}
-					// // }
-				}
+					
 			}
 		}
 	}
 
-	//* Tanks - updating:
-	for (const tank of gameState().tanks) {
-		tank.onFrame() // Importantly done after input + collision handling
-	}
+	// //* Tanks - updating:
+	// for (const tank of gameState().tanks) {
+		// tank.onFrame() // Importantly done after input + collision handling
+	// }
 
 	//* Projectiles (& Edges):
 	projectileLoop:
@@ -147,7 +123,7 @@ function draw() {
 			for (const wall in cell.walls) {
 				const wallObj = cell.walls[wall]
 
-				if (!wallObj) continue
+				// if (!wallObj) continue
 				
 				if (projectile.envCollision) {
 					const action = projectile.envCollision(i, wallObj)
@@ -170,6 +146,7 @@ function draw() {
 
 	//* Round Conditions:
 	game.onFrame()
+
 	console.timeEnd('draw')
 }
 

@@ -47,17 +47,21 @@ const grid = {
 
 	// Goes through all cells and randomly populates walls
 	_setWalls(cell) {
-		// for (const col of gameState().grid) {
-		// 	for (const cell of col) {
 
 		if (cell.x !== p5.width - config().cell.width) {
-			cell.walls.right = cell.randomWall('right')
+			const wall = cell.randomWall('right')
+
+			if (wall) {
+				cell.walls.right = wall
+			}
 		}
 		if (cell.y !== p5.height - config().cell.width) {
-			cell.walls.bottom = cell.randomWall('bottom')
+			const wall = cell.randomWall('bottom')
+
+			if (wall) {
+				cell.walls.bottom = wall
+			}
 		}
-		// 	}
-		// }
 	},
 
 	generateMaze() {
@@ -141,13 +145,13 @@ const grid = {
 
 	_removeWall(fromCell, toCell, dir) {
 		if (dir === 'up') {
-			toCell.walls.bottom = null
+			delete toCell.walls.bottom// = null
 		} else if (dir === 'right') {
-			fromCell.walls.right = null
+			delete fromCell.walls.right// = null
 		} else if (dir === 'down') {
-			fromCell.walls.bottom = null
+			delete fromCell.walls.bottom// = null
 		} else if (dir === 'left') {
-			toCell.walls.right = null
+			delete toCell.walls.right// = null
 		}
 	}
 }

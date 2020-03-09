@@ -50,8 +50,7 @@ Todos
 - Ikon til alm bullets til at vise ammo i statusbar og laserSight af samme årsag
 
 ### Fix
-- Se om walls (og andet) ofte får udregnet props, som bare kan være på objektet statisk
-	- Walls repræsenteret som rektangler er done
+- Se om projectiles, cells, tanks, pickups osv ofte får udregnet props, som bare kan være på objektet
 - Se på om body + cannon kan tegnes som 1 p5 shape, som kan roteres ved turning
 - Rename helpers navne til at give bedre mening
 - Loops i `draw.js` kan slås sammen. F.eks. kan tanks + projectiles vist lægges ind i projectiles (bare tjek om rækkefølgen tillader det først)
@@ -88,6 +87,8 @@ Todos
 - Skriv `unvisitedNeighbors` om til at bruge cell.neighborhood
 - Opdel collision checks i wall og edge, så det ikke er samme funktion, der bruges (der er mere logik per gang den bliver kaldt, end der bør være)
 - Redesign pickups til at være mere ligesom status-item / color-picker med farve og gradient, men uden hul igennem
+- Flyt mest muligt config ind i objekter, når de initialiseres, så de ikke skal gettes hvert frame
+- Se på om `#` kan bruges til private metoder osv i objekter
 
 Idéer til spillet
 --------------------------
@@ -109,6 +110,7 @@ Idéer til spillet
 - Skyggeeffekter på spillet?
 - Custom cursor á la: https://www.youtube.com/watch?v=TpwpAYi-p2w 
 - Shotgun med små pellets og 1x bounce?
+- Game modes? CTF, parkour (fra a til b), flere liv etc
 
 Links
 -----

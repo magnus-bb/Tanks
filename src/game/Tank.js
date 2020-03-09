@@ -201,7 +201,7 @@ export default class Tank {
 		return collision
 	}
 
-	_checkCannonEdgeCollision(wall) {
+	_checkCannonEdgeCollision() {
 		// To be returned:
 		const collision = {
 			x: false,
@@ -278,16 +278,30 @@ export default class Tank {
 	}
 
 	_checkTurnEdgeCollision() {
-		const nextCannonTip = {
-			x: this.next.x + this.relCannon.x,
-			y: this.next.y + this.relCannon.y
-		}
+		const nextDir = (this.direction % 360) + this.turnSpeed * this.turning
 
-		const out = outOfBounds(nextCannonTip)
+		const nextPoint = getOffsetPoint(config().tank.cannon.length, nextDir)
+
+			// Relative to the recalculated next location of the tank (since we don't want to turn and then move in the "old" direction)
+			nextPoint.x += this.next.x
+			nextPoint.y += this.next.y
+
+		const out = outOfBounds(nextPoint)
 
 		if (out.x || out.y) {
 			return true
 		}
+		
+		// const nextCannonTip = {
+		// 	x: this.next.x + this.relCannon.x,
+		// 	y: this.next.y + this.relCannon.y
+		// }
+
+		// const out = outOfBounds(nextCannonTip)
+
+		// if (out.x || out.y) {
+		// 	return true
+		// }
 	}
 
 	_handleTurnCollision() {
@@ -346,7 +360,7 @@ export default class Tank {
 			// % 360 makes it so we don't have to deal with angles over 360 deg:
 			this.direction = (this.direction % 360) + this.turnSpeed / config().tank.collisionTurnSlow * turnDirection //TODO: Maybe use rotate() when we switch to sprites
 		} else {
-			this.direction = (this.direction % 360) + this.turnSpeed * turnDirection //TODO: Maybe use rotate() when we switch to sprites
+			this.direction = (this.direction % 360) + this.turnSpeed * turnDirection //TODO: Maybe use rotate()?
 		}
 	}
 
