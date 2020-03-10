@@ -51,7 +51,6 @@ Todos
 
 ### Fix
 - Se om projectiles, cells, tanks, pickups osv ofte får udregnet props, som bare kan være på objektet
-- Se på om body + cannon kan tegnes som 1 p5 shape, som kan roteres ved turning
 - Rename helpers navne til at give bedre mening
 - Loops i `draw.js` kan slås sammen. F.eks. kan tanks + projectiles vist lægges ind i projectiles (bare tjek om rækkefølgen tillader det først)
 - Random selections, der skal ekskludere noget bestemt (f.eks de steder, der allerede er en pickup eller tanks, der ikke skal vælge sig selv) skal omskrives så de tager arrayet, kloner det og fjerner sig selv/de ekskluderede fra klonen og bare vælger en random. På denne måde skal funtionen ikke kalde sig selv igen, hvis den rammer noget ekskluderet.
@@ -76,7 +75,6 @@ Todos
 - Color tank skal være ligeså lækker som color-input-buttons i config
 - Bullet skal bruge circle-intersections frem for midtpunkt, så man kan ændre størrelse på projektil
 	- Tilføj projektilstørrelse til config igen
-- fix babel eller loaders til at kunne bruge spread operators etc
 	- https://forum.vuejs.org/t/vue-loader-unexpected-token-error-for-using-spread-operator-on-my-vue-component/10241/6 (nederst)
 	- Tror faktisk spread virker, og babel er unødvendigt
 - Fjern passed names til equipment? De ved vel selv, hvad de hedder

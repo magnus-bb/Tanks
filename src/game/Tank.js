@@ -291,17 +291,6 @@ export default class Tank {
 		if (out.x || out.y) {
 			return true
 		}
-		
-		// const nextCannonTip = {
-		// 	x: this.next.x + this.relCannon.x,
-		// 	y: this.next.y + this.relCannon.y
-		// }
-
-		// const out = outOfBounds(nextCannonTip)
-
-		// if (out.x || out.y) {
-		// 	return true
-		// }
 	}
 
 	_handleTurnCollision() {
@@ -332,9 +321,6 @@ export default class Tank {
 		this.modifiers.forEach((modifier, index) => {
 			modifier.onFrame(index)
 		})
-
-		// for (const modifier of this.modifiers) {
-		// }
 	}
 
 	_equipment() {
