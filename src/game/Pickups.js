@@ -175,7 +175,8 @@ const Pickup = {
 				y,
 				col,
 				row,
-				asset: assets.pickups[name]
+				asset: assets.pickups[name],
+				size: config().pickup.size
 			}
 		},
 
@@ -195,10 +196,10 @@ const Pickup = {
 					}
 
 					const pickupRect = {
-						x: this.x - config().pickup.size / 2,
-						y: this.y - config().pickup.size / 2,
-						h: config().pickup.size,
-						w: config().pickup.size
+						x: this.x - this.size / 2,
+						y: this.y - this.size / 2,
+						h: this.size,
+						w: this.size
 					}
 
 					if (circleIntersectsRect(tankBody, pickupRect)) {
@@ -211,7 +212,7 @@ const Pickup = {
 		canShowAndRemoveSelf() {
 			return {
 				_show() {
-					p5.image(this.asset, this.x, this.y, config().pickup.size, config().pickup.size)
+					p5.image(this.asset, this.x, this.y, this.size, this.size)
 				},
 
 				_remove(i) {

@@ -12,12 +12,13 @@ export default class Tank {
 		this.owner = owner
 		this.name = name
 		this.x = x
-		this.y = y //TODO: Given a cell, calculate the center instead of giving a center coordinate
+		this.y = y //TODO: Given a cell, calculate the center instead of giving an x, y coordinate?
 		this.d = config().tank.diameter
 		this.moveSpeed = config().tank.moveSpeed
 		this.turnSpeed = config().tank.turnSpeed
 		this.driving = false // To look ahead before actually moving
 		this.direction = p5.random(0, 360)
+		this.strokeColor = config().strokeColor
 		this.color = p5.color(colorArray) // Array of RGB
 		this.ammo = config().tank.ammo
 		this.stealthedAmmo = false
@@ -31,12 +32,17 @@ export default class Tank {
 			dY: 0
 		}
 		this.turning = 0
+		this.collisionMoveSlow = config().tank.collisionMoveSlow
+		this.collisionTurnSlow = config().tank.collisionTurnSlow
 		
 		const relCannonTip = getOffsetPoint(config().tank.cannon.length, this.direction)
 		this.relCannon = {
 			x: relCannonTip.x,
 			y: relCannonTip.y
 		}
+		this.cannonLength = config().tank.cannon.length
+		this.cannonWidth = config().tank.cannon.width
+		this.cannonMidOffset = config().tank.cannon.midOffsetDivisor
 	}
 
 	get cannon() {
@@ -160,11 +166,11 @@ export default class Tank {
 	_handleBodyCollision(axes) {
 		if (axes.x) {
 			this.moveCoords.dX = 0
-			this.moveCoords.dY /= config().tank.collisionMoveSlow
+			this.moveCoords.dY /= this.collisionMoveSlow
 		}
 		if (axes.y) {
 			this.moveCoords.dY = 0
-			this.moveCoords.dX /= config().tank.collisionMoveSlow
+			this.moveCoords.dX /= this.collisionMoveSlow
 		}
 	}
 
@@ -177,7 +183,7 @@ export default class Tank {
 
 		const wallRect = wall.pointRect
 
-		for (let i = this.r; i <= config().tank.cannon.length; i++) {
+		for (let i = this.r; i <= this.cannonLength; i++) {
 
 			// Every point on the cannon...
 			const point = getOffsetPoint(i, this.direction)
@@ -229,10 +235,10 @@ export default class Tank {
 		// Halts / slows movement:
 		if (axes.x) {
 			this.moveCoords.dX = 0
-			this.moveCoords.dY /= config().tank.collisionMoveSlow
+			this.moveCoords.dY /= this.collisionMoveSlow
 		}
 		if (axes.y) {
-			this.moveCoords.dX /= config().tank.collisionMoveSlow
+			this.moveCoords.dX /= this.collisionMoveSlow
 			this.moveCoords.dY = 0
 		}
 
@@ -262,7 +268,7 @@ export default class Tank {
 		const wallRect = wall.pointRect
 
 		// Starts from edge of tank, not cannon root:
-		for (let i = this.r; i <= config().tank.cannon.length; i++) {
+		for (let i = this.r; i <= this.cannonLength; i++) {
 
 			// Every point on the cannon...
 			const nextPoint = getOffsetPoint(i, nextDir)
@@ -280,7 +286,7 @@ export default class Tank {
 	_checkTurnEdgeCollision() {
 		const nextDir = (this.direction % 360) + this.turnSpeed * this.turning
 
-		const nextPoint = getOffsetPoint(config().tank.cannon.length, nextDir)
+		const nextPoint = getOffsetPoint(this.cannonLength, nextDir)
 
 			// Relative to the recalculated next location of the tank (since we don't want to turn and then move in the "old" direction)
 			nextPoint.x += this.next.x
@@ -335,7 +341,7 @@ export default class Tank {
 		}
 
 		// Updates cannon coords:
-		const tip = getOffsetPoint(config().tank.cannon.length, this.direction) // Same function as with moving - gets coords based on distance from center and a direction
+		const tip = getOffsetPoint(this.cannonLength, this.direction) // Same function as with moving - gets coords based on distance from center and a direction
 		this.relCannon.x = tip.x
 		this.relCannon.y = tip.y
 	}
@@ -344,7 +350,7 @@ export default class Tank {
 	_turn(turnDirection, bodyCollision = false) {
 		if (bodyCollision) {
 			// % 360 makes it so we don't have to deal with angles over 360 deg:
-			this.direction = (this.direction % 360) + this.turnSpeed / config().tank.collisionTurnSlow * turnDirection //TODO: Maybe use rotate() when we switch to sprites
+			this.direction = (this.direction % 360) + this.turnSpeed / this.collisionTurnSlow * turnDirection //TODO: Maybe use rotate() when we switch to sprites
 		} else {
 			this.direction = (this.direction % 360) + this.turnSpeed * turnDirection //TODO: Maybe use rotate()?
 		}
@@ -360,7 +366,7 @@ export default class Tank {
 	_show() {
 		p5.push()
 
-		p5.stroke(config().strokeColor)
+		p5.stroke(this.strokeColor)
 		p5.fill(this.color)
 
 		// Renders body:
@@ -371,10 +377,10 @@ export default class Tank {
 
 		// Renders cannon:
 		p5.push()
-		p5.strokeWeight(config().tank.cannon.width)
+		p5.strokeWeight(this.cannonWidth)
 		p5.translate(this.x, this.y)
 		p5.rotate(this.direction)
-		p5.line(this.d / config().tank.cannon.midOffsetDivisor, 0, config().tank.cannon.length, 0) // Straight line the length of the cannon
+		p5.line(this.d / this.cannonMidOffset, 0, this.cannonLength, 0) // Straight line the length of the cannon
 		p5.pop()
 
 		p5.pop()

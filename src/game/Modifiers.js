@@ -33,7 +33,8 @@ export function LaserSight(owner, name) {
 	const props = {
 		owner,
 		name,
-		color: p5.color(owner.color.levels) // Copies owner color instead of referencing the object
+		color: p5.color(owner.color.levels), // Copies owner color instead of referencing the object
+		width: config().modifier.laserSight.width
 	}
 	props.color.setAlpha(config().modifier.laserSight.alpha)
 
@@ -82,7 +83,7 @@ export function LaserSight(owner, name) {
 		_drawLaser(from, to) {
 			p5.push()
 
-			p5.strokeWeight(config().modifier.laserSight.width)
+			p5.strokeWeight(this.width)
 			p5.stroke(this.color)
 
 			p5.line(from.x, from.y, to.x, to.y)

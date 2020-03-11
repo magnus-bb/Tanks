@@ -32,7 +32,6 @@ Todos
 - Finde og loade open source lydeffekter til skud (*gud forbyde, at jeg bliver nødt til at optage mundlyde*)
 - Tank collisions med hinanden?
 - Feedback på player created
-- Statusfelter skal kun vise det mest basale, og så give udvidet info ved hover (f.eks. antal selvmord)
 - Tilføj fejlmeddelelse, hvis ikke alle controls er valgt
 - Graying af brugte controls + besked hvis CTRL + W er valgt som controls på tværs af spillere også
 - Tilføj en counter til selvmord, sørg for at et selvmord ikke tæller almindelige kills
@@ -41,6 +40,7 @@ Todos
 - Autostørrelse (på max eller evt default) af canvas ved at tage vinduets width divideret med cellestørrelsen?
 - Tilføj mulighed for altid at have laser sight i config
 - P5Vector er fucking nemt med .add(), og man kan stadig bare x / y *= -1 for at omvende en akse nemt: Lav om til vektorer (så skrå vægge etc kan laves)
+	- Også bare for at simplificere meget
 - Opfordr til at bruge ALT, SHIFT, CONTROL etc, da disse oftes kan bruges med flere taster
 - Sørg for at det er muligt at slette en spiller nede i status, så længe spillet ikke er startet
 - et `?` til at se enheder på configs (px, frames etc)
@@ -48,9 +48,12 @@ Todos
 - Collisionchecking skal loope igennem det, der flytter sig (tanks, projektiler etc), og så bruge sin egen x, y til kun at finde sin egen celle, og så kun checke collisions på de walls, der er rundt om (bliver stadig nødt til at gennemløbe alle andre ting, der flytter sig, for at se deres position)
 - Animationer i menuer
 - Ikon til alm bullets til at vise ammo i statusbar og laserSight af samme årsag
+- Muzzle på andre våben (ligesom `Bullet`), men skal gøres med `p5.scale()`
+	- Skal indsættes efter `translate` men før tegning af shapen
 
 ### Fix
-- Se om projectiles, cells, tanks, pickups osv ofte får udregnet props, som bare kan være på objektet
+- Bullets der starter inde i væg (hvis man har kanon helt ind imod væg) bouncer direkte tilbage
+- Omskriv `Tank.cannon` getter til at være en getter på en alm prop `cannon` som også har width, length osv med dot-notation
 - Rename helpers navne til at give bedre mening
 - Loops i `draw.js` kan slås sammen. F.eks. kan tanks + projectiles vist lægges ind i projectiles (bare tjek om rækkefølgen tillader det først)
 - Random selections, der skal ekskludere noget bestemt (f.eks de steder, der allerede er en pickup eller tanks, der ikke skal vælge sig selv) skal omskrives så de tager arrayet, kloner det og fjerner sig selv/de ekskluderede fra klonen og bare vælger en random. På denne måde skal funtionen ikke kalde sig selv igen, hvis den rammer noget ekskluderet.
@@ -75,8 +78,7 @@ Todos
 - Color tank skal være ligeså lækker som color-input-buttons i config
 - Bullet skal bruge circle-intersections frem for midtpunkt, så man kan ændre størrelse på projektil
 	- Tilføj projektilstørrelse til config igen
-	- https://forum.vuejs.org/t/vue-loader-unexpected-token-error-for-using-spread-operator-on-my-vue-component/10241/6 (nederst)
-	- Tror faktisk spread virker, og babel er unødvendigt
+- https://forum.vuejs.org/t/vue-loader-unexpected-token-error-for-using-spread-operator-on-my-vue-component/10241/6 (nederst)
 - Fjern passed names til equipment? De ved vel selv, hvad de hedder
 - Se om alle `tank.modifiers` referencer er omskrevet til array frem for set
 - Lav pickups om til at være farvedelt i powerup (grøn), equipment (rød), modifier (blå) og med border delt i usable (sort) , auto-use (hvid) og evt non-use (grå?)

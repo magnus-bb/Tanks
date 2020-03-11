@@ -13,7 +13,7 @@ export function Bullet(owner) {
 		type: 'bullet',
 		d: config().projectile.bullet.diameter,
 		duration: config().projectile.bullet.duration,
-		dead: false // For knowing when to stop rendering trail
+		dead: false, // For knowing when to stop rendering trail
 	}
 
 	return {
@@ -56,16 +56,16 @@ export function Bullet(owner) {
 			drawDiameter = drawDiameter > this.d ? drawDiameter : this.d
 
 			p5.push()
-
+			
 			p5.noStroke()
-
+			
 			// Alpha should not be permanent when creating bullet, since this should change back and forth mid-shot:
-			this.owner.stealthedAmmo ? this.color.setAlpha(config().modifier.stealthAmmo.alpha) : this.color.setAlpha(255)
-
+			this.owner.stealthedAmmo ? this.color.setAlpha(this.stealthAlpha) : this.color.setAlpha(255)
+			
 			p5.fill(this.color)
-
+			
 			p5.circle(this.x, this.y, drawDiameter)
-
+			
 			p5.pop()
 		},
 
@@ -75,7 +75,6 @@ export function Bullet(owner) {
 
 			store.commit('removeProjectile', i)
 
-			// gameState().projectiles.splice(i, 1) //TODO: Mutation
 
 			this.owner.ammo++
 		},
@@ -104,6 +103,8 @@ export function M82(owner) {
 		type: 'm82',
 		d: 3, // Max width of projectile shape //TODO: calculated?
 		penetratedWall: null,
+		penetrationSpeedDivisor: config().projectile.m82.penetrationSpeedDivisor,
+		alphaModifier: config().projectile.m82.stealthModifier
 	}
 
 	return {
@@ -132,7 +133,7 @@ export function M82(owner) {
 				this.penetratedWall = wall
 
 				// Reduces speed:
-				this.speed /= config().projectile.m82.penetrationSpeedDivisor
+				this.speed /= this.penetrationSpeedDivisor
 
 				// Recalculates moveCoords based on new speed:
 				const { x, y } = getOffsetPoint(this.speed, this.direction)
@@ -163,7 +164,9 @@ export function M82(owner) {
 			p5.push()
 
 			p5.noStroke()
-			stealth ? this.color.setAlpha(config().modifier.stealthAmmo.alpha * config().projectile.m82.stealthModifier) : this.color.setAlpha(255)
+
+			stealth ? this.color.setAlpha(this.stealthAlpha * this.alphaModifier) : this.color.setAlpha(255)
+
 			p5.fill(this.color)
 
 			// Centering based on half the width / height of the drawing (use figma):
@@ -240,7 +243,7 @@ export function Breaker(owner) {
 
 		_projectileShape(stealth) {
 			p5.noStroke()
-			stealth ? this.color.setAlpha(config().modifier.stealthAmmo.alpha) : this.color.setAlpha(255)
+			stealth ? this.color.setAlpha(this.stealthAlpha) : this.color.setAlpha(255)
 			p5.fill(this.color)
 
 			// Centering based on half the width / height of the drawing (use figma):
@@ -299,7 +302,8 @@ const mixins = {
 			moveCoords: {
 				dX: move.x,
 				dY: move.y
-			}
+			},
+			stealthAlpha: config().modifier.stealthAmmo.alpha,
 		}
 	},
 

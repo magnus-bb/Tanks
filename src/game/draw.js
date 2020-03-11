@@ -9,8 +9,8 @@ const { config, gameState } = store.getters
 
 
 function draw() {
-	console.clear()
-	console.time('draw')
+	// console.clear()
+	// console.time('draw')
 
 	//* Canvas:
 	//TODO: Canvas-class?
@@ -51,13 +51,9 @@ function draw() {
 		}
 
 		//* Tanks & Walls:
-		const pos = {
-			x: tank.x,
-			y: tank.y
-		}
 
 		// Only collision-checks with walls around tank:
-		const cells = getContainingCell(pos).neighborhood
+		const cells = getContainingCell({ x: tank.x, y: tank.y }).neighborhood
 
 		for (const cell of cells) {
 			for (const wall in cell.walls) {
@@ -111,13 +107,9 @@ function draw() {
 		}
 
 		//* Projectiles & Walls:
-		const pos = {
-			x: projectile.x,
-			y: projectile.y
-		}
 
 		// Only collision-checks with walls around proj:
-		const cells = getContainingCell(pos).neighborhood
+		const cells = getContainingCell({ x: projectile.x, y: projectile.y }).neighborhood
 
 		for (const cell of cells) {
 			for (const wall in cell.walls) {
@@ -139,15 +131,13 @@ function draw() {
 				}
 			}
 		}
-
-		// // projectile.onFrame(i)
 	}
 
 
 	//* Round Conditions:
 	game.onFrame()
 
-	console.timeEnd('draw')
+	// console.timeEnd('draw')
 }
 
 

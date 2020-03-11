@@ -45,19 +45,22 @@ const grid = {
 		if (getCell(col+1, row)) cell.neighborhood.push(getCell(col+1, row))
 	},
 
-	// Goes through all cells and randomly populates walls
+	// Called for all cells and randomly populates walls:
 	_setWalls(cell) {
 
-		if (cell.x !== p5.width - config().cell.width) {
+		if (cell.x !== p5.width - cell.w) { // Not the rightmost column
 			const wall = cell.randomWall('right')
 
+			// Only makes the key in cell.walls if a wall was returned:
 			if (wall) {
 				cell.walls.right = wall
 			}
 		}
-		if (cell.y !== p5.height - config().cell.width) {
+
+		if (cell.y !== p5.height - cell.w) { // Not the bottom row
 			const wall = cell.randomWall('bottom')
 
+			// Only makes the key in cell.walls if a wall was returned:
 			if (wall) {
 				cell.walls.bottom = wall
 			}
