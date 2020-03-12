@@ -1,9 +1,8 @@
-import { getOffsetPoint, outOfBounds, pointInRect } from './helpers.js'
-
 import store from '@/store'
 const { p5 } = store.state
 const { config, gameState } = store.getters
 
+import { getOffsetPoint, outOfBounds, pointInRect, stepArray } from './helpers.js'
 
 
 //* BULLET
@@ -29,13 +28,14 @@ export function Bullet(owner) {
 
 			if (bounce) {
 				this._bounce(bounce)
-				return 'nextProj' //* Solves infinity corner bounce glitch - can this be moved to common bounce behaviour?
+				// // Makes sure projectiles won't bounce off the end of a wall lying end to end with another wall:
+				// return 'nextProj' // I.e. makes long stretches of wall act like one long wall
 			}
 		},
 
 		// Makes a trail point for each frame:
 		_makeTrailPoint() { //TODO: Move to mixin, if other projectiles should do this
-			// Trails are initialized in state (not on bullet) to allow for continuous rendering when bullet is destroyed
+			// Trails are initialized in gameState (not on bullet) to allow for continuous rendering when bullet is destroyed
 
 			// When first point is made, the bullet's trail has to be initialized:
 			if (!gameState().fx.bulletTrails.has(this)) {
@@ -74,7 +74,6 @@ export function Bullet(owner) {
 			this.dead = true // For trails effect //TODO: Add to trail mixin, if other projectiles should make trails
 
 			store.commit('removeProjectile', i)
-
 
 			this.owner.ammo++
 		},
@@ -281,28 +280,34 @@ const mixins = {
 		const move = getOffsetPoint(speed, owner.direction)
 		const x = owner.cannon.x
 		const y = owner.cannon.y
-		const next = [] // Populates the first lookaheads:
-		for (let step = 0; step <= speed; step += (speed < config().wall.collisionStepSize ? speed : config().wall.collisionStepSize)) { // Only makes fractional lookaheads of speed if speed is more than walls' width
 
-			// This has to be in fractions of moveCoords (and not just +- some values) to account for the direction of the movement - we don't want to ADD to a negative and vice versa:
-			next.push({
-				x: x + move.x * (step / speed),
-				y: y + move.y * (step / speed)
-			})
-		}
+		// const next = [] // Populates the first lookaheads:
+		// for (let step = 0; step <= speed; step += (speed < config().wall.collisionStepSize ? speed : config().wall.collisionStepSize)) { // Only makes fractional lookaheads of speed if speed is more than walls' width
+
+		// 	// This has to be in fractions of moveCoords (and not just +- some values) to account for the direction of the movement - we don't want to ADD to a negative and vice versa:
+		// 	next.push({
+		// 		x: x + move.x * (step / speed),
+		// 		y: y + move.y * (step / speed)
+		// 	})
+		// }
 
 		return {
 			owner,
 			x,
 			y,
 			speed,
-			next, // Is updated every frame (since a getter would recalc every wall * frame etc)
 			color: p5.color(owner.color.levels), // Copies owner color instead of referencing the object
 			direction: owner.direction,
 			moveCoords: {
 				dX: move.x,
 				dY: move.y
 			},
+			next: stepArray({ 
+				x,
+				y,
+				moveCoords: { dX: move.x, dY: move.y },
+				speed
+			}), // Is updated every frame (since a getter would recalc every wall * frame etc)
 			stealthAlpha: config().modifier.stealthAmmo.alpha,
 		}
 	},
@@ -315,17 +320,17 @@ const mixins = {
 			},
 
 			_updateNext() {
-				this.next = []
-
 				// Looks at "all" positions between location and (fraction of) 'next' location:
-				for (let step = 0; step <= this.speed; step += (this.speed < config().wall.collisionStepSize ? this.speed : config().wall.collisionStepSize)) { // Only does lookaheads if speed is more than walls' width
+				this.next = stepArray(this) // Takes object and returns steps between current and next position
 
-					// This has to be in fractions of moveCoords (and not just +- some values) to account for the direction of the movement - we don't want to ADD to a negative and vice versa:
-					this.next.push({
-						x: this.x + this.moveCoords.dX * (step / this.speed),
-						y: this.y + this.moveCoords.dY * (step / this.speed)
-					})
-				}
+				// // Looks at "all" positions between location and (fraction of) 'next' location:
+				// for (let step = 0; step <= this.speed; step += (this.speed < config().wall.collisionStepSize ? this.speed: config().wall.collisionStepSize)) { // Only does lookaheads if speed is more than walls' width
+				// 	// This has to be in fractions of moveCoords (and not just +- some values) to account for the direction of the movement - we don't want to ADD to a negative and vice versa:
+				// 	this.next.push({
+				// 		x: this.x + this.moveCoords.dX * (step / this.speed),
+				// 		y: this.y + this.moveCoords.dY * (step / this.speed)
+				// 	})
+				// }
 			}
 		}
 	},
@@ -359,7 +364,7 @@ const mixins = {
 	canBounce() { //TODO: Separate checks and bounce if other handling should be added, that has to be integrated into checks
 		return {
 			_checkWallCollision(wall) {
-				const bounce = {
+				const bounceAxis = {
 					x: false,
 					y: false
 				}
@@ -369,17 +374,19 @@ const mixins = {
 				// Uses fractional lookaheads:
 				for (const step of this.next) {
 
+					// Else-if solves infinite corner bounce:
 					if (pointInRect({ x: step.x, y: this.y }, wallRect)) {
-						bounce.x = true
-					} 
-					
-					if (pointInRect({ x: this.x, y: step.y }, wallRect)) { 
-						bounce.y = true
+						bounceAxis.x = true
+
+					} else if (pointInRect({ x: this.x, y: step.y }, wallRect)) { 
+						bounceAxis.y = true
 					}
 
-					// Cannot return anything if falsy! (will break further checking / looping):
-					if (bounce.x || bounce.y) {
-						return bounce
+					// Cannot return anything if falsy! - It will break further looping of steps:
+					if (bounceAxis.x || bounceAxis.y) {
+			
+						// Returns bounce-object so handler will know which way to bounce:
+						return bounceAxis
 					}
 				}
 			},

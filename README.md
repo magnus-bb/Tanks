@@ -36,7 +36,6 @@ Todos
 - Graying af brugte controls + besked hvis CTRL + W er valgt som controls på tværs af spillere også
 - Tilføj en counter til selvmord, sørg for at et selvmord ikke tæller almindelige kills
 - Tildeling af point i `Game.end()` eller i en funktion, den kalder
-- Lav muzzle-effekt om til noget nyt grafisk i stedet for at manipulere størrelsen af projektilet
 - Autostørrelse (på max eller evt default) af canvas ved at tage vinduets width divideret med cellestørrelsen?
 - Tilføj mulighed for altid at have laser sight i config
 - P5Vector er fucking nemt med .add(), og man kan stadig bare x / y *= -1 for at omvende en akse nemt: Lav om til vektorer (så skrå vægge etc kan laves)
@@ -52,9 +51,10 @@ Todos
 	- Skal indsættes efter `translate` men før tegning af shapen
 
 ### Fix
-- Bullets der starter inde i væg (hvis man har kanon helt ind imod væg) bouncer direkte tilbage
+- Brug stepArray i tanks også
 - Omskriv `Tank.cannon` getter til at være en getter på en alm prop `cannon` som også har width, length osv med dot-notation
 - Rename helpers navne til at give bedre mening
+	- Også andre navne
 - Loops i `draw.js` kan slås sammen. F.eks. kan tanks + projectiles vist lægges ind i projectiles (bare tjek om rækkefølgen tillader det først)
 - Random selections, der skal ekskludere noget bestemt (f.eks de steder, der allerede er en pickup eller tanks, der ikke skal vælge sig selv) skal omskrives så de tager arrayet, kloner det og fjerner sig selv/de ekskluderede fra klonen og bare vælger en random. På denne måde skal funtionen ikke kalde sig selv igen, hvis den rammer noget ekskluderet.
 - Omskriv metoder, der *kun* kaldes af et objekt selv til private (med underscores) - `.show()`, `.move()` etc som kaldes af `onFrame()`
@@ -63,10 +63,7 @@ Todos
 - Colors skal være kopier af owner, ikke den samme (hvis det ikke allerede er sådan), for at forhindre problemer med setAlpha etc
 - lav steps på `tankHit()` (se kommentar ved tankHit())
 - Sørg for steps på ALT der kan ændres i config, dvs også movespeed evt (hvis det bliver muligt at gøre denne stor nok til at gå igennem vægge etc)
-- Hjørnecollisions bugger på bounce med det nye step lookaheads (den når vist at procce flere gange per frame nogle gange?)
-- Se om nogle helpers kan flyttes til en enkelt class / constructor etc, hvis kun dén bruger helperen
 - Fjern alle gamle kommentarer
-- Se om noget state kan flyttes ud af Vuex
 - Ny løsning til `fire` controls-listener, som enten ikke er p5 (men stadig ikke kan fyre flere pr frame), eller bare som minimum ikke er i ekstern js
 	- Se om Fire kan flyttes ind i tanken, (evt med `keyIsDown()`) selvom hvert frame så tjekker om man skyder, og man bare kan holde den inde
 - Organisér `mutations`

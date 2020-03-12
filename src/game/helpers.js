@@ -102,6 +102,35 @@ export function randomCoords() {
 	return { x: x, y: y, col: col, row: row }
 }
 
+// Takes an object with a speed and a position, and returns array of steps between the position and next position based off speed and wall-thickness:
+export function stepArray({ x, y, moveCoords, speed }) {
+	const steps = []
+
+	for (let step = 0; step <= speed; step += (speed < config().wall.collisionStepSize ? speed : config().wall.collisionStepSize)) { // Only does lookaheads if speed is more than walls' width
+
+		// This has to be in fractions of moveCoords (and not just +- some values) to account for the direction of the movement - we don't want to ADD to a negative and vice versa:
+		steps.push({
+			x: x + moveCoords.dX * (step / speed),
+			y: y + moveCoords.dY * (step / speed)
+		})
+	}
+
+	return steps
+
+
+
+
+
+	for (let step = 0; step <= speed; step += (speed < config().wall.collisionStepSize ? speed : config().wall.collisionStepSize)) { // Only makes fractional lookaheads of speed if speed is more than walls' width
+
+			// This has to be in fractions of moveCoords (and not just +- some values) to account for the direction of the movement - we don't want to ADD to a negative and vice versa:
+			next.push({
+				x: x + move.x * (step / speed),
+				y: y + move.y * (step / speed)
+			})
+		}
+}
+
 // Every number can call .between:
 Number.prototype.between = function (min, max, include = true) { // Cannot be arrow function because of 'this'-binding
 	if (include) {

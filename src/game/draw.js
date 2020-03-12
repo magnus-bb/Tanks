@@ -58,6 +58,15 @@ function draw() {
 		for (const cell of cells) {
 			for (const wall in cell.walls) {
 				tank.collision(cell.walls[wall])
+
+				// // if (tank === gameState().tanks[0]) {
+				// // 	const tip = {
+				// // 		x: tank.x + tank.relCannon.x,
+				// // 		y: tank.y + tank.relCannon.y
+				// // 	}
+					
+				// // 	console.log(pointInRect(tip, cell.walls[wall].pointRect))
+				// // }
 			}
 		}
 
@@ -79,17 +88,10 @@ function draw() {
 		}
 	}
 
-	// //* Tanks - updating:
-	// for (const tank of gameState().tanks) {
-		// tank.onFrame() // Importantly done after input + collision handling
-	// }
-
 	//* Projectiles (& Edges):
 	projectileLoop:
 	for (let i = gameState().projectiles.length - 1; i >= 0; i--) { // We have to go backwards when removing projectiles
 		const projectile = gameState().projectiles[i]
-
-		projectile.onFrame(i) // Before all collision-checks is important
 
 		if (projectile.envCollision) {
 			projectile.envCollision(i)
@@ -107,15 +109,12 @@ function draw() {
 		}
 
 		//* Projectiles & Walls:
-
 		// Only collision-checks with walls around proj:
 		const cells = getContainingCell({ x: projectile.x, y: projectile.y }).neighborhood
 
 		for (const cell of cells) {
 			for (const wall in cell.walls) {
 				const wallObj = cell.walls[wall]
-
-				// if (!wallObj) continue
 				
 				if (projectile.envCollision) {
 					const action = projectile.envCollision(i, wallObj)
@@ -123,14 +122,16 @@ function draw() {
 					// 'Breaker' removes a wall, and then needs to continue wall-loop to not try to read same wall:
 					if (action === 'nextWall') {
 						continue
-
-						// Bouncing can make infinite loop between two walls, so we need to stop checking the same proj after the first bounce until next frame
-					} else if (action === 'nextProj') {
-						continue projectileLoop // Has to be done last in this loop
-					}
+					} 
+					// else if (action === 'nextProj') { 
+					// 	continue projectileLoop // Has to be done last in this loop
+					// }
 				}
 			}
 		}
+
+		// Important to do after collision checks:
+		projectile.onFrame(i) // Otherwise the first move of a projectile will not check for collisions -> glitches
 	}
 
 

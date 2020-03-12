@@ -192,7 +192,7 @@ export default class Tank {
 				x: point.x + this.next.x,
 				y: point.y + this.next.y
 			}
-			// Relative to the tank:
+			// Relative to the tank's current pos:
 			point.x += this.x
 			point.y += this.y
 
@@ -202,6 +202,9 @@ export default class Tank {
 			if (pointInRect({ x: point.x, y: nextPoint.y }, wallRect)) {
 				collision.y = true
 			}
+
+			// No need to check further when a collision is detected:
+			if (collision.x || collision.y) break
 		}
 
 		return collision
@@ -245,7 +248,7 @@ export default class Tank {
 		// Turns slowly, if driving forward:
 		for (const axis in axes) {
 			if (axes[axis] && this.driving === 'forward') {
-				this._turn(this._getTurnDirection(axis, this.direction), true) // true lowers the turnspeed for collisions
+				this._turn(this._getTurnDirection(axis, this.direction), true) // true lowers the turnspeed (used for collisions)
 			}
 		}
 	}
