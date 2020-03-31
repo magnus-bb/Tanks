@@ -86,6 +86,7 @@ Todos
 - Redesign pickups til at være mere ligesom status-item / color-picker med farve og gradient, men uden hul igennem
 - Flyt mest muligt config ind i objekter, når de initialiseres, så de ikke skal gettes hvert frame
 - Se på om `#` kan bruges til private metoder osv i objekter
+- Se om memoization kan hjælpe på tunge opgaver
 
 Idéer til spillet
 --------------------------
