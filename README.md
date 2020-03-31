@@ -87,6 +87,7 @@ Todos
 - Flyt mest muligt config ind i objekter, når de initialiseres, så de ikke skal gettes hvert frame
 - Se på om `#` kan bruges til private metoder osv i objekter
 - Se om memoization kan hjælpe på tunge opgaver
+- Se om 2 objekter kan udregne deres afstande etc på samme tid, eller vide at de skal skippe dem, der allerede er udregnet
 
 Idéer til spillet
 --------------------------
