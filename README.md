@@ -1,5 +1,5 @@
 # Tanks (*TBD*)
-A recreation of the flash game Tank Trouble
+En kopi af Flash-spillet tank-trouble. Vue.js og P5 til canvasmanipulation - egen game-engine
 
 Guidelines
 ----------
